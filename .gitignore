@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+.env
+.env.*.local
+*.local
+.DS_Store
+coverage/
+.turbo/
+pnpm-lock.yaml.bak
+
+# Vite
+apps/web/dist/
+apps/web/.vite/
+
+# Fastify/Node
+apps/api/dist/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

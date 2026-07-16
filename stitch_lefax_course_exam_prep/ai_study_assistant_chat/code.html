@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Lefax AI Tutor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#00174a",
+                    "primary-container": "#252746",
+                    "on-secondary-fixed-variant": "#5b4300",
+                    "on-error": "#ffffff",
+                    "action-blue": "#0064FF",
+                    "on-tertiary-container": "#5f8bff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#171937",
+                    "surface-dim": "#d8dadc",
+                    "on-surface": "#191c1e",
+                    "inverse-surface": "#2d3133",
+                    "on-tertiary": "#ffffff",
+                    "error-red": "#D32F2F",
+                    "on-background": "#191c1e",
+                    "text-primary": "#1F3545",
+                    "secondary-container": "#fdc003",
+                    "error": "#ba1a1a",
+                    "text-secondary": "#64748B",
+                    "achievement-gold": "#FFC107",
+                    "surface-variant": "#e0e3e5",
+                    "excellence-blue": "#252746",
+                    "surface": "#f7f9fb",
+                    "tertiary": "#00123c",
+                    "surface-bright": "#f7f9fb",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#6c5000",
+                    "surface-tint": "#5a5c7e",
+                    "surface-container-low": "#f2f4f6",
+                    "secondary": "#785900",
+                    "primary-fixed-dim": "#c3c3eb",
+                    "on-secondary-fixed": "#261a00",
+                    "background": "#f7f9fb",
+                    "on-surface-variant": "#46464d",
+                    "primary-fixed": "#e0e0ff",
+                    "surface-gray": "#F3E9F7",
+                    "tertiary-fixed": "#dbe1ff",
+                    "secondary-fixed-dim": "#fabd00",
+                    "tertiary-fixed-dim": "#b3c5ff",
+                    "on-primary-container": "#8d8eb3",
+                    "surface-container": "#eceef0",
+                    "outline-variant": "#c8c5ce",
+                    "on-primary-fixed-variant": "#424465",
+                    "inverse-on-surface": "#eff1f3",
+                    "secondary-fixed": "#ffdf9e",
+                    "outline": "#77767e",
+                    "surface-container-high": "#e6e8ea",
+                    "inverse-primary": "#c3c3eb",
+                    "tertiary-container": "#002468",
+                    "success-green": "#2E7D32",
+                    "primary": "#101230",
+                    "on-tertiary-fixed-variant": "#003ea6",
+                    "surface-container-highest": "#e0e3e5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "4px",
+                    "sm": "8px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "gutter": "16px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "label-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .chat-container {
+            height: calc(100vh - 128px);
+        }
+        .message-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c8c5ce; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md">
+<!-- Top AppBar (from JSON guidance) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined text-excellence-blue">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">Lefax AI Tutor</h1>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 bg-success-green rounded-full"></span>
+<span class="text-label-md font-label-md text-on-surface-variant">Active now</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-label-lg font-label-lg text-achievement-gold bg-primary-container px-3 py-1 rounded-full">5 🔥</span>
+<button class="p-2 hover:bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Chat Canvas -->
+<main class="pt-16 pb-32 px-margin-mobile max-w-[720px] mx-auto min-h-screen">
+<!-- Header Utility / Context -->
+<div class="mt-lg flex justify-center">
+<button class="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant px-4 py-2 rounded-xl text-excellence-blue font-label-lg hover:bg-surface-container-low transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+                Summarize This Lesson
+            </button>
+</div>
+<div class="chat-container flex flex-col gap-lg py-lg">
+<!-- AI Message: Complex Topic Explanation -->
+<div class="flex flex-col gap-sm max-w-[85%] message-fade-in">
+<div class="flex items-center gap-2 mb-xs">
+<div class="w-8 h-8 rounded-full bg-excellence-blue flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[18px]">smart_toy</span>
+</div>
+<span class="text-label-md font-label-md text-excellence-blue">Study Assistant</span>
+</div>
+<div class="bg-surface-container-low p-md rounded-2xl rounded-tl-xs border border-outline-variant">
+<p class="text-body-md font-body-md mb-md">
+                        Organic chemistry reaction mechanisms describe the step-by-step sequence of elementary reactions by which overall chemical change occurs.
+                    </p>
+<p class="text-label-lg font-label-lg text-excellence-blue mb-sm">Key Principles:</p>
+<ul class="space-y-sm text-body-sm font-body-sm text-on-surface-variant">
+<li class="flex gap-2">
+<span class="text-excellence-blue font-bold">•</span>
+<span><strong>Nucleophiles:</strong> Electron-rich species that donate an electron pair.</span>
+</li>
+<li class="flex gap-2">
+<span class="text-excellence-blue font-bold">•</span>
+<span><strong>Electrophiles:</strong> Electron-poor species that accept an electron pair.</span>
+</li>
+<li class="flex gap-2">
+<span class="text-excellence-blue font-bold">•</span>
+<span><strong>Curly Arrows:</strong> Always show the movement of electron pairs from source to sink.</span>
+</li>
+</ul>
+</div>
+<span class="text-[10px] text-on-surface-variant ml-10">10:42 AM</span>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-sm max-w-[85%] self-end message-fade-in" style="animation-delay: 0.2s;">
+<div class="bg-excellence-blue text-white p-md rounded-2xl rounded-tr-xs shadow-md">
+<p class="text-body-md font-body-md">
+                        Can you explain the S<sub>N</sub>2 mechanism specifically? I'm confused about the transition state.
+                    </p>
+</div>
+<span class="text-[10px] text-on-surface-variant mr-2">10:43 AM</span>
+</div>
+<!-- AI Message: Detailed Follow-up -->
+<div class="flex flex-col gap-sm max-w-[85%] message-fade-in" style="animation-delay: 0.4s;">
+<div class="flex items-center gap-2 mb-xs">
+<div class="w-8 h-8 rounded-full bg-excellence-blue flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[18px]">smart_toy</span>
+</div>
+<span class="text-label-md font-label-md text-excellence-blue">Study Assistant</span>
+</div>
+<div class="bg-surface-container-low p-md rounded-2xl rounded-tl-xs border border-outline-variant">
+<p class="text-body-md font-body-md mb-sm">
+                        Absolutely! <strong>S<sub>N</sub>2</strong> stands for Bimolecular Nucleophilic Substitution.
+                    </p>
+<div class="bg-white rounded-lg p-sm border border-outline-variant mb-md">
+<div class="h-40 w-full rounded bg-surface flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(#252746_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<img class="h-full w-full object-contain p-4" data-alt="A clean, minimalist 2D chemical diagram illustrating an SN2 reaction mechanism. The nucleophile approaches a central carbon from the back, showing a transition state with dashed bonds and partial charges. Professional educational illustration in a corporate blue and white color scheme, high clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbmneLN5WhSgPZLsbTa8NkpyYbmwshWOyrx7ZcKBDZrrmYgXl0jyRS9PAz7UuE_dElL8hPujHbureW7lPUQGdGegD-e6J8cKf-0Fe58PoDmuDV4jr7scUrGEhKZ_UIvcKzv7sqqrohWzbZBM6l0KU-j3ExHXYJFcQ80xhN05ftmpCQCOTc9w1eqU6dtbXh7hxgykOUdzjrTw__DahncwMUidunlxjsK3iPPxh9SXtoNzev4OM72eSLmeg9wkt4tk23YD-CcoHR57k"/>
+</div>
+<p class="text-[11px] text-center text-on-surface-variant mt-2 italic">Transition State Visualization</p>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                        In the transition state, the carbon is partially bonded to both the incoming nucleophile and the leaving group. This happens in a <strong>single concerted step</strong>.
+                    </p>
+</div>
+<span class="text-[10px] text-on-surface-variant ml-10">10:44 AM</span>
+</div>
+</div>
+</main>
+<!-- Bottom Input Area (Fixed) -->
+<div class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant px-margin-mobile pt-sm pb-8 z-50">
+<div class="max-w-[720px] mx-auto">
+<!-- Quick Suggestion Chips -->
+<div class="flex gap-sm overflow-x-auto pb-sm no-scrollbar whitespace-nowrap">
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-label-md font-label-md border border-outline-variant hover:bg-excellence-blue hover:text-white transition-all active:scale-95">
+                    Summarize notes
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-label-md font-label-md border border-outline-variant hover:bg-excellence-blue hover:text-white transition-all active:scale-95">
+                    Explain this formula
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-label-md font-label-md border border-outline-variant hover:bg-excellence-blue hover:text-white transition-all active:scale-95">
+                    Practice questions
+                </button>
+</div>
+<!-- Input Field Group -->
+<div class="flex items-end gap-sm bg-surface-container-lowest border border-outline-variant rounded-2xl p-2 shadow-sm focus-within:border-excellence-blue focus-within:ring-1 focus-within:ring-excellence-blue transition-all">
+<button class="p-2 text-excellence-blue hover:bg-surface-container-low rounded-xl transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-body-md font-body-md py-2 px-1 resize-none max-h-32" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" placeholder="Ask about a formula or concept..." rows="1"></textarea>
+<button class="bg-excellence-blue text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Nav Bar (Suppressed because this is a task-focused screen) -->
+<script>
+        // Micro-interactions for chips
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Visual feedback
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 100);
+            });
+        });
+
+        // Simple send simulation
+        const textarea = document.querySelector('textarea');
+        const sendBtn = document.querySelector('.bg-excellence-blue.w-10');
+        const chatContainer = document.querySelector('.chat-container');
+
+        sendBtn.addEventListener('click', () => {
+            if (textarea.value.trim() !== '') {
+                const userMsg = textarea.value;
+                const msgHtml = `
+                    <div class="flex flex-col items-end gap-sm max-w-[85%] self-end message-fade-in">
+                        <div class="bg-excellence-blue text-white p-md rounded-2xl rounded-tr-xs shadow-md">
+                            <p class="text-body-md font-body-md">${userMsg}</p>
+                        </div>
+                        <span class="text-[10px] text-on-surface-variant mr-2">Just now</span>
+                    </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', msgHtml);
+                textarea.value = '';
+                textarea.style.height = 'auto';
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
+        });
+
+        // Handle enter key
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendBtn.click();
+            }
+        });
+    </script>
+</body></html>

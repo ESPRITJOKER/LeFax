@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diagnostic Test | Lefax Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .option-card:hover {
+            border-color: #252746;
+            background-color: #f2f4f6;
+        }
+        .option-selected {
+            border-color: #252746 !important;
+            border-width: 2px !important;
+            background-color: #e0e0ff !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d8dadc",
+                      "action-blue": "#0064FF",
+                      "tertiary": "#00123c",
+                      "error-red": "#D32F2F",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#dbe1ff",
+                      "success-green": "#2E7D32",
+                      "on-tertiary-fixed": "#00174a",
+                      "outline-variant": "#c8c5ce",
+                      "on-primary": "#ffffff",
+                      "outline": "#77767e",
+                      "surface-bright": "#f7f9fb",
+                      "tertiary-container": "#002468",
+                      "on-surface": "#191c1e",
+                      "on-secondary-container": "#6c5000",
+                      "on-error-container": "#93000a",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-primary-fixed-variant": "#424465",
+                      "on-primary-container": "#8d8eb3",
+                      "surface-gray": "#F3E9F7",
+                      "surface": "#f7f9fb",
+                      "primary-fixed-dim": "#c3c3eb",
+                      "primary-container": "#252746",
+                      "on-surface-variant": "#46464d",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed": "#ffdf9e",
+                      "on-primary-fixed": "#171937",
+                      "text-secondary": "#64748B",
+                      "background": "#f7f9fb",
+                      "primary": "#101230",
+                      "on-tertiary-fixed-variant": "#003ea6",
+                      "inverse-primary": "#c3c3eb",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#fabd00",
+                      "text-primary": "#1F3545",
+                      "excellence-blue": "#252746",
+                      "surface-container-low": "#f2f4f6",
+                      "secondary": "#785900",
+                      "on-secondary-fixed": "#261a00",
+                      "on-tertiary-container": "#5f8bff",
+                      "secondary-container": "#fdc003",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#5b4300",
+                      "on-background": "#191c1e",
+                      "tertiary-fixed-dim": "#b3c5ff",
+                      "primary-fixed": "#e0e0ff",
+                      "inverse-surface": "#2d3133",
+                      "surface-container": "#eceef0",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#5a5c7e",
+                      "on-error": "#ffffff",
+                      "achievement-gold": "#FFC107",
+                      "surface-container-high": "#e6e8ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "base": "4px",
+                      "lg": "24px",
+                      "gutter": "16px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Hanken Grotesk"],
+                      "label-md": ["Inter"],
+                      "label-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<button aria-label="Menu" class="p-2 hover:bg-surface-container-low rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<span class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">Lefax Course</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-label-lg font-label-lg text-primary">5 🔥</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-20 pb-24 px-margin-mobile max-w-[720px] mx-auto w-full">
+<!-- Diagnostic Progress Header -->
+<section class="mb-lg">
+<div class="flex justify-between items-end mb-sm">
+<div>
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Diagnostic Mode</span>
+<h1 class="text-headline-md font-headline-md text-excellence-blue">Question 3/20</h1>
+</div>
+<span class="text-label-lg font-label-lg text-excellence-blue">15% Complete</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-excellence-blue w-[15%] transition-all duration-500 ease-out"></div>
+</div>
+</section>
+<!-- Question Section -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md mb-lg shadow-sm">
+<div class="flex items-center gap-sm mb-md">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-label-md font-label-md">Calculus</span>
+<span class="text-on-surface-variant text-label-md font-label-md">• Integration</span>
+</div>
+<p class="text-body-lg font-body-lg text-primary leading-relaxed mb-lg">
+                Determine the value of the definite integral of <span class="italic font-semibold">f(x) = 3x² - 2x + 5</span> from <span class="italic">x = 0</span> to <span class="italic">x = 2</span>.
+            </p>
+<div class="relative w-full aspect-video rounded-lg overflow-hidden mb-md border border-outline-variant">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A clean mathematical visualization on a white background showing a parabolic curve plotted on a Cartesian coordinate system. The area under the curve between x equals zero and x equals two is highlighted with a soft excellence blue shade. The style is professional and academic, resembling a high-quality textbook illustration with precise lines and clear labeling. Soft lighting emphasizes the clarity and functional minimalism of the educational content." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJvr3NMa55-t3XHeyN8y2R7tFUo4g_qR5a6PLcg2J5avqfvbDQYF5NjMIw3Gl7nm2JmntyZxo2GvUeQV822b-_jT7OIs5j1DBZf8m3W3J4WKWj09Jz65PV8Twdlq6zFoZkp4U3ZJoPTL6OWxhyZHKyEhhPQ2b_qUECJYhj2Nlm-N6IiiiFjAsYh2mkplF9c_zY3zqxI0uUm_jAPRv8nVbkYuPpKX4JeZUioDD-deli27z48Pvrg_tgL5byd3NtUQ3KWHTTxkGE6Xg')">
+</div>
+</div>
+</article>
+<!-- Options Grid -->
+<section class="grid grid-cols-1 gap-md">
+<!-- Option A -->
+<button class="option-card flex items-center p-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left transition-all active:scale-[0.98]" onclick="selectOption(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center mr-md flex-shrink-0">
+<span class="text-label-lg font-label-lg text-primary">A</span>
+</div>
+<span class="text-body-md font-body-md text-on-surface">12</span>
+</button>
+<!-- Option B -->
+<button class="option-card flex items-center p-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left transition-all active:scale-[0.98]" onclick="selectOption(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center mr-md flex-shrink-0">
+<span class="text-label-lg font-label-lg text-primary">B</span>
+</div>
+<span class="text-body-md font-body-md text-on-surface">14</span>
+</button>
+<!-- Option C -->
+<button class="option-card flex items-center p-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left transition-all active:scale-[0.98]" onclick="selectOption(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center mr-md flex-shrink-0">
+<span class="text-label-lg font-label-lg text-primary">C</span>
+</div>
+<span class="text-body-md font-body-md text-on-surface">10</span>
+</button>
+<!-- Option D -->
+<button class="option-card flex items-center p-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left transition-all active:scale-[0.98]" onclick="selectOption(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center mr-md flex-shrink-0">
+<span class="text-label-lg font-label-lg text-primary">D</span>
+</div>
+<span class="text-body-md font-body-md text-on-surface">16</span>
+</button>
+</section>
+<!-- Action Footer -->
+<section class="mt-xl flex gap-md">
+<button class="flex-1 py-4 bg-surface-container-high text-primary font-bold rounded-xl active:scale-95 transition-transform">
+                Skip
+            </button>
+<button class="flex-[2] py-4 bg-excellence-blue text-white font-bold rounded-xl opacity-50 cursor-not-allowed active:scale-95 transition-all" disabled="" id="nextBtn">
+                Next Question
+            </button>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-xs pb-safe h-16 bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-label-md font-label-md">Lessons</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="text-label-md font-label-md">Exams</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+</nav>
+<script>
+        function selectOption(element) {
+            // Remove selection from all options
+            const options = document.querySelectorAll('.option-card');
+            options.forEach(opt => {
+                opt.classList.remove('option-selected');
+                opt.querySelector('div').classList.remove('bg-excellence-blue', 'text-white');
+                opt.querySelector('div').classList.add('bg-surface-container');
+                opt.querySelector('div span').classList.remove('text-white');
+                opt.querySelector('div span').classList.add('text-primary');
+            });
+
+            // Add selection to clicked option
+            element.classList.add('option-selected');
+            const letterContainer = element.querySelector('div');
+            letterContainer.classList.remove('bg-surface-container');
+            letterContainer.classList.add('bg-excellence-blue');
+            letterContainer.querySelector('span').classList.remove('text-primary');
+            letterContainer.querySelector('span').classList.add('text-white');
+
+            // Enable Next button
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            nextBtn.classList.add('opacity-100');
+        }
+
+        // Simple haptic-like feedback on click
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+            });
+        });
+    </script>
+</body></html>

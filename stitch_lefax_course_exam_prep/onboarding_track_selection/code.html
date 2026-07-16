@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lefax Course - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#002468",
+                        "success-green": "#2E7D32",
+                        "inverse-primary": "#c3c3eb",
+                        "on-secondary-fixed": "#261a00",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary": "#101230",
+                        "background": "#f7f9fb",
+                        "inverse-surface": "#2d3133",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed": "#ffdf9e",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#6c5000",
+                        "secondary-fixed-dim": "#fabd00",
+                        "on-tertiary-container": "#5f8bff",
+                        "excellence-blue": "#252746",
+                        "on-secondary-fixed-variant": "#5b4300",
+                        "on-primary-fixed": "#171937",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface": "#f7f9fb",
+                        "text-secondary": "#64748B",
+                        "error-red": "#D32F2F",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#00174a",
+                        "achievement-gold": "#FFC107",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "secondary-container": "#fdc003",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container": "#eceef0",
+                        "surface-tint": "#5a5c7e",
+                        "primary-container": "#252746",
+                        "primary-fixed": "#e0e0ff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-gray": "#F3E9F7",
+                        "on-surface": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f7f9fb",
+                        "tertiary-fixed": "#dbe1ff",
+                        "secondary": "#785900",
+                        "outline-variant": "#c8c5ce",
+                        "action-blue": "#0064FF",
+                        "on-primary": "#ffffff",
+                        "text-primary": "#1F3545",
+                        "tertiary-fixed-dim": "#b3c5ff",
+                        "primary-fixed-dim": "#c3c3eb",
+                        "tertiary": "#00123c",
+                        "on-surface-variant": "#46464d",
+                        "outline": "#77767e",
+                        "on-primary-fixed-variant": "#424465",
+                        "on-primary-container": "#8d8eb3",
+                        "on-tertiary-fixed-variant": "#003ea6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .track-card.active {
+            border-color: #252746;
+            background-color: #f7f9fb;
+            box-shadow: 0 4px 12px rgba(37, 39, 70, 0.08);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .bento-item-large {
+            grid-column: span 2;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col items-center">
+<!-- Top Navigation Suppression: Not rendered for onboarding -->
+<main class="w-full max-w-[720px] px-margin-mobile pt-xl pb-32 flex flex-col">
+<!-- Welcome Hero -->
+<header class="mb-xl text-center md:text-left">
+<div class="flex justify-center md:justify-start mb-md">
+<div class="w-16 h-16 rounded-full bg-excellence-blue flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined text-[32px]">school</span>
+</div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-sm">
+                Welcome to Lefax Course
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-[500px]">
+                Democratizing excellence for every Cameroonian student. Your journey to the prestigious <strong>Grandes Écoles</strong> starts here.
+            </p>
+</header>
+<!-- Dynamic Visual Accent -->
+<section class="relative h-48 rounded-xl overflow-hidden mb-xl border border-outline-variant shadow-sm">
+<div class="w-full h-full bg-cover bg-center" data-alt="A clean, minimalist academic setting with high-quality textbooks, a brass compass, and a sleek modern tablet displaying complex mathematical diagrams. The lighting is soft and airy, emphasizing a light-mode corporate aesthetic with deep navy blue accents. Professional, inspiring atmosphere for elite student preparation." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_9n_cNc5d3VAm_DaCjfSweTP_sD3MPGRU5O20n8dt34ahH9zohvZLbcm91kxmCAuTJ6tB6LJTJRmdMfks5cFu7ZNhkV1E74V8e1W8q4U3WfRQ5oF1t0TfclMPvyJhI5xWLoszze1NUHqEiEsjSbAMtnXiDch5Ia0ZO0f34bWbhu2f0uYJsD4Gtu1mkM6MhG3JLzbrHv2OaGEnbpsJxslQOOFEewcUIrchtmkEbYIrXWVHj-bVPGsUfoXeogl5uhNym7wqNvX0QNQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent flex items-end p-md">
+<span class="text-white font-label-lg text-label-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                    Elite Preparation for Elite Admissions
+                </span>
+</div>
+</section>
+<!-- Track Selection Title -->
+<div class="mb-md">
+<h2 class="font-headline-md text-headline-md text-primary">Choose Your Track</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Select the institution you are targeting.</p>
+</div>
+<!-- Track Selection Bento List -->
+<div class="bento-grid" id="track-container">
+<!-- Medicine Track (Highlighted/MVP) -->
+<div class="track-card bento-item-large bg-surface-container-lowest border-2 border-primary cursor-pointer rounded-xl p-md flex items-center gap-md transition-all active:scale-[0.98]" data-track="Medicine" onclick="selectTrack(this)">
+<div class="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<h3 class="font-label-lg text-label-lg text-primary">Medicine (FMSB)</h3>
+<span class="bg-achievement-gold text-on-secondary-fixed text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Most Popular</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">National Competitive Exam</p>
+</div>
+<span class="material-symbols-outlined text-primary" id="check-Medicine">check_circle</span>
+</div>
+<!-- Polytechnique Track -->
+<div class="track-card bg-surface-container-lowest border border-outline-variant cursor-pointer rounded-xl p-md flex flex-col gap-sm transition-all hover:border-outline active:scale-[0.98]" data-track="Polytechnique" onclick="selectTrack(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">engineering</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-primary">Polytechnique</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ENSPY / ENSPB</p>
+</div>
+</div>
+<!-- ENS Track -->
+<div class="track-card bg-surface-container-lowest border border-outline-variant cursor-pointer rounded-xl p-md flex flex-col gap-sm transition-all hover:border-outline active:scale-[0.98]" data-track="ENS" onclick="selectTrack(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">history_edu</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-primary">ENS / ENSET</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Teacher Education</p>
+</div>
+</div>
+<!-- ENSP Track -->
+<div class="track-card bg-surface-container-lowest border border-outline-variant cursor-pointer rounded-xl p-md flex flex-col gap-sm transition-all hover:border-outline active:scale-[0.98]" data-track="ENSP" onclick="selectTrack(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">construction</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-primary">ENSP</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Public Works</p>
+</div>
+</div>
+<!-- FASA Track -->
+<div class="track-card bg-surface-container-lowest border border-outline-variant cursor-pointer rounded-xl p-md flex flex-col gap-sm transition-all hover:border-outline active:scale-[0.98]" data-track="FASA" onclick="selectTrack(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">agriculture</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-primary">FASA</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Agronomy &amp; Sciences</p>
+</div>
+</div>
+<!-- IDE Track -->
+<div class="track-card bento-item-large bg-surface-container-lowest border border-outline-variant cursor-pointer rounded-xl p-md flex items-center gap-md transition-all hover:border-outline active:scale-[0.98]" data-track="IDE" onclick="selectTrack(this)">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">local_hospital</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label-lg text-label-lg text-primary">IDE / TMS</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Nursing &amp; Health Technicians</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Fixed) -->
+<div class="fixed bottom-0 left-0 w-full glass-effect border-t border-outline-variant px-margin-mobile py-md flex justify-center z-50">
+<button class="w-full max-w-[400px] bg-primary text-on-primary h-14 rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all" onclick="startJourney()">
+            Start My Journey
+            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<script>
+        let selectedTrack = "Medicine";
+
+        function selectTrack(element) {
+            // Remove active styles from all cards
+            document.querySelectorAll('.track-card').forEach(card => {
+                card.classList.remove('border-primary', 'border-2');
+                card.classList.add('border-outline-variant', 'border');
+            });
+
+            // Remove all checkmarks
+            document.querySelectorAll('.track-card span.material-symbols-outlined').forEach(icon => {
+                if (icon.textContent === 'check_circle') {
+                    icon.style.display = 'none';
+                }
+            });
+
+            // Apply active styles to clicked card
+            element.classList.remove('border-outline-variant', 'border');
+            element.classList.add('border-primary', 'border-2');
+            
+            // Show checkmark for clicked card (or create it if it doesn't exist)
+            let check = element.querySelector('span[textContent="check_circle"]');
+            if(!check) {
+                const newCheck = document.createElement('span');
+                newCheck.className = 'material-symbols-outlined text-primary ml-auto';
+                newCheck.textContent = 'check_circle';
+                element.appendChild(newCheck);
+            } else {
+                check.style.display = 'block';
+            }
+
+            selectedTrack = element.getAttribute('data-track');
+        }
+
+        function startJourney() {
+            // Visual feedback
+            const btn = document.querySelector('button');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Loading Syllabus...';
+            
+            setTimeout(() => {
+                alert('Your journey for ' + selectedTrack + ' begins now! Redirecting to Dashboard...');
+            }, 1000);
+        }
+
+        // Initialize state for the MVP Medicine track
+        document.addEventListener('DOMContentLoaded', () => {
+            const medicineCard = document.querySelector('[data-track="Medicine"]');
+            // Checkmark is already in HTML for MVP
+        });
+    </script>
+</body></html>

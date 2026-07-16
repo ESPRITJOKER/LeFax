@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FaxCoins Wallet - Lefax Course</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary-container": "#002468",
+                "success-green": "#2E7D32",
+                "inverse-primary": "#c3c3eb",
+                "on-secondary-fixed": "#261a00",
+                "surface-variant": "#e0e3e5",
+                "on-secondary": "#ffffff",
+                "surface-container-highest": "#e0e3e5",
+                "primary": "#101230",
+                "background": "#f7f9fb",
+                "inverse-surface": "#2d3133",
+                "inverse-on-surface": "#eff1f3",
+                "secondary-fixed": "#ffdf9e",
+                "error": "#ba1a1a",
+                "on-secondary-container": "#6c5000",
+                "secondary-fixed-dim": "#fabd00",
+                "on-tertiary-container": "#5f8bff",
+                "excellence-blue": "#252746",
+                "on-secondary-fixed-variant": "#5b4300",
+                "on-primary-fixed": "#171937",
+                "on-error": "#ffffff",
+                "surface-dim": "#d8dadc",
+                "surface": "#f7f9fb",
+                "text-secondary": "#64748B",
+                "error-red": "#D32F2F",
+                "error-container": "#ffdad6",
+                "on-tertiary-fixed": "#00174a",
+                "achievement-gold": "#FFC107",
+                "surface-container-lowest": "#ffffff",
+                "on-background": "#191c1e",
+                "secondary-container": "#fdc003",
+                "on-tertiary": "#ffffff",
+                "surface-container-high": "#e6e8ea",
+                "surface-container": "#eceef0",
+                "surface-tint": "#5a5c7e",
+                "primary-container": "#252746",
+                "primary-fixed": "#e0e0ff",
+                "surface-container-low": "#f2f4f6",
+                "surface-gray": "#F3E9F7",
+                "on-surface": "#191c1e",
+                "on-error-container": "#93000a",
+                "surface-bright": "#f7f9fb",
+                "tertiary-fixed": "#dbe1ff",
+                "secondary": "#785900",
+                "outline-variant": "#c8c5ce",
+                "action-blue": "#0064FF",
+                "on-primary": "#ffffff",
+                "text-primary": "#1F3545",
+                "tertiary-fixed-dim": "#b3c5ff",
+                "primary-fixed-dim": "#c3c3eb",
+                "tertiary": "#00123c",
+                "on-surface-variant": "#46464d",
+                "outline": "#77767e",
+                "on-primary-fixed-variant": "#424465",
+                "on-primary-container": "#8d8eb3",
+                "on-tertiary-fixed-variant": "#003ea6"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "sm": "8px",
+                "base": "4px",
+                "xs": "4px",
+                "lg": "24px",
+                "xl": "32px",
+                "margin-desktop": "32px",
+                "gutter": "16px",
+                "margin-mobile": "16px",
+                "md": "16px"
+            },
+            "fontFamily": {
+                "label-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "label-lg": ["Inter"],
+                "body-sm": ["Inter"],
+                "body-md": ["Inter"],
+                "display-lg": ["Hanken Grotesk"],
+                "headline-lg-mobile": ["Hanken Grotesk"],
+                "headline-md": ["Hanken Grotesk"],
+                "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+      }
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .safe-pb {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">Lefax Course</h1>
+</div>
+<div class="flex items-center gap-xs px-3 py-1 bg-surface-container-low rounded-full">
+<span class="text-label-lg font-label-lg text-primary">5 🔥</span>
+</div>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-[720px] mx-auto">
+<!-- Balance Hero Section -->
+<section class="relative mb-xl overflow-hidden rounded-xl bg-excellence-blue p-lg text-white shadow-lg">
+<!-- Decorative background element -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-achievement-gold/10 rounded-full blur-3xl"></div>
+<div class="relative z-10 flex flex-col items-center">
+<span class="text-label-lg font-label-lg text-on-primary-container opacity-80 uppercase tracking-widest mb-xs">Available Balance</span>
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-achievement-gold text-[32px]" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-display-lg font-display-lg">1,250 FaxCoins</span>
+</div>
+<!-- Premium CTA -->
+<div class="w-full bg-white/10 border border-white/20 p-md rounded-lg flex items-center justify-between">
+<div>
+<p class="text-label-lg font-label-lg">Premium Membership</p>
+<p class="text-body-sm font-body-sm text-on-primary-container">Upgrade to Standard Tier for Full Access</p>
+</div>
+<button class="bg-achievement-gold text-primary font-label-lg px-md py-sm rounded-lg hover:scale-105 transition-transform active:scale-95">
+                        Upgrade
+                    </button>
+</div>
+</div>
+</section>
+<!-- Bento Section: Spend Your Coins -->
+<section class="mb-xl">
+<h2 class="text-headline-md font-headline-md text-excellence-blue mb-md">Spend Your Coins</h2>
+<div class="bento-grid">
+<!-- Card 1 -->
+<div class="col-span-2 md:col-span-1 bg-white border border-outline-variant p-md rounded-xl hover:shadow-md transition-shadow cursor-pointer group">
+<div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center mb-md group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+</div>
+<h3 class="text-label-lg font-label-lg mb-xs">Unlock Premium Past Papers</h3>
+<p class="text-body-sm font-body-sm text-text-secondary mb-md">2025 Medicine Entrance Exams bundle.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="text-excellence-blue font-bold">500 FC</span>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="col-span-2 md:col-span-1 bg-white border border-outline-variant p-md rounded-xl hover:shadow-md transition-shadow cursor-pointer group">
+<div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center mb-md group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="extension">extension</span>
+</div>
+<h3 class="text-label-lg font-label-lg mb-xs">Unlock Bonus Lesson Pack</h3>
+<p class="text-body-sm font-body-sm text-text-secondary mb-md">Advanced Organic Chemistry series.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="text-excellence-blue font-bold">350 FC</span>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- History Section -->
+<section class="mb-lg">
+<div class="flex items-center justify-between mb-md">
+<h2 class="text-headline-md font-headline-md text-excellence-blue">Recent Activity</h2>
+<button class="text-label-md font-label-md text-action-blue">View All</button>
+</div>
+<div class="space-y-sm">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-md bg-white border border-outline-variant rounded-xl">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-success-green/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-success-green" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-label-lg font-label-lg">Mock Exam Participation</p>
+<p class="text-body-sm font-body-sm text-text-secondary">Today, 10:45 AM</p>
+</div>
+</div>
+<span class="text-success-green font-bold">+15</span>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-md bg-white border border-outline-variant rounded-xl">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-success-green/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-success-green" data-icon="school" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<p class="text-label-lg font-label-lg">Completed Biology Set</p>
+<p class="text-body-sm font-body-sm text-text-secondary">Yesterday</p>
+</div>
+</div>
+<span class="text-success-green font-bold">+5</span>
+</div>
+<!-- Item 3 (Purchase Example) -->
+<div class="flex items-center justify-between p-md bg-white border border-outline-variant rounded-xl">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-excellence-blue" data-icon="shopping_bag">shopping_bag</span>
+</div>
+<div>
+<p class="text-label-lg font-label-lg">Physics Formula Sheet</p>
+<p class="text-body-sm font-body-sm text-text-secondary">2 days ago</p>
+</div>
+</div>
+<span class="text-error-red font-bold">-200</span>
+</div>
+</div>
+</section>
+<!-- Aesthetic Imagery Component -->
+<section class="mt-xl rounded-xl overflow-hidden border border-outline-variant h-48 relative">
+<div class="bg-cover bg-center w-full h-full" data-alt="A clean and modern corporate study environment with a sleek laptop and notebooks on a white desk. The lighting is bright and natural, creating an atmosphere of academic focus and professional success. The color palette is dominated by deep navy blues and accents of warm gold, reflecting a high-end educational brand aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCbO3t0lRf_7uB8bxU83R0XzZdMKWg8O6rmXsHeJP1OSnMeUZSHXW4qVpaRDQbJWUWC9XXdsXet4jFq1yL9gWVRB5hBz8fXlBx_aj_dCeH6xtbnL6zB3XDRadnwVw9Ex9cc7thCDB4bNHLySgvNkQn9FG2PlIT1IQ9lGmx2q_dhc6h27Ymjoait5AHEPIZNSSevL88huX5jZDVV7GE9ZM6zRQeh6poBonBx8xt9wMZBsoF8KuSxgDU6_RBCFkq7v0SilKdMRLSCwA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-excellence-blue/80 to-transparent flex flex-col justify-end p-md">
+<p class="text-white text-headline-md font-headline-md">Boost Your Preparation</p>
+<p class="text-white/80 text-body-sm font-body-sm">Premium resources curated by top Cameroonian examiners.</p>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-xs pb-safe h-16 bg-surface border-t border-outline-variant">
+<!-- Dashboard -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</button>
+<!-- Lessons -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Lessons</span>
+</button>
+<!-- Exams -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="text-label-md font-label-md">Exams</span>
+</button>
+<!-- Wallet (Active State) -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for purchase buttons
+        document.querySelectorAll('.bento-grid > div').forEach(card => {
+            card.addEventListener('click', () => {
+                const rect = card.getBoundingClientRect();
+                const ripple = document.createElement('div');
+                ripple.className = 'absolute bg-primary/10 rounded-full w-4 h-4 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 animate-ping';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                card.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Simple scroll appearance for top bar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.classList.add('bg-white');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.remove('bg-white');
+            }
+        });
+    </script>
+</body></html>

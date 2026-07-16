@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lefax Course - QCM Exercise</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#002468",
+                    "success-green": "#2E7D32",
+                    "inverse-primary": "#c3c3eb",
+                    "on-secondary-fixed": "#261a00",
+                    "surface-variant": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary": "#101230",
+                    "background": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "secondary-fixed": "#ffdf9e",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#6c5000",
+                    "secondary-fixed-dim": "#fabd00",
+                    "on-tertiary-container": "#5f8bff",
+                    "excellence-blue": "#252746",
+                    "on-secondary-fixed-variant": "#5b4300",
+                    "on-primary-fixed": "#171937",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d8dadc",
+                    "surface": "#f7f9fb",
+                    "text-secondary": "#64748B",
+                    "error-red": "#D32F2F",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#00174a",
+                    "achievement-gold": "#FFC107",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#191c1e",
+                    "secondary-container": "#fdc003",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#5a5c7e",
+                    "primary-container": "#252746",
+                    "primary-fixed": "#e0e0ff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-gray": "#F3E9F7",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f7f9fb",
+                    "tertiary-fixed": "#dbe1ff",
+                    "secondary": "#785900",
+                    "outline-variant": "#c8c5ce",
+                    "action-blue": "#0064FF",
+                    "on-primary": "#ffffff",
+                    "text-primary": "#1F3545",
+                    "tertiary-fixed-dim": "#b3c5ff",
+                    "primary-fixed-dim": "#c3c3eb",
+                    "tertiary": "#00123c",
+                    "on-surface-variant": "#46464d",
+                    "outline": "#77767e",
+                    "on-primary-fixed-variant": "#424465",
+                    "on-primary-container": "#8d8eb3",
+                    "on-tertiary-fixed-variant": "#003ea6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "margin-mobile": "16px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #f7f9fb;
+            color: #191c1e;
+            -webkit-font-smoothing: antialiased;
+        }
+        .focused-card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .progress-bar-fill {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">Lefax Course</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-achievement-gold mr-1" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+<span class="text-label-lg font-label-lg text-excellence-blue">450</span>
+</div>
+<div class="text-label-lg font-label-lg text-primary">5 🔥</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 pb-24 px-margin-mobile max-w-[720px] mx-auto min-h-screen">
+<!-- Progress Header -->
+<div class="mb-8">
+<div class="flex justify-between items-center mb-2">
+<span class="text-label-lg font-label-lg text-text-secondary">Question 14 of 20</span>
+<span class="text-label-lg font-label-lg text-excellence-blue">70% Correct</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="progress-bar-fill h-full bg-excellence-blue" style="width: 70%;"></div>
+</div>
+</div>
+<!-- Question Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md mb-gutter focused-card">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-container text-on-primary-container text-label-md font-label-md px-2 py-0.5 rounded">MEDICINE</span>
+<span class="bg-surface-container-high text-on-surface-variant text-label-md font-label-md px-2 py-0.5 rounded">DIFFICULTY: HARD</span>
+</div>
+<h2 class="text-headline-md font-headline-md text-primary mb-4 leading-relaxed">
+                During a myocardial infarction, which of the following cardiac biomarkers is the most sensitive and specific for detecting initial myocardial cell injury within the first 3-6 hours?
+            </h2>
+<div class="relative w-full h-48 mb-4 rounded-lg overflow-hidden border border-outline-variant bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A highly detailed 3D medical illustration of a human heart showing cellular-level details of the myocardium. The lighting is clinical and sharp, with subtle glowing blue highlights representing cardiac biomarkers. The aesthetic is professional, modern, and high-contrast, fitting a premium medical exam application. Colors include deep navies, whites, and clinical light blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqHYO_RNZHi20nmIbhDwc8a-D8UUsRuhojX0dFuwTuzAd-HBdwn-8-LiPhK_xCGzWPul247pvibLRayMdxTMCFSer0HFUi1WJ2uN4bTAiP0uxw7aJYd9pV57AVCZTArZ-IT3ccl_tHGJCIyvFJrzuLeqU5P2BuexQUUqUd-llJSWxjLgbJUROEuwRBs9n44j0K1YAGNdHB1lJDQFteOMSwy45Qkb8y1Zq6MaxflRH1TEwK_akxdnJkGBAceZxMzQvK5ISJbKH2sIc"/>
+</div>
+</div>
+<!-- Options Section -->
+<div class="space-y-4 mb-8">
+<!-- Option A: Incorrect Selection -->
+<button class="w-full text-left bg-surface-container-lowest border-2 border-error-red rounded-xl p-md flex items-start gap-3 transition-all">
+<div class="min-w-[32px] h-[32px] rounded-full border-2 border-error-red flex items-center justify-center bg-error-container text-error-red">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-body-md text-on-surface">Creatine Kinase-MB (CK-MB)</p>
+</div>
+</button>
+<!-- Option B: Correct Answer (Not selected by user but highlighted) -->
+<button class="w-full text-left bg-surface-container-lowest border-2 border-success-green rounded-xl p-md flex items-start gap-3 transition-all shadow-sm">
+<div class="min-w-[32px] h-[32px] rounded-full border-2 border-success-green flex items-center justify-center bg-green-50 text-success-green">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-body-md text-on-surface">Cardiac Troponin I (cTnI)</p>
+</div>
+</button>
+<!-- Option C: Unselected -->
+<button class="w-full text-left bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-start gap-3 hover:border-excellence-blue transition-all opacity-60 pointer-events-none">
+<div class="min-w-[32px] h-[32px] rounded-full border border-outline-variant flex items-center justify-center text-text-secondary">
+<span class="text-label-lg font-label-lg">C</span>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-body-md text-on-surface">Myoglobin</p>
+</div>
+</button>
+<!-- Option D: Unselected -->
+<button class="w-full text-left bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-start gap-3 hover:border-excellence-blue transition-all opacity-60 pointer-events-none">
+<div class="min-w-[32px] h-[32px] rounded-full border border-outline-variant flex items-center justify-center text-text-secondary">
+<span class="text-label-lg font-label-lg">D</span>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-body-md text-on-surface">Lactate Dehydrogenase (LDH)</p>
+</div>
+</button>
+</div>
+<!-- Explanation Panel -->
+<div class="bg-surface-container-low border-l-4 border-excellence-blue rounded-r-xl p-md mb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-excellence-blue" style="font-variation-settings: 'FILL' 1;">info</span>
+<h3 class="text-headline-md font-headline-md text-excellence-blue">Explanation</h3>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+<strong class="text-primary">Cardiac Troponin I (cTnI)</strong> is considered the gold standard for diagnosing myocardial infarction. It is highly specific to cardiac muscle and begins to rise within 3 to 6 hours after the onset of chest pain. 
+                <br/><br/>
+                While <span class="text-error-red">CK-MB</span> was previously used, it is also present in skeletal muscle, making it less specific. Myoglobin rises earlier (1-3 hours) but lacks cardiac specificity. LDH is a late marker, rising 12-24 hours after injury.
+            </p>
+</div>
+<!-- Score Tracker Widget -->
+<div class="grid grid-cols-2 gap-4 mb-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col items-center">
+<span class="text-label-md font-label-md text-text-secondary uppercase tracking-wider mb-1">Time Spent</span>
+<span class="text-headline-lg font-headline-lg text-primary">01:42</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col items-center">
+<span class="text-label-md font-label-md text-text-secondary uppercase tracking-wider mb-1">Current Streak</span>
+<span class="text-headline-lg font-headline-lg text-success-green">4 <span class="text-body-sm">🔥</span></span>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-excellence-blue text-white py-4 rounded-xl font-bold text-body-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg mb-8">
+            Next Question
+            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-xs pb-safe h-16 bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-label-md font-label-md">Lessons</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="text-label-md font-label-md">Exams</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+</nav>
+<script>
+        // Simple logic for interactive feel
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.classList.add('opacity-80');
+            });
+            button.addEventListener('touchend', function() {
+                this.classList.remove('opacity-80');
+            });
+        });
+    </script>
+</body></html>
