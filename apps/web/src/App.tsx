@@ -8,6 +8,9 @@ import { api } from "./lib/api-client";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LandingPage } from "./pages/LandingPage";
+import { AboutPage } from "./pages/AboutPage";
+import { ContactPage } from "./pages/ContactPage";
+import { PrivacyPage } from "./pages/PrivacyPage";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { SignupPage } from "./pages/auth/SignupPage";
 import { OnboardingTrackPage } from "./pages/onboarding/OnboardingTrackPage";
@@ -72,6 +75,9 @@ export function App() {
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/onboarding/track" element={<OnboardingTrackPage />} />

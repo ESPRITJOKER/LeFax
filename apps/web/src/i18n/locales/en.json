@@ -527,5 +527,38 @@
     "title": "An error occurred",
     "body": "Something went wrong displaying this page. Try refreshing.",
     "reload": "Reload page"
+  },
+  "about": {
+    "title": "About Lefax Course",
+    "mission": "Lefax Course was born from a simple conviction: every Cameroonian student deserves elite preparation for Grandes Écoles entrance exams, wherever they are. We combine cutting-edge pedagogical expertise with artificial intelligence tools to deliver a personalized, effective, and accessible learning experience for all.",
+    "valuesTitle": "Our Values",
+    "values": {
+      "access": { "title": "Accessibility", "body": "Excellence should not depend on geography or income. Our platform is designed to work even with limited connectivity." },
+      "excellence": { "title": "Excellence", "body": "Every lesson, every MCQ, every mock exam is designed by expert teachers and validated by successful alumni." },
+      "innovation": { "title": "Innovation", "body": "Our AI tutor and adaptation algorithms transform how students identify and fill their knowledge gaps." },
+      "community": { "title": "Community", "body": "We believe in the power of collective effort. Rankings, testimonials, and the referral system create a healthy competitive spirit." }
+    },
+    "storyTitle": "Our Story",
+    "story": "Founded in 2024 by a team of former Grandes Écoles students, Lefax Course was born from the observation that the best students all had access to similar resources: study cards, mock exams, and mentorship. Our mission is to democratize this access for every deserving student in Cameroon."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "A question, suggestion, or partnership? We're here to help.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "locationLabel": "Address",
+    "locationValue": "Yaoundé, Cameroon"
+  },
+  "privacy": {
+    "lastUpdated": "Last updated: January 2026",
+    "sections": {
+      "dataCollection": { "title": "1. Data We Collect", "body": "We collect the data necessary for platform operation: name, phone number, email address (for teachers and administrators), school affiliation, and learning data (scores, progress, AI tutor interactions)." },
+      "dataUse": { "title": "2. How We Use Data", "body": "Your data is used to: personalize your learning experience, calculate your mastery scores and ranking, improve the quality of our educational content, and send important notifications related to your account." },
+      "dataSharing": { "title": "3. Data Sharing", "body": "We never sell your personal data. Your data may be shared with: your school (aggregated results only), our technical providers (hosting, SMS delivery) under strict confidentiality agreements, and authorities when legally required." },
+      "security": { "title": "4. Security", "body": "We use SSL/TLS encryption for all communications, secure storage via Supabase (PostgreSQL with RLS), and JWT authentication with httpOnly refresh tokens. Your passwords are never stored in plain text." },
+      "cookies": { "title": "5. Cookies", "body": "We use only cookies strictly necessary for session operation (JWT refresh token in httpOnly cookie). No advertising or third-party tracking cookies are used." },
+      "rights": { "title": "6. Your Rights", "body": "Under Cameroonian data protection legislation, you have the right to access, rectify, and delete your personal data. Contact us at contact@lefaxcourse.com to exercise these rights." },
+      "changes": { "title": "7. Changes", "body": "We reserve the right to modify this privacy policy. Any significant changes will be notified to you by email or via the application." }
+    }
   }
 }

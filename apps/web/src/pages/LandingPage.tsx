@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../components/ui/MaterialIcon";
+import { LanguageSwitcher } from "../components/ui/LanguageSwitcher";
 import { BRANCH_SLUGS, LAUNCH_BRANCH } from "@lefax/shared";
 
 const FEATURES = [
@@ -22,7 +23,7 @@ export function LandingPage() {
           </span>
         </div>
         <div className="flex items-center gap-md">
-          <span className="text-label-lg font-label-lg text-primary">5 🔥</span>
+          <LanguageSwitcher />
         </div>
       </header>
 
@@ -180,13 +181,13 @@ export function LandingPage() {
               <span className="font-label-lg text-label-lg uppercase tracking-wider opacity-50">
                 {t("landing.footerCompany")}
               </span>
-              <a className="font-body-sm text-body-sm" href="#">
+              <a className="font-body-sm text-body-sm" href="/about">
                 {t("landing.footerAbout")}
               </a>
-              <a className="font-body-sm text-body-sm" href="#">
+              <a className="font-body-sm text-body-sm" href="/contact">
                 {t("landing.footerContact")}
               </a>
-              <a className="font-body-sm text-body-sm" href="#">
+              <a className="font-body-sm text-body-sm" href="/privacy">
                 {t("landing.footerPrivacy")}
               </a>
             </div>

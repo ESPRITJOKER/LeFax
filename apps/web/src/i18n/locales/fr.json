@@ -527,5 +527,38 @@
     "title": "Une erreur est survenue",
     "body": "Quelque chose s'est mal passé lors de l'affichage de cette page. Essayez de rafraîchir.",
     "reload": "Rafraîchir la page"
+  },
+  "about": {
+    "title": "À propos de Lefax Course",
+    "mission": "Lefax Course est née d'une conviction simple : chaque étudiant camerounais mérite une préparation d'élite aux concours des Grandes Écoles, où qu'il se trouve. Nous combinons une expertise pédagogique de pointe avec des outils d'intelligence artificielle pour offrir une expérience d'apprentissage personnalisée, efficace et accessible à tous.",
+    "valuesTitle": "Nos valeurs",
+    "values": {
+      "access": { "title": "Accessibilité", "body": "L'excellence ne devrait pas dépendre de la géographie ou du revenu. Notre plateforme est conçue pour fonctionner même avec une connexion limitée." },
+      "excellence": { "title": "Excellence", "body": "Chaque leçon, chaque QCM, chaque concours blanc est conçu par des enseignants experts et validé par des anciens admis." },
+      "innovation": { "title": "Innovation", "body": "Notre tuteur IA et nos algorithmes d'adaptation transforment la façon dont les étudiants identifient et comblent leurs lacunes." },
+      "community": { "title": "Communauté", "body": "Nous croyons en la force du collectif. Le classement, les témoignages et le système de parrainage créent un esprit de compétition saine." }
+    },
+    "storyTitle": "Notre histoire",
+    "story": "Fondée en 2024 par une équipe d'anciens étudiants des Grandes Écoles camerounaises, Lefax Course est née de l'observation que les meilleurs étudiants avaient tous accès à des ressources similaires : des fiches, des concours blancs et du mentorat. Notre mission est de démocratiser cet accès pour chaque étudiant méritant du Cameroun."
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Une question, une suggestion ou un partenariat ? Nous sommes à votre écoute.",
+    "emailLabel": "Email",
+    "phoneLabel": "Téléphone",
+    "locationLabel": "Adresse",
+    "locationValue": "Yaoundé, Cameroun"
+  },
+  "privacy": {
+    "lastUpdated": "Dernière mise à jour : janvier 2026",
+    "sections": {
+      "dataCollection": { "title": "1. Données collectées", "body": "Nous collectons les données nécessaires au fonctionnement de la plateforme : nom, numéro de téléphone, adresse email (pour les enseignants et administrateurs), établissement scolaire, et données d'apprentissage (scores, progression, interactions avec le tuteur IA)." },
+      "dataUse": { "title": "2. Utilisation des données", "body": "Vos données sont utilisées pour : personnaliser votre expérience d'apprentissage, calculer vos scores de maîtrise et votre classement, améliorer la qualité de notre contenu pédagogique, et vous envoyer des notifications importantes relatives à votre compte." },
+      "dataSharing": { "title": "3. Partage des données", "body": "Nous ne vendons jamais vos données personnelles. Vos données peuvent être partagées avec : votre établissement scolaire (résultats agrégés uniquement), nos prestataires techniques (hébergement, envoi de SMS) sous contrat de confidentialité strict, et les autorités en cas d'obligation légale." },
+      "security": { "title": "4. Sécurité", "body": "Nous utilisons le chiffrement SSL/TLS pour toutes les communications, le stockage sécurisé via Supabase (PostgreSQL avec RLS), et l'authentification JWT avec refresh tokens httpOnly. Vos mots de passe ne sont jamais stockés en clair." },
+      "cookies": { "title": "5. Cookies", "body": "Nous utilisons uniquement des cookies strictement nécessaires au fonctionnement de la session (JWT refresh token en httpOnly cookie). Aucun cookie publicitaire ou de tracking tiers n'est utilisé." },
+      "rights": { "title": "6. Vos droits", "body": "Conformément à la législation camerounaise sur la protection des données, vous avez le droit d'accéder, de rectifier et de supprimer vos données personnelles. Contactez-nous à contact@lefaxcourse.com pour exercer ces droits." },
+      "changes": { "title": "7. Modifications", "body": "Nous nous réservons le droit de modifier cette politique de privacité. Toute modification significative vous sera notifiée par email ou via l'application." }
+    }
   }
 }
