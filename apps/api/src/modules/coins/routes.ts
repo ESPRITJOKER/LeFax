@@ -46,10 +46,11 @@ export default async function coinsRoutes(fastify: FastifyInstance) {
 
     const { data: existing } = await fastify.supabase
       .from("coin_ledger")
-      .select("id", { count: "exact", head: true })
+      .select("id")
       .eq("student_id", request.user.sub)
       .eq("reason", "paper_unlock")
-      .eq("reference_id", paperId);
+      .eq("reference_id", paperId)
+      .maybeSingle();
     if (existing) {
       return reply.send({ alreadyUnlocked: true });
     }

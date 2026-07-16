@@ -110,7 +110,7 @@ export default async function contentPipelineRoutes(fastify: FastifyInstance) {
     ];
 
     // Call LLM
-    let llmResponse: { content: string; usage: { totalTokens: number }; model: string };
+    let llmResponse: { content: string; usage: { promptTokens: number; completionTokens: number; totalTokens: number }; model: string };
 
     try {
       const provider = createLlmProvider({
@@ -118,7 +118,15 @@ export default async function contentPipelineRoutes(fastify: FastifyInstance) {
         apiKey: config[`${config.LLM_PROVIDER.toUpperCase()}_API_KEY` as keyof typeof config] as string ?? "",
       });
       const result = await provider.chat(messages, { temperature: 0.6, maxTokens: 4096 });
-      llmResponse = result;
+      llmResponse = {
+        content: result.content,
+        usage: {
+          promptTokens: (result as any).usage?.promptTokens ?? result.usage.totalTokens,
+          completionTokens: (result as any).usage?.completionTokens ?? 0,
+          totalTokens: result.usage.totalTokens,
+        },
+        model: result.model,
+      };
     } catch (err) {
       fastify.log.error({ err }, "LLM call failed for content generation");
       return reply.code(502).send({ error: "LLM_ERROR" });
@@ -141,7 +149,7 @@ export default async function contentPipelineRoutes(fastify: FastifyInstance) {
         subject_id: subjectId,
         chapter_id: chapterId ?? null,
         title: (body.title as string) ?? `Draft ${draftType} - ${subject.name}`,
-        body: JSON.stringify(body),
+        body: body,
         source_chunks: ragChunks.map((c: any) => c.id),
         generation_prompt: topicHint ?? null,
         status: "pending",
@@ -156,8 +164,8 @@ export default async function contentPipelineRoutes(fastify: FastifyInstance) {
       student_id: request.user.sub,
       provider: config.LLM_PROVIDER,
       model: llmResponse.model,
-      prompt_tokens: llmResponse.usage.totalTokens,
-      completion_tokens: 0,
+      prompt_tokens: (llmResponse as any).usage?.promptTokens ?? llmResponse.usage.totalTokens,
+      completion_tokens: (llmResponse as any).usage?.completionTokens ?? 0,
       total_tokens: llmResponse.usage.totalTokens,
       endpoint: "content_generation",
     });

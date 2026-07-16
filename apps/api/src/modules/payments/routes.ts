@@ -111,7 +111,7 @@ export default async function paymentsRoutes(fastify: FastifyInstance) {
     const payload = request.body as Record<string, unknown>;
 
     const { error: insertErr } = await fastify.supabase.from("payment_webhooks_raw").insert({
-      payload: JSON.stringify(payload),
+      payload: payload,
     });
     if (insertErr) fastify.log.error({ insertErr }, "Failed to log raw webhook");
 

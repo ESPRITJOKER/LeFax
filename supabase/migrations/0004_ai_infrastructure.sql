@@ -214,7 +214,8 @@ create or replace function match_rag_chunks(
   query_embedding vector(1024),
   match_count int default 5,
   match_threshold float default 0.5,
-  filter_clause text default ''
+  p_source_type text default null,
+  p_subject_id text default null
 )
 returns table (
   id uuid,
@@ -236,7 +237,8 @@ begin
     1 - (rc.embedding <=> query_embedding) as similarity
   from rag_chunks rc
   where 1 - (rc.embedding <=> query_embedding) > match_threshold
-    and (filter_clause = '' or filter_clause is null or execute(filter_clause))
+    and (p_source_type is null or rc.source_type = p_source_type)
+    and (p_subject_id is null or rc.metadata->>'subjectId' = p_subject_id)
   order by rc.embedding <=> query_embedding
   limit match_count;
 end;

@@ -253,7 +253,7 @@ export default async function aiRoutes(fastify: FastifyInstance) {
       ];
 
       // 10. Call LLM via BullMQ (or directly if queue unavailable)
-      let llmResponse: { content: string; usage: { totalTokens: number }; model: string };
+      let llmResponse: { content: string; usage: { promptTokens: number; completionTokens: number; totalTokens: number }; model: string };
 
       try {
         if (fastify.queues?.inference) {
@@ -285,7 +285,15 @@ export default async function aiRoutes(fastify: FastifyInstance) {
             apiKey: config[`${config.LLM_PROVIDER.toUpperCase()}_API_KEY` as keyof typeof config] as string ?? "",
           });
           const result = await provider.chat(messages, { temperature: 0.7, maxTokens: 2048 });
-          llmResponse = result;
+          llmResponse = {
+            content: result.content,
+            usage: {
+              promptTokens: (result as any).usage?.promptTokens ?? result.usage.totalTokens,
+              completionTokens: (result as any).usage?.completionTokens ?? 0,
+              totalTokens: result.usage.totalTokens,
+            },
+            model: result.model,
+          };
         }
       } catch (err) {
         fastify.log.error({ err }, "LLM call failed");
@@ -316,8 +324,8 @@ export default async function aiRoutes(fastify: FastifyInstance) {
         student_id: request.user.sub,
         provider: config.LLM_PROVIDER,
         model: llmResponse.model,
-        prompt_tokens: llmResponse.usage.totalTokens,
-        completion_tokens: 0,
+        prompt_tokens: llmResponse.usage.promptTokens ?? 0,
+        completion_tokens: llmResponse.usage.completionTokens ?? 0,
         total_tokens: llmResponse.usage.totalTokens,
         endpoint: "tutor_chat",
       });
@@ -326,10 +334,10 @@ export default async function aiRoutes(fastify: FastifyInstance) {
       await fastify.supabase.from("learning_events").insert({
         student_id: request.user.sub,
         event_type: "tutor_interaction",
-        metadata: JSON.stringify({
+        metadata: {
           session_id: sessionId,
           message_count: (history?.length ?? 0) + 2,
-        }),
+        },
       });
 
       // 16. Confidence flag if needed
@@ -368,6 +376,10 @@ export default async function aiRoutes(fastify: FastifyInstance) {
         .maybeSingle();
 
       if (!session) return reply.code(404).send({ error: "NOT_FOUND" });
+
+      if (!session.branch_id) {
+        return reply.code(400).send({ error: "NO_BRANCH", message: "Impossible d'escalader sans filière assignée." });
+      }
 
       const { data: lastMessages } = await fastify.supabase
         .from("tutor_messages")

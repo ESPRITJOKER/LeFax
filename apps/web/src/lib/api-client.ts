@@ -361,7 +361,7 @@ export interface ExamDto {
   closes_at: string;
   duration_seconds: number;
   status: string;
-  branch_id: string;
+  branch_id?: string;
 }
 export interface ExamDetailDto extends ExamDto {
   questions: { id: string; question: string; options: { id: string; text: string }[] }[];
