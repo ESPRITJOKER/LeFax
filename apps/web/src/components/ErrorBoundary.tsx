@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { MaterialIcon } from "./ui/MaterialIcon";
+import i18n from "../i18n";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -33,17 +34,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             <MaterialIcon name="error" className="text-error-red text-[32px]" />
           </div>
           <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-excellence-blue">
-            Une erreur est survenue
+            {i18n.t("errorBoundary.title")}
           </h1>
           <p className="font-body-sm text-body-sm text-text-secondary max-w-sm">
-            Quelque chose s'est mal passé lors de l'affichage de cette page. Essayez de rafraîchir.
+            {i18n.t("errorBoundary.body")}
           </p>
           <button
             type="button"
             onClick={() => window.location.reload()}
             className="mt-sm bg-excellence-blue text-white px-lg py-sm rounded-lg font-label-lg text-label-lg"
           >
-            Rafraîchir la page
+            {i18n.t("errorBoundary.reload")}
           </button>
         </div>
       );

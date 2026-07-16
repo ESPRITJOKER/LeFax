@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type BranchDto, type TeacherContentItemDto } from "../../lib/api-client";
 import { ContentListPanel } from "./ContentListPanel";
 
 /** No matching Stitch design — built from tokens (WEB-T04 dépôt d'anciens sujets). */
 export function PastPapersEditorPage() {
+  const { t } = useTranslation();
   const [branches, setBranches] = useState<BranchDto[]>([]);
   const [papers, setPapers] = useState<TeacherContentItemDto[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -31,11 +33,11 @@ export function PastPapersEditorPage() {
   async function create() {
     setError(null);
     if (!form.branchId || !form.title || !form.schoolName || !form.paperUrl) {
-      setError("Filière, titre, école et URL du sujet sont requis.");
+      setError(t("pastPapersEditor.validationRequired"));
       return;
     }
     if (!form.correctionText && !form.correctionUrl) {
-      setError("Une correction (texte ou PDF) est obligatoire.");
+      setError(t("pastPapersEditor.correctionRequired"));
       return;
     }
     try {
@@ -52,21 +54,21 @@ export function PastPapersEditorPage() {
       setForm({ branchId: "", title: "", schoolName: "", year: String(new Date().getFullYear()), paperUrl: "", correctionText: "", correctionUrl: "" });
       refresh();
     } catch {
-      setError("Erreur lors du dépôt du sujet.");
+      setError(t("pastPapersEditor.submitError"));
     }
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-lg">
-        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">Anciens sujets</h1>
+        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{t("pastPapers.title")}</h1>
         <button
           type="button"
           onClick={() => setShowForm((s) => !s)}
           className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg flex items-center gap-xs"
         >
           <MaterialIcon name="add" className="text-[16px]" />
-          Déposer un sujet
+          {t("pastPapersEditor.newPaper")}
         </button>
       </div>
 
@@ -77,7 +79,7 @@ export function PastPapersEditorPage() {
             onChange={(e) => setForm({ ...form, branchId: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           >
-            <option value="">Sélectionner une filière</option>
+            <option value="">{t("pastPapersEditor.selectBranch")}</option>
             {branches.map((b) => (
               <option key={b.id} value={b.id}>
                 {b.name}
@@ -85,48 +87,48 @@ export function PastPapersEditorPage() {
             ))}
           </select>
           <input
-            placeholder="Titre"
+            placeholder={t("pastPapersEditor.titlePlaceholder")}
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           />
           <div className="flex gap-sm">
             <input
-              placeholder="École"
+              placeholder={t("pastPapersEditor.schoolPlaceholder")}
               value={form.schoolName}
               onChange={(e) => setForm({ ...form, schoolName: e.target.value })}
               className="flex-1 px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
             />
             <input
               type="number"
-              placeholder="Année"
+              placeholder={t("pastPapersEditor.yearPlaceholder")}
               value={form.year}
               onChange={(e) => setForm({ ...form, year: e.target.value })}
               className="w-32 px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
             />
           </div>
           <input
-            placeholder="URL du sujet (PDF)"
+            placeholder={t("pastPapersEditor.paperUrlPlaceholder")}
             value={form.paperUrl}
             onChange={(e) => setForm({ ...form, paperUrl: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           />
           <textarea
-            placeholder="Correction (texte)"
+            placeholder={t("pastPapersEditor.correctionTextPlaceholder")}
             value={form.correctionText}
             onChange={(e) => setForm({ ...form, correctionText: e.target.value })}
             rows={3}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           />
           <input
-            placeholder="ou URL de la correction (PDF)"
+            placeholder={t("pastPapersEditor.correctionUrlPlaceholder")}
             value={form.correctionUrl}
             onChange={(e) => setForm({ ...form, correctionUrl: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           />
           {error && <p className="font-label-md text-label-md text-error-red">{error}</p>}
           <button type="button" onClick={create} className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg">
-            Enregistrer comme brouillon
+            {t("common.saveAsDraft")}
           </button>
         </div>
       )}

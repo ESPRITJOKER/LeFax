@@ -24,7 +24,7 @@ export function ProfilePage() {
         <div className="w-20 h-20 rounded-full bg-primary-container flex items-center justify-center text-white text-headline-lg font-headline-lg mb-md">
           {(user?.firstName ?? user?.phone ?? "?").charAt(0).toUpperCase()}
         </div>
-        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{user?.firstName ?? "Étudiant"}</h1>
+        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{user?.firstName ?? t("profile.studentFallback")}</h1>
         <p className="font-body-sm text-body-sm text-text-secondary">{user?.phone}</p>
       </div>
 
@@ -32,7 +32,7 @@ export function ProfilePage() {
         <div className="flex items-center justify-between p-md">
           <div className="flex items-center gap-md">
             <MaterialIcon name="school" className="text-on-surface-variant" />
-            <span className="font-body-md text-body-md text-on-surface">Mon parcours</span>
+            <span className="font-body-md text-body-md text-on-surface">{t("profile.myTrack")}</span>
           </div>
           <span className="font-label-md text-label-md text-text-secondary">
             {(user?.branchPreferences ?? []).map((slug) => t(`branches.${slug}`)).join(", ") || "—"}
@@ -45,16 +45,16 @@ export function ProfilePage() {
         >
           <div className="flex items-center gap-md">
             <MaterialIcon name="edit" className="text-on-surface-variant" />
-            <span className="font-body-md text-body-md text-on-surface">Modifier mes filières</span>
+            <span className="font-body-md text-body-md text-on-surface">{t("profile.editTracks")}</span>
           </div>
           <MaterialIcon name="chevron_right" className="text-on-surface-variant" />
         </button>
         <div className="flex items-center justify-between p-md">
           <div className="flex items-center gap-md">
             <MaterialIcon name="notifications" className="text-on-surface-variant" />
-            <span className="font-body-md text-body-md text-on-surface">Notifications</span>
+            <span className="font-body-md text-body-md text-on-surface">{t("profile.notifications")}</span>
           </div>
-          <span className="font-label-md text-label-md text-text-secondary">Bientôt disponible</span>
+          <span className="font-label-md text-label-md text-text-secondary">{t("onboarding.comingSoon")}</span>
         </div>
         <div className="flex items-center justify-between p-md">
           <div className="flex items-center gap-md">
@@ -71,7 +71,7 @@ export function ProfilePage() {
         className="w-full flex items-center justify-center gap-sm p-md bg-error-container/40 text-error-red rounded-xl font-label-lg text-label-lg"
       >
         <MaterialIcon name="logout" />
-        Déconnexion
+        {t("profile.logout")}
       </button>
     </div>
   );

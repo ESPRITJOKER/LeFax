@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type TeacherContentItemDto, type TeacherLessonOptionDto } from "../../lib/api-client";
 import { ContentListPanel } from "./ContentListPanel";
@@ -12,6 +13,7 @@ const EMPTY_OPTIONS = [
 
 /** No matching Stitch design — built from tokens (WEB-T03 créateur de QCM). */
 export function QcmGeneratorPage() {
+  const { t } = useTranslation();
   const [lessons, setLessons] = useState<TeacherLessonOptionDto[]>([]);
   const [qcms, setQcms] = useState<TeacherContentItemDto[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -44,11 +46,11 @@ export function QcmGeneratorPage() {
   async function create() {
     setError(null);
     if (!lessonId || !question || options.some((o) => !o.text) || !correctOptionId) {
-      setError("Leçon, question, 4 options et une bonne réponse sont requises.");
+      setError(t("qcmGenerator.validationRequired"));
       return;
     }
     if (explanation.length < 30) {
-      setError("L'explication doit contenir au moins 30 caractères.");
+      setError(t("qcmGenerator.explanationTooShort"));
       return;
     }
     try {
@@ -57,21 +59,21 @@ export function QcmGeneratorPage() {
       resetForm();
       refresh();
     } catch {
-      setError("Erreur lors de la création du QCM.");
+      setError(t("qcmGenerator.createError"));
     }
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-lg">
-        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">QCMs</h1>
+        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{t("qcmGenerator.title")}</h1>
         <button
           type="button"
           onClick={() => setShowForm((s) => !s)}
           className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg flex items-center gap-xs"
         >
           <MaterialIcon name="add" className="text-[16px]" />
-          Nouveau QCM
+          {t("qcmGenerator.newQcm")}
         </button>
       </div>
 
@@ -82,7 +84,7 @@ export function QcmGeneratorPage() {
             onChange={(e) => setLessonId(e.target.value)}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           >
-            <option value="">Sélectionner une leçon</option>
+            <option value="">{t("lessonEditor.selectLesson")}</option>
             {lessons.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.chapters?.subjects?.name} → {l.chapters?.name} → {l.title}
@@ -90,7 +92,7 @@ export function QcmGeneratorPage() {
             ))}
           </select>
           <textarea
-            placeholder="Question"
+            placeholder={t("qcmGenerator.questionPlaceholder")}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             rows={2}
@@ -103,10 +105,10 @@ export function QcmGeneratorPage() {
                 name="correct"
                 checked={correctOptionId === option.id}
                 onChange={() => setCorrectOptionId(option.id)}
-                title="Bonne réponse"
+                title={t("qcmGenerator.correctAnswerTitle")}
               />
               <input
-                placeholder={`Option ${String.fromCharCode(65 + i)}`}
+                placeholder={t("qcmGenerator.optionPlaceholder", { letter: String.fromCharCode(65 + i) })}
                 value={option.text}
                 onChange={(e) => {
                   const next = [...options];
@@ -118,7 +120,7 @@ export function QcmGeneratorPage() {
             </div>
           ))}
           <textarea
-            placeholder="Explication (min. 30 caractères)"
+            placeholder={t("qcmGenerator.explanationPlaceholder")}
             value={explanation}
             onChange={(e) => setExplanation(e.target.value)}
             rows={2}
@@ -129,13 +131,13 @@ export function QcmGeneratorPage() {
             onChange={(e) => setDifficulty(e.target.value)}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           >
-            <option value="easy">Facile</option>
-            <option value="intermediate">Intermédiaire</option>
-            <option value="hard">Difficile</option>
+            <option value="easy">{t("qcmGenerator.difficulty.easy")}</option>
+            <option value="intermediate">{t("qcmGenerator.difficulty.intermediate")}</option>
+            <option value="hard">{t("qcmGenerator.difficulty.hard")}</option>
           </select>
           {error && <p className="font-label-md text-label-md text-error-red">{error}</p>}
           <button type="button" onClick={create} className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg">
-            Enregistrer comme brouillon
+            {t("common.saveAsDraft")}
           </button>
         </div>
       )}

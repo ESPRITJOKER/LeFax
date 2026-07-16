@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type AdminExamDto, type AdminQcmOptionDto, type BranchDto } from "../../lib/api-client";
 
 /** No matching Stitch design — built from tokens (WEB-A03 planification concours blancs). */
 export function ExamsPage() {
+  const { t, i18n } = useTranslation();
   const [exams, setExams] = useState<AdminExamDto[]>([]);
   const [branches, setBranches] = useState<BranchDto[]>([]);
   const [qcms, setQcms] = useState<AdminQcmOptionDto[]>([]);
@@ -34,11 +36,11 @@ export function ExamsPage() {
   async function createExam() {
     setError(null);
     if (!form.title || !form.branchId || !form.opensAt) {
-      setError("Titre, filière et date d'ouverture sont requis.");
+      setError(t("adminExams.validationRequired"));
       return;
     }
     if (selectedQcms.size < 10) {
-      setError(`Minimum 10 questions requises (${selectedQcms.size} sélectionnée(s)).`);
+      setError(t("adminExams.minQuestions", { count: selectedQcms.size }));
       return;
     }
     try {
@@ -54,28 +56,28 @@ export function ExamsPage() {
       setSelectedQcms(new Set());
       refresh();
     } catch {
-      setError("Erreur lors de la création du concours.");
+      setError(t("adminExams.createError"));
     }
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-lg">
-        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">Concours blancs</h1>
+        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{t("examsList.title")}</h1>
         <button
           type="button"
           onClick={() => setShowForm((s) => !s)}
           className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg flex items-center gap-xs"
         >
           <MaterialIcon name="add" className="text-[16px]" />
-          Planifier un concours
+          {t("adminExams.scheduleNew")}
         </button>
       </div>
 
       {showForm && (
         <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-md mb-lg space-y-sm">
           <input
-            placeholder="Titre du concours"
+            placeholder={t("adminExams.titlePlaceholder")}
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
@@ -85,7 +87,7 @@ export function ExamsPage() {
             onChange={(e) => setForm({ ...form, branchId: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           >
-            <option value="">Sélectionner une filière</option>
+            <option value="">{t("common.selectBranch")}</option>
             {branches.map((b) => (
               <option key={b.id} value={b.id}>
                 {b.name}
@@ -101,7 +103,7 @@ export function ExamsPage() {
             />
             <input
               type="number"
-              placeholder="Durée (min)"
+              placeholder={t("adminExams.durationPlaceholder")}
               value={form.durationMinutes}
               onChange={(e) => setForm({ ...form, durationMinutes: e.target.value })}
               className="w-40 px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
@@ -110,10 +112,10 @@ export function ExamsPage() {
 
           <div>
             <p className="font-label-lg text-label-lg text-text-secondary mb-xs">
-              Questions ({selectedQcms.size} sélectionnée(s), min. 10)
+              {t("adminExams.questionsCount", { count: selectedQcms.size })}
             </p>
             <div className="max-h-56 overflow-y-auto border border-outline-variant rounded-lg divide-y divide-outline-variant">
-              {qcms.length === 0 && <p className="p-sm font-body-sm text-body-sm text-text-secondary">Aucun QCM publié disponible.</p>}
+              {qcms.length === 0 && <p className="p-sm font-body-sm text-body-sm text-text-secondary">{t("adminExams.noQcms")}</p>}
               {qcms.map((q) => (
                 <label key={q.id} className="flex items-start gap-sm p-sm cursor-pointer hover:bg-surface-container-low">
                   <input type="checkbox" checked={selectedQcms.has(q.id)} onChange={() => toggleQcm(q.id)} className="mt-1" />
@@ -127,23 +129,23 @@ export function ExamsPage() {
 
           {error && <p className="font-label-md text-label-md text-error-red">{error}</p>}
           <button type="button" onClick={createExam} className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg">
-            Planifier
+            {t("adminExams.schedule")}
           </button>
         </div>
       )}
 
       {exams.length === 0 ? (
-        <p className="font-body-md text-body-md text-text-secondary text-center py-xl">Aucun concours planifié.</p>
+        <p className="font-body-md text-body-md text-text-secondary text-center py-xl">{t("adminExams.empty")}</p>
       ) : (
         <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container border-b border-outline-variant">
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Titre</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Filière</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Ouverture</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Questions</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Statut</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("adminExams.colTitle")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("adminExams.colBranch")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("adminExams.colOpens")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("adminExams.colQuestions")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("adminExams.colStatus")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant">
@@ -152,7 +154,7 @@ export function ExamsPage() {
                   <td className="px-md py-3 font-body-md text-body-md">{e.title}</td>
                   <td className="px-md py-3 text-body-sm text-body-sm text-text-secondary">{e.branches?.name}</td>
                   <td className="px-md py-3 text-body-sm text-body-sm text-text-secondary">
-                    {new Date(e.opens_at).toLocaleString("fr-FR")}
+                    {new Date(e.opens_at).toLocaleString(i18n.language.startsWith("fr") ? "fr-FR" : "en-US")}
                   </td>
                   <td className="px-md py-3 text-body-sm text-body-sm text-text-secondary">{e.questionCount}</td>
                   <td className="px-md py-3">

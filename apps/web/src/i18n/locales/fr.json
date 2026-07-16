@@ -6,19 +6,36 @@
     "back": "Retour",
     "continue": "Continuer",
     "seconds": "s",
-    "optional": "Optionnel"
+    "optional": "Optionnel",
+    "cancel": "Annuler",
+    "backToDashboard": "Retour au tableau de bord",
+    "minutes": "{{count}} min",
+    "saveAsDraft": "Enregistrer comme brouillon",
+    "selectBranch": "Sélectionner une filière",
+    "actions": "Actions"
   },
   "landing": {
-    "tagline": "La préparation aux concours pour tout camerounais, quelle que soit sa région.",
-    "cta": "Commencer gratuitement",
+    "tagline": "Démocratiser l'excellence pour chaque étudiant camerounais.",
+    "heroSubtitle": "Votre parcours vers les prestigieuses Grandes Écoles commence ici avec une formation encadrée par des experts et des analyses pilotées par l'IA.",
+    "cta": "Commencer",
     "login": "Se connecter",
-    "whyTitle": "Pourquoi Lefax Course ?",
+    "whyTitle": "Pourquoi Lefax ?",
     "featureMicroTitle": "Micro-apprentissage",
-    "featureMicroBody": "Des fiches courtes et illustrées, conçues pour réviser efficacement entre deux cours.",
+    "featureMicroBody": "Maîtrisez des concepts complexes en sessions ciblées de 5 minutes conçues pour les emplois du temps chargés.",
     "featureExamTitle": "Concours blancs hebdomadaires",
-    "featureExamBody": "Entraînez-vous dans les conditions réelles de l'examen, chronométré et classé.",
-    "featureAiTitle": "Assistant IA",
-    "featureAiBody": "Posez vos questions et obtenez une explication immédiate, à toute heure.",
+    "featureExamBody": "Simulez les vraies conditions d'entrée aux Grandes Écoles chaque semaine et suivez votre classement.",
+    "featureAiTitle": "Assistant d'étude IA",
+    "featureAiBody": "Boucles de rétroaction personnalisées qui identifient vos points faibles avant qu'ils ne deviennent des obstacles.",
+    "successStories": "Témoignages de réussite",
+    "testimonial1Name": "Jean-Pierre M.",
+    "testimonial1Status": "Admis au Polytechnique de Yaoundé",
+    "testimonial1Quote": "« Lefax ne m'a pas seulement donné dessupports ; il m'a donné une stratégie. Les concours blancs étaient identiques à la vraie pression du concours. »",
+    "testimonial2Name": "Sarah K.",
+    "testimonial2Status": "Admise à l'ENAM",
+    "testimonial2Quote": "« Les modules de micro-apprentissage m'ont aidée à rester régulière même en travaillant à temps partiel. Je dois mon admission à la précision de Lefax. »",
+    "ctaTitle": "Prêt(e) à exceller ?",
+    "ctaBody": "Rejoignez plus de 10 000 étudiants qui se préparent pour un avenir meilleur dès aujourd'hui.",
+    "ctaButton": "S'inscrire maintenant",
     "footerBranches": "Filières",
     "footerRights": "Tous droits réservés.",
     "footerTagline": "Nous formons la prochaine génération d'excellence camerounaise, une leçon à la fois.",
@@ -93,14 +110,317 @@
   "studentNav": {
     "dashboard": "Tableau de bord",
     "lessons": "Leçons",
+    "tutor": "Tuteur",
     "exams": "Concours",
-    "wallet": "Portefeuille"
+    "wallet": "Portefeuille",
+    "profileAria": "Profil"
+  },
+  "tutorLock": {
+    "title": "Tuteur IA",
+    "heading": "Bientôt disponible sur l'application mobile",
+    "body": "Le Tuteur IA est en cours de développement pour l'application mobile Lefax. Restez à l'écoute pour le lancement !",
+    "cta": "Retour au tableau de bord"
+  },
+  "diagnostic": {
+    "intro": {
+      "title": "Testez votre niveau",
+      "body": "Répondez à quelques questions pour identifier vos points forts et vos zones à travailler. Nous adapterons vos futures leçons en fonction des résultats.",
+      "durationLabel": "Quelques minutes",
+      "durationCaption": "Durée estimée",
+      "analysisLabel": "Analyse intelligente",
+      "analysisCaption": "Basée sur vos réponses",
+      "start": "Commencer le diagnostic",
+      "later": "Plus tard",
+      "noPressureTitle": "Aucune pression, c'est un repère",
+      "noPressureBody": "Ce n'est pas un examen. Votre score n'est pas partagé. Il sert uniquement à adapter la difficulté de vos prochaines leçons."
+    },
+    "question": {
+      "modeLabel": "Mode diagnostic",
+      "counter": "Question {{current}}/{{total}}",
+      "percentComplete": "{{percent}}% complété",
+      "skip": "Passer",
+      "next": "Question suivante",
+      "viewResults": "Voir mes résultats"
+    },
+    "results": {
+      "title": "Votre profil de maîtrise",
+      "badge": "Diagnostic terminé",
+      "subtitle": "Voici votre niveau par matière selon vos réponses.",
+      "notEnoughData": "Pas assez de questions pour calculer un profil de maîtrise.",
+      "bySubject": "Par matière",
+      "subjectFallback": "Matière",
+      "weakZoneTitle": "Zone à travailler",
+      "weakZoneHint": "— concentrez vos prochaines révisions ici.",
+      "viewMastery": "Voir mon profil de maîtrise"
+    }
+  },
+  "reviewQueue": {
+    "title": "File de révision",
+    "empty": "Aucun contenu en attente de révision.",
+    "type": {
+      "lessonCard": "Fiche de cours",
+      "qcm": "QCM",
+      "pastPaper": "Ancien sujet"
+    },
+    "teacherFallback": "Enseignant",
+    "aiGenerated": "Généré par IA",
+    "overdue": "En attente depuis plus de 48h",
+    "autoGenerated": "Généré automatiquement",
+    "submittedBy": "Soumis par {{name}}",
+    "hideSources": "Masquer les sources",
+    "viewSources": "Voir les sources ({{count}})",
+    "loadingSources": "Chargement des sources...",
+    "noSources": "Aucune source trouvée.",
+    "feedbackTooShort": "Le feedback doit contenir au moins 20 caractères.",
+    "rejectPlaceholder": "Expliquez pourquoi ce contenu est rejeté (min. 20 caractères)",
+    "confirmReject": "Confirmer le rejet",
+    "approve": "Approuver",
+    "reject": "Rejeter"
+  },
+  "wallet": {
+    "insufficientBalance": "Solde FaxCoins insuffisant pour débloquer ce sujet.",
+    "availableBalance": "Solde disponible",
+    "premiumSubscription": "Abonnement Premium",
+    "upgradeBody": "Passez au tier Standard pour un accès complet",
+    "upgradeCta": "Passer au tier supérieur",
+    "paymentsComingSoon": "Les abonnements payants arrivent bientôt (CinetPay non encore connecté).",
+    "unlockSectionTitle": "Débloquer avec vos coins",
+    "noPapersToUnlock": "Aucun sujet à débloquer pour le moment.",
+    "recentActivity": "Activité récente",
+    "noTransactions": "Aucune transaction pour le moment.",
+    "boostTitle": "Boostez votre préparation",
+    "boostBody": "Ressources premium sélectionnées par nos meilleurs enseignants."
+  },
+  "courseLibrary": {
+    "selectBranch": "Sélectionnez une filière depuis votre profil pour accéder aux cours.",
+    "subjects": "Matières",
+    "noSubjects": "Aucune matière disponible pour le moment.",
+    "chapterCount": "{{count}} chapitre(s)",
+    "noChapters": "Aucun chapitre disponible.",
+    "noLessons": "Aucune leçon publiée pour ce chapitre.",
+    "completed": "Terminée"
+  },
+  "examCommon": {
+    "notFound": "Concours introuvable."
+  },
+  "examLeaderboard": {
+    "statusClosed": "Terminé",
+    "statusOngoing": "En cours",
+    "coinsEarnedPrefix": "Vous avez gagné",
+    "yourRankPrefix": "Votre rang :",
+    "rankOrdinal": "{{rank}}e",
+    "reviewCorrections": "Revoir les corrections",
+    "title": "Classement",
+    "updatedNow": "Mis à jour à l'instant",
+    "updatedMinutesAgo": "Mis à jour il y a {{count}} min",
+    "noSubmissions": "Aucune soumission notée pour le moment.",
+    "youMarker": "(vous)"
+  },
+  "examTake": {
+    "submitFailed": "La soumission a échoué (délai probablement dépassé).",
+    "sending": "Envoi...",
+    "submit": "Soumettre mes réponses"
+  },
+  "examCorrections": {
+    "unavailable": "Corrections indisponibles — vous n'avez pas encore soumis ce concours.",
+    "title": "Corrections",
+    "finalScore": "Score final : {{score}}%"
+  },
+  "pastPapers": {
+    "title": "Anciens sujets",
+    "empty": "Aucun ancien sujet publié pour le moment.",
+    "unlocked": "Débloqué"
+  },
+  "qcmPractice": {
+    "noneAvailable": "Aucun QCM disponible à ce niveau pour cette leçon.",
+    "counter": "Question {{current}} sur {{total}}",
+    "accuracy": "{{percent}}% de réussite",
+    "explanation": "Explication",
+    "timeElapsed": "Temps écoulé",
+    "currentStreak": "Série en cours",
+    "nextQuestion": "Question suivante",
+    "difficulty": {
+      "easy": "FACILE",
+      "intermediate": "INTERMÉDIAIRE",
+      "hard": "DIFFICILE"
+    }
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "Cette page n'existe pas ou a été déplacée.",
+    "cta": "Retour à l'accueil"
+  },
+  "teacherContent": {
+    "empty": "Aucun contenu pour le moment.",
+    "submit": "Soumettre",
+    "status": {
+      "draft": "Brouillon",
+      "inReview": "En révision",
+      "approved": "Publié",
+      "rejected": "Rejeté"
+    }
+  },
+  "lessonEditor": {
+    "title": "Fiches de cours",
+    "newCard": "Nouvelle fiche",
+    "selectLesson": "Sélectionner une leçon",
+    "contentPlaceholder": "Contenu de la fiche",
+    "imageUrlPlaceholder": "URL image (optionnel)",
+    "untitled": "(sans titre)",
+    "validationRequired": "Leçon et contenu texte sont requis.",
+    "createError": "Erreur lors de la création de la fiche."
+  },
+  "pastPapersEditor": {
+    "newPaper": "Déposer un sujet",
+    "selectBranch": "Sélectionner une filière",
+    "titlePlaceholder": "Titre",
+    "schoolPlaceholder": "École",
+    "yearPlaceholder": "Année",
+    "paperUrlPlaceholder": "URL du sujet (PDF)",
+    "correctionTextPlaceholder": "Correction (texte)",
+    "correctionUrlPlaceholder": "ou URL de la correction (PDF)",
+    "validationRequired": "Filière, titre, école et URL du sujet sont requis.",
+    "correctionRequired": "Une correction (texte ou PDF) est obligatoire.",
+    "submitError": "Erreur lors du dépôt du sujet."
+  },
+  "qcmGenerator": {
+    "title": "QCMs",
+    "newQcm": "Nouveau QCM",
+    "questionPlaceholder": "Question",
+    "correctAnswerTitle": "Bonne réponse",
+    "optionPlaceholder": "Option {{letter}}",
+    "explanationPlaceholder": "Explication (min. 30 caractères)",
+    "validationRequired": "Leçon, question, 4 options et une bonne réponse sont requises.",
+    "explanationTooShort": "L'explication doit contenir au moins 30 caractères.",
+    "createError": "Erreur lors de la création du QCM.",
+    "difficulty": {
+      "easy": "Facile",
+      "intermediate": "Intermédiaire",
+      "hard": "Difficile"
+    }
+  },
+  "qaInbox": {
+    "title": "Questions des élèves",
+    "unanswered": "Sans réponse",
+    "answered": "Répondues",
+    "emptyUnanswered": "Aucune question en attente.",
+    "emptyAnswered": "Aucune question répondue.",
+    "answerPlaceholder": "Votre réponse...",
+    "submitAnswer": "Répondre"
+  },
+  "performance": {
+    "title": "Performance du contenu",
+    "published": "Publiés",
+    "inReview": "En révision",
+    "drafts": "Brouillons",
+    "rejected": "Rejetés",
+    "dataNote": "Les taux de complétion étudiants et la rémunération estimée nécessitent des données d'engagement réelles (leçons vues, QCMs tentés) qui n'existent pas encore pour ce contenu."
+  },
+  "schools": {
+    "title": "Établissements",
+    "newContract": "Nouveau contrat",
+    "namePlaceholder": "Nom de l'établissement",
+    "cityPlaceholder": "Ville",
+    "seatQuotaPlaceholder": "Quota de places",
+    "directorEmailPlaceholder": "Email du directeur (optionnel)",
+    "createContract": "Créer le contrat",
+    "empty": "Aucun établissement partenaire.",
+    "colSchool": "École",
+    "colCode": "Code",
+    "colSeats": "Places",
+    "colExpiration": "Expiration",
+    "regenerateTitle": "Régénérer le code",
+    "validationRequired": "Nom, filière et date d'expiration sont requis.",
+    "createError": "Erreur lors de la création du contrat."
+  },
+  "adminExams": {
+    "scheduleNew": "Planifier un concours",
+    "titlePlaceholder": "Titre du concours",
+    "durationPlaceholder": "Durée (min)",
+    "questionsCount": "Questions ({{count}} sélectionnée(s), min. 10)",
+    "noQcms": "Aucun QCM publié disponible.",
+    "schedule": "Planifier",
+    "empty": "Aucun concours planifié.",
+    "colTitle": "Titre",
+    "colBranch": "Filière",
+    "colOpens": "Ouverture",
+    "colQuestions": "Questions",
+    "colStatus": "Statut",
+    "validationRequired": "Titre, filière et date d'ouverture sont requis.",
+    "minQuestions": "Minimum 10 questions requises ({{count}} sélectionnée(s)).",
+    "createError": "Erreur lors de la création du concours."
+  },
+  "usersAdmin": {
+    "title": "Utilisateurs",
+    "searchPlaceholder": "Rechercher par nom, téléphone, email...",
+    "allRoles": "Tous les rôles",
+    "search": "Rechercher",
+    "empty": "Aucun utilisateur trouvé.",
+    "colName": "Nom",
+    "colRole": "Rôle",
+    "colContact": "Contact",
+    "colStatus": "Statut",
+    "active": "Actif",
+    "inactive": "Désactivé",
+    "deactivateTitle": "Désactiver",
+    "role": {
+      "student": "Étudiant",
+      "teacher": "Enseignant",
+      "admin": "Admin"
+    }
+  },
+  "analytics": {
+    "title": "Statistiques",
+    "totalStudents": "Étudiants inscrits",
+    "totalTeachers": "Enseignants",
+    "publishedLessons": "Leçons publiées",
+    "publishedQcms": "QCMs publiés",
+    "pendingReviews": "En attente de révision",
+    "activeSubscriptions": "Abonnements actifs",
+    "dataNote": "MRR, DAU/WAU/MAU et les graphiques d'évolution nécessitent l'historique de facturation CinetPay (non connecté pour le moment) et un pipeline d'événements d'activité — non disponibles tant que ces intégrations ne sont pas en place."
+  },
+  "paymentsAdmin": {
+    "title": "Paiements & Abonnements",
+    "notConnectedNote": "Aucun compte CinetPay n'est encore connecté (comme pour les SMS via Africa's Talking, il faut un compte marchand réel). Ce journal est réel et se remplira dès que le flux de paiement (WEB-E13) sera branché sur un vrai fournisseur.",
+    "empty": "Aucun paiement enregistré.",
+    "colTransaction": "Transaction",
+    "colAmount": "Montant",
+    "colStatus": "Statut",
+    "colDate": "Date",
+    "status": {
+      "pending": "En attente",
+      "confirmed": "Confirmé",
+      "failed": "Échoué"
+    }
+  },
+  "examsList": {
+    "title": "Concours blancs",
+    "empty": "Aucun concours programmé pour le moment.",
+    "takeExam": "Passer l'examen",
+    "leaderboard": "Classement",
+    "status": {
+      "scheduled": "Programmé",
+      "open": "Ouvert",
+      "closed": "Clôturé",
+      "scored": "Résultats disponibles"
+    }
   },
   "studentDashboard": {
     "welcome": "Bon retour, {{firstName}}",
     "readyQuestion": "Prêt(e) pour {{school}} ?",
     "streak": "Série",
     "lessonsCompleted": "Leçons terminées",
+    "reward": {
+      "lessonComplete": "Leçon complétée",
+      "lesson_perfect_qcm_desc": "100% de réussite sur les QCMs d'une leçon",
+      "lessonPerfectQcm": "100% aux QCMs d'une leçon",
+      "exam_participation_desc": "Participation à un concours blanc",
+      "examParticipation": "Participation au concours blanc",
+      "exam_top10_desc": "Classé dans le top 10 d'un concours",
+      "examTop10": "Top 10 au concours blanc",
+      "paper_unlock_desc": "Sujet d'ancien examen débloqué",
+      "paperUnlock": "Débloquage d'un ancien sujet"
+    },
     "qcmAccuracy": "Précision QCM",
     "globalRanking": "Classement général",
     "whatsNext": "À SUIVRE",
@@ -164,7 +484,15 @@
     "noQuestions": "Aucune question en attente.",
     "respondToStudents": "Répondre aux étudiants",
     "contentDistribution": "Répartition du contenu",
-    "contentDistributionSubtitle": "Par type de contenu"
+    "contentDistributionSubtitle": "Par type de contenu",
+    "type": {
+      "lessonCard": "Fiche",
+      "qcm": "QCM",
+      "pastPaper": "Ancien sujet"
+    },
+    "distLessonCards": "Fiches",
+    "distQcms": "QCMs",
+    "distPastPapers": "Anciens sujets"
   },
   "adminDashboard": {
     "title": "Tableau de bord administrateur",
@@ -180,6 +508,24 @@
     "rejected": "Rejeté"
   },
   "profile": {
-    "language": "Langue"
+    "language": "Langue",
+    "studentFallback": "Étudiant",
+    "myTrack": "Mon parcours",
+    "editTracks": "Modifier mes filières",
+    "notifications": "Notifications",
+    "logout": "Déconnexion"
+  },
+  "lessonViewer": {
+    "noContent": "Cette leçon n'a pas encore de contenu publié.",
+    "stepOf": "Étape {{current}} sur {{total}}",
+    "percentComplete": "{{percent}}% Complété",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "finish": "Terminer"
+  },
+  "errorBoundary": {
+    "title": "Une erreur est survenue",
+    "body": "Quelque chose s'est mal passé lors de l'affichage de cette page. Essayez de rafraîchir.",
+    "reload": "Rafraîchir la page"
   }
 }

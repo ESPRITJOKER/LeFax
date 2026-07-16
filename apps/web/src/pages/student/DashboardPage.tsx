@@ -12,12 +12,13 @@ const REWARD_ICONS: Record<string, string> = {
   exam_top10: "military_tech",
   paper_unlock: "shopping_bag",
 };
-const REWARD_LABELS: Record<string, string> = {
-  lesson_complete: "Leçon complétée",
-  lesson_perfect_qcm: "100% aux QCMs d'une leçon",
-  exam_participation: "Participation au concours blanc",
-  exam_top10: "Top 10 au concours blanc",
-  paper_unlock: "Débloquage d'un ancien sujet",
+
+const REWARD_SUBTITLES: Record<string, string> = {
+  lesson_complete: "lesson_complete_desc",
+  lesson_perfect_qcm: "lesson_perfect_qcm_desc",
+  exam_participation: "exam_participation_desc",
+  exam_top10: "exam_top10_desc",
+  paper_unlock: "paper_unlock_desc",
 };
 
 function useCountdown(targetIso: string | undefined) {
@@ -41,6 +42,13 @@ function useCountdown(targetIso: string | undefined) {
 /** Ported from stitch_lefax_course_exam_prep/student_dashboard (WEB-E03). Every number is real — see api-client.studentDashboard. */
 export function StudentDashboardPage() {
   const { t } = useTranslation();
+  const rewardLabels: Record<string, string> = {
+    lesson_complete: t("studentDashboard.reward.lessonComplete"),
+    lesson_perfect_qcm: t("studentDashboard.reward.lessonPerfectQcm"),
+    exam_participation: t("studentDashboard.reward.examParticipation"),
+    exam_top10: t("studentDashboard.reward.examTop10"),
+    paper_unlock: t("studentDashboard.reward.paperUnlock"),
+  };
   const navigate = useNavigate();
   const user = useSessionStore((s) => s.user);
   const branch = user?.branchPreferences[0];
@@ -97,6 +105,11 @@ export function StudentDashboardPage() {
         <div className="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between h-32">
           <div className="flex justify-between items-start">
             <MaterialIcon name="insights" className="text-excellence-blue" />
+            {data.qcmAccuracy !== null && data.qcmAccuracy >= 80 && (
+              <span className="text-label-md font-label-md text-action-blue">
+                Top {100 - data.qcmAccuracy}%
+              </span>
+            )}
           </div>
           <div>
             <p className="text-display-lg font-display-lg text-primary">
@@ -124,7 +137,7 @@ export function StudentDashboardPage() {
               <p className="text-body-md font-body-md mt-1 max-w-[220px]">{t("studentDashboard.notRankedYet")}</p>
             )}
           </div>
-          {data.rank && data.rank <= 10 && (
+          {data.rank && (
             <div className="relative z-10 w-16 h-16 bg-achievement-gold/20 rounded-full flex items-center justify-center border border-achievement-gold/30">
               <MaterialIcon name="military_tech" filled className="text-achievement-gold text-4xl" />
             </div>
@@ -231,7 +244,12 @@ export function StudentDashboardPage() {
                 <div className="w-10 h-10 rounded-full bg-achievement-gold/10 flex items-center justify-center">
                   <MaterialIcon name={REWARD_ICONS[reward.reason] ?? "stars"} filled className="text-achievement-gold" />
                 </div>
-                <p className="text-label-lg font-label-lg text-primary flex-1">{REWARD_LABELS[reward.reason] ?? reward.reason}</p>
+                <div className="flex-1">
+                  <p className="text-label-lg font-label-lg text-primary">{rewardLabels[reward.reason] ?? reward.reason}</p>
+                  {REWARD_SUBTITLES[reward.reason] && (
+                    <p className="text-label-md font-label-md text-text-secondary">{t(`studentDashboard.reward.${REWARD_SUBTITLES[reward.reason]}`)}</p>
+                  )}
+                </div>
                 <div className="ml-auto text-achievement-gold font-label-lg">+{reward.amount} FaxCoins</div>
               </div>
             ))}

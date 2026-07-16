@@ -40,7 +40,7 @@ export function LessonViewerPage() {
   if (!lesson || lesson.cards.length === 0) {
     return (
       <div className="pt-20 px-margin-mobile max-w-[720px] mx-auto text-center">
-        <p className="font-body-md text-body-md text-text-secondary">Cette leçon n'a pas encore de contenu publié.</p>
+        <p className="font-body-md text-body-md text-text-secondary">{t("lessonViewer.noContent")}</p>
       </div>
     );
   }
@@ -113,9 +113,9 @@ export function LessonViewerPage() {
           <div className="flex flex-col gap-xs">
             <div className="flex justify-between items-center mb-1">
               <span className="text-label-md font-label-md text-on-surface-variant">
-                Étape {index + 1} sur {total}
+                {t("lessonViewer.stepOf", { current: index + 1, total })}
               </span>
-              <span className="text-label-md font-label-md text-excellence-blue font-bold">{percent}% Complété</span>
+              <span className="text-label-md font-label-md text-excellence-blue font-bold">{t("lessonViewer.percentComplete", { percent })}</span>
             </div>
             <div className="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
               <div
@@ -147,7 +147,7 @@ export function LessonViewerPage() {
             className="flex-1 py-3 px-lg border border-excellence-blue text-excellence-blue font-label-lg rounded-xl flex items-center justify-center gap-base active:opacity-80 transition-all disabled:opacity-40"
           >
             <MaterialIcon name="arrow_back" />
-            Précédent
+            {t("lessonViewer.previous")}
           </button>
           <button
             type="button"
@@ -155,7 +155,7 @@ export function LessonViewerPage() {
             disabled={advancing}
             className="flex-1 py-3 px-lg bg-excellence-blue text-white font-label-lg rounded-xl flex items-center justify-center gap-base active:opacity-80 transition-all shadow-md disabled:opacity-60"
           >
-            {index < total - 1 ? "Suivant" : "Terminer"}
+            {index < total - 1 ? t("lessonViewer.next") : t("lessonViewer.finish")}
             <MaterialIcon name="arrow_forward" />
           </button>
         </section>

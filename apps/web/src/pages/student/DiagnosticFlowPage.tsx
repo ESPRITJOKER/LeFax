@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type DiagnosticQuestionDto, type MasteryProfileDto } from "../../lib/api-client";
 import { useSessionStore } from "../../stores/session.store";
@@ -14,6 +15,7 @@ type Step = "intro" | "question" | "results";
  * and doesn't need its own URL per question.
  */
 export function DiagnosticFlowPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useSessionStore((s) => s.user);
   const [step, setStep] = useState<Step>("intro");
@@ -69,22 +71,19 @@ export function DiagnosticFlowPage() {
           <MaterialIcon name="psychology" filled className="text-white text-[64px]" />
         </div>
         <div className="space-y-md">
-          <h1 className="font-display-lg text-display-lg text-primary tracking-tight">Testez votre niveau</h1>
-          <p className="font-body-md text-body-md text-on-surface-variant px-md">
-            Répondez à quelques questions pour identifier vos points forts et vos zones à travailler. Nous
-            adapterons vos futures leçons en fonction des résultats.
-          </p>
+          <h1 className="font-display-lg text-display-lg text-primary tracking-tight">{t("diagnostic.intro.title")}</h1>
+          <p className="font-body-md text-body-md text-on-surface-variant px-md">{t("diagnostic.intro.body")}</p>
         </div>
         <div className="grid grid-cols-2 gap-md w-full pt-md">
           <div className="bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex flex-col items-center justify-center text-center">
             <MaterialIcon name="timer" className="text-excellence-blue text-[24px] mb-xs" />
-            <span className="font-label-lg text-label-lg text-primary">Quelques minutes</span>
-            <span className="font-label-md text-label-md text-on-surface-variant">Durée estimée</span>
+            <span className="font-label-lg text-label-lg text-primary">{t("diagnostic.intro.durationLabel")}</span>
+            <span className="font-label-md text-label-md text-on-surface-variant">{t("diagnostic.intro.durationCaption")}</span>
           </div>
           <div className="bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex flex-col items-center justify-center text-center border-l-4 border-l-achievement-gold">
             <MaterialIcon name="psychology" filled className="text-achievement-gold text-[24px] mb-xs" />
-            <span className="font-label-lg text-label-lg text-primary">Analyse intelligente</span>
-            <span className="font-label-md text-label-md text-on-surface-variant">Basée sur vos réponses</span>
+            <span className="font-label-lg text-label-lg text-primary">{t("diagnostic.intro.analysisLabel")}</span>
+            <span className="font-label-md text-label-md text-on-surface-variant">{t("diagnostic.intro.analysisCaption")}</span>
           </div>
         </div>
         <div className="w-full pt-xl space-y-md">
@@ -94,7 +93,7 @@ export function DiagnosticFlowPage() {
             disabled={loading}
             className="w-full bg-excellence-blue text-white font-label-lg text-label-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-sm disabled:opacity-60"
           >
-            {loading ? "Chargement..." : "Commencer le diagnostic"}
+            {loading ? t("common.loading") : t("diagnostic.intro.start")}
             <MaterialIcon name="arrow_forward" />
           </button>
           <button
@@ -102,17 +101,16 @@ export function DiagnosticFlowPage() {
             onClick={() => navigate("/app")}
             className="w-full text-excellence-blue font-label-lg text-label-lg py-3 rounded-xl hover:bg-surface-container-low transition-colors"
           >
-            Plus tard
+            {t("diagnostic.intro.later")}
           </button>
         </div>
         <div className="w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-md text-left">
           <div className="flex items-start gap-md">
             <MaterialIcon name="info" className="text-action-blue mt-0.5" />
             <div className="space-y-xs">
-              <p className="font-label-lg text-label-lg text-primary">Aucune pression, c'est un repère</p>
+              <p className="font-label-lg text-label-lg text-primary">{t("diagnostic.intro.noPressureTitle")}</p>
               <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                Ce n'est pas un examen. Votre score n'est pas partagé. Il sert uniquement à adapter la difficulté de
-                vos prochaines leçons.
+                {t("diagnostic.intro.noPressureBody")}
               </p>
             </div>
           </div>
@@ -131,13 +129,15 @@ export function DiagnosticFlowPage() {
           <div className="flex justify-between items-end mb-sm">
             <div>
               <span className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">
-                Mode diagnostic
+                {t("diagnostic.question.modeLabel")}
               </span>
               <h1 className="text-headline-md font-headline-md text-excellence-blue">
-                Question {index + 1}/{questions.length}
+                {t("diagnostic.question.counter", { current: index + 1, total: questions.length })}
               </h1>
             </div>
-            <span className="text-label-lg font-label-lg text-excellence-blue">{percent}% complété</span>
+            <span className="text-label-lg font-label-lg text-excellence-blue">
+              {t("diagnostic.question.percentComplete", { percent })}
+            </span>
           </div>
           <div className="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
             <div className="h-full bg-excellence-blue transition-all duration-500" style={{ width: `${percent}%` }} />
@@ -177,7 +177,7 @@ export function DiagnosticFlowPage() {
             disabled={loading}
             className="flex-1 py-4 bg-surface-container-high text-primary font-bold rounded-xl active:scale-95 transition-transform"
           >
-            Passer
+            {t("diagnostic.question.skip")}
           </button>
           <button
             type="button"
@@ -185,7 +185,7 @@ export function DiagnosticFlowPage() {
             disabled={!selected || loading}
             className="flex-[2] py-4 bg-excellence-blue text-white font-bold rounded-xl active:scale-95 transition-all disabled:opacity-50"
           >
-            {index < questions.length - 1 ? "Question suivante" : "Voir mes résultats"}
+            {index < questions.length - 1 ? t("diagnostic.question.next") : t("diagnostic.question.viewResults")}
           </button>
         </section>
       </div>
@@ -197,29 +197,29 @@ export function DiagnosticFlowPage() {
     <div className="max-w-[720px] mx-auto">
       <section className="mb-lg">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-headline-lg-mobile font-headline-lg-mobile text-excellence-blue">Votre profil de maîtrise</h2>
+          <h2 className="text-headline-lg-mobile font-headline-lg-mobile text-excellence-blue">{t("diagnostic.results.title")}</h2>
           <span className="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-md font-label-md">
-            Diagnostic terminé
+            {t("diagnostic.results.badge")}
           </span>
         </div>
-        <p className="text-body-md text-on-surface-variant">Voici votre niveau par matière selon vos réponses.</p>
+        <p className="text-body-md text-on-surface-variant">{t("diagnostic.results.subtitle")}</p>
       </section>
 
       {profiles.length === 0 ? (
         <p className="font-body-md text-body-md text-text-secondary text-center py-xl">
-          Pas assez de questions pour calculer un profil de maîtrise.
+          {t("diagnostic.results.notEnoughData")}
         </p>
       ) : (
         <div className="space-y-md mb-xl">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm">
             <h3 className="text-label-lg font-label-lg text-on-surface-variant mb-md uppercase tracking-wider">
-              Par matière
+              {t("diagnostic.results.bySubject")}
             </h3>
             <div className="space-y-4">
               {profiles.map((p) => (
                 <div key={p.subject_id}>
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-body-md font-semibold text-excellence-blue">{p.subjects?.name ?? "Matière"}</span>
+                    <span className="text-body-md font-semibold text-excellence-blue">{p.subjects?.name ?? t("diagnostic.results.subjectFallback")}</span>
                     <span
                       className={`text-label-lg font-label-lg ${
                         p.mastery_score >= 70 ? "text-success-green" : p.is_weak_zone ? "text-error-red" : "text-on-surface-variant"
@@ -243,14 +243,14 @@ export function DiagnosticFlowPage() {
             <div className="bg-error-container/20 border border-error-red/20 rounded-xl p-md">
               <div className="flex items-center gap-2 mb-2">
                 <MaterialIcon name="warning" className="text-error-red text-[20px]" />
-                <h3 className="text-label-lg font-label-lg text-error-red uppercase tracking-wider">Zone à travailler</h3>
+                <h3 className="text-label-lg font-label-lg text-error-red uppercase tracking-wider">{t("diagnostic.results.weakZoneTitle")}</h3>
               </div>
               <p className="text-body-sm text-on-surface-variant">
                 {profiles
                   .filter((p) => p.is_weak_zone)
-                  .map((p) => p.subjects?.name ?? "Matière")
+                  .map((p) => p.subjects?.name ?? t("diagnostic.results.subjectFallback"))
                   .join(", ")}{" "}
-                — concentrez vos prochaines révisions ici.
+                {t("diagnostic.results.weakZoneHint")}
               </p>
             </div>
           )}
@@ -259,11 +259,18 @@ export function DiagnosticFlowPage() {
 
       <button
         type="button"
-        onClick={() => navigate("/app")}
-        className="w-full bg-excellence-blue text-white font-label-lg text-label-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-sm mb-xl"
+        onClick={() => navigate("/app/mastery")}
+        className="w-full bg-excellence-blue text-white font-label-lg text-label-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-sm mb-md"
       >
-        Retour au tableau de bord
-        <MaterialIcon name="arrow_forward" />
+        {t("diagnostic.results.viewMastery")}
+        <MaterialIcon name="insights" />
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate("/app")}
+        className="w-full text-excellence-blue font-label-lg text-label-lg py-3 rounded-xl hover:bg-surface-container-low transition-colors mb-xl"
+      >
+        {t("common.backToDashboard")}
       </button>
     </div>
   );

@@ -4,18 +4,27 @@ import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type QaQuestionDto, type TeacherContentItemDto, type TeacherLessonOptionDto } from "../../lib/api-client";
 
-const TYPE_LABELS: Record<string, string> = { lesson_card: "Fiche", qcm: "QCM", past_paper: "Ancien sujet" };
 const STATUS_STYLES: Record<string, string> = {
   draft: "bg-yellow-100 text-on-secondary-fixed-variant",
   in_review: "bg-surface-container text-on-surface-variant",
   approved: "bg-green-100 text-success-green",
   rejected: "bg-error-red/10 text-error-red",
 };
-const STATUS_LABELS: Record<string, string> = { draft: "Brouillon", in_review: "En révision", approved: "Publié", rejected: "Rejeté" };
 
 /** Ported from stitch_lefax_course_exam_prep/teacher_content_dashboard (WEB-T01). Every number below is real. */
 export function TeacherDashboardPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const typeLabels: Record<string, string> = {
+    lesson_card: t("teacherDashboard.type.lessonCard"),
+    qcm: t("teacherDashboard.type.qcm"),
+    past_paper: t("teacherDashboard.type.pastPaper"),
+  };
+  const statusLabels: Record<string, string> = {
+    draft: t("teacherContent.status.draft"),
+    in_review: t("teacherContent.status.inReview"),
+    approved: t("teacherContent.status.approved"),
+    rejected: t("teacherContent.status.rejected"),
+  };
   const navigate = useNavigate();
   const [items, setItems] = useState<TeacherContentItemDto[]>([]);
   const [lessons, setLessons] = useState<TeacherLessonOptionDto[]>([]);
@@ -57,13 +66,13 @@ export function TeacherDashboardPage() {
   for (const item of items) byType[item.type] = (byType[item.type] ?? 0) + 1;
   const distTotal = Math.max(1, totalContent);
   const distSegments = [
-    { key: "lesson_card", label: "Fiches", color: "bg-excellence-blue", count: byType.lesson_card ?? 0 },
-    { key: "qcm", label: "QCMs", color: "bg-action-blue", count: byType.qcm ?? 0 },
-    { key: "past_paper", label: "Anciens sujets", color: "bg-secondary-container", count: byType.past_paper ?? 0 },
+    { key: "lesson_card", label: t("teacherDashboard.distLessonCards"), color: "bg-excellence-blue", count: byType.lesson_card ?? 0 },
+    { key: "qcm", label: t("teacherDashboard.distQcms"), color: "bg-action-blue", count: byType.qcm ?? 0 },
+    { key: "past_paper", label: t("teacherDashboard.distPastPapers"), color: "bg-secondary-container", count: byType.past_paper ?? 0 },
   ];
 
   function titleOf(item: TeacherContentItemDto) {
-    return String(item.text_content ?? item.question ?? item.title ?? "(sans titre)").slice(0, 60);
+    return String(item.text_content ?? item.question ?? item.title ?? t("lessonEditor.untitled")).slice(0, 60);
   }
   function editRoute(item: TeacherContentItemDto) {
     return item.type === "lesson_card" ? "/teacher/lessons" : item.type === "qcm" ? "/teacher/qcms" : "/teacher/past-papers";
@@ -146,14 +155,14 @@ export function TeacherDashboardPage() {
                   {recent.map((item) => (
                     <tr key={item.id} className="hover:bg-surface-container-low transition-colors">
                       <td className="px-md py-4 font-body-md text-body-md font-medium">{titleOf(item)}</td>
-                      <td className="px-md py-4 text-body-sm text-body-sm text-text-secondary">{TYPE_LABELS[item.type]}</td>
+                      <td className="px-md py-4 text-body-sm text-body-sm text-text-secondary">{typeLabels[item.type]}</td>
                       <td className="px-md py-4">
                         <span className={`px-2 py-1 rounded-full text-label-md font-label-md ${STATUS_STYLES[item.status]}`}>
-                          {STATUS_LABELS[item.status]}
+                          {statusLabels[item.status]}
                         </span>
                       </td>
                       <td className="px-md py-4 text-body-sm text-body-sm text-text-secondary">
-                        {new Date(item.created_at).toLocaleDateString("fr-FR")}
+                        {new Date(item.created_at).toLocaleDateString(i18n.language.startsWith("fr") ? "fr-FR" : "en-US")}
                       </td>
                       <td className="px-md py-4">
                         <button type="button" onClick={() => navigate(editRoute(item))}>

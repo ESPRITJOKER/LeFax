@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type CoinHistoryEntryDto, type PaperDto } from "../../lib/api-client";
 
 /** Ported from stitch_lefax_course_exam_prep/faxcoins_premium_store (WEB-E11). */
 export function WalletPage() {
+  const { t, i18n } = useTranslation();
   const [balance, setBalance] = useState(0);
   const [history, setHistory] = useState<CoinHistoryEntryDto[]>([]);
   const [lockedPapers, setLockedPapers] = useState<PaperDto[]>([]);
@@ -28,7 +30,7 @@ export function WalletPage() {
       await api.unlockPaper(paper.id);
       refresh();
     } catch {
-      setUnlockError("Solde FaxCoins insuffisant pour débloquer ce sujet.");
+      setUnlockError(t("wallet.insufficientBalance"));
     }
   }
 
@@ -40,7 +42,7 @@ export function WalletPage() {
         <div className="absolute -top-12 -right-12 w-48 h-48 bg-achievement-gold/10 rounded-full blur-3xl" />
         <div className="relative z-10 flex flex-col items-center">
           <span className="text-label-lg font-label-lg text-on-primary-container opacity-80 uppercase tracking-widest mb-xs">
-            Solde disponible
+            {t("wallet.availableBalance")}
           </span>
           <div className="flex items-center gap-sm mb-lg">
             <MaterialIcon name="payments" filled className="text-achievement-gold text-[32px]" />
@@ -48,29 +50,29 @@ export function WalletPage() {
           </div>
           <div className="w-full bg-white/10 border border-white/20 p-md rounded-lg flex items-center justify-between gap-md">
             <div>
-              <p className="text-label-lg font-label-lg">Abonnement Premium</p>
-              <p className="text-body-sm font-body-sm text-on-primary-container">Passez au tier Standard pour un accès complet</p>
+              <p className="text-label-lg font-label-lg">{t("wallet.premiumSubscription")}</p>
+              <p className="text-body-sm font-body-sm text-on-primary-container">{t("wallet.upgradeBody")}</p>
             </div>
             <button
               type="button"
               onClick={() => setUpgradeNotice(true)}
               className="bg-achievement-gold text-primary font-label-lg px-md py-sm rounded-lg hover:scale-105 transition-transform active:scale-95 shrink-0"
             >
-              Passer au tier supérieur
+              {t("wallet.upgradeCta")}
             </button>
           </div>
           {upgradeNotice && (
             <p className="text-label-md font-label-md text-on-primary-container mt-sm">
-              Les abonnements payants arrivent bientôt (CinetPay non encore connecté).
+              {t("wallet.paymentsComingSoon")}
             </p>
           )}
         </div>
       </section>
 
       <section className="mb-xl">
-        <h2 className="text-headline-md font-headline-md text-excellence-blue mb-md">Débloquer avec vos coins</h2>
+        <h2 className="text-headline-md font-headline-md text-excellence-blue mb-md">{t("wallet.unlockSectionTitle")}</h2>
         {lockedPapers.length === 0 ? (
-          <p className="font-body-sm text-body-sm text-text-secondary">Aucun sujet à débloquer pour le moment.</p>
+          <p className="font-body-sm text-body-sm text-text-secondary">{t("wallet.noPapersToUnlock")}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-md">
             {lockedPapers.map((paper) => (
@@ -99,9 +101,9 @@ export function WalletPage() {
       </section>
 
       <section className="mb-lg">
-        <h2 className="text-headline-md font-headline-md text-excellence-blue mb-md">Activité récente</h2>
+        <h2 className="text-headline-md font-headline-md text-excellence-blue mb-md">{t("wallet.recentActivity")}</h2>
         {history.length === 0 ? (
-          <p className="font-body-sm text-body-sm text-text-secondary">Aucune transaction pour le moment.</p>
+          <p className="font-body-sm text-body-sm text-text-secondary">{t("wallet.noTransactions")}</p>
         ) : (
           <div className="space-y-sm">
             {history.map((entry) => (
@@ -121,7 +123,7 @@ export function WalletPage() {
                   <div>
                     <p className="text-label-lg font-label-lg">{entry.label}</p>
                     <p className="text-body-sm font-body-sm text-text-secondary">
-                      {new Date(entry.created_at).toLocaleDateString("fr-FR")}
+                      {new Date(entry.created_at).toLocaleDateString(i18n.language.startsWith("fr") ? "fr-FR" : "en-US")}
                     </p>
                   </div>
                 </div>
@@ -137,8 +139,8 @@ export function WalletPage() {
 
       <section className="rounded-xl overflow-hidden border border-outline-variant h-40 relative bg-gradient-to-br from-excellence-blue to-primary-container flex items-end p-md">
         <div>
-          <p className="text-white text-headline-md font-headline-md">Boostez votre préparation</p>
-          <p className="text-white/80 text-body-sm font-body-sm">Ressources premium sélectionnées par nos meilleurs enseignants.</p>
+          <p className="text-white text-headline-md font-headline-md">{t("wallet.boostTitle")}</p>
+          <p className="text-white/80 text-body-sm font-body-sm">{t("wallet.boostBody")}</p>
         </div>
       </section>
     </div>

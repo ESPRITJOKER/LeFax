@@ -5,12 +5,16 @@ import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type QcmDto } from "../../lib/api-client";
 import { useSessionStore } from "../../stores/session.store";
 
-const DIFFICULTY_LABELS: Record<string, string> = { easy: "FACILE", intermediate: "INTERMÉDIAIRE", hard: "DIFFICILE" };
 const DIFFICULTIES = ["easy", "intermediate", "hard"] as const;
 
 /** Ported from stitch_lefax_course_exam_prep/qcm_practice (WEB-E06). */
 export function QcmPracticePage() {
   const { t } = useTranslation();
+  const difficultyLabels: Record<string, string> = {
+    easy: t("qcmPractice.difficulty.easy"),
+    intermediate: t("qcmPractice.difficulty.intermediate"),
+    hard: t("qcmPractice.difficulty.hard"),
+  };
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
   const branch = useSessionStore((s) => s.user?.branchPreferences[0]);
@@ -94,7 +98,7 @@ export function QcmPracticePage() {
               } disabled:opacity-40`}
             >
               {!isUnlocked && <MaterialIcon name="lock" className="text-[16px]" />}
-              {DIFFICULTY_LABELS[d]}
+              {difficultyLabels[d]}
             </button>
           );
         })}
@@ -102,16 +106,16 @@ export function QcmPracticePage() {
 
       {!current ? (
         <p className="font-body-md text-body-md text-text-secondary text-center py-xl">
-          Aucun QCM disponible à ce niveau pour cette leçon.
+          {t("qcmPractice.noneAvailable")}
         </p>
       ) : (
         <>
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <span className="text-label-lg font-label-lg text-text-secondary">
-                Question {index + 1} sur {filtered.length}
+                {t("qcmPractice.counter", { current: index + 1, total: filtered.length })}
               </span>
-              <span className="text-label-lg font-label-lg text-excellence-blue">{accuracy}% de réussite</span>
+              <span className="text-label-lg font-label-lg text-excellence-blue">{t("qcmPractice.accuracy", { percent: accuracy })}</span>
             </div>
             <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
               <div
@@ -129,7 +133,7 @@ export function QcmPracticePage() {
                 </span>
               )}
               <span className="bg-surface-container-high text-on-surface-variant text-label-md font-label-md px-2 py-0.5 rounded">
-                {DIFFICULTY_LABELS[current.difficulty]}
+                {difficultyLabels[current.difficulty]}
               </span>
             </div>
             <h2 className="text-headline-md font-headline-md text-primary mb-4 leading-relaxed">{current.question}</h2>
@@ -183,7 +187,7 @@ export function QcmPracticePage() {
             <div className="bg-surface-container-low border-l-4 border-excellence-blue rounded-r-xl p-md mb-8">
               <div className="flex items-center gap-2 mb-3">
                 <MaterialIcon name="info" filled className="text-excellence-blue" />
-                <h3 className="text-headline-md font-headline-md text-excellence-blue">Explication</h3>
+                <h3 className="text-headline-md font-headline-md text-excellence-blue">{t("qcmPractice.explanation")}</h3>
               </div>
               <p className="text-body-md font-body-md text-on-surface-variant leading-relaxed">{feedback.explanation}</p>
             </div>
@@ -191,13 +195,13 @@ export function QcmPracticePage() {
 
           <div className="grid grid-cols-2 gap-4 mb-gutter">
             <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col items-center">
-              <span className="text-label-md font-label-md text-text-secondary uppercase tracking-wider mb-1">Temps écoulé</span>
+              <span className="text-label-md font-label-md text-text-secondary uppercase tracking-wider mb-1">{t("qcmPractice.timeElapsed")}</span>
               <span className="text-headline-lg font-headline-lg text-primary">
                 {minutes}:{seconds}
               </span>
             </div>
             <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col items-center">
-              <span className="text-label-md font-label-md text-text-secondary uppercase tracking-wider mb-1">Série en cours</span>
+              <span className="text-label-md font-label-md text-text-secondary uppercase tracking-wider mb-1">{t("qcmPractice.currentStreak")}</span>
               <span className="text-headline-lg font-headline-lg text-success-green flex items-center gap-1">
                 {correctStreak} <span className="text-body-sm">🔥</span>
               </span>
@@ -210,7 +214,7 @@ export function QcmPracticePage() {
               onClick={nextQuestion}
               className="w-full bg-excellence-blue text-white py-4 rounded-xl font-bold text-body-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg mb-8"
             >
-              Question suivante
+              {t("qcmPractice.nextQuestion")}
               <MaterialIcon name="arrow_forward" />
             </button>
           )}

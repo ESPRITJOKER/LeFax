@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type TeacherContentItemDto, type TeacherLessonOptionDto } from "../../lib/api-client";
 import { ContentListPanel } from "./ContentListPanel";
@@ -9,6 +10,7 @@ import { ContentListPanel } from "./ContentListPanel";
  * (image_url accepts a plain URL, matching the API's honest scope).
  */
 export function LessonEditorPage() {
+  const { t } = useTranslation();
   const [lessons, setLessons] = useState<TeacherLessonOptionDto[]>([]);
   const [cards, setCards] = useState<TeacherContentItemDto[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -27,7 +29,7 @@ export function LessonEditorPage() {
   async function create() {
     setError(null);
     if (!form.lessonId || !form.textContent) {
-      setError("Leçon et contenu texte sont requis.");
+      setError(t("lessonEditor.validationRequired"));
       return;
     }
     try {
@@ -41,21 +43,21 @@ export function LessonEditorPage() {
       setForm({ lessonId: "", textContent: "", imageUrl: "" });
       refresh();
     } catch {
-      setError("Erreur lors de la création de la fiche.");
+      setError(t("lessonEditor.createError"));
     }
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-lg">
-        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">Fiches de cours</h1>
+        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{t("lessonEditor.title")}</h1>
         <button
           type="button"
           onClick={() => setShowForm((s) => !s)}
           className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg flex items-center gap-xs"
         >
           <MaterialIcon name="add" className="text-[16px]" />
-          Nouvelle fiche
+          {t("lessonEditor.newCard")}
         </button>
       </div>
 
@@ -66,7 +68,7 @@ export function LessonEditorPage() {
             onChange={(e) => setForm({ ...form, lessonId: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           >
-            <option value="">Sélectionner une leçon</option>
+            <option value="">{t("lessonEditor.selectLesson")}</option>
             {lessons.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.chapters?.subjects?.name} → {l.chapters?.name} → {l.title}
@@ -74,28 +76,28 @@ export function LessonEditorPage() {
             ))}
           </select>
           <textarea
-            placeholder="Contenu de la fiche"
+            placeholder={t("lessonEditor.contentPlaceholder")}
             value={form.textContent}
             onChange={(e) => setForm({ ...form, textContent: e.target.value })}
             rows={4}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           />
           <input
-            placeholder="URL image (optionnel)"
+            placeholder={t("lessonEditor.imageUrlPlaceholder")}
             value={form.imageUrl}
             onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
             className="w-full px-md py-sm bg-surface-container rounded-xl border-none text-body-md font-body-md"
           />
           {error && <p className="font-label-md text-label-md text-error-red">{error}</p>}
           <button type="button" onClick={create} className="bg-excellence-blue text-white px-md py-sm rounded-xl font-label-lg text-label-lg">
-            Enregistrer comme brouillon
+            {t("common.saveAsDraft")}
           </button>
         </div>
       )}
 
       <ContentListPanel
         items={cards}
-        titleOf={(item) => String(item.text_content ?? "").slice(0, 80) || "(sans titre)"}
+        titleOf={(item) => String(item.text_content ?? "").slice(0, 80) || t("lessonEditor.untitled")}
         onSubmitted={refresh}
       />
     </div>

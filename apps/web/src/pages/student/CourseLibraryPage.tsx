@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type ChapterDto, type LessonListDto, type SubjectDto } from "../../lib/api-client";
 import { useSessionStore } from "../../stores/session.store";
@@ -9,6 +10,7 @@ import { useSessionStore } from "../../stores/session.store";
  * (WEB-E04 content hierarchy: matières -> chapitres -> leçons).
  */
 export function CourseLibraryPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useSessionStore((s) => s.user);
   const [branchId, setBranchId] = useState<string | null>(null);
@@ -52,7 +54,7 @@ export function CourseLibraryPage() {
 
   if (loading) return null;
   if (!branchId) {
-    return <p className="font-body-md text-body-md text-text-secondary text-center py-xl">Sélectionnez une filière depuis votre profil pour accéder aux cours.</p>;
+    return <p className="font-body-md text-body-md text-text-secondary text-center py-xl">{t("courseLibrary.selectBranch")}</p>;
   }
 
   return (
@@ -66,7 +68,7 @@ export function CourseLibraryPage() {
           }}
           className={selectedSubject ? "text-excellence-blue" : "text-primary font-bold"}
         >
-          Matières
+          {t("courseLibrary.subjects")}
         </button>
         {selectedSubject && (
           <>
@@ -90,7 +92,7 @@ export function CourseLibraryPage() {
 
       {!selectedSubject && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-md">
-          {subjects.length === 0 && <p className="font-body-md text-body-md text-text-secondary">Aucune matière disponible pour le moment.</p>}
+          {subjects.length === 0 && <p className="font-body-md text-body-md text-text-secondary">{t("courseLibrary.noSubjects")}</p>}
           {subjects.map((subject) => (
             <button
               key={subject.id}
@@ -102,7 +104,7 @@ export function CourseLibraryPage() {
                 <MaterialIcon name="menu_book" className="text-white" />
               </div>
               <h3 className="font-label-lg text-label-lg text-primary">{subject.name}</h3>
-              <p className="font-label-md text-label-md text-text-secondary">{subject.chapterCount} chapitre(s)</p>
+              <p className="font-label-md text-label-md text-text-secondary">{t("courseLibrary.chapterCount", { count: subject.chapterCount })}</p>
             </button>
           ))}
         </div>
@@ -110,7 +112,7 @@ export function CourseLibraryPage() {
 
       {selectedSubject && !selectedChapter && (
         <div className="flex flex-col gap-sm">
-          {chapters.length === 0 && <p className="font-body-md text-body-md text-text-secondary">Aucun chapitre disponible.</p>}
+          {chapters.length === 0 && <p className="font-body-md text-body-md text-text-secondary">{t("courseLibrary.noChapters")}</p>}
           {chapters.map((chapter) => (
             <button
               key={chapter.id}
@@ -127,7 +129,7 @@ export function CourseLibraryPage() {
 
       {selectedChapter && (
         <div className="flex flex-col gap-sm">
-          {lessons.length === 0 && <p className="font-body-md text-body-md text-text-secondary">Aucune leçon publiée pour ce chapitre.</p>}
+          {lessons.length === 0 && <p className="font-body-md text-body-md text-text-secondary">{t("courseLibrary.noLessons")}</p>}
           {lessons.map((lesson) => (
             <button
               key={lesson.id}
@@ -138,8 +140,8 @@ export function CourseLibraryPage() {
               <div>
                 <span className="font-label-lg text-label-lg text-primary block">{lesson.title}</span>
                 <span className="font-label-md text-label-md text-text-secondary">
-                  {lesson.estimated_minutes ? `${lesson.estimated_minutes} min` : ""}
-                  {lesson.progress.completed ? " • Terminée" : ""}
+                  {lesson.estimated_minutes ? t("common.minutes", { count: lesson.estimated_minutes }) : ""}
+                  {lesson.progress.completed ? ` • ${t("courseLibrary.completed")}` : ""}
                 </span>
               </div>
               <MaterialIcon name="chevron_right" className="text-on-surface-variant" />

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { api, type AdminPaymentDto } from "../../lib/api-client";
 
 const STATUS_STYLES: Record<string, string> = {
@@ -9,6 +10,12 @@ const STATUS_STYLES: Record<string, string> = {
 
 /** No matching Stitch design — built from tokens (WEB-A06 réconciliation paiements). */
 export function PaymentsPage() {
+  const { t, i18n } = useTranslation();
+  const statusLabels: Record<string, string> = {
+    pending: t("paymentsAdmin.status.pending"),
+    confirmed: t("paymentsAdmin.status.confirmed"),
+    failed: t("paymentsAdmin.status.failed"),
+  };
   const [payments, setPayments] = useState<AdminPaymentDto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,25 +30,23 @@ export function PaymentsPage() {
 
   return (
     <div>
-      <h1 className="font-headline-lg text-headline-lg text-excellence-blue mb-lg">Paiements & Abonnements</h1>
+      <h1 className="font-headline-lg text-headline-lg text-excellence-blue mb-lg">{t("paymentsAdmin.title")}</h1>
       <div className="bg-surface-container-low border border-outline-variant rounded-xl p-md mb-lg flex items-start gap-md">
         <p className="font-body-sm text-body-sm text-text-secondary">
-          Aucun compte CinetPay n'est encore connecté (comme pour les SMS via Africa's Talking, il faut un compte
-          marchand réel). Ce journal est réel et se remplira dès que le flux de paiement (WEB-E13) sera branché sur
-          un vrai fournisseur.
+          {t("paymentsAdmin.notConnectedNote")}
         </p>
       </div>
       {payments.length === 0 ? (
-        <p className="font-body-md text-body-md text-text-secondary text-center py-xl">Aucun paiement enregistré.</p>
+        <p className="font-body-md text-body-md text-text-secondary text-center py-xl">{t("paymentsAdmin.empty")}</p>
       ) : (
         <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container border-b border-outline-variant">
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Transaction</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Montant</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Statut</th>
-                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">Date</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("paymentsAdmin.colTransaction")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("paymentsAdmin.colAmount")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("paymentsAdmin.colStatus")}</th>
+                <th className="px-md py-3 font-label-lg text-label-lg text-text-secondary">{t("paymentsAdmin.colDate")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant">
@@ -51,11 +56,11 @@ export function PaymentsPage() {
                   <td className="px-md py-3 font-body-md text-body-md">{p.amount_xaf} XAF</td>
                   <td className="px-md py-3">
                     <span className={`px-2 py-1 rounded-full text-label-md font-label-md ${STATUS_STYLES[p.status] ?? ""}`}>
-                      {p.status}
+                      {statusLabels[p.status] ?? p.status}
                     </span>
                   </td>
                   <td className="px-md py-3 text-body-sm text-body-sm text-text-secondary">
-                    {new Date(p.created_at).toLocaleDateString("fr-FR")}
+                    {new Date(p.created_at).toLocaleDateString(i18n.language.startsWith("fr") ? "fr-FR" : "en-US")}
                   </td>
                 </tr>
               ))}

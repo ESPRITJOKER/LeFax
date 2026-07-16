@@ -232,6 +232,49 @@ export const api = {
     request<{ questions: QaQuestionDto[] }>(`/teacher/qa/questions?status=${status}`),
   answerQaQuestion: (questionId: string, body: string) =>
     request<{ answer: unknown }>(`/teacher/qa/questions/${questionId}/answer`, { method: "POST", body: { body } }),
+
+  // --- ai tutor -------------------------------------------------------------
+  createTutorSession: (branchId?: string) =>
+    request<{ session: { id: string } }>("/ai/sessions", { method: "POST", body: { branchId } }),
+  tutorSessions: () => request<{ sessions: { id: string; title: string | null; created_at: string }[] }>("/ai/sessions"),
+  tutorMessages: (sessionId: string) =>
+    request<{ messages: { id: string; role: string; content: string; confidence_score: number | null; tokens_used: number | null; created_at: string }[] }>(
+      `/ai/sessions/${sessionId}/messages`
+    ),
+  sendTutorMessage: (sessionId: string, content: string) =>
+    request<{ message: { id?: string; content: string; confidenceScore: number }; grounded: boolean }>(
+      `/ai/sessions/${sessionId}/messages`,
+      { method: "POST", body: { content } }
+    ),
+  escalateTutorSession: (sessionId: string, reason?: string) =>
+    request<{ escalated: boolean }>(`/ai/sessions/${sessionId}/escalate`, { method: "POST", body: { reason } }),
+
+  // --- content pipeline -----------------------------------------------------
+  generateContentDraft: (body: { subjectId: string; chapterId?: string; draftType: string; topicHint?: string }) =>
+    request<{ draft: ContentDraftDto }>("/content-pipeline/generate", { method: "POST", body }),
+  contentDrafts: (status?: string, subjectId?: string) =>
+    request<{ drafts: ContentDraftDto[] }>(
+      `/content-pipeline/drafts${status ? `?status=${status}` : ""}${subjectId ? `&subjectId=${subjectId}` : ""}`
+    ),
+  contentDraftSources: (draftId: string) =>
+    request<{ draft: ContentDraftDto; sources: RagChunkDto[] }>(`/content-pipeline/drafts/${draftId}/sources`),
+  indexContent: (body: { sourceType: string; sourceId: string; content: string; metadata?: Record<string, unknown> }) =>
+    request<{ indexed: number }>("/content-pipeline/index", { method: "POST", body }),
+
+  // --- payments -------------------------------------------------------------
+  initiatePayment: (planId: string) =>
+    request<{ paymentUrl: string; checkoutUrl: string; token: string }>("/payments/initiate", {
+      method: "POST",
+      body: { planId },
+    }),
+  paymentStatus: (token: string) =>
+    request<{ payment: { id: string; status: string; amount_xaf: number; confirmed_at: string | null; created_at: string } }>(
+      `/payments/status/${token}`
+    ),
+  paymentHistory: () =>
+    request<{ payments: { id: string; amount_xaf: number; status: string; confirmed_at: string | null; created_at: string }[] }>(
+      "/payments/history"
+    ),
 };
 
 // --- DTOs (loosely typed — the API is the real validation boundary) --------
@@ -461,4 +504,24 @@ export interface TeacherContentItemDto {
   feedback: string | null;
   created_at: string;
   [key: string]: unknown;
+}
+export interface ContentDraftDto {
+  id: string;
+  draft_type: string;
+  subject_id: string;
+  chapter_id: string | null;
+  title: string;
+  body: string;
+  source_chunks: string[];
+  generation_prompt: string | null;
+  status: string;
+  created_at: string;
+  subjects?: { name: string };
+}
+export interface RagChunkDto {
+  id: string;
+  content: string;
+  source_type: string;
+  source_id: string;
+  metadata: Record<string, unknown>;
 }

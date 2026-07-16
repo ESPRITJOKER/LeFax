@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type ExamDto, type LeaderboardEntryDto } from "../../lib/api-client";
 
@@ -11,6 +12,7 @@ const RANK_ACCENT: Record<number, string> = {
 
 /** Ported from stitch_lefax_course_exam_prep/mock_exam_leaderboard (WEB-E10). */
 export function ExamLeaderboardPage() {
+  const { t } = useTranslation();
   const { examId } = useParams<{ examId: string }>();
   const navigate = useNavigate();
   const [exam, setExam] = useState<ExamDto | null>(null);
@@ -35,7 +37,7 @@ export function ExamLeaderboardPage() {
   }, []);
 
   if (loading) return null;
-  if (!exam) return <p className="font-body-md text-body-md text-text-secondary text-center py-xl">Concours introuvable.</p>;
+  if (!exam) return <p className="font-body-md text-body-md text-text-secondary text-center py-xl">{t("examCommon.notFound")}</p>;
 
   const me = leaderboard.find((e) => e.isMe);
   // Reward rules mirror the fixed constants used server-side (+15
@@ -50,7 +52,7 @@ export function ExamLeaderboardPage() {
           <div className="absolute top-0 right-0 w-32 h-32 opacity-10 translate-x-10 -translate-y-10 border-[16px] border-white rounded-full" />
           <div className="relative z-10">
             <p className="text-label-md font-label-md text-on-primary-container uppercase tracking-widest mb-base">
-              {exam.status === "closed" || exam.status === "scored" ? "Terminé" : "En cours"}
+              {exam.status === "closed" || exam.status === "scored" ? t("examLeaderboard.statusClosed") : t("examLeaderboard.statusOngoing")}
             </p>
             <h2 className="text-headline-lg font-headline-lg mb-md leading-tight">{exam.title}</h2>
             <div className="flex flex-col gap-sm">
@@ -58,7 +60,7 @@ export function ExamLeaderboardPage() {
                 <div className="flex items-center gap-sm bg-white/10 w-fit px-md py-sm rounded-lg backdrop-blur-sm border border-white/10">
                   <MaterialIcon name="stars" filled className="text-achievement-gold" />
                   <span className="text-body-md font-body-md">
-                    Vous avez gagné <span className="font-bold">+{coinsEarned} FaxCoins</span>
+                    {t("examLeaderboard.coinsEarnedPrefix")} <span className="font-bold">+{coinsEarned} FaxCoins</span>
                   </span>
                 </div>
               )}
@@ -66,7 +68,7 @@ export function ExamLeaderboardPage() {
                 <div className="flex items-center gap-sm">
                   <MaterialIcon name="leaderboard" className="text-on-primary-container" />
                   <span className="text-body-md font-body-md">
-                    Votre rang : <span className="font-bold text-secondary-container">{me.rank}e</span>{" "}
+                    {t("examLeaderboard.yourRankPrefix")} <span className="font-bold text-secondary-container">{t("examLeaderboard.rankOrdinal", { rank: me.rank })}</span>{" "}
                     <span className="text-on-primary-container">({me.score}%)</span>
                   </span>
                 </div>
@@ -82,21 +84,21 @@ export function ExamLeaderboardPage() {
           onClick={() => navigate(`/app/exams/${examId}/corrections`)}
           className="flex-1 bg-excellence-blue text-white font-label-lg text-label-lg py-md rounded-xl shadow-md active:scale-95 transition-transform flex items-center justify-center gap-sm"
         >
-          Revoir les corrections
+          {t("examLeaderboard.reviewCorrections")}
           <MaterialIcon name="arrow_forward" />
         </button>
       </div>
 
       <div className="flex items-center justify-between mb-md">
-        <h3 className="text-headline-md font-headline-md text-primary">Classement</h3>
+        <h3 className="text-headline-md font-headline-md text-primary">{t("examLeaderboard.title")}</h3>
         <span className="text-label-md font-label-md text-text-secondary">
-          {minutesAgo === 0 ? "Mis à jour à l'instant" : `Mis à jour il y a ${minutesAgo} min`}
+          {minutesAgo === 0 ? t("examLeaderboard.updatedNow") : t("examLeaderboard.updatedMinutesAgo", { count: minutesAgo })}
         </span>
       </div>
 
       {leaderboard.length === 0 ? (
         <p className="font-body-md text-body-md text-text-secondary text-center py-xl">
-          Aucune soumission notée pour le moment.
+          {t("examLeaderboard.noSubmissions")}
         </p>
       ) : (
         <div className="bg-surface-container-lowest border border-outline-variant rounded-xl divide-y divide-outline-variant overflow-hidden">
@@ -119,7 +121,7 @@ export function ExamLeaderboardPage() {
               <div className="flex-1">
                 <p className="text-label-lg font-label-lg text-primary">
                   {entry.firstName}
-                  {entry.isMe && <span className="text-label-md font-label-md text-text-secondary"> (vous)</span>}
+                  {entry.isMe && <span className="text-label-md font-label-md text-text-secondary"> {t("examLeaderboard.youMarker")}</span>}
                 </p>
               </div>
               <span className="text-label-lg font-label-lg text-success-green">{entry.score}%</span>

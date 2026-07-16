@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type ExamCorrectionDto } from "../../lib/api-client";
 
 /** WEB-E10 "Résultats détaillés" — no dedicated Stitch screen; built from tokens, reusing qcm_practice's answer-review visual language. */
 export function ExamCorrectionsPage() {
+  const { t } = useTranslation();
   const { examId } = useParams<{ examId: string }>();
   const [corrections, setCorrections] = useState<ExamCorrectionDto[]>([]);
   const [score, setScore] = useState<number | null>(null);
@@ -27,7 +29,7 @@ export function ExamCorrectionsPage() {
   if (error) {
     return (
       <p className="font-body-md text-body-md text-text-secondary text-center py-xl">
-        Corrections indisponibles — vous n'avez pas encore soumis ce concours.
+        {t("examCorrections.unavailable")}
       </p>
     );
   }
@@ -35,8 +37,8 @@ export function ExamCorrectionsPage() {
   return (
     <div className="max-w-[720px] mx-auto">
       <div className="mb-lg">
-        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">Corrections</h1>
-        {score !== null && <p className="font-body-md text-body-md text-text-secondary">Score final : {score}%</p>}
+        <h1 className="font-headline-lg text-headline-lg text-excellence-blue">{t("examCorrections.title")}</h1>
+        {score !== null && <p className="font-body-md text-body-md text-text-secondary">{t("examCorrections.finalScore", { score })}</p>}
       </div>
 
       <div className="flex flex-col gap-md">

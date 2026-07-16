@@ -22,6 +22,33 @@ const envSchema = z.object({
   AFRICASTALKING_USERNAME: z.string().optional(),
   AFRICASTALKING_API_KEY: z.string().optional(),
   AFRICASTALKING_SENDER_ID: z.string().optional(),
+
+  // Redis
+  REDIS_URL: z.string().default("redis://localhost:6379"),
+
+  // CinetPay
+  CINETPAY_API_KEY: z.string().default(""),
+  CINETPAY_SECRET_KEY: z.string().default(""),
+  CINETPAY_MERCHANT_ID: z.string().default(""),
+  CINETPAY_WEBHOOK_SECRET: z.string().default(""),
+
+  // LLM providers
+  LLM_PROVIDER: z.enum(["mistral", "openai", "anthropic"]).default("mistral"),
+  MISTRAL_API_KEY: z.string().default(""),
+  MISTRAL_BASE_URL: z.string().optional(),
+  OPENAI_API_KEY: z.string().default(""),
+  OPENAI_BASE_URL: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().default(""),
+  ANTHROPIC_BASE_URL: z.string().optional(),
+
+  // Embedding service
+  EMBEDDING_SERVICE_URL: z.string().default("http://localhost:8080"),
+
+  // Guardrails
+  RAG_CONFIDENCE_THRESHOLD: z.coerce.number().min(0).max(1).default(0.5),
+  RAG_TOP_K: z.coerce.number().int().positive().default(5),
+  TUTOR_DAILY_LIMIT: z.coerce.number().int().positive().default(50),
+  CONFIDENCE_FLAG_THRESHOLD: z.coerce.number().min(0).max(1).default(0.7),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type ExamDetailDto } from "../../lib/api-client";
 
@@ -9,6 +10,7 @@ import { api, type ExamDetailDto } from "../../lib/api-client";
  * authoritative for the deadline (NFR-08); this countdown is display-only.
  */
 export function ExamTakePage() {
+  const { t } = useTranslation();
   const { examId } = useParams<{ examId: string }>();
   const navigate = useNavigate();
   const [exam, setExam] = useState<ExamDetailDto | null>(null);
@@ -44,14 +46,14 @@ export function ExamTakePage() {
       await api.submitExam(examId, answers);
       navigate(`/app/exams/${examId}/leaderboard`);
     } catch {
-      setError("La soumission a échoué (délai probablement dépassé).");
+      setError(t("examTake.submitFailed"));
     } finally {
       setSubmitting(false);
     }
   }
 
   if (loading) return null;
-  if (!exam) return <p className="font-body-md text-body-md text-text-secondary text-center py-xl">Concours introuvable.</p>;
+  if (!exam) return <p className="font-body-md text-body-md text-text-secondary text-center py-xl">{t("examCommon.notFound")}</p>;
 
   const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
   const seconds = String(remainingSeconds % 60).padStart(2, "0");
@@ -95,7 +97,7 @@ export function ExamTakePage() {
         disabled={submitting || remainingSeconds <= 0}
         className="w-full bg-excellence-blue text-white py-4 rounded-xl font-bold text-body-lg flex items-center justify-center gap-2 shadow-lg mb-8 disabled:opacity-50"
       >
-        {submitting ? "Envoi..." : "Soumettre mes réponses"}
+        {submitting ? t("examTake.sending") : t("examTake.submit")}
         <MaterialIcon name="send" />
       </button>
     </div>

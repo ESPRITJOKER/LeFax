@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { api, type QaQuestionDto } from "../../lib/api-client";
 
 /** No matching Stitch design — built from tokens (WEB-T06 boîte de réception Q&A). */
 export function QaInboxPage() {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<"unanswered" | "answered">("unanswered");
   const [questions, setQuestions] = useState<QaQuestionDto[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -28,7 +30,7 @@ export function QaInboxPage() {
 
   return (
     <div>
-      <h1 className="font-headline-lg text-headline-lg text-excellence-blue mb-lg">Questions des élèves</h1>
+      <h1 className="font-headline-lg text-headline-lg text-excellence-blue mb-lg">{t("qaInbox.title")}</h1>
 
       <div className="flex mb-lg rounded-lg bg-surface-container-low p-1 w-fit">
         <button
@@ -36,20 +38,20 @@ export function QaInboxPage() {
           onClick={() => setTab("unanswered")}
           className={`px-md py-xs rounded-lg font-label-lg text-label-lg ${tab === "unanswered" ? "bg-white shadow-sm text-primary" : "text-on-surface-variant"}`}
         >
-          Sans réponse
+          {t("qaInbox.unanswered")}
         </button>
         <button
           type="button"
           onClick={() => setTab("answered")}
           className={`px-md py-xs rounded-lg font-label-lg text-label-lg ${tab === "answered" ? "bg-white shadow-sm text-primary" : "text-on-surface-variant"}`}
         >
-          Répondues
+          {t("qaInbox.answered")}
         </button>
       </div>
 
       {loading ? null : questions.length === 0 ? (
         <p className="font-body-md text-body-md text-text-secondary text-center py-xl">
-          {tab === "unanswered" ? "Aucune question en attente." : "Aucune question répondue."}
+          {tab === "unanswered" ? t("qaInbox.emptyUnanswered") : t("qaInbox.emptyAnswered")}
         </p>
       ) : (
         <div className="flex flex-col gap-md">
@@ -66,7 +68,7 @@ export function QaInboxPage() {
                   <input
                     value={answers[q.id] ?? ""}
                     onChange={(e) => setAnswers((a) => ({ ...a, [q.id]: e.target.value }))}
-                    placeholder="Votre réponse..."
+                    placeholder={t("qaInbox.answerPlaceholder")}
                     className="flex-1 px-md py-sm bg-surface-container rounded-xl border-none text-body-sm font-body-sm"
                   />
                   <button
@@ -74,7 +76,7 @@ export function QaInboxPage() {
                     onClick={() => answer(q.id)}
                     className="px-md py-sm bg-excellence-blue text-white rounded-xl font-label-lg text-label-lg"
                   >
-                    Répondre
+                    {t("qaInbox.submitAnswer")}
                   </button>
                 </div>
               )}

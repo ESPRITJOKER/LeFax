@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MaterialIcon } from "../../components/ui/MaterialIcon";
 import { api, type PaperDto } from "../../lib/api-client";
 
 /** No matching Stitch design — built from tokens (WEB-E08 anciens sujets). */
 export function PastPapersPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [papers, setPapers] = useState<PaperDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,10 +22,10 @@ export function PastPapersPage() {
 
   return (
     <div>
-      <h1 className="font-headline-lg text-headline-lg text-excellence-blue mb-lg">Anciens sujets</h1>
+      <h1 className="font-headline-lg text-headline-lg text-excellence-blue mb-lg">{t("pastPapers.title")}</h1>
       {papers.length === 0 ? (
         <p className="font-body-md text-body-md text-text-secondary text-center py-xl">
-          Aucun ancien sujet publié pour le moment.
+          {t("pastPapers.empty")}
         </p>
       ) : (
         <div className="flex flex-col gap-sm">
@@ -46,7 +48,7 @@ export function PastPapersPage() {
               {paper.unlocked ? (
                 <span className="font-label-md text-label-md text-success-green flex items-center gap-xs">
                   <MaterialIcon name="lock_open" className="text-[16px]" />
-                  Débloqué
+                  {t("pastPapers.unlocked")}
                 </span>
               ) : (
                 <button

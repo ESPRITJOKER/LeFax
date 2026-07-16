@@ -8,6 +8,7 @@ import { useSessionStore } from "../stores/session.store";
 const NAV_ITEMS = [
   { to: "/app", icon: "dashboard", labelKey: "studentNav.dashboard", end: true },
   { to: "/app/lessons", icon: "menu_book", labelKey: "studentNav.lessons" },
+  { to: "/app/tutor", icon: "smart_toy", labelKey: "studentNav.tutor" },
   { to: "/app/exams", icon: "quiz", labelKey: "studentNav.exams" },
   { to: "/app/wallet", icon: "payments", labelKey: "studentNav.wallet" },
 ] as const;
@@ -26,7 +27,7 @@ export function StudentAppShell() {
     <div className="min-h-dvh bg-background">
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
         <div className="flex items-center gap-md">
-          <button type="button" onClick={() => navigate("/app/profile")} className="p-1 rounded-full hover:bg-surface-container-low" aria-label="Profil">
+          <button type="button" onClick={() => navigate("/app/profile")} className="p-1 rounded-full hover:bg-surface-container-low" aria-label={t("studentNav.profileAria")}>
             <MaterialIcon name="menu" className="text-primary" />
           </button>
           <h1 className="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">
@@ -38,6 +39,7 @@ export function StudentAppShell() {
             <MaterialIcon name="monetization_on" filled className="text-achievement-gold" />
             <span className="font-label-lg text-label-lg text-primary">{balance ?? "—"}</span>
           </div>
+          <span className="text-label-lg font-label-lg text-primary">5 🔥</span>
         </div>
       </header>
 

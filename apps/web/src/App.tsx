@@ -23,6 +23,8 @@ import { WalletPage } from "./pages/student/WalletPage";
 import { PastPapersPage } from "./pages/student/PastPapersPage";
 import { ProfilePage } from "./pages/student/ProfilePage";
 import { DiagnosticFlowPage } from "./pages/student/DiagnosticFlowPage";
+import { TutorPage } from "./pages/student/TutorPage";
+import { MasteryProfilePage } from "./pages/student/MasteryProfilePage";
 import { TeacherDashboardPage } from "./pages/teacher/DashboardPage";
 import { LessonEditorPage } from "./pages/teacher/LessonEditorPage";
 import { QcmGeneratorPage } from "./pages/teacher/QcmGeneratorPage";
@@ -112,6 +114,8 @@ export function App() {
           <Route path="papers" element={<PastPapersPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="diagnostic" element={<DiagnosticFlowPage />} />
+          <Route path="tutor" element={<TutorPage />} />
+          <Route path="mastery" element={<MasteryProfilePage />} />
         </Route>
 
         <Route
