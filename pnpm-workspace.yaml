@@ -4,4 +4,4 @@ packages:
   - "supabase"
 allowBuilds:
   esbuild: true
-  msgpackr-extract: set this to true or false
+  msgpackr-extract: true
