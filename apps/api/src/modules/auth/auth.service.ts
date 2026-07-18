@@ -5,6 +5,12 @@ import type { AuthUser } from "@lefax/shared";
 import type { FastifyInstance } from "fastify";
 import type { AccessTokenPayload } from "../../plugins/jwt.js";
 
+export class AccountDisabledError extends Error {
+  constructor() {
+    super("ACCOUNT_DISABLED");
+  }
+}
+
 type ProfileRow = {
   id: string;
   role: "student" | "teacher" | "admin";
@@ -47,7 +53,7 @@ export class AuthService {
     if (error) throw error;
 
     if (existing) {
-      if (!existing.is_active) throw new Error("ACCOUNT_DISABLED");
+      if (!existing.is_active) throw new AccountDisabledError();
       return { user: toAuthUser(existing), isNewUser: false };
     }
 

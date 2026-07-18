@@ -84,6 +84,7 @@
       "OTP_RESEND_COOLDOWN": "Veuillez patienter avant de redemander un code.",
       "INVALID_CREDENTIALS": "Email ou mot de passe incorrect.",
       "SCHOOL_CODE_INVALID": "Code établissement invalide ou expiré.",
+      "ACCOUNT_DISABLED": "Votre compte a été désactivé. Contactez le support.",
       "INTERNAL": "Une erreur est survenue. Réessayez."
     }
   },

@@ -7,7 +7,7 @@ import {
 import type { FastifyInstance, FastifyReply } from "fastify";
 import { REFRESH_COOKIE_NAME } from "../../plugins/jwt.js";
 import { createSmsProvider } from "../../providers/sms.js";
-import { AuthService } from "./auth.service.js";
+import { AccountDisabledError, AuthService } from "./auth.service.js";
 import { OtpRateLimitError, OtpService, OtpVerifyError } from "./otp.service.js";
 
 const REFRESH_COOKIE_MAX_AGE_SECONDS = 7 * 24 * 60 * 60; // 7 days, matches JWT_REFRESH_TTL default
@@ -67,18 +67,20 @@ export default async function authRoutes(fastify: FastifyInstance) {
     }
     try {
       await otpService.verifyOtp(body.data.phone, body.data.code);
+      const { user, isNewUser } = await authService.findOrCreateStudentByPhone(body.data.phone, body.data.firstName);
+      const { accessToken, refreshToken } = await authService.issueTokens(user);
+      setRefreshCookie(reply, refreshToken, isProd);
+      return reply.send({ accessToken, user, isNewUser });
     } catch (err) {
       if (err instanceof OtpVerifyError || err instanceof OtpRateLimitError) {
         return reply.code(errorStatus(err.code)).send({ error: err.code, message: "Code invalide ou expiré." });
       }
+      if (err instanceof AccountDisabledError) {
+        return reply.code(403).send({ error: "ACCOUNT_DISABLED", message: "Votre compte a été désactivé." });
+      }
       request.log.error(err);
       return reply.code(500).send({ error: "INTERNAL", message: "Erreur serveur." });
     }
-
-    const { user, isNewUser } = await authService.findOrCreateStudentByPhone(body.data.phone, body.data.firstName);
-    const { accessToken, refreshToken } = await authService.issueTokens(user);
-    setRefreshCookie(reply, refreshToken, isProd);
-    return reply.send({ accessToken, user, isNewUser });
   });
 
   fastify.post("/auth/staff-login", async (request, reply) => {
@@ -86,13 +88,18 @@ export default async function authRoutes(fastify: FastifyInstance) {
     if (!body.success) {
       return reply.code(400).send({ error: "INVALID_CREDENTIALS", message: "Email ou mot de passe invalide." });
     }
-    const user = await authService.findStaffByEmail(body.data.email, body.data.password);
-    if (!user) {
-      return reply.code(401).send({ error: "INVALID_CREDENTIALS", message: "Email ou mot de passe invalide." });
+    try {
+      const user = await authService.findStaffByEmail(body.data.email, body.data.password);
+      if (!user) {
+        return reply.code(401).send({ error: "INVALID_CREDENTIALS", message: "Email ou mot de passe invalide." });
+      }
+      const { accessToken, refreshToken } = await authService.issueTokens(user);
+      setRefreshCookie(reply, refreshToken, isProd);
+      return reply.send({ accessToken, user });
+    } catch (err) {
+      request.log.error(err);
+      return reply.code(500).send({ error: "INTERNAL", message: "Erreur serveur." });
     }
-    const { accessToken, refreshToken } = await authService.issueTokens(user);
-    setRefreshCookie(reply, refreshToken, isProd);
-    return reply.send({ accessToken, user });
   });
 
   fastify.post("/auth/refresh", async (request, reply) => {

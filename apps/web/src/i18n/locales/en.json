@@ -84,6 +84,7 @@
       "OTP_RESEND_COOLDOWN": "Please wait before requesting another code.",
       "INVALID_CREDENTIALS": "Incorrect email or password.",
       "SCHOOL_CODE_INVALID": "Invalid or expired school code.",
+      "ACCOUNT_DISABLED": "Your account has been disabled. Contact support.",
       "INTERNAL": "Something went wrong. Please try again."
     }
   },

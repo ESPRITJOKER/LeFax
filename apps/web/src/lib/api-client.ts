@@ -13,9 +13,21 @@ export class ApiError extends Error {
   }
 }
 
+const KNOWN_AUTH_ERROR_CODES = new Set([
+  "OTP_INVALID", "OTP_EXPIRED", "OTP_LOCKED", "OTP_MAX_ATTEMPTS",
+  "OTP_RESEND_COOLDOWN", "RATE_LIMITED", "INVALID_CREDENTIALS",
+  "UNAUTHORIZED", "FORBIDDEN", "ACCOUNT_DISABLED", "INTERNAL",
+]);
+
 async function parseError(res: Response): Promise<never> {
   const body = await res.json().catch(() => ({}));
-  throw new ApiError(res.status, body.error ?? "UNKNOWN", body.message ?? res.statusText);
+  // Fastify's global rate-limit uses "Too Many Requests" as error code;
+  // normalise to the known RATE_LIMITED code so the frontend i18n matches.
+  const rawCode: string = res.status === 429 && body.error === "Too Many Requests"
+    ? "RATE_LIMITED"
+    : body.error ?? "INTERNAL";
+  const code = KNOWN_AUTH_ERROR_CODES.has(rawCode) ? rawCode : "INTERNAL";
+  throw new ApiError(res.status, code, body.message ?? res.statusText);
 }
 
 // Refresh tokens are single-use (rotated server-side on every call), so two
