@@ -15,7 +15,7 @@ const envSchema = z.object({
 
   CORS_ORIGINS: z
     .string()
-    .default("http://localhost:5173")
+    .default("http://localhost:5173,https://le-fax-web.vercel.app")
     .transform((v) => v.split(",").map((s) => s.trim())),
 
   SMS_PROVIDER: z.enum(["console", "africastalking"]).default("console"),

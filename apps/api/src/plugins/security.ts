@@ -7,8 +7,16 @@ import type { FastifyInstance } from "fastify";
 export default fp(async function securityPlugin(fastify: FastifyInstance) {
   await fastify.register(helmet);
 
+  const allowedOrigins: string[] = fastify.config.CORS_ORIGINS;
+  const VERCEL_PREVIEW_RE = /^https:\/\/lefax-web-git-.+\.vercel\.app$/;
+
   await fastify.register(cors, {
-    origin: fastify.config.CORS_ORIGINS,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin) || VERCEL_PREVIEW_RE.test(origin)) {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"), false);
+    },
     credentials: true,
   });
 
