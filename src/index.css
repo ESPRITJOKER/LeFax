@@ -40,6 +40,15 @@
   color-scheme: light;
 }
 
+/*
+ * Dark mode is an explicit per-user Profile preference (CDC 6.12), not an
+ * OS-level default — it must only apply once a logged-in user turns it on
+ * (Profile.tsx sets data-theme="dark" on <html> from profiles.dark_mode).
+ * There is intentionally no `@media (prefers-color-scheme: dark)` fallback:
+ * that was auto-applying a dark theme to signed-out visitors (e.g. Login/
+ * Register) purely from their OS setting, before they'd ever chosen one —
+ * light is always the default until a user explicitly opts in.
+ */
 :root[data-theme="dark"] {
   --color-surface: oklch(18% 0.015 258);
   --color-card: oklch(24% 0.02 258);
@@ -47,17 +56,6 @@
   --color-muted: oklch(70% 0.01 258);
   --color-text: oklch(92% 0.01 258);
   color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-surface: oklch(18% 0.015 258);
-    --color-card: oklch(24% 0.02 258);
-    --color-border: oklch(32% 0.02 258);
-    --color-muted: oklch(70% 0.01 258);
-    --color-text: oklch(92% 0.01 258);
-    color-scheme: dark;
-  }
 }
 
 * {
