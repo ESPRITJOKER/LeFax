@@ -1,0 +1,48 @@
+# Supabase CLI project config.
+# Once you've created a project at https://supabase.com/dashboard, run:
+#   supabase link --project-ref <your-project-ref>
+#   supabase db push
+# to apply supabase/migrations/*.sql (and supabase/seed.sql via `supabase db reset` locally).
+
+project_id = "lefax-course"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.sms]
+enable_signup = true
+# OTP confirmation is OFF for now: no SMS provider is configured/budgeted yet
+# (CDC section 8/13). With this false, phone+password sign-up auto-confirms
+# and returns a session immediately, so register/login work without SMS.
+# Flip to true once a real provider (Twilio, MessageBird, Vonage...) is
+# configured in this project's Auth settings, then `supabase config push`.
+enable_confirmations = false
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[storage.vector]
+enabled = false
+
+[edge_runtime]
+enabled = true
