@@ -12,7 +12,7 @@ const TABS: { to: string; icon: IconName; labelKey: "nav_home" | "nav_courses" |
 export function BottomTabs() {
   const { t } = useI18n();
   return (
-    <div className="sticky bottom-0 bg-card border-t border-border flex px-2 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))]">
+    <div className="lg:hidden sticky bottom-0 bg-card border-t border-border flex px-2 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))]">
       {TABS.map((tab) => (
         <NavLink
           key={tab.to}

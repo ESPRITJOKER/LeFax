@@ -37,7 +37,7 @@ export default function Track() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav={false}>
       <div className="flex-1 flex flex-col px-[22px] pb-6 pt-1.5 overflow-y-auto">
         <div className="font-serif font-bold text-[23px] text-ink-950 mt-2.5 mb-1">{t("track_title")}</div>
         <div className="text-[13px] text-muted mb-5">{t("track_sub")}</div>

@@ -106,7 +106,7 @@ export default function Dashboard() {
           ) : subjects.length === 0 ? (
             <div className="text-sm text-muted py-4">{isSupabaseConfigured ? t("common_error") : t("backend_banner")}</div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {subjects.map((s) => (
                 <div
                   key={s.id}
@@ -135,7 +135,7 @@ export default function Dashboard() {
 
         <div className="px-[22px] pt-3.5 pb-6">
           <div className="text-[13.5px] font-bold text-ink-900 mb-3">{t("dash_quickAccess")}</div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
             {quickAccess.map((q) => (
               <div
                 key={q.label}

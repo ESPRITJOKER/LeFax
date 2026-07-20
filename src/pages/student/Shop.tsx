@@ -68,7 +68,7 @@ export default function Shop() {
           </div>
         </div>
 
-        <div className="px-[22px] pt-4.5 pt-[18px] pb-6 grid grid-cols-2 gap-3">
+        <div className="px-[22px] pt-4.5 pt-[18px] pb-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
           {loading ? (
             <Spinner />
           ) : items.length === 0 ? (

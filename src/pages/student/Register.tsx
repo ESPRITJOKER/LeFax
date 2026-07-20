@@ -107,7 +107,7 @@ export default function Register() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav={false}>
       {step === "form" && (
         <div className="flex-1 flex flex-col px-[22px] pb-6 overflow-y-auto">
           <div className="flex items-center gap-2.5 my-2 mb-5">

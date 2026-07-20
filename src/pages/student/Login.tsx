@@ -31,7 +31,7 @@ export default function Login() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav={false}>
       <div className="flex-1 flex flex-col px-[22px] pb-6">
         <div className="flex items-center gap-2.5 my-2 mb-5">
           <Icon name="cap" size={22} className="text-ink-700" />

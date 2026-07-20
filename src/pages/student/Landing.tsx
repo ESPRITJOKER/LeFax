@@ -12,7 +12,7 @@ export default function Landing() {
   }
 
   return (
-    <PhoneFrame topBar={false}>
+    <PhoneFrame topBar={false} nav={false}>
       <div className="flex-1 flex flex-col items-center justify-center gap-7 p-8 bg-ink-950 sm:rounded-[26px]">
         <div className="flex flex-col items-center gap-2.5">
           <div className="w-[68px] h-[68px] rounded-2xl bg-ink-700 flex items-center justify-center">
