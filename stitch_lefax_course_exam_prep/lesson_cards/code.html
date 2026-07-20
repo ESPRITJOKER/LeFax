@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#002468",
+                    "success-green": "#2E7D32",
+                    "inverse-primary": "#c3c3eb",
+                    "on-secondary-fixed": "#261a00",
+                    "surface-variant": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary": "#101230",
+                    "background": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "secondary-fixed": "#ffdf9e",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#6c5000",
+                    "secondary-fixed-dim": "#fabd00",
+                    "on-tertiary-container": "#5f8bff",
+                    "excellence-blue": "#252746",
+                    "on-secondary-fixed-variant": "#5b4300",
+                    "on-primary-fixed": "#171937",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d8dadc",
+                    "surface": "#f7f9fb",
+                    "text-secondary": "#64748B",
+                    "error-red": "#D32F2F",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#00174a",
+                    "achievement-gold": "#FFC107",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#191c1e",
+                    "secondary-container": "#fdc003",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#5a5c7e",
+                    "primary-container": "#252746",
+                    "primary-fixed": "#e0e0ff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-gray": "#F3E9F7",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f7f9fb",
+                    "tertiary-fixed": "#dbe1ff",
+                    "secondary": "#785900",
+                    "outline-variant": "#c8c5ce",
+                    "action-blue": "#0064FF",
+                    "on-primary": "#ffffff",
+                    "text-primary": "#1F3545",
+                    "tertiary-fixed-dim": "#b3c5ff",
+                    "primary-fixed-dim": "#c3c3eb",
+                    "tertiary": "#00123c",
+                    "on-surface-variant": "#46464d",
+                    "outline": "#77767e",
+                    "on-primary-fixed-variant": "#424465",
+                    "on-primary-container": "#8d8eb3",
+                    "on-tertiary-fixed-variant": "#003ea6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "margin-mobile": "16px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .card-shadow {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-slide { animation: slideIn 0.3s ease-out forwards; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-excellence-blue selection:text-white overflow-hidden">
+<!-- Top AppBar (from JSON guidance) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<button class="active:scale-95 transition-transform duration-150 p-base hover:bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">Lefax Course</h1>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-label-lg font-label-lg text-primary bg-surface-container-low px-3 py-1 rounded-full">5 🔥</span>
+</div>
+</header>
+<main class="pt-16 pb-20 h-screen flex flex-col max-w-[720px] mx-auto overflow-hidden">
+<!-- Lesson Sub-Header & Progress -->
+<section class="px-margin-mobile py-md">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-text-secondary uppercase tracking-wider">Biology • Chapter 4</span>
+<h2 class="text-headline-md font-headline-md text-primary">Cell Division: Mitosis</h2>
+</div>
+<button class="p-base hover:bg-surface-container-high rounded-full transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant group-active:text-achievement-gold transition-colors" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-center mb-1">
+<span class="text-label-md font-label-md text-on-surface-variant">Step 4 of 12</span>
+<span class="text-label-md font-label-md text-excellence-blue font-bold">33% Complete</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-excellence-blue w-1/3 transition-all duration-500 ease-out"></div>
+</div>
+</div>
+</section>
+<!-- Main Card Canvas -->
+<section class="flex-1 px-margin-mobile flex items-center justify-center relative overflow-hidden">
+<!-- Central Learning Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl border border-outline-variant card-shadow p-lg flex flex-col animate-slide max-h-[85%] overflow-y-auto no-scrollbar">
+<!-- Diagram Container -->
+<div class="w-full aspect-video rounded-lg overflow-hidden bg-surface-container-low mb-lg border border-outline-variant relative">
+<img class="w-full h-full object-cover" data-alt="A scientific and detailed biological illustration of a cell during the metaphase stage of mitosis. The image shows chromosomes lined up in the center of a translucent, glowing blue cell against a clean, minimalist white background. Soft, diffused professional studio lighting highlights the intricate spindle fibers and cellular structure. The style is academic, modern, and clinical, using a palette of excellence blue and subtle soft grays for a premium educational feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5jZeTD7fQn0y1hIWso-mpYuQtY1eTk5Krtl4jsJ8DoEJNhekm1zZgu5o_XrqVGYKySpMQEffdCxOG9u46I_WelB2AVqD8fI4a-5DI4UDdXNRCREHB018mLNL58HogBhaOYFn10KkFpoMxK8NycykQsJoH3svbGtBCi_9GhKYFiMXaLITFOPDKZF8ZtX6sWdpY10VLI_RE7ZYqLAz_9WrjomJSOV_vf2GZeg9p-LQRw1m1ScFDH7fOO4Xr68mwPNt-VlJ4g92R7oc"/>
+<div class="absolute bottom-2 right-2 bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded text-[10px] font-label-md">
+                        Fig 4.2: Metaphase Alignment
+                    </div>
+</div>
+<div class="space-y-md">
+<h3 class="text-headline-md font-headline-md text-excellence-blue">Stage 2: Metaphase</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+                        During <strong>Metaphase</strong>, the cell's chromosomes align themselves in the middle of the cell through a type of cellular "tug of war." The chromosomes, which have been replicated and remain joined at a central point called the centromere, are called sister chromatids.
+                    </p>
+<div class="bg-surface-container-low p-md rounded-lg border-l-4 border-excellence-blue">
+<p class="text-label-lg font-label-lg text-primary mb-1 flex items-center gap-base">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                            Key Concept
+                        </p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                            The "Metaphase Plate" is the imaginary plane where all chromosomes line up before being pulled apart.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Side Swipe Hints (Desktop Only/Visual indicator) -->
+<div class="hidden md:block absolute left-2 opacity-10">
+<span class="material-symbols-outlined text-[48px]">chevron_left</span>
+</div>
+<div class="hidden md:block absolute right-2 opacity-10">
+<span class="material-symbols-outlined text-[48px]">chevron_right</span>
+</div>
+</section>
+<!-- Navigation Controls -->
+<section class="p-margin-mobile flex justify-between items-center gap-md">
+<button class="flex-1 py-3 px-lg border border-excellence-blue text-excellence-blue font-label-lg rounded-xl flex items-center justify-center gap-base active:opacity-80 transition-all">
+<span class="material-symbols-outlined">arrow_back</span>
+                Previous
+            </button>
+<button class="flex-1 py-3 px-lg bg-excellence-blue text-white font-label-lg rounded-xl flex items-center justify-center gap-base active:opacity-80 transition-all shadow-md">
+                Next Lesson
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</section>
+</main>
+<!-- Bottom Navigation Bar (from JSON guidance) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-xs pb-safe h-16 bg-surface border-t border-outline-variant md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-label-md font-label-md">Lessons</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="text-label-md font-label-md">Exams</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for bookmark toggle
+        const bookmarkBtn = document.querySelector('button .material-symbols-outlined[data-icon="bookmark"]');
+        let isBookmarked = false;
+        
+        bookmarkBtn.parentElement.addEventListener('click', () => {
+            isBookmarked = !isBookmarked;
+            bookmarkBtn.style.fontVariationSettings = isBookmarked ? "'FILL' 1" : "'FILL' 0";
+            bookmarkBtn.classList.toggle('text-achievement-gold', isBookmarked);
+            
+            // Haptic-like feedback animation
+            bookmarkBtn.parentElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                bookmarkBtn.parentElement.style.transform = 'scale(1)';
+            }, 100);
+        });
+
+        // Simple Card Slide simulation on button clicks
+        const nextBtn = document.querySelector('button.bg-excellence-blue');
+        const card = document.querySelector('.animate-slide');
+        
+        nextBtn.addEventListener('click', () => {
+            card.style.transition = 'transform 0.2s ease-in, opacity 0.2s ease-in';
+            card.style.transform = 'translateX(-100px)';
+            card.style.opacity = '0';
+            
+            setTimeout(() => {
+                card.style.transform = 'translateX(100px)';
+                setTimeout(() => {
+                    card.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+                    card.style.transform = 'translateX(0)';
+                    card.style.opacity = '1';
+                }, 50);
+            }, 200);
+        });
+    </script>
+</body></html>

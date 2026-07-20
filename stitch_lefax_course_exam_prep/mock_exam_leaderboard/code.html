@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lefax Course - Mock Exam Results</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config Verbatim -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#002468",
+                    "success-green": "#2E7D32",
+                    "inverse-primary": "#c3c3eb",
+                    "on-secondary-fixed": "#261a00",
+                    "surface-variant": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary": "#101230",
+                    "background": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "secondary-fixed": "#ffdf9e",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#6c5000",
+                    "secondary-fixed-dim": "#fabd00",
+                    "on-tertiary-container": "#5f8bff",
+                    "excellence-blue": "#252746",
+                    "on-secondary-fixed-variant": "#5b4300",
+                    "on-primary-fixed": "#171937",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d8dadc",
+                    "surface": "#f7f9fb",
+                    "text-secondary": "#64748B",
+                    "error-red": "#D32F2F",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#00174a",
+                    "achievement-gold": "#FFC107",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#191c1e",
+                    "secondary-container": "#fdc003",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#5a5c7e",
+                    "primary-container": "#252746",
+                    "primary-fixed": "#e0e0ff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-gray": "#F3E9F7",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f7f9fb",
+                    "tertiary-fixed": "#dbe1ff",
+                    "secondary": "#785900",
+                    "outline-variant": "#c8c5ce",
+                    "action-blue": "#0064FF",
+                    "on-primary": "#ffffff",
+                    "text-primary": "#1F3545",
+                    "tertiary-fixed-dim": "#b3c5ff",
+                    "primary-fixed-dim": "#c3c3eb",
+                    "tertiary": "#00123c",
+                    "on-surface-variant": "#46464d",
+                    "outline": "#77767e",
+                    "on-primary-fixed-variant": "#424465",
+                    "on-primary-container": "#8d8eb3",
+                    "on-tertiary-fixed-variant": "#003ea6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "margin-mobile": "16px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrolling-hide::-webkit-scrollbar { display: none; }
+        .scrolling-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased mb-20">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="menu">menu</span>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-excellence-blue">Lefax Course</h1>
+</div>
+<div class="flex items-center gap-md">
+<div class="bg-surface-container-low px-sm py-xs rounded-lg flex items-center gap-base active:scale-95 transition-transform">
+<span class="text-label-lg font-label-lg text-primary">5 🔥</span>
+</div>
+</div>
+</header>
+<main class="pt-20 px-margin-mobile max-w-[720px] mx-auto">
+<!-- Hero Result Section -->
+<section class="mb-lg">
+<div class="bg-excellence-blue text-white rounded-xl p-md shadow-sm relative overflow-hidden">
+<!-- Background Decorative Pattern -->
+<div class="absolute top-0 right-0 w-32 h-32 opacity-10 translate-x-10 -translate-y-10 border-[16px] border-white rounded-full"></div>
+<div class="relative z-10">
+<p class="text-label-md font-label-md text-on-primary-container uppercase tracking-widest mb-base">Completed</p>
+<h2 class="text-headline-lg font-headline-lg mb-md leading-tight">Medicine National Mock Exam</h2>
+<!-- Reward & Personal Rank -->
+<div class="flex flex-col gap-sm">
+<div class="flex items-center gap-sm bg-white/10 w-fit px-md py-sm rounded-lg backdrop-blur-sm border border-white/10">
+<span class="material-symbols-outlined text-achievement-gold" data-icon="stars" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="text-body-md font-body-md">You earned <span class="font-bold">+15 FaxCoins</span></span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="leaderboard">leaderboard</span>
+<span class="text-body-md font-body-md">Your Rank: <span class="font-bold text-secondary-container">142nd</span> <span class="text-on-primary-container">(Top 15%)</span></span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Button -->
+<div class="flex gap-md mb-lg">
+<button class="flex-1 bg-excellence-blue text-white font-label-lg text-label-lg py-md rounded-xl shadow-md active:scale-95 transition-transform flex items-center justify-center gap-sm">
+                Review Corrections
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Leaderboard Header -->
+<div class="flex items-center justify-between mb-md">
+<h3 class="text-headline-md font-headline-md text-primary">Leaderboard</h3>
+<span class="text-label-md font-label-md text-text-secondary">Updated 2m ago</span>
+</div>
+<!-- Leaderboard Bento Grid / Cards -->
+<div class="space-y-sm">
+<!-- Top 3 Podium (Visual Treatment) -->
+<div class="grid grid-cols-1 gap-sm">
+<!-- Rank 1 -->
+<div class="bg-surface-container-lowest border border-achievement-gold p-md rounded-xl flex items-center gap-md relative shadow-[0_4px_12px_rgba(255,193,7,0.1)]">
+<div class="flex-shrink-0 w-12 h-12 flex items-center justify-center relative">
+<div class="w-10 h-10 rounded-full bg-achievement-gold/10 flex items-center justify-center border-2 border-achievement-gold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a young medical student smiling, soft lighting, clean white background, corporate photography style, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUAj317ACup6zqvGZmo90LLTbVrWPG3WRttUlwC6Z4gmKPdFTPYPmVmS0BMjJQSMoGZUhSY_CwSTreo2_EjSeUR_hZeBs6XqNFmKdjunfwq6puZEiFOJXre8mYijGfjKg0GJv4PGUbGC6cF7dEencY_NCJnhFqYYbHTpFq9MIe9xp6S2eRleBPxHWc1cMehD5Yx4TKi1fDwVG0EiEWqbT08UM20sQyhaW7qHaobaJ6Ev4UOIHdUWj4S2Tue6fpj0i19Ba1mcSinEo"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-achievement-gold text-on-secondary-fixed w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-surface-container-lowest">1</div>
+</div>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Jean-Paul N.</p>
+<p class="text-label-md font-label-md text-text-secondary">Univ. of Yaoundé I</p>
+</div>
+<div class="text-right">
+<p class="text-label-lg font-label-lg text-success-green">192/200</p>
+<p class="text-label-md font-label-md text-text-secondary">42m 15s</p>
+</div>
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-achievement-gold text-[20px]" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<!-- Rank 2 & 3 -->
+<div class="grid grid-cols-2 gap-sm">
+<!-- Rank 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-sm rounded-xl flex flex-col items-center text-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-slate-300 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a serious female student with glasses, library setting in background blurred, soft natural lighting, corporate academic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPyywlYbuMPsKGQr0YT4loKjnZgZtZej2dXdZ2Xj8dB1SCQKGGQbacV7LweRGVGCvdtpkEzd5PjZLpZqyn9cfS818LVmyyRcxMp67yPX403NdgxqMnzxUNvyXvyceG1ozqfeUHUEmmg6-1HMhKn2XR_MTped8su2IQhZlJl5fpVcTJxcWQfZxxbUmr9nJnVk-JPDmioqzfqpnCb9ABBrwlG2rM5zFlCeDDvQIhSCH4pyHXttOzadD-C6Htu7CjF_IgFQHZNsgmuc8"/>
+<div class="absolute -bottom-1 -right-1 bg-slate-400 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold">2</div>
+</div>
+<div>
+<p class="text-label-md font-label-md text-primary truncate w-full">Marie-Grace T.</p>
+<p class="text-[10px] font-bold text-success-green">188/200</p>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-sm rounded-xl flex flex-col items-center text-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-orange-300 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young determined male student, university campus background, modern minimal corporate style, warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTb05dlO3LX7JMesxXB3ivJ6Fx848_rcGut--Ik5xXhii4YjO80x0_mynz9U-LzlDVj9-STlYtv1G73M1iUPx9u2Igp_zMYLDV9ZifbuuiXOLwDm0OCmJ_hwiSqnZfFlGC_Z5azUp4u-QkDjl5nbGkwjkDz-eS1ZnlVynLEAXqAQUxPNmJ7kiNMXyiKiusvjn8JaihIBRzxQxbVi4lRpOMo1x_dj-4tMiqS_k_SpENVATs6C7ElS7kM5SiGmfmCy9peRM-eFXiYRg"/>
+<div class="absolute -bottom-1 -right-1 bg-orange-400 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold">3</div>
+</div>
+<div>
+<p class="text-label-md font-label-md text-primary truncate w-full">Emmanuel K.</p>
+<p class="text-[10px] font-bold text-success-green">185/200</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Ranks 4-10 (List Style) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl divide-y divide-outline-variant overflow-hidden">
+<!-- Rank 4 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">4</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Christelle O.</p>
+<p class="text-label-md font-label-md text-text-secondary">182 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">48m 30s</span>
+</div>
+<!-- Rank 5 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">5</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Kevin M.</p>
+<p class="text-label-md font-label-md text-text-secondary">180 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">51m 10s</span>
+</div>
+<!-- Rank 6 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">6</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Saliou B.</p>
+<p class="text-label-md font-label-md text-text-secondary">179 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">45m 02s</span>
+</div>
+<!-- Rank 7 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">7</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Nadine Y.</p>
+<p class="text-label-md font-label-md text-text-secondary">177 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">55m 44s</span>
+</div>
+<!-- Rank 8 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">8</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Abigail F.</p>
+<p class="text-label-md font-label-md text-text-secondary">175 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">50m 12s</span>
+</div>
+<!-- Rank 9 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">9</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Yannick E.</p>
+<p class="text-label-md font-label-md text-text-secondary">174 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">59m 00s</span>
+</div>
+<!-- Rank 10 -->
+<div class="flex items-center gap-md p-md hover:bg-surface-container-low transition-colors">
+<span class="text-label-lg font-label-lg text-text-secondary w-6">10</span>
+<div class="flex-1">
+<p class="text-label-lg font-label-lg text-primary">Audrey L.</p>
+<p class="text-label-md font-label-md text-text-secondary">172 pts</p>
+</div>
+<span class="text-label-md font-label-md text-text-secondary">52m 15s</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-xs pb-safe h-16 bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Lessons</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="quiz" style="font-variation-settings: 'FILL' 1;">quiz</span>
+<span class="text-label-md font-label-md">Exams</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button, a, .active\\:scale-95').forEach(el => {
+            el.addEventListener('click', () => {
+                el.style.opacity = '0.8';
+                setTimeout(() => el.style.opacity = '1', 150);
+            });
+        });
+    </script>
+</body></html>

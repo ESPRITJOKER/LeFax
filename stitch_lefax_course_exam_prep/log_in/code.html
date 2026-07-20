@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Log In - Lefax Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#fdc003",
+                "outline": "#77767e",
+                "action-blue": "#0064FF",
+                "secondary-fixed": "#ffdf9e",
+                "tertiary-fixed": "#dbe1ff",
+                "surface-container-lowest": "#ffffff",
+                "surface-variant": "#e0e3e5",
+                "surface-container-high": "#e6e8ea",
+                "surface-container": "#eceef0",
+                "on-tertiary-fixed-variant": "#003ea6",
+                "secondary-fixed-dim": "#fabd00",
+                "inverse-on-surface": "#eff1f3",
+                "on-surface-variant": "#46464d",
+                "on-tertiary-container": "#5f8bff",
+                "primary-fixed": "#e0e0ff",
+                "on-secondary-container": "#6c5000",
+                "error": "#ba1a1a",
+                "surface-container-highest": "#e0e3e5",
+                "success-green": "#2E7D32",
+                "primary-fixed-dim": "#c3c3eb",
+                "primary-container": "#252746",
+                "on-error-container": "#93000a",
+                "surface-container-low": "#f2f4f6",
+                "error-red": "#D32F2F",
+                "surface-bright": "#f7f9fb",
+                "on-secondary-fixed-variant": "#5b4300",
+                "on-primary-fixed": "#171937",
+                "tertiary-container": "#002468",
+                "primary": "#101230",
+                "on-surface": "#191c1e",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed": "#261a00",
+                "on-primary-fixed-variant": "#424465",
+                "inverse-primary": "#c3c3eb",
+                "surface-gray": "#F3E9F7",
+                "inverse-surface": "#2d3133",
+                "text-primary": "#1F3545",
+                "surface-tint": "#5a5c7e",
+                "excellence-blue": "#252746",
+                "background": "#f7f9fb",
+                "on-error": "#ffffff",
+                "outline-variant": "#c8c5ce",
+                "on-primary": "#ffffff",
+                "secondary": "#785900",
+                "on-background": "#191c1e",
+                "tertiary-fixed-dim": "#b3c5ff",
+                "surface-dim": "#d8dadc",
+                "tertiary": "#00123c",
+                "error-container": "#ffdad6",
+                "achievement-gold": "#FFC107",
+                "text-secondary": "#64748B",
+                "on-primary-container": "#8d8eb3",
+                "surface": "#f7f9fb",
+                "on-tertiary-fixed": "#00174a",
+                "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "4px",
+                "margin-desktop": "32px",
+                "gutter": "16px",
+                "lg": "24px",
+                "base": "4px",
+                "xl": "32px",
+                "sm": "8px",
+                "margin-mobile": "16px",
+                "md": "16px"
+            },
+            "fontFamily": {
+                "headline-md": ["Hanken Grotesk"],
+                "label-lg": ["Inter"],
+                "body-sm": ["Inter"],
+                "body-md": ["Inter"],
+                "display-lg": ["Hanken Grotesk"],
+                "body-lg": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-lg-mobile": ["Hanken Grotesk"],
+                "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f7f9fb;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .academic-texture {
+            background-image: radial-gradient(#252746 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.03;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-hover-effect {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-hover-effect:active {
+            transform: scale(0.97);
+        }
+
+        .focus-ring:focus-within {
+            box-shadow: 0 0 0 2px #252746;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- Subtle Background Texture -->
+<div class="fixed inset-0 academic-texture pointer-events-none"></div>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile py-xl relative z-10">
+<!-- Brand Identity Section -->
+<div class="mb-xl text-center">
+<div class="flex items-center justify-center mb-md">
+<div class="w-12 h-12 bg-excellence-blue rounded-xl flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined text-display-lg" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-excellence-blue mb-xs">Lefax Course</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">The gateway to Grandes Écoles excellence.</p>
+</div>
+<!-- Login Card -->
+<div class="w-full max-w-[440px] glass-panel rounded-2xl p-lg md:p-xl shadow-sm">
+<header class="mb-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-text-primary mb-xs">Welcome Back</h2>
+<p class="font-body-md text-body-md text-text-secondary">Please enter your details to continue your journey.</p>
+</header>
+<form action="#" class="space-y-lg" method="POST">
+<!-- Phone Number Field -->
+<div class="space-y-xs">
+<label class="font-label-lg text-label-lg text-text-primary block" for="phone">Phone Number</label>
+<div class="relative flex items-center border border-outline-variant rounded-lg focus-within:border-excellence-blue focus-within:ring-1 focus-within:ring-excellence-blue transition-all bg-white">
+<div class="pl-md text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">phone_android</span>
+</div>
+<input class="w-full py-3 px-md bg-transparent border-none focus:ring-0 text-body-md text-on-surface placeholder:text-outline" id="phone" name="phone" placeholder="6XX XXX XXX" required="" type="tel"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-lg text-label-lg text-text-primary" for="password">Password</label>
+<a class="font-label-md text-label-md text-excellence-blue hover:underline" href="#">Forgot Password?</a>
+</div>
+<div class="relative flex items-center border border-outline-variant rounded-lg focus-within:border-excellence-blue focus-within:ring-1 focus-within:ring-excellence-blue transition-all bg-white">
+<div class="pl-md text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="w-full py-3 px-md bg-transparent border-none focus:ring-0 text-body-md text-on-surface placeholder:text-outline" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="pr-md text-on-surface-variant hover:text-excellence-blue transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Login Button -->
+<button class="w-full py-4 bg-excellence-blue text-white rounded-xl font-headline-md text-headline-md shadow-md hover:bg-primary-container btn-hover-effect flex items-center justify-center gap-sm" type="submit">
+                    Log In
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</form>
+<!-- Sign Up Redirect -->
+<div class="mt-xl pt-lg border-t border-outline-variant text-center">
+<p class="font-body-md text-body-md text-text-secondary">
+                    New to Lefax? 
+                    <a class="font-label-lg text-label-lg text-excellence-blue hover:underline ml-xs" href="#">Sign Up</a>
+</p>
+</div>
+</div>
+<!-- Footer Decorative Element -->
+<div class="mt-xl opacity-40">
+<div class="flex gap-lg justify-center items-center">
+<div class="h-px w-12 bg-outline-variant"></div>
+<div class="flex gap-sm">
+<div class="w-2 h-2 rounded-full bg-excellence-blue"></div>
+<div class="w-2 h-2 rounded-full bg-achievement-gold"></div>
+<div class="w-2 h-2 rounded-full bg-excellence-blue"></div>
+</div>
+<div class="h-px w-12 bg-outline-variant"></div>
+</div>
+</div>
+</main>
+<!-- Contextual Information (Floating on Desktop) -->
+<aside class="hidden lg:block fixed bottom-lg right-lg w-64 p-md glass-panel rounded-xl shadow-lg border border-outline-variant animate-fade-in">
+<div class="flex items-start gap-md">
+<div class="bg-secondary-container p-sm rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-container">lightbulb</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-secondary-container">Study Tip</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Log in daily to maintain your learning streak and earn extra FaxCoins!</p>
+</div>
+</div>
+</aside>
+<script>
+        // Micro-interaction for the password visibility toggle
+        const toggleBtn = document.querySelector('button[type="button"]');
+        const passwordInput = document.getElementById('password');
+        const iconSpan = toggleBtn.querySelector('.material-symbols-outlined');
+
+        toggleBtn.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            iconSpan.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+        });
+
+        // Simple form submission feedback
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            const btn = form.querySelector('button[type="submit"]');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Validating...';
+            // Logic would go here. We simulate for UX demonstration.
+        });
+    </script>
+</body></html>

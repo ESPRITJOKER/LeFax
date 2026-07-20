@@ -1,0 +1,565 @@
+{
+  "common": {
+    "appName": "Lefax Course",
+    "loading": "Loading...",
+    "next": "Next",
+    "back": "Back",
+    "continue": "Continue",
+    "seconds": "s",
+    "optional": "Optional",
+    "cancel": "Cancel",
+    "backToDashboard": "Back to dashboard",
+    "minutes": "{{count}} min",
+    "saveAsDraft": "Save as draft",
+    "selectBranch": "Select a track",
+    "actions": "Actions"
+  },
+  "landing": {
+    "tagline": "Democratizing Excellence for Every Cameroonian Student.",
+    "heroSubtitle": "Your journey to the prestigious Grandes Écoles starts here with expert-led training and AI-driven insights.",
+    "cta": "Get Started",
+    "login": "Log in",
+    "whyTitle": "Why Lefax?",
+    "featureMicroTitle": "Micro-learning",
+    "featureMicroBody": "Master complex concepts in 5-minute focused bursts designed for busy schedules.",
+    "featureExamTitle": "Weekly Mock Exams",
+    "featureExamBody": "Simulate real Grande École entrance conditions every weekend and track your ranking.",
+    "featureAiTitle": "AI Study Assistant",
+    "featureAiBody": "Personalized feedback loops that identify your weak spots before they become hurdles.",
+    "successStories": "Success Stories",
+    "testimonial1Name": "Jean-Pierre M.",
+    "testimonial1Status": "Admitted to Polytechnic Yaoundé",
+    "testimonial1Quote": "\"Lefax didn't just give me materials; it gave me a strategy. The mock exams were identical to the real competition pressure.\"",
+    "testimonial2Name": "Sarah K.",
+    "testimonial2Status": "Admitted to ENAM",
+    "testimonial2Quote": "\"The micro-learning modules helped me stay consistent even while working part-time. I owe my admission to the precision of Lefax.\"",
+    "ctaTitle": "Ready to excel?",
+    "ctaBody": "Join over 10,000 students preparing for a brighter future today.",
+    "ctaButton": "Enroll Now",
+    "footerBranches": "Programs",
+    "footerRights": "All rights reserved.",
+    "footerTagline": "Building the next generation of African excellence, one lesson at a time.",
+    "footerCompany": "Company",
+    "footerAbout": "About Us",
+    "footerContact": "Contact",
+    "footerPrivacy": "Privacy"
+  },
+  "auth": {
+    "studentTab": "Student",
+    "staffTab": "Teacher / Admin",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "+237 6XX XXX XXX",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "sendCode": "Send code",
+    "tagline": "The gateway to Grandes Écoles excellence.",
+    "loginTitle": "Welcome Back",
+    "loginSubtitle": "Please enter your details to continue your journey.",
+    "forgotPassword": "Forgot Password?",
+    "signupTitle": "Create an account",
+    "signupSubtitle": "Empowering the next generation of Cameroonian excellence.",
+    "fullNameLabel": "Full name",
+    "fullNamePlaceholder": "e.g. Jean Dupont",
+    "schoolCodeLabel": "School Access Code",
+    "schoolCodePlaceholder": "8-character code",
+    "otpFollowsNote": "OTP verification will follow this step.",
+    "signUpCta": "Sign Up",
+    "orContinueWith": "OR CONTINUE WITH",
+    "noAccount": "Don't have an account?",
+    "signupLink": "Sign up",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Log in",
+    "otpTitle": "Verification",
+    "otpSubtitle": "Enter the 6-digit code sent to {{phone}}",
+    "otpResend": "Resend code",
+    "otpResendIn": "Resend in {{seconds}}s",
+    "verify": "Verify",
+    "invalidPhone": "Expected format: +237 followed by 9 digits.",
+    "errors": {
+      "OTP_INVALID": "Incorrect code. Please try again.",
+      "OTP_EXPIRED": "This code has expired, request a new one.",
+      "OTP_MAX_ATTEMPTS": "Too many attempts for this code. Request a new one.",
+      "OTP_LOCKED": "Too many failed attempts. Try again in 10 minutes.",
+      "RATE_LIMITED": "Too many requests. Try again later.",
+      "OTP_RESEND_COOLDOWN": "Please wait before requesting another code.",
+      "INVALID_CREDENTIALS": "Incorrect email or password.",
+      "SCHOOL_CODE_INVALID": "Invalid or expired school code.",
+      "ACCOUNT_DISABLED": "Your account has been disabled. Contact support.",
+      "INTERNAL": "Something went wrong. Please try again."
+    }
+  },
+  "onboarding": {
+    "welcomeTitle": "Welcome to Lefax Course",
+    "welcomeSubtitlePrefix": "Democratizing excellence for every Cameroonian student. Your journey to the prestigious",
+    "welcomeSubtitleSuffix": "starts here.",
+    "heroBadge": "Elite Preparation for Elite Admissions",
+    "title": "Choose your track",
+    "subtitle": "Select one or more branches to prepare for.",
+    "comingSoon": "Coming soon",
+    "mostPopular": "Most popular",
+    "confirm": "Confirm my selection",
+    "minOneError": "Select at least one branch."
+  },
+  "branches": {
+    "medecine": "Medicine",
+    "ingenierie": "Engineering",
+    "agronomie": "Agronomy",
+    "management": "Management",
+    "infirmerie": "Nursing",
+    "enseignement": "Teaching"
+  },
+  "studentNav": {
+    "dashboard": "Dashboard",
+    "lessons": "Lessons",
+    "tutor": "Tutor",
+    "exams": "Exams",
+    "wallet": "Wallet",
+    "profileAria": "Profile"
+  },
+  "tutorLock": {
+    "title": "AI Tutor",
+    "heading": "Coming soon to the mobile app",
+    "body": "The AI Tutor is being built for the Lefax mobile app. Keep an eye out for the launch!",
+    "cta": "Back to dashboard"
+  },
+  "diagnostic": {
+    "intro": {
+      "title": "Test your level",
+      "body": "Answer a few questions to identify your strengths and weak spots. We'll adapt your upcoming lessons based on the results.",
+      "durationLabel": "A few minutes",
+      "durationCaption": "Estimated duration",
+      "analysisLabel": "Smart analysis",
+      "analysisCaption": "Based on your answers",
+      "start": "Start the diagnostic",
+      "later": "Later",
+      "noPressureTitle": "No pressure, it's a benchmark",
+      "noPressureBody": "This isn't an exam. Your score isn't shared. It's only used to adapt the difficulty of your upcoming lessons."
+    },
+    "question": {
+      "modeLabel": "Diagnostic mode",
+      "counter": "Question {{current}}/{{total}}",
+      "percentComplete": "{{percent}}% complete",
+      "skip": "Skip",
+      "next": "Next question",
+      "viewResults": "See my results"
+    },
+    "results": {
+      "title": "Your mastery profile",
+      "badge": "Diagnostic complete",
+      "subtitle": "Here's your level by subject based on your answers.",
+      "notEnoughData": "Not enough questions to calculate a mastery profile.",
+      "bySubject": "By subject",
+      "subjectFallback": "Subject",
+      "weakZoneTitle": "Area to work on",
+      "weakZoneHint": "— focus your next revisions here.",
+      "viewMastery": "View my mastery profile"
+    }
+  },
+  "reviewQueue": {
+    "title": "Review queue",
+    "empty": "No content awaiting review.",
+    "type": {
+      "lessonCard": "Lesson card",
+      "qcm": "MCQ",
+      "pastPaper": "Past paper"
+    },
+    "teacherFallback": "Teacher",
+    "aiGenerated": "AI generated",
+    "overdue": "Waiting for more than 48h",
+    "autoGenerated": "Automatically generated",
+    "submittedBy": "Submitted by {{name}}",
+    "hideSources": "Hide sources",
+    "viewSources": "View sources ({{count}})",
+    "loadingSources": "Loading sources...",
+    "noSources": "No sources found.",
+    "feedbackTooShort": "Feedback must be at least 20 characters long.",
+    "rejectPlaceholder": "Explain why this content is rejected (min. 20 characters)",
+    "confirmReject": "Confirm rejection",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+  "wallet": {
+    "insufficientBalance": "Not enough FaxCoins to unlock this paper.",
+    "availableBalance": "Available balance",
+    "premiumSubscription": "Premium subscription",
+    "upgradeBody": "Upgrade to the Standard tier for full access",
+    "upgradeCta": "Upgrade tier",
+    "paymentsComingSoon": "Paid subscriptions are coming soon (CinetPay not yet connected).",
+    "unlockSectionTitle": "Unlock with your coins",
+    "noPapersToUnlock": "No papers to unlock right now.",
+    "recentActivity": "Recent activity",
+    "noTransactions": "No transactions yet.",
+    "boostTitle": "Boost your preparation",
+    "boostBody": "Premium resources curated by our best teachers."
+  },
+  "courseLibrary": {
+    "selectBranch": "Select a track from your profile to access courses.",
+    "subjects": "Subjects",
+    "noSubjects": "No subjects available right now.",
+    "chapterCount": "{{count}} chapter(s)",
+    "noChapters": "No chapters available.",
+    "noLessons": "No lessons published for this chapter.",
+    "completed": "Completed"
+  },
+  "examCommon": {
+    "notFound": "Exam not found."
+  },
+  "examLeaderboard": {
+    "statusClosed": "Finished",
+    "statusOngoing": "Ongoing",
+    "coinsEarnedPrefix": "You earned",
+    "yourRankPrefix": "Your rank:",
+    "rankOrdinal": "{{rank}}th",
+    "reviewCorrections": "Review corrections",
+    "title": "Leaderboard",
+    "updatedNow": "Updated just now",
+    "updatedMinutesAgo": "Updated {{count}} min ago",
+    "noSubmissions": "No graded submissions yet.",
+    "youMarker": "(you)"
+  },
+  "examTake": {
+    "submitFailed": "Submission failed (deadline likely passed).",
+    "sending": "Sending...",
+    "submit": "Submit my answers"
+  },
+  "examCorrections": {
+    "unavailable": "Corrections unavailable — you haven't submitted this exam yet.",
+    "title": "Corrections",
+    "finalScore": "Final score: {{score}}%"
+  },
+  "pastPapers": {
+    "title": "Past papers",
+    "empty": "No past papers published yet.",
+    "unlocked": "Unlocked"
+  },
+  "qcmPractice": {
+    "noneAvailable": "No MCQs available at this level for this lesson.",
+    "counter": "Question {{current}} of {{total}}",
+    "accuracy": "{{percent}}% correct",
+    "explanation": "Explanation",
+    "timeElapsed": "Time elapsed",
+    "currentStreak": "Current streak",
+    "nextQuestion": "Next question",
+    "difficulty": {
+      "easy": "EASY",
+      "intermediate": "INTERMEDIATE",
+      "hard": "HARD"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page doesn't exist or has been moved.",
+    "cta": "Back to home"
+  },
+  "teacherContent": {
+    "empty": "No content yet.",
+    "submit": "Submit",
+    "status": {
+      "draft": "Draft",
+      "inReview": "In review",
+      "approved": "Published",
+      "rejected": "Rejected"
+    }
+  },
+  "lessonEditor": {
+    "title": "Lesson cards",
+    "newCard": "New card",
+    "selectLesson": "Select a lesson",
+    "contentPlaceholder": "Card content",
+    "imageUrlPlaceholder": "Image URL (optional)",
+    "untitled": "(untitled)",
+    "validationRequired": "Lesson and text content are required.",
+    "createError": "Error creating the card."
+  },
+  "pastPapersEditor": {
+    "newPaper": "Upload a paper",
+    "selectBranch": "Select a track",
+    "titlePlaceholder": "Title",
+    "schoolPlaceholder": "School",
+    "yearPlaceholder": "Year",
+    "paperUrlPlaceholder": "Paper URL (PDF)",
+    "correctionTextPlaceholder": "Correction (text)",
+    "correctionUrlPlaceholder": "or correction URL (PDF)",
+    "validationRequired": "Track, title, school, and paper URL are required.",
+    "correctionRequired": "A correction (text or PDF) is required.",
+    "submitError": "Error uploading the paper."
+  },
+  "qcmGenerator": {
+    "title": "MCQs",
+    "newQcm": "New MCQ",
+    "questionPlaceholder": "Question",
+    "correctAnswerTitle": "Correct answer",
+    "optionPlaceholder": "Option {{letter}}",
+    "explanationPlaceholder": "Explanation (min. 30 characters)",
+    "validationRequired": "Lesson, question, 4 options, and a correct answer are required.",
+    "explanationTooShort": "The explanation must be at least 30 characters long.",
+    "createError": "Error creating the MCQ.",
+    "difficulty": {
+      "easy": "Easy",
+      "intermediate": "Intermediate",
+      "hard": "Hard"
+    }
+  },
+  "qaInbox": {
+    "title": "Student questions",
+    "unanswered": "Unanswered",
+    "answered": "Answered",
+    "emptyUnanswered": "No questions waiting.",
+    "emptyAnswered": "No answered questions.",
+    "answerPlaceholder": "Your answer...",
+    "submitAnswer": "Reply"
+  },
+  "performance": {
+    "title": "Content performance",
+    "published": "Published",
+    "inReview": "In review",
+    "drafts": "Drafts",
+    "rejected": "Rejected",
+    "dataNote": "Student completion rates and estimated earnings require real engagement data (lessons viewed, MCQs attempted) that doesn't exist yet for this content."
+  },
+  "schools": {
+    "title": "Schools",
+    "newContract": "New contract",
+    "namePlaceholder": "School name",
+    "cityPlaceholder": "City",
+    "seatQuotaPlaceholder": "Seat quota",
+    "directorEmailPlaceholder": "Director email (optional)",
+    "createContract": "Create contract",
+    "empty": "No partner schools.",
+    "colSchool": "School",
+    "colCode": "Code",
+    "colSeats": "Seats",
+    "colExpiration": "Expiration",
+    "regenerateTitle": "Regenerate code",
+    "validationRequired": "Name, track, and expiration date are required.",
+    "createError": "Error creating the contract."
+  },
+  "adminExams": {
+    "scheduleNew": "Schedule an exam",
+    "titlePlaceholder": "Exam title",
+    "durationPlaceholder": "Duration (min)",
+    "questionsCount": "Questions ({{count}} selected, min. 10)",
+    "noQcms": "No published MCQs available.",
+    "schedule": "Schedule",
+    "empty": "No exams scheduled.",
+    "colTitle": "Title",
+    "colBranch": "Track",
+    "colOpens": "Opens",
+    "colQuestions": "Questions",
+    "colStatus": "Status",
+    "validationRequired": "Title, track, and opening date are required.",
+    "minQuestions": "Minimum 10 questions required ({{count}} selected).",
+    "createError": "Error creating the exam."
+  },
+  "usersAdmin": {
+    "title": "Users",
+    "searchPlaceholder": "Search by name, phone, email...",
+    "allRoles": "All roles",
+    "search": "Search",
+    "empty": "No users found.",
+    "colName": "Name",
+    "colRole": "Role",
+    "colContact": "Contact",
+    "colStatus": "Status",
+    "active": "Active",
+    "inactive": "Deactivated",
+    "deactivateTitle": "Deactivate",
+    "role": {
+      "student": "Student",
+      "teacher": "Teacher",
+      "admin": "Admin"
+    }
+  },
+  "analytics": {
+    "title": "Statistics",
+    "totalStudents": "Registered students",
+    "totalTeachers": "Teachers",
+    "publishedLessons": "Published lessons",
+    "publishedQcms": "Published MCQs",
+    "pendingReviews": "Pending review",
+    "activeSubscriptions": "Active subscriptions",
+    "dataNote": "MRR, DAU/WAU/MAU, and trend charts require CinetPay billing history (not yet connected) and an activity event pipeline — unavailable until those integrations are in place."
+  },
+  "paymentsAdmin": {
+    "title": "Payments & Subscriptions",
+    "notConnectedNote": "No CinetPay account is connected yet (like SMS via Africa's Talking, a real merchant account is required). This log is real and will fill in once the payment flow (WEB-E13) is wired to a real provider.",
+    "empty": "No payments recorded.",
+    "colTransaction": "Transaction",
+    "colAmount": "Amount",
+    "colStatus": "Status",
+    "colDate": "Date",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "failed": "Failed"
+    }
+  },
+  "examsList": {
+    "title": "Mock exams",
+    "empty": "No exams scheduled right now.",
+    "takeExam": "Take the exam",
+    "leaderboard": "Leaderboard",
+    "status": {
+      "scheduled": "Scheduled",
+      "open": "Open",
+      "closed": "Closed",
+      "scored": "Results available"
+    }
+  },
+  "studentDashboard": {
+    "welcome": "Welcome back, {{firstName}}",
+    "readyQuestion": "Ready for {{school}}?",
+    "streak": "Streak",
+    "lessonsCompleted": "Lessons Completed",
+    "reward": {
+      "lessonComplete": "Lesson completed",
+      "lesson_perfect_qcm_desc": "100% correct on a lesson's MCQs",
+      "lessonPerfectQcm": "100% on a lesson's MCQs",
+      "exam_participation_desc": "Participated in a mock exam",
+      "examParticipation": "Mock exam participation",
+      "exam_top10_desc": "Ranked in the top 10 of an exam",
+      "examTop10": "Top 10 in mock exam",
+      "paper_unlock_desc": "Past paper successfully unlocked",
+      "paperUnlock": "Past paper unlocked"
+    },
+    "qcmAccuracy": "QCM Accuracy",
+    "globalRanking": "Global Ranking",
+    "whatsNext": "WHAT'S NEXT",
+    "startLesson": "Start Lesson",
+    "weeklyExam": "Weekly Mock Exam",
+    "setReminder": "Set Reminder",
+    "latestRewards": "LATEST REWARDS",
+    "todayBadge": "+{{count}} today",
+    "rankOf": "/ {{total}}",
+    "rankSubtitle": "Keep going to climb the leaderboard!",
+    "notRankedYet": "Not ranked yet — finish a lesson or QCM to appear on the leaderboard.",
+    "noAccuracyYet": "No QCM attempted yet",
+    "chapterLabel": "Chapter: {{name}}",
+    "stepOf": "Card {{seen}} of {{total}}",
+    "minutesShort": "{{count}} mins",
+    "noNextLesson": "No lesson available yet.",
+    "days": "DAYS",
+    "hours": "HRS",
+    "mins": "MINS",
+    "secs": "SECS",
+    "noExamScheduled": "No mock exam scheduled yet.",
+    "noRewardsYet": "No rewards yet. Complete a lesson to earn your first FaxCoins."
+  },
+  "staffNav": {
+    "dashboard": "Dashboard",
+    "lessons": "Lessons",
+    "qcms": "QCMs",
+    "pastPapers": "Past Papers",
+    "feedback": "Feedback",
+    "analytics": "Analytics",
+    "users": "Users",
+    "reviewQueue": "Review Queue",
+    "exams": "Mock Exams",
+    "schools": "Schools",
+    "performance": "Performance",
+    "payments": "Payments"
+  },
+  "teacherDashboard": {
+    "title": "Teacher Dashboard",
+    "subtitle": "Welcome back, your students are making great progress!",
+    "searchPlaceholder": "Search lessons, QCMs...",
+    "createContent": "Create New Content",
+    "totalContent": "Total Content",
+    "publishedQcms": "Published QCMs",
+    "draftsPending": "Drafts Pending",
+    "unansweredQuestions": "Unanswered Questions",
+    "recentContent": "Recent Content",
+    "viewAll": "View All",
+    "colTitle": "Title",
+    "colType": "Type",
+    "colStatus": "Status",
+    "colDate": "Date",
+    "colAction": "Action",
+    "quickDraft": "Quick Draft",
+    "quickDraftBody": "Have a new lesson idea? Jot it down quickly and come back later.",
+    "selectLesson": "Select a lesson",
+    "draftPlaceholder": "Lesson/QCM content...",
+    "draftSaved": "Saved!",
+    "saveDraft": "Save as Draft",
+    "recentFeedback": "Recent Feedback",
+    "noQuestions": "No questions pending.",
+    "respondToStudents": "Respond to Students",
+    "contentDistribution": "Content Distribution",
+    "contentDistributionSubtitle": "Breakdown by content type",
+    "type": {
+      "lessonCard": "Card",
+      "qcm": "MCQ",
+      "pastPaper": "Past paper"
+    },
+    "distLessonCards": "Cards",
+    "distQcms": "MCQs",
+    "distPastPapers": "Past papers"
+  },
+  "adminDashboard": {
+    "title": "Admin Dashboard",
+    "dau": "Daily Active Users",
+    "mrr": "Monthly Recurring Revenue",
+    "reviewQueue": "Pending Review Queue",
+    "publishedContent": "Published Content"
+  },
+  "status": {
+    "draft": "Draft",
+    "in_review": "In Review",
+    "approved": "Published",
+    "rejected": "Rejected"
+  },
+  "profile": {
+    "language": "Language",
+    "studentFallback": "Student",
+    "myTrack": "My track",
+    "editTracks": "Edit my tracks",
+    "notifications": "Notifications",
+    "logout": "Log out"
+  },
+  "lessonViewer": {
+    "noContent": "This lesson doesn't have published content yet.",
+    "stepOf": "Step {{current}} of {{total}}",
+    "percentComplete": "{{percent}}% Complete",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish"
+  },
+  "errorBoundary": {
+    "title": "An error occurred",
+    "body": "Something went wrong displaying this page. Try refreshing.",
+    "reload": "Reload page"
+  },
+  "about": {
+    "title": "About Lefax Course",
+    "mission": "Lefax Course was born from a simple conviction: every Cameroonian student deserves elite preparation for Grandes Écoles entrance exams, wherever they are. We combine cutting-edge pedagogical expertise with artificial intelligence tools to deliver a personalized, effective, and accessible learning experience for all.",
+    "valuesTitle": "Our Values",
+    "values": {
+      "access": { "title": "Accessibility", "body": "Excellence should not depend on geography or income. Our platform is designed to work even with limited connectivity." },
+      "excellence": { "title": "Excellence", "body": "Every lesson, every MCQ, every mock exam is designed by expert teachers and validated by successful alumni." },
+      "innovation": { "title": "Innovation", "body": "Our AI tutor and adaptation algorithms transform how students identify and fill their knowledge gaps." },
+      "community": { "title": "Community", "body": "We believe in the power of collective effort. Rankings, testimonials, and the referral system create a healthy competitive spirit." }
+    },
+    "storyTitle": "Our Story",
+    "story": "Founded in 2024 by a team of former Grandes Écoles students, Lefax Course was born from the observation that the best students all had access to similar resources: study cards, mock exams, and mentorship. Our mission is to democratize this access for every deserving student in Cameroon."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "A question, suggestion, or partnership? We're here to help.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "locationLabel": "Address",
+    "locationValue": "Yaoundé, Cameroon"
+  },
+  "privacy": {
+    "lastUpdated": "Last updated: January 2026",
+    "sections": {
+      "dataCollection": { "title": "1. Data We Collect", "body": "We collect the data necessary for platform operation: name, phone number, email address (for teachers and administrators), school affiliation, and learning data (scores, progress, AI tutor interactions)." },
+      "dataUse": { "title": "2. How We Use Data", "body": "Your data is used to: personalize your learning experience, calculate your mastery scores and ranking, improve the quality of our educational content, and send important notifications related to your account." },
+      "dataSharing": { "title": "3. Data Sharing", "body": "We never sell your personal data. Your data may be shared with: your school (aggregated results only), our technical providers (hosting, SMS delivery) under strict confidentiality agreements, and authorities when legally required." },
+      "security": { "title": "4. Security", "body": "We use SSL/TLS encryption for all communications, secure storage via Supabase (PostgreSQL with RLS), and JWT authentication with httpOnly refresh tokens. Your passwords are never stored in plain text." },
+      "cookies": { "title": "5. Cookies", "body": "We use only cookies strictly necessary for session operation (JWT refresh token in httpOnly cookie). No advertising or third-party tracking cookies are used." },
+      "rights": { "title": "6. Your Rights", "body": "Under Cameroonian data protection legislation, you have the right to access, rectify, and delete your personal data. Contact us at contact@lefaxcourse.com to exercise these rights." },
+      "changes": { "title": "7. Changes", "body": "We reserve the right to modify this privacy policy. Any significant changes will be notified to you by email or via the application." }
+    }
+  }
+}
