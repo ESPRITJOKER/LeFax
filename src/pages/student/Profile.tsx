@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
-import { Button } from "../../components/ui";
+import { Button, Select } from "../../components/ui";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
@@ -74,14 +74,14 @@ export default function Profile() {
 
         <div className="px-[22px] pt-6 flex flex-col gap-4">
           <Field label={t("profile_region")}>
-            <select value={region} onChange={(e) => setRegion(e.target.value)} className={inputClass}>
+            <Select value={region} onChange={(e) => setRegion(e.target.value)} className={inputClass} wrapperClassName="w-full">
               <option value="">{t("reg_selectPlaceholder")}</option>
               {REGIONS.map((r) => (
                 <option key={r.id} value={r.id}>
                   {lang === "fr" ? r.fr : r.en}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field label={t("profile_town")}>
             <input value={town} onChange={(e) => setTown(e.target.value)} list="profileTownList" className={inputClass} />

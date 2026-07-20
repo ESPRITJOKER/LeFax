@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Spinner, EmptyState } from "../../components/ui";
+import { Button, Spinner, EmptyState, Select } from "../../components/ui";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
@@ -88,14 +88,14 @@ export default function TeacherAiAssist() {
       <div className="bg-white border border-border rounded-2xl p-5 mb-5">
         <div className="text-[13.5px] font-bold text-ink-900 mb-3.5">{t("teacher_uploadSource")}</div>
         <div className="flex flex-col gap-3">
-          <select value={lessonId} onChange={(e) => setLessonId(e.target.value)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white">
+          <Select value={lessonId} onChange={(e) => setLessonId(e.target.value)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white w-full" wrapperClassName="w-full">
             {lessons.length === 0 && <option value="">{lang === "fr" ? "Aucune leçon" : "No lesson"}</option>}
             {lessons.map((l) => (
               <option key={l.id} value={l.id}>
                 {lang === "fr" ? l.title_fr : l.title_en}
               </option>
             ))}
-          </select>
+          </Select>
           <label className="flex items-center gap-2.5 px-3 py-3 rounded-lg border-[1.5px] border-dashed border-border cursor-pointer">
             <Icon name="upload" size={18} className="text-ink-700" />
             <span className="text-xs text-ink-800">{file ? file.name : t("teacher_uploadSource")}</span>

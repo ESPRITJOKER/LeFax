@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Spinner, EmptyState, Button } from "../../components/ui";
+import { Spinner, EmptyState, Button, Select } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { ProfileRow, UserRole } from "../../lib/database.types";
@@ -63,11 +63,11 @@ export default function AdminAdmins() {
           <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("reg_firstname")} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
           <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("reg_lastname")} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
           <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("reg_phone")} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
-          <select value={role} onChange={(e) => setRole(e.target.value as UserRole)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white">
+          <Select value={role} onChange={(e) => setRole(e.target.value as UserRole)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white w-full" wrapperClassName="w-full">
             <option value="teacher">{lang === "fr" ? "Enseignant" : "Teacher"}</option>
             <option value="admin">{lang === "fr" ? "Administrateur" : "Admin"}</option>
             <option value="super_admin">{lang === "fr" ? "Super Administrateur" : "Super Admin"}</option>
-          </select>
+          </Select>
         </div>
         <Button onClick={invite}>{t("admin_inviteAdmin")}</Button>
         {message && <div className="mt-2.5 text-xs font-semibold text-ink-800">{message}</div>}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Spinner, EmptyState } from "../../components/ui";
+import { Spinner, EmptyState, Select } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import { REGIONS } from "../../lib/regions";
@@ -77,14 +77,14 @@ export default function AdminStudents() {
           placeholder={t("admin_searchStudents")}
           className="flex-1 min-w-[200px] px-3.5 py-2.5 rounded-xl border-[1.5px] border-border text-[13.5px] outline-none"
         />
-        <select value={regionFilter} onChange={(e) => setRegionFilter(e.target.value)} className="px-3.5 py-2.5 rounded-xl border-[1.5px] border-border text-[13px] bg-white">
+        <Select value={regionFilter} onChange={(e) => setRegionFilter(e.target.value)} className="px-3.5 py-2.5 rounded-xl border-[1.5px] border-border text-[13px] bg-white">
           <option value="">{t("admin_allRegions")}</option>
           {REGIONS.map((r) => (
             <option key={r.id} value={r.id}>
               {lang === "fr" ? r.fr : r.en}
             </option>
           ))}
-        </select>
+        </Select>
         <button onClick={exportCsv} className="px-4 py-2.5 rounded-xl border border-border bg-white text-xs font-bold text-ink-900">
           {t("admin_exportCsv")}
         </button>

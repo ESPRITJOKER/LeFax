@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Spinner, EmptyState } from "../../components/ui";
+import { Button, Spinner, EmptyState, Select } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -86,13 +86,13 @@ export default function TeacherContent() {
       <div className="bg-white border border-border rounded-2xl p-5 mb-5">
         <div className="text-[13.5px] font-bold text-ink-900 mb-3.5">{t("teacher_uploadContent")}</div>
         <div className="flex flex-col gap-3">
-          <select value={chapterId} onChange={(e) => setChapterId(e.target.value)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white">
+          <Select value={chapterId} onChange={(e) => setChapterId(e.target.value)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white w-full" wrapperClassName="w-full">
             {chapters.map((c) => (
               <option key={c.id} value={c.id}>
                 {lang === "fr" ? c.name_fr : c.name_en}
               </option>
             ))}
-          </select>
+          </Select>
           <input value={titleFr} onChange={(e) => setTitleFr(e.target.value)} placeholder={lang === "fr" ? "Titre (FR)" : "Title (FR)"} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
           <input value={titleEn} onChange={(e) => setTitleEn(e.target.value)} placeholder="Title (EN)" className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
           <textarea value={contentFr} onChange={(e) => setContentFr(e.target.value)} placeholder={lang === "fr" ? "Contenu (FR)" : "Content (FR)"} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] min-h-[80px]" />

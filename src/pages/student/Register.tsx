@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { LangSwitcher } from "../../components/LangSwitcher";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { REGIONS, TOWNS } from "../../lib/regions";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
-import { Button } from "../../components/ui";
+import { Button, Select } from "../../components/ui";
 
 // Flip to true once a real SMS provider is configured (CDC section 8/13) —
 // see supabase/functions/auth-otp for the bypass this currently uses instead.
@@ -109,10 +108,6 @@ export default function Register() {
 
   return (
     <PhoneFrame>
-      <div className="flex items-center justify-end px-4 pt-3.5">
-        <LangSwitcher />
-      </div>
-
       {step === "form" && (
         <div className="flex-1 flex flex-col px-[22px] pb-6 overflow-y-auto">
           <div className="flex items-center gap-2.5 my-2 mb-5">
@@ -133,13 +128,14 @@ export default function Register() {
               <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+237 6XX XXX XXX" className={inputClass} />
             </Field>
             <Field label={t("reg_region")}>
-              <select
+              <Select
                 value={region}
                 onChange={(e) => {
                   setRegion(e.target.value);
                   setTown("");
                 }}
                 className={inputClass}
+                wrapperClassName="w-full"
               >
                 <option value="">{t("reg_selectPlaceholder")}</option>
                 {REGIONS.map((r) => (
@@ -147,7 +143,7 @@ export default function Register() {
                     {lang === "fr" ? r.fr : r.en}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Field label={t("reg_town")}>
               <input

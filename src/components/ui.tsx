@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode, SelectHTMLAttributes } from "react";
+import { Icon } from "../lib/icons";
 
 export function Card({ children, className = "", onClick }: { children: ReactNode; className?: string; onClick?: () => void }) {
   return (
@@ -68,6 +69,29 @@ export function RingProgress({ pct, size = 64, stroke = 6, color = "var(--color-
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
     </svg>
+  );
+}
+
+/**
+ * Custom-chevron select — native <select> elements keep the browser's own
+ * dropdown arrow even when bordered/padded via className, which reads as
+ * unstyled next to the rest of the design system. Wraps any <select> with a
+ * matching SVG chevron (CDC 11: vector iconography only) and hides the
+ * native one via `appearance-none`. Drop-in replacement: same props/children
+ * as a plain <select>.
+ */
+export function Select({ className = "", wrapperClassName = "", children, ...rest }: SelectHTMLAttributes<HTMLSelectElement> & { wrapperClassName?: string }) {
+  return (
+    <div className={`relative ${wrapperClassName}`}>
+      <select className={`appearance-none pr-8 ${className}`} {...rest}>
+        {children}
+      </select>
+      <Icon
+        name="chevright"
+        size={14}
+        className="rotate-90 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted"
+      />
+    </div>
   );
 }
 

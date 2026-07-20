@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { LangSwitcher } from "../../components/LangSwitcher";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -33,9 +32,6 @@ export default function Login() {
 
   return (
     <PhoneFrame>
-      <div className="flex items-center justify-end px-4 pt-3.5">
-        <LangSwitcher />
-      </div>
       <div className="flex-1 flex flex-col px-[22px] pb-6">
         <div className="flex items-center gap-2.5 my-2 mb-5">
           <Icon name="cap" size={22} className="text-ink-700" />
