@@ -11,7 +11,7 @@ interface ChapterWithCounts extends ChapterRow {
   lessonsCount: number;
 }
 
-type LessonLite = { id: string; title_fr: string; title_en: string };
+type LessonLite = { id: string; title_fr: string; title_en: string; published: boolean };
 
 export default function AdminContent() {
   const { t, lang } = useI18n();
@@ -34,7 +34,7 @@ export default function AdminContent() {
     if (!lessonsByChapter[c.id] && isSupabaseConfigured) {
       const { data } = await supabase
         .from("lessons")
-        .select("id, title_fr, title_en")
+        .select("id, title_fr, title_en, published")
         .eq("chapter_id", c.id)
         .order("position");
       setLessonsByChapter((prev) => ({ ...prev, [c.id]: data ?? [] }));
@@ -172,6 +172,9 @@ export default function AdminContent() {
                       >
                         <Icon name="book" size={14} className="text-muted flex-none" />
                         <span className="flex-1 min-w-0 text-[13px] text-ink-900 truncate">{lang === "fr" ? l.title_fr : l.title_en}</span>
+                        {!l.published && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-ink-100 text-muted flex-none">{t("admin_draft")}</span>
+                        )}
                         <span className="text-[11px] font-bold text-brand-600 flex items-center gap-0.5 flex-none">
                           {t("admin_editLesson")}
                           <Icon name="chevright" size={12} />

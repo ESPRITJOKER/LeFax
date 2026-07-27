@@ -36,7 +36,7 @@ export default function Search() {
     const [{ data: subjects }, { data: chapters }, { data: lessons }] = await Promise.all([
       supabase.from("subjects").select("id, slug, name_fr, name_en").ilike(nameField, `%${q}%`),
       supabase.from("chapters").select("id, name_fr, name_en").ilike(nameField, `%${q}%`),
-      supabase.from("lessons").select("id, title_fr, title_en").ilike(titleField, `%${q}%`),
+      supabase.from("lessons").select("id, title_fr, title_en").eq("published", true).ilike(titleField, `%${q}%`),
     ]);
 
     const built: Result[] = [

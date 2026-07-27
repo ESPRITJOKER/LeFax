@@ -30,7 +30,7 @@ export default function LessonDetail() {
     }
     (async () => {
       setLoading(true);
-      const { data: lessonRow } = await supabase.from("lessons").select("*").eq("id", lessonId).maybeSingle();
+      const { data: lessonRow } = await supabase.from("lessons").select("*").eq("id", lessonId).eq("published", true).maybeSingle();
       setLesson(lessonRow ?? null);
 
       if (lessonRow) {
@@ -38,6 +38,7 @@ export default function LessonDetail() {
           .from("lessons")
           .select("*")
           .eq("chapter_id", lessonRow.chapter_id)
+          .eq("published", true)
           .order("position");
         setSiblings(siblingRows ?? []);
 

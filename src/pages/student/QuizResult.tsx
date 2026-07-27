@@ -54,7 +54,7 @@ export default function QuizResult() {
 
       const { data: lessonRow } = await supabase.from("lessons").select("chapter_id").eq("id", lessonId).maybeSingle();
       if (!lessonRow) return;
-      const { data: siblings } = await supabase.from("lessons").select("id").eq("chapter_id", lessonRow.chapter_id).order("position");
+      const { data: siblings } = await supabase.from("lessons").select("id").eq("chapter_id", lessonRow.chapter_id).eq("published", true).order("position");
       const list = siblings ?? [];
       const idx = list.findIndex((l) => l.id === lessonId);
       const next = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;

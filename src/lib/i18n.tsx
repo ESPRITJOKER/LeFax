@@ -213,6 +213,12 @@ const dict = {
     admin_lessonSaved: "Leçon enregistrée",
     admin_saveError: "Échec de l'enregistrement",
     admin_noLessons: "Aucune leçon dans ce chapitre",
+    admin_published: "Publié",
+    admin_draft: "Brouillon",
+    admin_publish: "Publier",
+    admin_unpublish: "Dépublier",
+    admin_publishedHint: "Visible par les étudiants",
+    admin_draftHint: "Masqué aux étudiants",
 
     // Teacher
     teacher_dashboard: "Tableau de bord enseignant",
@@ -436,6 +442,12 @@ const dict = {
     admin_lessonSaved: "Lesson saved",
     admin_saveError: "Save failed",
     admin_noLessons: "No lessons in this chapter",
+    admin_published: "Published",
+    admin_draft: "Draft",
+    admin_publish: "Publish",
+    admin_unpublish: "Unpublish",
+    admin_publishedHint: "Visible to students",
+    admin_draftHint: "Hidden from students",
 
     // Teacher
     teacher_dashboard: "Teacher dashboard",

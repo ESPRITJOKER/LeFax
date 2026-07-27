@@ -45,7 +45,7 @@ export default function SubjectChapters() {
       const { data: chapterRows } = await supabase.from("chapters").select("*").eq("subject_id", current.id).order("position");
       const chapterIds = (chapterRows ?? []).map((c) => c.id);
       const { data: lessonRows } = chapterIds.length
-        ? await supabase.from("lessons").select("id, chapter_id").in("chapter_id", chapterIds)
+        ? await supabase.from("lessons").select("id, chapter_id").eq("published", true).in("chapter_id", chapterIds)
         : { data: [] };
       let doneLessonIds = new Set<string>();
       if (profile) {

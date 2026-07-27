@@ -32,7 +32,7 @@ export default function ChapterLessons() {
       setLoading(true);
       const { data: chapterRow } = await supabase.from("chapters").select("*").eq("id", chapterId).maybeSingle();
       setChapter(chapterRow ?? null);
-      const { data: lessonRows } = await supabase.from("lessons").select("*").eq("chapter_id", chapterId).order("position");
+      const { data: lessonRows } = await supabase.from("lessons").select("*").eq("chapter_id", chapterId).eq("published", true).order("position");
 
       let progressByLesson: Record<string, LessonProgressStatus> = {};
       if (profile) {

@@ -19,6 +19,8 @@ export default function AdminLessonEditor() {
   const [lesson, setLesson] = useState<LessonRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [published, setPublished] = useState(false);
+  const [publishing, setPublishing] = useState(false);
   const [flash, setFlash] = useState<{ ok: boolean; msg: string } | null>(null);
 
   // editable fields
@@ -56,6 +58,7 @@ export default function AdminLessonEditor() {
         setTitleEn(data.title_en);
         setContentFr(data.content_fr);
         setContentEn(data.content_en);
+        setPublished(data.published);
         await loadMedia(lessonId);
       }
       setLoading(false);
@@ -72,6 +75,21 @@ export default function AdminLessonEditor() {
       .eq("id", lessonId);
     setFlash(error ? { ok: false, msg: t("admin_saveError") } : { ok: true, msg: t("admin_lessonSaved") });
     setSaving(false);
+  }
+
+  async function togglePublish() {
+    if (!lessonId) return;
+    setPublishing(true);
+    setFlash(null);
+    const next = !published;
+    const { error } = await supabase.from("lessons").update({ published: next }).eq("id", lessonId);
+    if (error) {
+      setFlash({ ok: false, msg: t("admin_saveError") });
+    } else {
+      setPublished(next);
+      setFlash({ ok: true, msg: next ? t("admin_published") : t("admin_draft") });
+    }
+    setPublishing(false);
   }
 
   async function uploadForSlot(slot: number, file: File) {
@@ -134,6 +152,21 @@ export default function AdminLessonEditor() {
       </button>
 
       <div className="font-serif font-bold text-xl text-ink-950 mb-4">{t("admin_editLesson")}</div>
+
+      {/* Publish status + toggle */}
+      <div className="flex items-center gap-3 mb-4 bg-white border border-border rounded-2xl px-4 py-3 flex-wrap">
+        <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${published ? "bg-success-600/10 text-success-600" : "bg-ink-100 text-muted"}`}>
+          {published ? t("admin_published") : t("admin_draft")}
+        </span>
+        <span className="text-[12px] text-muted flex-1 min-w-[120px]">{published ? t("admin_publishedHint") : t("admin_draftHint")}</span>
+        <button
+          onClick={togglePublish}
+          disabled={publishing}
+          className={`border-none px-4 py-2 rounded-xl text-[13px] font-bold text-white disabled:opacity-60 ${published ? "bg-ink-700" : "bg-success-600"}`}
+        >
+          {publishing ? t("admin_uploading") : published ? t("admin_unpublish") : t("admin_publish")}
+        </button>
+      </div>
 
       {flash && (
         <div className={`mb-4 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-600/10 text-success-600" : "bg-danger-600/10 text-danger-600"}`}>

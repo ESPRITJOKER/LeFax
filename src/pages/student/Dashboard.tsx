@@ -41,7 +41,7 @@ export default function Dashboard() {
       let progressBySubject: Record<string, number> = {};
       if (profile && subjectRows) {
         const { data: chapterRows } = await supabase.from("chapters").select("id, subject_id");
-        const { data: lessonRows } = await supabase.from("lessons").select("id, chapter_id");
+        const { data: lessonRows } = await supabase.from("lessons").select("id, chapter_id").eq("published", true);
         const { data: progressRows } = await supabase
           .from("lesson_progress")
           .select("lesson_id, status")
