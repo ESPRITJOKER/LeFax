@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Icon } from "../../lib/icons";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ContentApprovalRow } from "../../lib/database.types";
 
 interface GeneratedQuestion {
@@ -39,7 +39,7 @@ export default function AdminAiReview() {
   async function approve(row: ContentApprovalRow) {
     setBusyId(row.id);
     try {
-      const { error } = await supabase.functions.invoke("ai-content", { body: { action: "approve", content_approval_id: row.id } });
+      const { error } = await invokeFn("ai-content", { action: "approve", content_approval_id: row.id });
       if (error) throw error;
       await load();
     } catch {

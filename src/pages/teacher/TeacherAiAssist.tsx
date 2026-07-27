@@ -3,7 +3,7 @@ import { Button, Spinner, EmptyState, Select } from "../../components/ui";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { LessonRow } from "../../lib/database.types";
 
 interface GeneratedQuestion {
@@ -55,9 +55,7 @@ export default function TeacherAiAssist() {
         mediaId = mediaRow?.id ?? null;
       }
 
-      const { data, error } = await supabase.functions.invoke("ai-content", {
-        body: { action: "generate", lesson_id: lessonId, media_id: mediaId },
-      });
+      const { data, error } = await invokeFn("ai-content", { action: "generate", lesson_id: lessonId, media_id: mediaId });
       if (error) throw error;
       setDraft((data?.questions as GeneratedQuestion[]) ?? []);
     } catch {

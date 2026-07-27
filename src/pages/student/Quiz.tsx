@@ -9,7 +9,7 @@ import { Spinner } from "../../components/ui";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { QuizRow, QuestionRow, ChoiceRow } from "../../lib/database.types";
 
 const LETTERS = ["A", "B", "C", "D", "E"];
@@ -101,14 +101,12 @@ export default function Quiz() {
     setSubmitting(true);
     setAnswerFailed(false);
     try {
-      const { data, error } = await supabase.functions.invoke("quiz-submit", {
-        body: {
-          action: "answer",
-          attempt_id: attemptId,
-          quiz_id: quizId,
-          question_id: question.id,
-          choice_id: choiceId,
-        },
+      const { data, error } = await invokeFn("quiz-submit", {
+        action: "answer",
+        attempt_id: attemptId,
+        quiz_id: quizId,
+        question_id: question.id,
+        choice_id: choiceId,
       });
       if (error) throw error;
       const isCorrect = data.is_correct === true;
@@ -162,7 +160,7 @@ export default function Quiz() {
       answers: questions.map((q) => ({ question_id: q.id, choice_id: answers[q.id]?.choiceId ?? null })),
     };
     try {
-      const { data, error } = await supabase.functions.invoke("quiz-submit", { body: payload });
+      const { data, error } = await invokeFn("quiz-submit", payload);
       if (error) throw error;
       navigate(`/quiz/${quizId}/result`, { state: data });
     } catch {

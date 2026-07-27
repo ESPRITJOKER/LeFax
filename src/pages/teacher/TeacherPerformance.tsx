@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 
 interface QuizStat {
   quizId: string;
@@ -26,7 +26,7 @@ export default function TeacherPerformance() {
     }
     (async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("teacher", { body: { action: "performance_summary" } });
+        const { data, error } = await invokeFn("teacher", { action: "performance_summary" });
         if (error) throw error;
         setStats(data?.quizzes ?? []);
       } catch {

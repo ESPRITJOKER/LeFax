@@ -6,7 +6,7 @@ import { Icon, type IconName } from "../../lib/icons";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ShopItemRow } from "../../lib/database.types";
 
 const ITEM_ICON: Record<ShopItemRow["item_type"], IconName> = {
@@ -48,7 +48,7 @@ export default function Shop() {
   async function unlock(item: ShopItemRow) {
     setPendingId(item.id);
     try {
-      const { error } = await supabase.functions.invoke("faxcoins", { body: { action: "unlock", shop_item_id: item.id } });
+      const { error } = await invokeFn("faxcoins", { action: "unlock", shop_item_id: item.id });
       if (error) throw error;
       await refreshProfile();
       await load();

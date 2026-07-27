@@ -5,7 +5,7 @@ import { Icon } from "../../lib/icons";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { DailyTaskRow } from "../../lib/database.types";
 
 export default function Tasks() {
@@ -47,7 +47,7 @@ export default function Tasks() {
   async function complete(task: DailyTaskRow) {
     setPendingId(task.id);
     try {
-      const { error } = await supabase.functions.invoke("daily-tasks", { body: { action: "complete", task_id: task.id } });
+      const { error } = await invokeFn("daily-tasks", { action: "complete", task_id: task.id });
       if (error) throw error;
       await refreshProfile();
       await load();

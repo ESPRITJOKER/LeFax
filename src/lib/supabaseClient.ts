@@ -26,3 +26,27 @@ export const supabase = createClient<Database>(
     },
   }
 );
+
+/**
+ * Invoke an Edge Function with the signed-in user's access token explicitly
+ * attached.
+ *
+ * Why this exists: with a session restored from storage on page reload,
+ * supabase-js does not always propagate the user token to the functions
+ * client, so `functions.invoke` falls back to sending the anon key. Functions
+ * deployed with `verify_jwt = true` accept the anon key at the gateway but then
+ * `auth.getUser()` finds no user and the function returns 401 "unauthorized".
+ * Reading the session here and passing the Authorization header directly makes
+ * the call always carry the real user token. `auth-otp` (pre-login) is the one
+ * caller that should keep using `supabase.functions.invoke` with the anon key.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function invokeFn<T = any>(name: string, body?: Record<string, unknown>) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return supabase.functions.invoke<T>(name, {
+    body,
+    ...(session?.access_token ? { headers: { Authorization: `Bearer ${session.access_token}` } } : {}),
+  });
+}

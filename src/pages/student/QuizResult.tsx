@@ -4,7 +4,7 @@ import { PhoneFrame } from "../../components/PhoneFrame";
 import { StatRow } from "../../components/StatRow";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 
 interface ResultState {
   score: number;
@@ -47,7 +47,7 @@ export default function QuizResult() {
       if (!lessonId) return; // e.g. a mock-exam quiz — nothing to continue here
 
       try {
-        await supabase.functions.invoke("courses", { body: { action: "complete_lesson", lesson_id: lessonId } });
+        await invokeFn("courses", { action: "complete_lesson", lesson_id: lessonId });
       } catch {
         // Backend unreachable — the lesson just won't be flagged done yet.
       }

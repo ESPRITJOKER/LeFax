@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spinner, EmptyState, Button, Select } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ProfileRow, UserRole } from "../../lib/database.types";
 
 export default function AdminAdmins() {
@@ -31,9 +31,7 @@ export default function AdminAdmins() {
   async function invite() {
     setMessage(null);
     try {
-      const { error } = await supabase.functions.invoke("admin", {
-        body: { action: "invite_admin", first_name: firstName, last_name: lastName, phone, role },
-      });
+      const { error } = await invokeFn("admin", { action: "invite_admin", first_name: firstName, last_name: lastName, phone, role });
       if (error) throw error;
       setMessage(lang === "fr" ? "Invitation envoyée." : "Invitation sent.");
       setFirstName("");
@@ -48,7 +46,7 @@ export default function AdminAdmins() {
   async function toggleActive(a: ProfileRow) {
     const nextStatus = a.status === "active" ? "suspended" : "active";
     try {
-      await supabase.functions.invoke("admin", { body: { action: "set_student_status", user_id: a.id, status: nextStatus } });
+      await invokeFn("admin", { action: "set_student_status", user_id: a.id, status: nextStatus });
       await load();
     } catch {
       // Backend not reachable yet.

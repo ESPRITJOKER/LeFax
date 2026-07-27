@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spinner, EmptyState, Select } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
-import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import { REGIONS } from "../../lib/regions";
 import type { ProfileRow } from "../../lib/database.types";
 
@@ -37,7 +37,7 @@ export default function AdminStudents() {
     setBusyId(s.id);
     const nextStatus = s.status === "active" ? "suspended" : "active";
     try {
-      const { error } = await supabase.functions.invoke("admin", { body: { action: "set_student_status", user_id: s.id, status: nextStatus } });
+      const { error } = await invokeFn("admin", { action: "set_student_status", user_id: s.id, status: nextStatus });
       if (error) throw error;
       await load();
     } catch {
@@ -49,7 +49,7 @@ export default function AdminStudents() {
   async function resetPassword(s: ProfileRow) {
     setBusyId(s.id);
     try {
-      await supabase.functions.invoke("admin", { body: { action: "reset_student_password", user_id: s.id } });
+      await invokeFn("admin", { action: "reset_student_password", user_id: s.id });
     } catch {
       // Backend not reachable yet.
     }
