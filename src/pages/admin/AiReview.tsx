@@ -8,6 +8,8 @@ import type { ContentApprovalRow } from "../../lib/database.types";
 interface GeneratedQuestion {
   text_fr: string;
   text_en: string;
+  explanation_fr?: string;
+  explanation_en?: string;
   options: { text_fr: string; text_en: string; is_correct: boolean }[];
   source?: string;
 }
@@ -100,6 +102,15 @@ export default function AdminAiReview() {
                     </div>
                   ))}
                 </div>
+                {(() => {
+                  const expl = lang === "fr" ? q.explanation_fr : q.explanation_en;
+                  return expl ? (
+                    <div className="mb-3.5 rounded-lg bg-ink-50 border border-ink-100 px-3 py-2.5">
+                      <div className="text-[10px] font-bold uppercase tracking-wide text-ink-700 mb-1">{t("corr_title")}</div>
+                      <div className="text-[12px] leading-relaxed text-ink-800">{expl}</div>
+                    </div>
+                  ) : null;
+                })()}
                 {editing ? (
                   <div className="flex gap-2">
                     <button onClick={() => saveModify(row)} className="flex-1 py-2 rounded-lg border-none bg-brand-600 text-white text-xs font-bold">

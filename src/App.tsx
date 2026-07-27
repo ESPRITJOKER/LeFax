@@ -26,6 +26,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminOverview from "./pages/admin/Overview";
 import AdminStudents from "./pages/admin/Students";
 import AdminContent from "./pages/admin/Content";
+import AdminLessonEditor from "./pages/admin/LessonEditor";
 import AdminAiReview from "./pages/admin/AiReview";
 import AdminMockExams from "./pages/admin/MockExams";
 import AdminAdmins from "./pages/admin/Admins";
@@ -190,6 +191,7 @@ export default function App() {
           <Route path="overview" element={<AdminOverview />} />
           <Route path="students" element={<AdminStudents />} />
           <Route path="content" element={<AdminContent />} />
+          <Route path="content/lesson/:lessonId" element={<AdminLessonEditor />} />
           <Route path="ai-review" element={<AdminAiReview />} />
           <Route path="mock-exams" element={<AdminMockExams />} />
           <Route path="admins" element={<AdminAdmins />} />

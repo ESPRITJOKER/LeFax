@@ -5,6 +5,7 @@ import { ScreenHeader } from "../../components/ScreenHeader";
 import { Button, ProgressBar, Spinner } from "../../components/ui";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
+import { LessonContent } from "../../lib/lessonContent";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow, QuizRow } from "../../lib/database.types";
@@ -18,6 +19,7 @@ export default function LessonDetail() {
   const [lesson, setLesson] = useState<LessonRow | null>(null);
   const [siblings, setSiblings] = useState<LessonRow[]>([]);
   const [quiz, setQuiz] = useState<QuizRow | null>(null);
+  const [images, setImages] = useState<Record<number, string>>({});
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -41,6 +43,15 @@ export default function LessonDetail() {
 
         const { data: quizRow } = await supabase.from("quizzes").select("*").eq("lesson_id", lessonRow.id).maybeSingle();
         setQuiz(quizRow ?? null);
+
+        const { data: mediaRows } = await supabase
+          .from("media_library")
+          .select("image_slot, storage_path")
+          .eq("lesson_id", lessonRow.id)
+          .not("image_slot", "is", null);
+        const map: Record<number, string> = {};
+        for (const m of mediaRows ?? []) if (m.image_slot != null) map[m.image_slot] = m.storage_path;
+        setImages(map);
 
         if (profile) {
           const { data: progressRow } = await supabase
@@ -139,7 +150,9 @@ export default function LessonDetail() {
             </>
           )}
 
-          <div className="text-[13.5px] leading-relaxed text-text mb-4.5">{lang === "fr" ? lesson.content_fr : lesson.content_en}</div>
+          <div className="mb-4.5">
+            <LessonContent text={lang === "fr" ? lesson.content_fr : lesson.content_en} images={images} />
+          </div>
 
           {keyPoints.length > 0 && (
             <>
@@ -153,10 +166,6 @@ export default function LessonDetail() {
               </ul>
             </>
           )}
-
-          <div className="w-full aspect-[16/10] rounded-2xl bg-ink-50 flex items-center justify-center text-muted text-[11.5px] font-mono text-center p-3">
-            {t("lesson_diagramPlaceholder")}
-          </div>
         </div>
 
         <div className="sticky bottom-0 bg-white border-t border-[#E4E9F0] px-[22px] py-3 flex gap-2.5">

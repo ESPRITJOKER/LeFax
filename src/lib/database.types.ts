@@ -282,7 +282,7 @@ export type AdminLogRow = {
 
 export type ContentApprovalRow = {
   id: string;
-  submitted_by: string;
+  submitted_by: string | null;
   source_media_id: string | null;
   lesson_id: string | null;
   generated_payload: Record<string, unknown>;
@@ -299,6 +299,7 @@ export type MediaLibraryRow = {
   mime_type: string | null;
   uploaded_by: string | null;
   lesson_id: string | null;
+  image_slot: number | null;
   created_at: string;
 }
 
