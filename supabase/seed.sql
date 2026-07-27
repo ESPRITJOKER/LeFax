@@ -10,36 +10,24 @@
 -- ---------------------------------------------------------------------------
 -- Subjects (Médecine track)
 -- ---------------------------------------------------------------------------
+-- Only subjects that actually have written notes are seeded (see migration
+-- 0009): the earlier 6-subject scaffold (Chimie, Physique, Mathématiques,
+-- Français, Culture générale) had no lessons, so it is no longer seeded.
 insert into public.subjects (slug, name_fr, name_en, track, position) values
-  ('biologie', 'Biologie', 'Biology', 'medicine', 1),
-  ('chimie', 'Chimie', 'Chemistry', 'medicine', 2),
-  ('physique', 'Physique', 'Physics', 'medicine', 3),
-  ('mathematiques', 'Mathématiques', 'Mathematics', 'medicine', 4),
-  ('francais', 'Français', 'French', 'medicine', 5),
-  ('culture-generale', 'Culture générale', 'General Knowledge', 'medicine', 6);
+  ('biologie', 'Biologie', 'Biology', 'medicine', 1);
 
 -- ---------------------------------------------------------------------------
 -- Chapters
 -- ---------------------------------------------------------------------------
+-- Only "La cellule" is seeded here (its structure-de-la-cellule lesson has real
+-- notes + a quiz). The other biologie chapters and the empty chapters of the
+-- other subjects were removed (migration 0009). Cytologie I and Organisation
+-- générale de l'être humain are seeded by migration 0007, not here.
 insert into public.chapters (subject_id, slug, name_fr, name_en, position)
 select s.id, c.slug, c.name_fr, c.name_en, c.position
 from public.subjects s
 join (values
-  ('biologie', 'la-cellule', 'La cellule', 'The Cell', 1),
-  ('biologie', 'genetique', 'Génétique', 'Genetics', 2),
-  ('biologie', 'physiologie-humaine', 'Physiologie humaine', 'Human Physiology', 3),
-  ('chimie', 'structure-atomique', 'Structure atomique', 'Atomic Structure', 1),
-  ('chimie', 'liaisons-chimiques', 'Liaisons chimiques', 'Chemical Bonds', 2),
-  ('chimie', 'reactions-chimiques', 'Réactions chimiques', 'Chemical Reactions', 3),
-  ('physique', 'mecanique', 'Mécanique', 'Mechanics', 1),
-  ('physique', 'electricite', 'Électricité', 'Electricity', 2),
-  ('physique', 'optique', 'Optique', 'Optics', 3),
-  ('mathematiques', 'analyse', 'Analyse', 'Calculus', 1),
-  ('mathematiques', 'algebre', 'Algèbre', 'Algebra', 2),
-  ('francais', 'comprehension-de-texte', 'Compréhension de texte', 'Reading Comprehension', 1),
-  ('francais', 'grammaire-et-syntaxe', 'Grammaire et syntaxe', 'Grammar and Syntax', 2),
-  ('culture-generale', 'actualite-et-societe', 'Actualité et société', 'Current Affairs and Society', 1),
-  ('culture-generale', 'institutions-camerounaises', 'Institutions camerounaises', 'Cameroonian Institutions', 2)
+  ('biologie', 'la-cellule', 'La cellule', 'The Cell', 1)
 ) as c(subject_slug, slug, name_fr, name_en, position) on c.subject_slug = s.slug;
 
 -- ---------------------------------------------------------------------------
@@ -68,43 +56,11 @@ join (values
     array['Le noyau contient l''ADN','La mitochondrie produit l''énergie','La membrane régule les échanges'],
     array['The nucleus holds DNA','The mitochondria produce energy','The membrane regulates exchange'],
     12, 'easy', 1
-  ),
-  (
-    'biologie', 'la-cellule',
-    'membrane-plasmique', 'Membrane plasmique', 'Plasma Membrane',
-    array['Décrire la structure en bicouche lipidique','Comprendre la perméabilité sélective'],
-    array['Describe the lipid bilayer structure','Understand selective permeability'],
-    'Cette leçon couvre : Membrane plasmique. Lisez attentivement le contenu puis validez vos acquis avec le test qui suit.',
-    'This lesson covers: Plasma Membrane. Read the content carefully, then check your understanding with the quiz that follows.',
-    '', '', array[]::text[], array[]::text[], 10, 'easy', 2
-  ),
-  (
-    'biologie', 'la-cellule',
-    'noyau-et-organites', 'Noyau et organites', 'Nucleus and Organelles',
-    array['Cartographier les organites cellulaires majeurs'],
-    array['Map the major cell organelles'],
-    'Cette leçon couvre : Noyau et organites. Lisez attentivement le contenu puis validez vos acquis avec le test qui suit.',
-    'This lesson covers: Nucleus and Organelles. Read the content carefully, then check your understanding with the quiz that follows.',
-    '', '', array[]::text[], array[]::text[], 14, 'medium', 3
-  ),
-  (
-    'biologie', 'la-cellule',
-    'division-cellulaire', 'Division cellulaire', 'Cell Division',
-    array['Distinguer mitose et méiose'],
-    array['Distinguish mitosis and meiosis'],
-    'Cette leçon couvre : Division cellulaire. Lisez attentivement le contenu puis validez vos acquis avec le test qui suit.',
-    'This lesson covers: Cell Division. Read the content carefully, then check your understanding with the quiz that follows.',
-    '', '', array[]::text[], array[]::text[], 15, 'medium', 4
-  ),
-  (
-    'biologie', 'la-cellule',
-    'transport-cellulaire', 'Transport cellulaire', 'Cellular Transport',
-    array['Comprendre diffusion, osmose et transport actif'],
-    array['Understand diffusion, osmosis, and active transport'],
-    'Cette leçon couvre : Transport cellulaire. Lisez attentivement le contenu puis validez vos acquis avec le test qui suit.',
-    'This lesson covers: Cellular Transport. Read the content carefully, then check your understanding with the quiz that follows.',
-    '', '', array[]::text[], array[]::text[], 12, 'hard', 5
   )
+  -- The other "La cellule" lessons (membrane-plasmique, noyau-et-organites,
+  -- division-cellulaire, transport-cellulaire) were filler with no notes and
+  -- have been removed (migration 0009). Full cell content now lives in the
+  -- Cytologie I chapter seeded by migration 0007.
 ) as l(subject_slug, chapter_slug, slug, title_fr, title_en, objectives_fr, objectives_en, content_fr, content_en, summary_fr, summary_en, key_points_fr, key_points_en, duration_minutes, difficulty, position)
   on l.subject_slug = s.slug and l.chapter_slug = ch.slug;
 
