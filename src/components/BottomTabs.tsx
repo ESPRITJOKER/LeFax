@@ -18,7 +18,7 @@ export function BottomTabs() {
           key={tab.to}
           to={tab.to}
           className={({ isActive }) =>
-            `flex-1 flex flex-col items-center gap-1 py-1.5 ${isActive ? "text-ink-700" : "text-muted"}`
+            `flex-1 flex flex-col items-center gap-[3px] py-1.5 ${isActive ? "text-ink-950" : "text-muted"}`
           }
         >
           <Icon name={tab.icon} size={20} />

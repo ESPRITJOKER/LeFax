@@ -110,10 +110,22 @@ export default function AdminStudents() {
               {filtered.map((s) => (
                 <tr key={s.id} className="border-b border-ink-50">
                   <td className="px-4 py-3.5">
-                    <div className="text-[13px] font-bold text-ink-900">
-                      {s.first_name} {s.last_name}
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 flex-none rounded-full bg-ink-100 text-ink-700 flex items-center justify-center text-[11px] font-extrabold overflow-hidden">
+                        {s.avatar_url ? (
+                          <img src={s.avatar_url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          s.first_name.charAt(0).toUpperCase()
+                        )}
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-bold text-ink-900">
+                          {s.first_name} {s.last_name}
+                          {s.nickname && <span className="text-[11px] font-semibold text-muted"> · @{s.nickname}</span>}
+                        </div>
+                        <div className="text-[11.5px] text-muted">{s.phone}</div>
+                      </div>
                     </div>
-                    <div className="text-[11.5px] text-muted">{s.phone}</div>
                   </td>
                   <td className="px-4 py-3.5 text-xs text-ink-800">
                     {s.region} · {s.town}

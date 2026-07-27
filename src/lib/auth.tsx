@@ -20,7 +20,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function loadProfile(userId: string) {
     const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
-    if (!error && data) setProfile(data as ProfileRow);
+    if (error) {
+      console.error("[auth] loadProfile error:", error.message);
+    }
+    if (data) setProfile(data as ProfileRow);
   }
 
   async function refreshProfile() {
@@ -34,9 +37,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
       setSession(data.session);
-      if (data.session?.user?.id) loadProfile(data.session.user.id);
+      // Await the profile load before clearing `loading` so route guards never
+      // see "session present, profile still null" and fall open on a role gate.
+      if (data.session?.user?.id) await loadProfile(data.session.user.id);
       setLoading(false);
     });
 

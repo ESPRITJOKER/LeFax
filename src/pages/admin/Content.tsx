@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Icon } from "../../lib/icons";
+import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { SubjectBadge } from "../../components/SubjectBadge";
 import { Pill, Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -81,12 +82,15 @@ export default function AdminContent() {
         ) : (
           subjects.map((s) => (
             <Pill key={s.id} active={s.id === activeSubjectId} onClick={() => setActiveSubjectId(s.id)}>
-              {lang === "fr" ? s.name_fr : s.name_en}
+              <span className="flex items-center gap-1.5">
+                <Icon name={subjectIcon(s.slug)} size={12} style={{ color: subjectColors(s.slug).accent }} />
+                {lang === "fr" ? s.name_fr : s.name_en}
+              </span>
             </Pill>
           ))
         )}
         <div className="flex-1" />
-        <button onClick={addChapter} className="border-none px-4 py-2.5 rounded-xl text-xs font-bold bg-ink-700 text-white flex items-center gap-1.5">
+        <button onClick={addChapter} className="border-none px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-600 text-white flex items-center gap-1.5">
           <Icon name="plus" size={14} />
           {t("admin_addChapter")}
         </button>
@@ -97,9 +101,12 @@ export default function AdminContent() {
           <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
         ) : (
           chapters.map((c) => (
-            <div key={c.id} className="bg-white border border-border rounded-2xl px-4.5 px-[18px] py-4 flex items-center gap-3.5">
-              <div className="w-9 h-9 rounded-[10px] bg-ink-100 flex items-center justify-center text-ink-700">
-                <Icon name="book" size={17} />
+            <div key={c.id} className="bg-card border border-border rounded-2xl px-4.5 px-[18px] py-4 flex items-center gap-3.5">
+              <div className="w-9 h-9 rounded-[10px] bg-ink-100 flex items-center justify-center">
+                {(() => {
+                  const sub = subjects.find((s) => s.id === c.subject_id);
+                  return <Icon name={sub ? subjectIcon(sub.slug) : "book"} size={17} style={{ color: sub ? subjectColors(sub.slug).accent : undefined }} />;
+                })()}
               </div>
               {editingId === c.id ? (
                 <>

@@ -55,7 +55,7 @@ Deno.serve(async (req: Request) => {
       totalsByUser.set(a.user_id, (totalsByUser.get(a.user_id) ?? 0) + a.score);
     }
 
-    const { data: profiles } = await admin.from("profiles").select("id, first_name, last_name, town, region").in("id", [...totalsByUser.keys()]);
+    const { data: profiles } = await admin.from("profiles").select("id, first_name, last_name, town, region, avatar_url").in("id", [...totalsByUser.keys()]);
     const profileById = new Map((profiles ?? []).map((p: { id: string }) => [p.id, p]));
 
     let written = 0;
@@ -65,9 +65,14 @@ Deno.serve(async (req: Request) => {
       await admin.from("rankings").upsert(
         {
           scope: "weekly",
+          // Non-regional scopes use '' (not NULL) so the onConflict target
+          // (scope, region, user_id, period_start) actually matches on re-run —
+          // NULLs are treated as distinct, which would insert duplicates.
+          region: "",
           user_id: userId,
           display_name: `${p.first_name} ${p.last_name.charAt(0)}.`,
           town: p.town,
+          avatar_url: p.avatar_url,
           score,
           period_start: weekStart.toISOString().slice(0, 10),
           period_end: weekEnd.toISOString().slice(0, 10),

@@ -71,6 +71,8 @@ Deno.serve(async (req: Request) => {
       await admin.from("rankings").upsert(
         {
           scope: "national",
+          // '' rather than NULL so the onConflict upsert dedupes on re-run.
+          region: "",
           user_id: r.user_id,
           display_name: displayName,
           town: r.profiles.town,
@@ -83,7 +85,7 @@ Deno.serve(async (req: Request) => {
       await admin.from("rankings").upsert(
         {
           scope: "regional",
-          region: r.profiles.region,
+          region: r.profiles.region ?? "",
           user_id: r.user_id,
           display_name: displayName,
           town: r.profiles.town,

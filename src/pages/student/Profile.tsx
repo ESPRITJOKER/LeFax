@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
-import { Button, Select } from "../../components/ui";
+import { Button, Select, Spinner } from "../../components/ui";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
@@ -12,18 +12,23 @@ import { REGIONS, TOWNS } from "../../lib/regions";
 export default function Profile() {
   const { t, lang, setLang } = useI18n();
   const navigate = useNavigate();
-  const { profile, refreshProfile, signOut } = useAuth();
+  const { profile, loading: authLoading, refreshProfile, signOut } = useAuth();
 
   const [region, setRegion] = useState(profile?.region ?? "");
   const [town, setTown] = useState(profile?.town ?? "");
+  const [nickname, setNickname] = useState(profile?.nickname ?? "");
   const [darkMode, setDarkMode] = useState(profile?.dark_mode ?? false);
   const [newPassword, setNewPassword] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setRegion(profile?.region ?? "");
     setTown(profile?.town ?? "");
+    setNickname(profile?.nickname ?? "");
     setDarkMode(profile?.dark_mode ?? false);
   }, [profile]);
 
@@ -38,7 +43,10 @@ export default function Profile() {
     if (!profile || !isSupabaseConfigured) return;
     setSaving(true);
     setMessage(null);
-    const { error } = await supabase.from("profiles").update({ region, town, dark_mode: darkMode, language: lang }).eq("id", profile.id);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ region, town, nickname: nickname.trim() || null, dark_mode: darkMode, language: lang })
+      .eq("id", profile.id);
     if (newPassword) {
       await supabase.auth.updateUser({ password: newPassword });
     }
@@ -47,24 +55,68 @@ export default function Profile() {
     await refreshProfile();
   }
 
+  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file || !profile || !isSupabaseConfigured) return;
+    if (!file.type.startsWith("image/")) {
+      setPhotoError(true);
+      return;
+    }
+    setPhotoUploading(true);
+    setPhotoError(false);
+    try {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${profile.id}/avatar.${ext}`;
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, cacheControl: "3600" });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+      // Cache-bust so the new photo shows immediately even though the path is unchanged.
+      const avatarUrl = `${data.publicUrl}?t=${Date.now()}`;
+      const { error: updateError } = await supabase.from("profiles").update({ avatar_url: avatarUrl }).eq("id", profile.id);
+      if (updateError) throw updateError;
+      await refreshProfile();
+    } catch {
+      setPhotoError(true);
+    }
+    setPhotoUploading(false);
+  }
+
   async function logout() {
     await signOut();
     navigate("/login");
   }
 
+  if (authLoading) return <PhoneFrame><Spinner /></PhoneFrame>;
+
   return (
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto">
-        <div className="px-[22px] pt-4 font-serif font-bold text-xl text-ink-950">{t("profile_title")}</div>
+        <div className="px-[22px] pt-4 font-serif font-bold text-xl text-text">{t("profile_title")}</div>
 
         <div className="px-[22px] pt-5 flex flex-col items-center gap-2.5">
-          <div className="w-20 h-20 rounded-full bg-ink-700 text-white flex items-center justify-center text-2xl font-bold overflow-hidden">
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={photoUploading}
+            className="relative w-20 h-20 rounded-full bg-brand-600 text-white flex items-center justify-center text-2xl font-bold overflow-hidden border-none disabled:opacity-70"
+          >
             {profile?.avatar_url ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" /> : <Icon name="user" size={32} />}
-          </div>
-          <button className="text-xs font-semibold text-ink-700">{t("profile_editPhoto")}</button>
-          <div className="text-sm font-bold text-ink-900">
+            {photoUploading && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+          </button>
+          <button type="button" onClick={() => fileInputRef.current?.click()} disabled={photoUploading} className="text-xs font-semibold text-muted">
+            {photoUploading ? t("profile_photoUploading") : t("profile_editPhoto")}
+          </button>
+          {photoError && <div className="text-[11px] font-semibold text-danger-700">{t("profile_photoError")}</div>}
+          <div className="text-sm font-bold text-text">
             {profile?.first_name} {profile?.last_name}
           </div>
+          {profile?.nickname && <div className="text-xs font-semibold text-muted -mt-1.5">@{profile.nickname}</div>}
           <div className="flex items-center gap-3 text-[11.5px] text-muted">
             <span>{t("profile_level")}: {profile?.level ?? "—"}</span>
             <span>·</span>
@@ -73,6 +125,15 @@ export default function Profile() {
         </div>
 
         <div className="px-[22px] pt-6 flex flex-col gap-4">
+          <Field label={t("profile_nickname")}>
+            <input
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              placeholder={t("profile_nicknamePlaceholder")}
+              maxLength={30}
+              className={inputClass}
+            />
+          </Field>
           <Field label={t("profile_region")}>
             <Select value={region} onChange={(e) => setRegion(e.target.value)} className={inputClass} wrapperClassName="w-full">
               <option value="">{t("reg_selectPlaceholder")}</option>
@@ -96,25 +157,25 @@ export default function Profile() {
           </Field>
 
           <div className="flex items-center justify-between py-2">
-            <span className="text-[12.5px] font-semibold text-ink-800">{t("profile_language")}</span>
+            <span className="text-[12.5px] font-semibold text-text">{t("profile_language")}</span>
             <div className="flex bg-ink-100 rounded-pill p-[3px] gap-0.5">
-              <button onClick={() => setLang("fr")} className={`rounded-pill px-2.5 py-1 text-[11px] font-bold ${lang === "fr" ? "bg-ink-700 text-white" : "text-muted"}`}>
+              <button onClick={() => setLang("fr")} className={`rounded-pill px-2.5 py-1 text-[11px] font-bold ${lang === "fr" ? "bg-brand-600 text-white" : "text-muted"}`}>
                 FR
               </button>
-              <button onClick={() => setLang("en")} className={`rounded-pill px-2.5 py-1 text-[11px] font-bold ${lang === "en" ? "bg-ink-700 text-white" : "text-muted"}`}>
+              <button onClick={() => setLang("en")} className={`rounded-pill px-2.5 py-1 text-[11px] font-bold ${lang === "en" ? "bg-brand-600 text-white" : "text-muted"}`}>
                 EN
               </button>
             </div>
           </div>
 
           <div className="flex items-center justify-between py-2">
-            <span className="text-[12.5px] font-semibold text-ink-800 flex items-center gap-2">
+            <span className="text-[12.5px] font-semibold text-text flex items-center gap-2">
               <Icon name={darkMode ? "moon" : "sun"} size={16} />
               {t("profile_darkMode")}
             </span>
             <button
               onClick={() => setDarkMode((v) => !v)}
-              className={`w-11 h-6 rounded-pill relative transition-colors ${darkMode ? "bg-ink-700" : "bg-ink-100"}`}
+              className={`w-11 h-6 rounded-pill relative transition-colors ${darkMode ? "bg-brand-600" : "bg-ink-100"}`}
             >
               <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all ${darkMode ? "left-[22px]" : "left-0.5"}`} />
             </button>
@@ -137,12 +198,12 @@ export default function Profile() {
   );
 }
 
-const inputClass = "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-ink-950 bg-white w-full";
+const inputClass = "px-3.5 py-3 rounded-xl border border-border text-[14.5px] outline-none text-text bg-card w-full";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[12.5px] font-semibold text-ink-800">{label}</span>
+      <span className="text-[12.5px] font-semibold text-text">{label}</span>
       {children}
     </label>
   );

@@ -19,7 +19,7 @@ const TABS: { to: string; icon: IconName; labelKey: "nav_home" | "nav_courses" |
 export function Sidebar() {
   const { t } = useI18n();
   return (
-    <div className="hidden lg:flex flex-none w-[220px] bg-ink-950 flex-col">
+    <div className="hidden lg:flex flex-none w-[220px] bg-brand-800 flex-col">
       <div className="flex items-center gap-2.5 px-5 py-6">
         <Icon name="cap" size={26} color="#fff" />
         <div className="font-serif font-bold text-[17px] text-white">{t("appName")}</div>
@@ -31,7 +31,7 @@ export function Sidebar() {
             to={tab.to}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-[10px] ${
-                isActive ? "bg-ink-700 text-white" : "text-ink-100/80 hover:bg-ink-800"
+                isActive ? "bg-brand-600 text-white" : "text-ink-100/80 hover:bg-brand-700"
               }`
             }
           >

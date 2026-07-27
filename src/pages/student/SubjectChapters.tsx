@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
-import { ScreenHeader } from "../../components/ScreenHeader";
-import { Pill, ProgressBar, RingProgress, Spinner, EmptyState } from "../../components/ui";
+import { CoinsBadge } from "../../components/CoinsBadge";
+import { Icon, subjectColors } from "../../lib/icons";
+import { SubjectBadge } from "../../components/SubjectBadge";
+import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -12,6 +14,7 @@ import type { SubjectRow, ChapterRow } from "../../lib/database.types";
 interface ChapterProgress extends ChapterRow {
   lessonsCount: number;
   progressPct: number;
+  locked: boolean;
 }
 
 export default function SubjectChapters() {
@@ -24,7 +27,6 @@ export default function SubjectChapters() {
   const [subject, setSubject] = useState<SubjectRow | null>(null);
   const [chapters, setChapters] = useState<ChapterProgress[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (!isSupabaseConfigured) {
       setLoading(false);
@@ -50,14 +52,22 @@ export default function SubjectChapters() {
         const { data: progressRows } = await supabase.from("lesson_progress").select("lesson_id, status").eq("user_id", profile.id);
         doneLessonIds = new Set((progressRows ?? []).filter((p) => p.status === "done").map((p) => p.lesson_id));
       }
+      // First not-yet-completed chapter (in position order) is the unlocked
+      // entry point, mirroring ChapterLessons' lesson-level sequencing —
+      // everything after it stays locked until it's done; chapters with no
+      // lessons yet (nothing to gate on) are never locked.
+      let firstUnlockedAssigned = false;
       const enriched = (chapterRows ?? []).map((c) => {
         const lessonsForChapter = (lessonRows ?? []).filter((l) => l.chapter_id === c.id);
         const done = lessonsForChapter.filter((l) => doneLessonIds.has(l.id)).length;
-        return {
-          ...c,
-          lessonsCount: lessonsForChapter.length,
-          progressPct: lessonsForChapter.length ? Math.round((done / lessonsForChapter.length) * 100) : 0,
-        };
+        const progressPct = lessonsForChapter.length ? Math.round((done / lessonsForChapter.length) * 100) : 0;
+        const isComplete = lessonsForChapter.length > 0 && progressPct === 100;
+        let locked = false;
+        if (lessonsForChapter.length > 0 && !isComplete) {
+          locked = firstUnlockedAssigned;
+          if (!locked) firstUnlockedAssigned = true;
+        }
+        return { ...c, lessonsCount: lessonsForChapter.length, progressPct, locked };
       });
       setChapters(enriched);
       setLoading(false);
@@ -71,51 +81,61 @@ export default function SubjectChapters() {
   return (
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto">
-        <ScreenHeader title={subject ? (lang === "fr" ? subject.name_fr : subject.name_en) : "..."} onBack={() => navigate("/dashboard")} />
-
-        <div className="flex gap-2 px-[22px] pt-3.5 pb-1 overflow-x-auto">
-          {subjects.map((s) => (
-            <Pill key={s.id} active={s.slug === subjectId} onClick={() => navigate(`/subjects/${s.slug}`)}>
-              {lang === "fr" ? s.name_fr : s.name_en}
-            </Pill>
-          ))}
+        {/* Header: hamburger + coins */}
+        <div className="flex items-center justify-between px-5 py-3">
+          <button onClick={() => navigate("/dashboard")} className="p-1">
+            <div className="flex flex-col gap-1 w-5">
+              <span className="block h-0.5 bg-brand-800 rounded-sm"></span>
+              <span className="block h-0.5 bg-brand-800 rounded-sm"></span>
+              <span className="block h-0.5 bg-brand-800 rounded-sm"></span>
+            </div>
+          </button>
+          <CoinsBadge balance={profile?.faxcoins ?? 0} />
         </div>
 
-        {subject && (
-          <div className="flex items-center gap-3.5 px-[22px] py-4">
-            <RingProgress pct={subjectProgress} />
-            <div className="text-[12.5px] text-muted">{t("chap_progressLabel")}</div>
-          </div>
-        )}
+        {/* Subject hero */}
+        {subject && (() => {
+          const sc = subjectColors(subject.slug);
+          return (
+            <div className="flex items-center gap-4 px-5 pt-2 pb-5">
+              <SubjectBadge slug={subject.slug} size="lg" />
+              <div>
+                <div className="text-[19px] font-bold text-text leading-tight">
+                  {lang === "fr" ? subject.name_fr : subject.name_en}
+                </div>
+                <div className="text-[12px] font-bold mt-0.5" style={{ color: sc.accent }}>
+                  {chapters.length} {t("chap_progressLabel").split(" ")[0]}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
-        <div className="px-[22px] pb-6 flex flex-col gap-3">
+        {/* Chapter list */}
+        <div className="px-5 pb-6 flex flex-col gap-2.5">
           {loading ? (
             <Spinner />
           ) : chapters.length === 0 ? (
             <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
           ) : (
-            chapters.map((c) => (
+            chapters.map((c, i) => (
               <div
                 key={c.id}
-                onClick={() => navigate(`/lessons/${c.id}`)}
-                className="cursor-pointer p-4 rounded-[15px] border border-border hover:bg-ink-50"
+                onClick={() => !c.locked && navigate(`/lessons/${c.id}`)}
+                className={`flex items-center gap-3 p-4 bg-card border border-border rounded-[14px] ${c.locked ? "opacity-60" : "cursor-pointer hover:bg-ink-50"}`}
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="text-[15px] font-bold text-ink-900">{lang === "fr" ? c.name_fr : c.name_en}</div>
-                    <div className="text-xs text-muted mt-0.5">
-                      {c.lessonsCount} {t("chap_lessonsCount")}
-                    </div>
-                  </div>
-                  <div className="text-xs font-bold text-success-600">{c.progressPct}%</div>
+                <div className="w-[22px] text-[13px] font-[800] shrink-0" style={{ color: subject ? subjectColors(subject.slug).accent : undefined }}>
+                  {String(i + 1).padStart(2, "0")}
                 </div>
-                <div className="mt-2.5">
-                  <ProgressBar pct={c.progressPct} />
+                <div className="text-[13.5px] font-[700] text-text flex-1 truncate">
+                  {lang === "fr" ? c.name_fr : c.name_en}
                 </div>
+                {c.locked && <Icon name="lock" size={16} className="text-muted shrink-0" />}
               </div>
             ))
           )}
         </div>
+
         <BottomTabs />
       </div>
     </PhoneFrame>

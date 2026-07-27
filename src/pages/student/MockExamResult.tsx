@@ -6,9 +6,16 @@ import { Button, Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
+import { subjectColors } from "../../lib/icons";
 import type { MockExamResultRow } from "../../lib/database.types";
 
-const SUBJECT_COLORS = ["var(--color-success-600)", "var(--color-ochre-600)", "var(--color-ink-700)"];
+function subjectNameToSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+}
 
 export default function MockExamResult() {
   const { t, lang } = useI18n();
@@ -49,29 +56,33 @@ export default function MockExamResult() {
   return (
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto p-5 px-[22px] pb-6">
-        <div className="font-serif font-bold text-xl text-ink-950 mb-4">{t("mockres_title")}</div>
-        <div className="flex items-center justify-center gap-1.5 py-5.5 py-[22px]">
-          <div className="text-[42px] font-extrabold text-ink-950">{result.score}</div>
+        <div className="font-serif font-bold text-xl text-text mb-4">{t("mockres_title")}</div>
+
+        <div className="flex items-center justify-center gap-1.5 py-[22px]">
+          <div className="text-[42px] font-extrabold text-text">{result.score}</div>
           <div className="text-[15px] text-muted self-end mb-2">/100</div>
         </div>
+
         <div className="grid grid-cols-2 gap-2.5 mb-5">
           <StatBox value={result.national_rank ? String(result.national_rank) : "—"} label={t("mockres_national")} />
           <StatBox value={result.regional_rank ? String(result.regional_rank) : "—"} label={t("mockres_regional")} />
         </div>
-        <div className="text-xs font-bold text-ink-900 mb-2.5">{t("mockres_breakdown")}</div>
+
+        <div className="text-xs font-bold text-text mb-2.5">{t("mockres_breakdown")}</div>
         <div className="flex flex-col gap-3 mb-5">
           {breakdownEntries.map(([name, pct], i) => (
             <div key={name}>
               <div className="flex justify-between text-xs mb-1.5">
-                <span className="font-bold text-ink-900">{name}</span>
+                <span className="font-bold text-text">{name}</span>
                 <span className="font-bold text-muted">{pct}%</span>
               </div>
               <div className="h-[7px] rounded-pill bg-ink-100 overflow-hidden">
-                <div className="h-full rounded-pill" style={{ width: `${pct}%`, background: SUBJECT_COLORS[i % SUBJECT_COLORS.length] }} />
+                <div className="h-full rounded-pill" style={{ width: `${pct}%`, background: subjectColors(subjectNameToSlug(name)).accent }} />
               </div>
             </div>
           ))}
         </div>
+
         <Button variant="secondary" onClick={() => navigate(-1)}>
           {t("result_seeCorrection")}
         </Button>
@@ -83,8 +94,8 @@ export default function MockExamResult() {
 
 function StatBox({ value, label }: { value: string; label: string }) {
   return (
-    <div className="p-3.5 rounded-xl bg-ink-50 text-center">
-      <div className="text-[17px] font-extrabold text-ink-950">{value}</div>
+    <div className="p-3.5 bg-card border border-border rounded-xl text-center">
+      <div className="text-[17px] font-extrabold text-text">{value}</div>
       <div className="text-[10.5px] text-muted mt-0.5">{label}</div>
     </div>
   );

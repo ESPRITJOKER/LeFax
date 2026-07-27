@@ -26,7 +26,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen flex">
-      <div className={`flex-none bg-ink-950 flex flex-col overflow-hidden transition-[width] ${open ? "w-[232px]" : "w-[72px]"}`}>
+      <div className={`flex-none bg-brand-800 flex flex-col overflow-hidden transition-[width] ${open ? "w-[232px]" : "w-[72px]"}`}>
         <div className="flex items-center gap-2.5 px-4.5 px-[18px] py-5 whitespace-nowrap">
           <Icon name="cap" size={26} color="#fff" />
           {open && (
@@ -42,7 +42,7 @@ export default function AdminLayout() {
               to={n.to}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-[10px] whitespace-nowrap ${
-                  isActive ? "bg-ink-700 text-white" : "text-ink-100/80 hover:bg-ink-800"
+                  isActive ? "bg-brand-600 text-white" : "text-ink-100/80 hover:bg-brand-700"
                 }`
               }
             >
@@ -63,7 +63,7 @@ export default function AdminLayout() {
           <div className="font-serif font-bold text-xl text-ink-950">{t("admin_overview")}</div>
           <div className="flex items-center gap-3.5">
             <LangSwitcher />
-            <div className="w-9 h-9 rounded-full bg-ink-700 text-white flex items-center justify-center text-[13px] font-bold">{initials}</div>
+            <div className="w-9 h-9 rounded-full bg-brand-600 text-white flex items-center justify-center text-[13px] font-bold">{initials}</div>
           </div>
         </div>
         <div className="flex-1 p-7 overflow-y-auto">

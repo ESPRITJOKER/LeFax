@@ -49,20 +49,35 @@ Deno.serve(async (req: Request) => {
 
     const chapterCompleted = siblingIds.length > 0 && (doneRows ?? []).length === siblingIds.length;
 
+    let bonusAwarded = 0;
     if (chapterCompleted) {
-      const { data: profile } = await admin.from("profiles").select("faxcoins").eq("id", user.id).single();
-      const newBalance = (profile?.faxcoins ?? 0) + CHAPTER_COMPLETE_BONUS;
-      await admin.from("profiles").update({ faxcoins: newBalance }).eq("id", user.id);
-      await admin.from("faxcoins_transactions").insert({
-        user_id: user.id,
-        amount: CHAPTER_COMPLETE_BONUS,
-        reason: "chapter_complete",
-        reference_id: lesson.chapter_id,
-        balance_after: newBalance,
-      });
+      // Award the chapter-complete bonus at most once per (user, chapter).
+      // This endpoint is now invoked after every lesson-quiz completion, so a
+      // student re-finishing the last lesson's quiz must never re-mint coins.
+      const { data: priorBonus } = await admin
+        .from("faxcoins_transactions")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("reason", "chapter_complete")
+        .eq("reference_id", lesson.chapter_id)
+        .maybeSingle();
+
+      if (!priorBonus) {
+        const { data: profile } = await admin.from("profiles").select("faxcoins").eq("id", user.id).single();
+        const newBalance = (profile?.faxcoins ?? 0) + CHAPTER_COMPLETE_BONUS;
+        await admin.from("profiles").update({ faxcoins: newBalance }).eq("id", user.id);
+        await admin.from("faxcoins_transactions").insert({
+          user_id: user.id,
+          amount: CHAPTER_COMPLETE_BONUS,
+          reason: "chapter_complete",
+          reference_id: lesson.chapter_id,
+          balance_after: newBalance,
+        });
+        bonusAwarded = CHAPTER_COMPLETE_BONUS;
+      }
     }
 
-    return jsonResponse({ ok: true, chapterCompleted, bonusAwarded: chapterCompleted ? CHAPTER_COMPLETE_BONUS : 0 });
+    return jsonResponse({ ok: true, chapterCompleted, bonusAwarded });
   } catch (err) {
     return jsonResponse({ error: String(err) }, 500);
   }

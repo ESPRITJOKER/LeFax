@@ -74,6 +74,30 @@ export default function AdminOverview() {
   if (loading) return <Spinner />;
   if (!stats) return <div className="text-sm text-muted">{t("backend_banner")}</div>;
 
+  function exportCsv() {
+    if (!stats) return;
+    const lines = [
+      "metric,value",
+      `total_students,${stats.totalStudents}`,
+      `active_today,${stats.activeToday}`,
+      `lessons_completed,${stats.lessonsCompleted}`,
+      `quiz_pass_rate_pct,${stats.quizPassRate}`,
+      `mock_participation,${stats.mockParticipation}`,
+      `avg_score_pct,${stats.avgScore}`,
+      `faxcoins_distributed,${stats.faxcoinsDistributed}`,
+      "",
+      "region,students",
+      ...stats.regionalBreakdown.map((r) => `${r.region},${r.count}`),
+    ];
+    const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lefax-overview.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const cards: { label: string; value: string | number; icon: IconName; bg: string; color: string }[] = [
     { label: lang === "fr" ? "Étudiants inscrits" : "Registered students", value: stats.totalStudents, icon: "users", bg: "bg-ink-100", color: "text-ink-700" },
     { label: lang === "fr" ? "Actifs aujourd'hui" : "Active today", value: stats.activeToday, icon: "chart", bg: "bg-success-50", color: "text-success-600" },
@@ -112,7 +136,7 @@ export default function AdminOverview() {
         </div>
       </div>
 
-      <button className="mt-5 px-4 py-2.5 rounded-xl border border-border bg-white text-xs font-bold text-ink-900">
+      <button onClick={exportCsv} className="mt-5 px-4 py-2.5 rounded-xl border border-border bg-white text-xs font-bold text-ink-900">
         {t("admin_exportCsv")}
       </button>
     </div>

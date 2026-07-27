@@ -87,8 +87,12 @@ export default function LessonDetail() {
     if (!isFirst) navigate(`/lesson/${siblings[idx - 1].id}`);
   }
   function goNext() {
-    if (!isLast) navigate(`/lesson/${siblings[idx + 1].id}`);
-    else if (quiz) navigate(`/quiz/${quiz.id}`);
+    // A lesson's own quiz comes first — finishing it (in QuizResult) marks the
+    // lesson done and routes on to the next lesson. Only fall through to the
+    // next lesson / chapter list when this lesson has no quiz attached.
+    if (quiz) navigate(`/quiz/${quiz.id}`);
+    else if (!isLast) navigate(`/lesson/${siblings[idx + 1].id}`);
+    else navigate(`/lessons/${lesson!.chapter_id}`);
   }
 
   const objectives = lang === "fr" ? lesson.objectives_fr : lesson.objectives_en;
@@ -98,7 +102,7 @@ export default function LessonDetail() {
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto">
         <div className="flex items-center gap-3 px-[22px] pt-4">
-          <button onClick={() => navigate(-1)} className="border-none bg-ink-100 w-[34px] h-[34px] rounded-[10px] flex items-center justify-center text-ink-800">
+          <button onClick={() => navigate(-1)} className="border-none bg-ink-100 w-[34px] h-[34px] rounded-[10px] flex items-center justify-center text-text">
             <Icon name="chevleft" size={18} />
           </button>
           <div className="text-[11.5px] font-bold text-muted">
@@ -114,7 +118,7 @@ export default function LessonDetail() {
         </div>
 
         <div className="px-[22px] pt-3.5 pb-24">
-          <div className="font-serif font-bold text-[21px] text-ink-950 mb-3.5">{lang === "fr" ? lesson.title_fr : lesson.title_en}</div>
+          <div className="font-serif font-bold text-[21px] text-text mb-3.5">{lang === "fr" ? lesson.title_fr : lesson.title_en}</div>
 
           <div className="flex items-center gap-3 mb-3.5 text-[11.5px] text-muted font-semibold">
             <span>{t("lesson_duration")}: {lesson.duration_minutes} min</span>
@@ -124,10 +128,10 @@ export default function LessonDetail() {
 
           {objectives.length > 0 && (
             <>
-              <div className="text-xs font-bold text-ink-800 mb-2">{t("lesson_objectives")}</div>
+              <div className="text-xs font-bold text-text mb-2">{t("lesson_objectives")}</div>
               <ul className="list-disc pl-[18px] flex flex-col gap-1.5 mb-4.5 mb-[18px]">
                 {objectives.map((o, i) => (
-                  <li key={i} className="text-[13px] text-ink-900 leading-normal">
+                  <li key={i} className="text-[13px] text-text leading-normal">
                     {o}
                   </li>
                 ))}
@@ -135,14 +139,14 @@ export default function LessonDetail() {
             </>
           )}
 
-          <div className="text-[13.5px] leading-relaxed text-ink-900 mb-4.5">{lang === "fr" ? lesson.content_fr : lesson.content_en}</div>
+          <div className="text-[13.5px] leading-relaxed text-text mb-4.5">{lang === "fr" ? lesson.content_fr : lesson.content_en}</div>
 
           {keyPoints.length > 0 && (
             <>
-              <div className="text-xs font-bold text-ink-800 mb-2">{t("lesson_keypoints")}</div>
+              <div className="text-xs font-bold text-text mb-2">{t("lesson_keypoints")}</div>
               <ul className="list-disc pl-[18px] flex flex-col gap-1.5 mb-4">
                 {keyPoints.map((k, i) => (
-                  <li key={i} className="text-[13px] text-ink-900 leading-normal">
+                  <li key={i} className="text-[13px] text-text leading-normal">
                     {k}
                   </li>
                 ))}
@@ -155,12 +159,12 @@ export default function LessonDetail() {
           </div>
         </div>
 
-        <div className="sticky bottom-0 bg-white border-t border-border px-[22px] py-3 flex gap-2.5">
+        <div className="sticky bottom-0 bg-white border-t border-[#E4E9F0] px-[22px] py-3 flex gap-2.5">
           <Button variant="secondary" onClick={goPrev} disabled={isFirst} className="flex-1">
             {t("previous")}
           </Button>
           <Button onClick={goNext} className="flex-1">
-            {isLast && quiz ? t("quiz_finish") : t("next")}
+            {quiz ? t("quiz_startQuiz") : isLast ? t("quiz_finish") : t("next")}
           </Button>
         </div>
       </div>

@@ -51,7 +51,7 @@ export default function MockExamHome() {
     return (
       <PhoneFrame>
         <div className="flex-1 flex flex-col overflow-y-auto">
-          <div className="px-[22px] pt-4 font-serif font-bold text-xl text-ink-950">{t("mock_title")}</div>
+          <div className="px-[22px] pt-4 font-serif font-bold text-xl text-text">{t("mock_title")}</div>
           <EmptyState label={isSupabaseConfigured ? t("mock_none") : t("backend_banner")} />
           <BottomTabs />
         </div>
@@ -65,9 +65,9 @@ export default function MockExamHome() {
   return (
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto">
-        <div className="px-[22px] pt-4 font-serif font-bold text-xl text-ink-950">{lang === "fr" ? mock.title_fr : mock.title_en}</div>
+        <div className="px-[22px] pt-4 font-serif font-bold text-xl text-text">{lang === "fr" ? mock.title_fr : mock.title_en}</div>
 
-        <div className="mx-[22px] my-4.5 my-[18px] p-5 rounded-2xl bg-ink-950 text-white text-center">
+        <div className="mx-[22px] my-[18px] p-5 rounded-2xl bg-brand-800 text-white text-center">
           <div className="text-[11.5px] opacity-75 font-semibold mb-1.5">{isOpen ? t("mock_title") : t("mock_opensIn")}</div>
           <div className="text-[26px] font-extrabold tabular-nums">{isOpen ? (lang === "fr" ? "Ouvert" : "Open") : formatCountdown(opensAt - now)}</div>
         </div>
@@ -78,18 +78,18 @@ export default function MockExamHome() {
           <StatBox value={`${mock.passing_score}/100`} label={t("mock_passing")} />
         </div>
 
-        <div className="mx-[22px] mt-5 mb-6 p-4 rounded-2xl border border-border">
-          <div className="text-xs font-bold text-ink-900 mb-2">{t("mock_instructions")}</div>
+        <div className="mx-[22px] mt-5 mb-6 p-4 bg-card border border-border rounded-xl">
+          <div className="text-xs font-bold text-text mb-2">{t("mock_instructions")}</div>
           <ul className="list-disc pl-[18px] flex flex-col gap-1.5">
             {instructions.map((mi, i) => (
-              <li key={i} className="text-xs text-ink-800 leading-normal">
+              <li key={i} className="text-xs text-text leading-normal">
                 {mi}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="px-[22px] pb-5.5 pb-[22px]">
+        <div className="px-[22px] pb-[22px]">
           <Button disabled={!isOpen || !mock.quiz_id} onClick={() => mock.quiz_id && navigate(`/quiz/${mock.quiz_id}`)} className="w-full">
             {t("mock_start")}
           </Button>
@@ -102,8 +102,8 @@ export default function MockExamHome() {
 
 function StatBox({ value, label }: { value: string; label: string }) {
   return (
-    <div className="p-3 rounded-xl bg-ink-50 text-center">
-      <div className="text-[15px] font-extrabold text-ink-950">{value}</div>
+    <div className="p-3 bg-card border border-border rounded-xl text-center">
+      <div className="text-[15px] font-extrabold text-text">{value}</div>
       <div className="text-[10.5px] text-muted mt-0.5">{label}</div>
     </div>
   );

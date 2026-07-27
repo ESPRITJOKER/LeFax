@@ -1,0 +1,51 @@
+{
+  "projectId": "bb0475e9-3796-4f44-bab6-de5bd550b27b",
+  "shape": "package",
+  "pkg": "lefax-course",
+  "globalName": "LefaxCourse",
+  "srcDir": "src/components",
+  "tsconfig": "tsconfig.json",
+  "buildCmd": "node .design-sync/build-css.mjs",
+  "readmeHeader": ".design-sync/conventions.md",
+  "cssEntry": ".design-sync/.cache/build/entry.css",
+  "extraEntries": ["react-router-dom", "./src/lib/i18n.tsx"],
+  "provider": {
+    "component": "I18nProvider",
+    "inner": { "component": "MemoryRouter" }
+  },
+  "overrides": {
+    "PhoneFrame": { "cardMode": "single", "viewport": "760x820" },
+    "Sidebar": { "cardMode": "single", "viewport": "1100x400" }
+  },
+  "componentSrcMap": {
+    "Card": "src/components/ui.tsx",
+    "Button": "src/components/ui.tsx",
+    "ProgressBar": "src/components/ui.tsx",
+    "Pill": "src/components/ui.tsx",
+    "RingProgress": "src/components/ui.tsx",
+    "Select": "src/components/ui.tsx",
+    "EmptyState": "src/components/ui.tsx",
+    "Spinner": "src/components/ui.tsx",
+    "Sidebar": "src/components/Sidebar.tsx",
+    "BottomTabs": null,
+    "LangSwitcher": "src/components/LangSwitcher.tsx",
+    "PhoneFrame": "src/components/PhoneFrame.tsx",
+    "ScreenHeader": "src/components/ScreenHeader.tsx",
+    "ProtectedRoute": null,
+    "BackendBanner": null
+  },
+  "dtsPropsFor": {
+    "Card": "children: ReactNode; className?: string; onClick?: () => void;",
+    "Button": "variant?: \"primary\" | \"secondary\" | \"ghost\" | \"danger\"; disabled?: boolean; type?: \"button\" | \"submit\" | \"reset\"; onClick?: () => void; children?: ReactNode;",
+    "ProgressBar": "pct: number; color?: \"success\" | \"ink\" | \"ochre\";",
+    "Pill": "active?: boolean; children: ReactNode; onClick?: () => void;",
+    "RingProgress": "pct: number; size?: number; stroke?: number; color?: string;",
+    "Select": "children: ReactNode; className?: string; wrapperClassName?: string; disabled?: boolean; value?: string; onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;",
+    "EmptyState": "label: string;",
+    "Spinner": "",
+    "Sidebar": "",
+    "LangSwitcher": "",
+    "PhoneFrame": "children: ReactNode; topBar?: boolean; nav?: boolean;",
+    "ScreenHeader": "title: string; onBack?: () => void;"
+  }
+}

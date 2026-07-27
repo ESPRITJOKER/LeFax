@@ -31,6 +31,25 @@
   --color-danger-100: oklch(94% 0.04 25);
   --color-danger-50: oklch(98% 0.02 25);
 
+  /* Hearts — QCM lives mechanic */
+  --color-heart: #FF5A7A;
+  --color-heart-empty: #DADFE6;
+
+  /* Blue accent — interactive highlights, primary buttons */
+  --color-accent: #2F9BEE;
+
+  /* Friendly brand blue — the platform's primary surfaces and buttons.
+   * A lighter, more saturated blue than the near-black `ink` navy, so the
+   * app reads warm and approachable instead of heavy/dark. Kept dark enough
+   * for white text (all values pass AA against #fff). `ink` stays reserved
+   * for readable dark TEXT; `brand` is for coloured surfaces. */
+  --color-brand-800: oklch(46% 0.15 256);  /* large surfaces: language screen, sidebars, headers */
+  --color-brand-700: oklch(50% 0.17 258);  /* darker chips / hover states */
+  --color-brand-600: oklch(54% 0.19 260);  /* primary buttons */
+  --color-brand-500: oklch(63% 0.17 256);  /* lighter accent / hover-light */
+  --color-brand-100: oklch(93% 0.045 256); /* light tint fills */
+  --color-brand-50: oklch(97% 0.022 256);
+
   --color-surface: oklch(96% 0.012 250);
   --color-card: #ffffff;
   --color-border: oklch(92% 0.01 250);

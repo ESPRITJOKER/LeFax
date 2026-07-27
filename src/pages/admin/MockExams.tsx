@@ -76,7 +76,7 @@ export default function AdminMockExams() {
             <input value={passingScore} onChange={(e) => setPassingScore(e.target.value)} placeholder="50" className="px-2.5 py-2 rounded-lg border-[1.5px] border-border text-[13px]" />
           </Field>
         </div>
-        <button onClick={scheduleMock} className="px-4.5 py-2.5 rounded-xl border-none bg-ink-700 text-white text-[12.5px] font-bold">
+        <button onClick={scheduleMock} className="px-4.5 py-2.5 rounded-xl border-none bg-brand-600 text-white text-[12.5px] font-bold">
           {t("admin_schedule")}
         </button>
       </div>

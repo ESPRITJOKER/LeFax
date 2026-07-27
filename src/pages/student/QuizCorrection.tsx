@@ -82,11 +82,11 @@ export default function QuizCorrection() {
             items.map((ci) => (
               <div
                 key={ci.index}
-                className={`p-3.5 rounded-[13px] border-[1.5px] ${
+                className={`p-3.5 rounded-[14px] border-[1.5px] ${
                   ci.correct ? "border-success-100 bg-success-50" : "border-danger-100 bg-danger-50"
                 }`}
               >
-                <div className="text-[13px] font-bold text-ink-900 mb-2">
+                <div className="text-[13px] font-bold text-text mb-2">
                   {ci.index}. {ci.question}
                 </div>
                 <div className={`text-xs font-semibold ${ci.correct ? "text-success-600" : "text-danger-700"}`}>

@@ -74,19 +74,19 @@ export default function Tasks() {
               const done = completedIds.has(task.id);
               const capped = completedIds.size >= rewardedLimit && !done;
               return (
-                <div key={task.id} className="flex items-center gap-3 p-3.5 rounded-2xl border border-border">
+                <div key={task.id} className="flex items-center gap-3 p-3.5 rounded-[14px] border border-[#E4E9F0]">
                   <div className="w-[38px] h-[38px] flex-none rounded-[11px] bg-ink-50 flex items-center justify-center text-ink-800">
                     <Icon name="thumbsup" size={18} />
                   </div>
                   <div className="flex-1">
-                    <div className="text-[13px] font-semibold text-ink-900">{lang === "fr" ? task.label_fr : task.label_en}</div>
+                    <div className="text-[13px] font-semibold text-text">{lang === "fr" ? task.label_fr : task.label_en}</div>
                     <div className="text-[11px] font-bold text-ochre-700 mt-0.5">+{task.reward_coins} FaxCoins</div>
                   </div>
                   <button
                     disabled={done || capped || pendingId === task.id}
                     onClick={() => complete(task)}
                     className={`px-3.5 py-2 rounded-[9px] border-none text-[11.5px] font-bold ${
-                      done ? "bg-success-100 text-success-600" : "bg-ink-700 text-white disabled:bg-ink-100 disabled:text-muted"
+                      done ? "bg-success-100 text-success-600" : "bg-brand-600 text-white disabled:bg-ink-100 disabled:text-muted"
                     }`}
                   >
                     {done ? (lang === "fr" ? "Fait" : "Done") : lang === "fr" ? "Faire" : "Do it"}

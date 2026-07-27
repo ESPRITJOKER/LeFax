@@ -102,7 +102,7 @@ export default function AdminAiReview() {
                 </div>
                 {editing ? (
                   <div className="flex gap-2">
-                    <button onClick={() => saveModify(row)} className="flex-1 py-2 rounded-lg border-none bg-ink-700 text-white text-xs font-bold">
+                    <button onClick={() => saveModify(row)} className="flex-1 py-2 rounded-lg border-none bg-brand-600 text-white text-xs font-bold">
                       {t("admin_save")}
                     </button>
                     <button onClick={() => setEditingId(null)} className="flex-1 py-2 rounded-lg border border-border bg-white text-xs font-bold text-ink-900">

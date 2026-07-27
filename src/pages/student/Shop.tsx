@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
+import { CoinsBadge } from "../../components/CoinsBadge";
 import { Icon, type IconName } from "../../lib/icons";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
@@ -61,11 +62,8 @@ export default function Shop() {
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto">
         <div className="flex items-center justify-between px-[22px] pt-4">
-          <div className="font-serif font-bold text-xl text-ink-950">{t("shop_title")}</div>
-          <div className="flex items-center gap-1.5 bg-ochre-50 px-3 py-1.5 rounded-pill">
-            <Icon name="coin" size={14} className="text-ochre-700" />
-            <span className="text-[13px] font-bold text-ochre-700">{profile?.faxcoins ?? 0}</span>
-          </div>
+          <div className="font-serif font-bold text-xl text-text">{t("shop_title")}</div>
+          <CoinsBadge balance={profile?.faxcoins ?? 0} />
         </div>
 
         <div className="px-[22px] pt-4.5 pt-[18px] pb-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -82,7 +80,7 @@ export default function Shop() {
                   <div className="w-full aspect-[4/3] rounded-[10px] bg-ink-50 flex items-center justify-center text-ink-700">
                     <Icon name={ITEM_ICON[it.item_type]} size={24} />
                   </div>
-                  <div className="text-xs font-bold text-ink-900 leading-snug">{lang === "fr" ? it.name_fr : it.name_en}</div>
+                  <div className="text-xs font-bold text-text leading-snug">{lang === "fr" ? it.name_fr : it.name_en}</div>
                   <div className="text-[11.5px] font-bold text-ochre-700 flex items-center gap-1">
                     <Icon name="coin" size={11} />
                     {it.price_coins}
@@ -91,7 +89,7 @@ export default function Shop() {
                     disabled={unlocked || !canAfford || pendingId === it.id}
                     onClick={() => unlock(it)}
                     className={`py-2 rounded-[9px] border-none text-[11.5px] font-bold ${
-                      unlocked ? "bg-success-100 text-success-600" : canAfford ? "bg-ink-700 text-white" : "bg-ink-100 text-muted"
+                      unlocked ? "bg-success-100 text-success-600" : canAfford ? "bg-brand-600 text-white" : "bg-ink-100 text-muted"
                     }`}
                   >
                     {unlocked

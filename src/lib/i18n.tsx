@@ -69,6 +69,8 @@ const dict = {
     next: "Suivant",
     quiz_locked: "Terminez la leçon pour débloquer le test",
     quiz_finish: "Terminer",
+    quiz_startQuiz: "Commencer le quiz",
+    lesson_complete: "Terminé !",
 
     result_congrats: "Félicitations !",
     result_score: "Votre score",
@@ -121,6 +123,10 @@ const dict = {
 
     profile_title: "Profil",
     profile_editPhoto: "Changer la photo",
+    profile_nickname: "Surnom",
+    profile_nicknamePlaceholder: "Ajouter un surnom",
+    profile_photoUploading: "Envoi en cours…",
+    profile_photoError: "Échec de l'envoi de la photo",
     profile_region: "Région",
     profile_town: "Ville",
     profile_password: "Changer le mot de passe",
@@ -261,6 +267,8 @@ const dict = {
     next: "Next",
     quiz_locked: "Finish the lesson to unlock the quiz",
     quiz_finish: "Finish",
+    quiz_startQuiz: "Start quiz",
+    lesson_complete: "Completed!",
 
     result_congrats: "Congratulations!",
     result_score: "Your score",
@@ -313,6 +321,10 @@ const dict = {
 
     profile_title: "Profile",
     profile_editPhoto: "Change photo",
+    profile_nickname: "Nickname",
+    profile_nicknamePlaceholder: "Add a nickname",
+    profile_photoUploading: "Uploading…",
+    profile_photoError: "Failed to upload photo",
     profile_region: "Region",
     profile_town: "Town",
     profile_password: "Change password",

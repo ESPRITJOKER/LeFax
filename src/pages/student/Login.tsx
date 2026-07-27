@@ -35,18 +35,18 @@ export default function Login() {
       <div className="flex-1 flex flex-col px-[22px] pb-6">
         <div className="flex items-center gap-2.5 my-2 mb-5">
           <Icon name="cap" size={22} className="text-ink-700" />
-          <div className="font-serif font-semibold text-[19px] text-ink-900">{t("appName")}</div>
+          <div className="font-serif font-semibold text-[19px] text-text">{t("appName")}</div>
         </div>
-        <div className="font-serif font-bold text-2xl text-ink-950 mb-1">{t("login_title")}</div>
+        <div className="font-serif font-bold text-2xl text-text mb-1">{t("login_title")}</div>
         <div className="text-[13.5px] text-muted mb-6">{t("login_sub")}</div>
 
         <div className="flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="text-[12.5px] font-semibold text-ink-800">{t("reg_phone")}</span>
+            <span className="text-[12.5px] font-semibold text-text">{t("reg_phone")}</span>
             <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+237 6XX XXX XXX" className={inputClass} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-[12.5px] font-semibold text-ink-800">{t("reg_password")}</span>
+            <span className="text-[12.5px] font-semibold text-text">{t("reg_password")}</span>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className={inputClass} />
           </label>
         </div>
@@ -74,4 +74,4 @@ export default function Login() {
 }
 
 const inputClass =
-  "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-ink-950 bg-white w-full";
+  "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-text bg-card w-full";

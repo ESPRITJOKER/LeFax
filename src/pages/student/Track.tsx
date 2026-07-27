@@ -39,7 +39,7 @@ export default function Track() {
   return (
     <PhoneFrame nav={false}>
       <div className="flex-1 flex flex-col px-[22px] pb-6 pt-1.5 overflow-y-auto">
-        <div className="font-serif font-bold text-[23px] text-ink-950 mt-2.5 mb-1">{t("track_title")}</div>
+        <div className="font-serif font-bold text-[23px] text-text mt-2.5 mb-1">{t("track_title")}</div>
         <div className="text-[13px] text-muted mb-5">{t("track_sub")}</div>
 
         <div className="flex flex-col gap-3.5">
@@ -52,17 +52,17 @@ export default function Track() {
             >
               <div
                 className={`w-11 h-11 flex-none rounded-xl flex items-center justify-center ${
-                  tr.active ? "bg-ink-700 text-white" : "bg-ink-100 text-muted"
+                  tr.active ? "bg-brand-600 text-white" : "bg-ink-100 text-muted"
                 }`}
               >
                 <Icon name={tr.icon} size={22} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[15.5px] font-bold text-ink-900">{lang === "fr" ? tr.fr : tr.en}</div>
+                <div className="text-[15.5px] font-bold text-text">{lang === "fr" ? tr.fr : tr.en}</div>
                 <div className="text-[12.5px] text-muted mt-0.5 leading-snug">{lang === "fr" ? tr.fr_desc : tr.en_desc}</div>
               </div>
               {tr.active ? (
-                <button onClick={selectMedicine} className="flex-none px-4 py-2 rounded-pill border-none bg-ink-700 text-white text-xs font-bold whitespace-nowrap">
+                <button onClick={selectMedicine} className="flex-none px-4 py-2 rounded-pill border-none bg-brand-600 text-white text-xs font-bold whitespace-nowrap">
                   {t("track_select")}
                 </button>
               ) : (

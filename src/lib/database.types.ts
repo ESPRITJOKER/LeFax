@@ -26,6 +26,7 @@ export type ProfileRow = {
   faxcoins: number;
   rank_label: string;
   avatar_url: string | null;
+  nickname: string | null;
   language: "fr" | "en";
   dark_mode: boolean;
   notif_prefs: Record<string, boolean>;
@@ -132,6 +133,8 @@ export type QuizAttemptRow = {
   coins_earned: number;
   started_at: string;
   submitted_at: string | null;
+  hearts_total: number;
+  hearts_remaining: number;
 }
 
 export type StudentAnswerRow = {
@@ -179,6 +182,7 @@ export type RankingRow = {
   user_id: string;
   display_name: string;
   town: string | null;
+  avatar_url: string | null;
   score: number;
   period_start: string;
   period_end: string;

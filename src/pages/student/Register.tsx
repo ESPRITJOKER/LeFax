@@ -112,9 +112,9 @@ export default function Register() {
         <div className="flex-1 flex flex-col px-[22px] pb-6 overflow-y-auto">
           <div className="flex items-center gap-2.5 my-2 mb-5">
             <Icon name="cap" size={22} className="text-ink-700" />
-            <div className="font-serif font-semibold text-[19px] text-ink-900">{t("appName")}</div>
+            <div className="font-serif font-semibold text-[19px] text-text">{t("appName")}</div>
           </div>
-          <div className="font-serif font-bold text-2xl text-ink-950 mb-1">{t("reg_title")}</div>
+          <div className="font-serif font-bold text-2xl text-text mb-1">{t("reg_title")}</div>
           <div className="text-[13.5px] text-muted mb-6">{t("reg_sub")}</div>
 
           <div className="flex flex-col gap-4">
@@ -171,7 +171,7 @@ export default function Register() {
                 className={inputClass}
               />
             </Field>
-            <label className="flex items-start gap-2 text-[12.5px] text-ink-900">
+            <label className="flex items-start gap-2 text-[12.5px] text-text">
               <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="mt-0.5" />
               <span>{t("reg_terms")}</span>
             </label>
@@ -193,7 +193,7 @@ export default function Register() {
 
       {step === "otp" && (
         <div className="flex-1 flex flex-col px-[22px] pb-6">
-          <div className="font-serif font-bold text-2xl text-ink-950 mb-1 mt-6">{t("reg_otp_title")}</div>
+          <div className="font-serif font-bold text-2xl text-text mb-1 mt-6">{t("reg_otp_title")}</div>
           <div className="text-[13.5px] text-muted mb-6">
             {t("reg_otp_sub")} {phone}
           </div>
@@ -218,12 +218,12 @@ export default function Register() {
 }
 
 const inputClass =
-  "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-ink-950 bg-white w-full";
+  "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-text bg-card w-full";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[12.5px] font-semibold text-ink-800">{label}</span>
+      <span className="text-[12.5px] font-semibold text-text">{label}</span>
       {children}
     </label>
   );

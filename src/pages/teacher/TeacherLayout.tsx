@@ -16,7 +16,7 @@ export default function TeacherLayout() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="flex-none w-[220px] bg-ink-950 flex flex-col">
+      <div className="flex-none w-[220px] bg-brand-800 flex flex-col">
         <div className="flex items-center gap-2.5 px-[18px] py-5">
           <Icon name="cap" size={26} color="#fff" />
           <div className="font-serif font-bold text-[17px] text-white">
@@ -29,7 +29,7 @@ export default function TeacherLayout() {
               key={n.to}
               to={n.to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-[10px] ${isActive ? "bg-ink-700 text-white" : "text-ink-100/80 hover:bg-ink-800"}`
+                `flex items-center gap-3 px-3 py-2.5 rounded-[10px] ${isActive ? "bg-brand-600 text-white" : "text-ink-100/80 hover:bg-brand-700"}`
               }
             >
               <Icon name={n.icon} size={18} />

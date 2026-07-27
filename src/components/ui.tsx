@@ -19,7 +19,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ variant = "primary", className = "", ...rest }: ButtonProps) {
   const base = "rounded-xl px-4 py-3 text-sm font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
   const styles: Record<string, string> = {
-    primary: "bg-ink-700 text-white hover:bg-ink-800",
+    primary: "bg-brand-600 text-white hover:bg-brand-700",
     secondary: "bg-white border border-border text-ink-900 hover:bg-ink-50",
     ghost: "bg-transparent text-ink-900 hover:bg-ink-50",
     danger: "bg-danger-600 text-white hover:opacity-90",
@@ -28,7 +28,7 @@ export function Button({ variant = "primary", className = "", ...rest }: ButtonP
 }
 
 export function ProgressBar({ pct, color = "success" }: { pct: number; color?: "success" | "ink" | "ochre" }) {
-  const bar = { success: "bg-success-600", ink: "bg-ink-700", ochre: "bg-ochre-600" }[color];
+  const bar = { success: "bg-success-600", ink: "bg-brand-600", ochre: "bg-ochre-600" }[color];
   return (
     <div className="h-[7px] rounded-pill bg-ink-100 overflow-hidden">
       <div className={`h-full rounded-pill ${bar} transition-all`} style={{ width: `${Math.max(0, Math.min(100, pct))}%` }} />
@@ -41,7 +41,7 @@ export function Pill({ active, children, onClick }: { active?: boolean; children
     <button
       onClick={onClick}
       className={`rounded-pill px-3 py-1.5 text-xs font-bold whitespace-nowrap ${
-        active ? "bg-ink-700 text-white" : "bg-ink-100 text-ink-900"
+        active ? "bg-brand-600 text-white" : "bg-ink-100 text-ink-900"
       }`}
     >
       {children}

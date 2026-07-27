@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
+import { CoinsBadge } from "../../components/CoinsBadge";
 import { ProgressBar, Spinner } from "../../components/ui";
 import { Icon, type IconName } from "../../lib/icons";
+import { SubjectBadge } from "../../components/SubjectBadge";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -81,18 +83,15 @@ export default function Dashboard() {
   return (
     <PhoneFrame>
       <div className="flex-1 flex flex-col overflow-y-auto">
-        <div className="bg-ink-950 px-[22px] pt-5 pb-6.5 pb-[26px] rounded-b-[22px] text-white">
+        <div className="bg-brand-800 px-[22px] pt-5 pb-6.5 pb-[26px] rounded-b-[22px] text-white">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs opacity-70 font-semibold">{t("dash_hello")}</div>
               <div className="font-serif font-bold text-[21px] mt-0.5">{firstName}</div>
             </div>
-            <div className="flex items-center gap-2 bg-ink-800 px-3.5 py-2 rounded-pill">
-              <Icon name="coin" size={16} className="text-ochre-600 animate-coinspin" />
-              <span className="font-bold text-[14.5px]">{profile?.faxcoins ?? 0}</span>
-            </div>
+            <CoinsBadge balance={profile?.faxcoins ?? 0} />
           </div>
-          <div className="flex items-center gap-2 mt-4 bg-ink-800/55 w-fit px-3.5 py-2 rounded-xl">
+          <div className="flex items-center gap-2 mt-4 bg-brand-700/55 w-fit px-3.5 py-2 rounded-xl">
             <Icon name="flame" size={17} className="text-[oklch(70%_0.15_55)] animate-flamepulse" />
             <span className="text-[13.5px] font-bold">{profile?.streak_count ?? 0}</span>
             <span className="text-xs opacity-75">{t("dash_streakLabel")}</span>
@@ -100,7 +99,7 @@ export default function Dashboard() {
         </div>
 
         <div className="px-[22px] pt-5 pb-2">
-          <div className="text-[13.5px] font-bold text-ink-900 mb-3">{t("dash_progressTitle")}</div>
+          <div className="text-[13.5px] font-bold text-text mb-3">{t("dash_progressTitle")}</div>
           {loading ? (
             <Spinner />
           ) : subjects.length === 0 ? (
@@ -113,9 +112,12 @@ export default function Dashboard() {
                   onClick={() => navigate(`/subjects/${s.slug}`)}
                   className="cursor-pointer p-3.5 rounded-2xl border border-border hover:bg-ink-50"
                 >
-                  <div className="flex justify-between text-[13.5px] mb-2">
-                    <span className="font-bold text-ink-900">{lang === "fr" ? s.name_fr : s.name_en}</span>
-                    <span className="text-muted font-semibold">{s.progressPct}%</span>
+                    <div className="flex items-center justify-between text-[13.5px] mb-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <SubjectBadge slug={s.slug} size="sm" />
+                      <span className="font-bold text-text truncate">{lang === "fr" ? s.name_fr : s.name_en}</span>
+                    </div>
+                    <span className="text-muted font-semibold flex-none">{s.progressPct}%</span>
                   </div>
                   <ProgressBar pct={s.progressPct} />
                 </div>
@@ -126,7 +128,7 @@ export default function Dashboard() {
 
         {nextMock && (
           <div className="px-[22px] pb-2">
-            <div className="text-[13.5px] font-bold text-ink-900 mb-2">{t("dash_nextMock")}</div>
+            <div className="text-[13.5px] font-bold text-text mb-2">{t("dash_nextMock")}</div>
             <div onClick={() => navigate("/mock-exam")} className="cursor-pointer p-3.5 rounded-2xl bg-ochre-50 border border-ochre-100 text-sm font-semibold text-ochre-700">
               {lang === "fr" ? nextMock.title_fr : nextMock.title_en}
             </div>
@@ -134,7 +136,7 @@ export default function Dashboard() {
         )}
 
         <div className="px-[22px] pt-3.5 pb-6">
-          <div className="text-[13.5px] font-bold text-ink-900 mb-3">{t("dash_quickAccess")}</div>
+          <div className="text-[13.5px] font-bold text-text mb-3">{t("dash_quickAccess")}</div>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
             {quickAccess.map((q) => (
               <div
@@ -145,7 +147,7 @@ export default function Dashboard() {
                 <div className={`w-10 h-10 rounded-[11px] flex items-center justify-center ${q.bg} ${q.color}`}>
                   <Icon name={q.icon} size={19} />
                 </div>
-                <div className="text-[11.5px] font-semibold text-ink-800 text-center">{q.label}</div>
+                <div className="text-[11.5px] font-semibold text-text text-center">{q.label}</div>
               </div>
             ))}
           </div>

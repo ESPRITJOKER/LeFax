@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { ScreenHeader } from "../../components/ScreenHeader";
 import { Icon } from "../../lib/icons";
+import { SubjectBadge } from "../../components/SubjectBadge";
 import { EmptyState, Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -12,6 +13,7 @@ interface Result {
   id: string;
   label: string;
   navigateTo: string;
+  slug?: string;
 }
 
 export default function Search() {
@@ -38,7 +40,7 @@ export default function Search() {
     ]);
 
     const built: Result[] = [
-      ...(subjects ?? []).map((s) => ({ type: "subject" as const, id: s.id, label: lang === "fr" ? s.name_fr : s.name_en, navigateTo: `/subjects/${s.slug}` })),
+      ...(subjects ?? []).map((s) => ({ type: "subject" as const, id: s.id, label: lang === "fr" ? s.name_fr : s.name_en, navigateTo: `/subjects/${s.slug}`, slug: s.slug })),
       ...(chapters ?? []).map((c) => ({ type: "chapter" as const, id: c.id, label: lang === "fr" ? c.name_fr : c.name_en, navigateTo: `/lessons/${c.id}` })),
       ...(lessons ?? []).map((l) => ({ type: "lesson" as const, id: l.id, label: lang === "fr" ? l.title_fr : l.title_en, navigateTo: `/lesson/${l.id}` })),
     ];
@@ -57,7 +59,7 @@ export default function Search() {
               value={query}
               onChange={(e) => runSearch(e.target.value)}
               placeholder={t("search_placeholder")}
-              className="flex-1 outline-none border-none text-sm text-ink-950"
+              className="flex-1 outline-none border-none text-sm text-text"
             />
           </div>
         </div>
@@ -71,10 +73,20 @@ export default function Search() {
               <div
                 key={`${r.type}-${r.id}`}
                 onClick={() => navigate(r.navigateTo)}
-                className="cursor-pointer flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-ink-50"
+                className="cursor-pointer flex items-center gap-3 p-3 rounded-[14px] border border-border hover:bg-ink-50"
               >
-                <Icon name={r.type === "subject" ? "book" : r.type === "chapter" ? "clipboard" : "check"} size={16} className="text-ink-700" />
-                <span className="text-sm font-semibold text-ink-900">{r.label}</span>
+                {r.type === "subject" ? (
+                  <SubjectBadge slug={r.slug ?? ""} size="sm" />
+                ) : (
+                  <div className="w-7 h-7 rounded-[9px] bg-ink-100 flex items-center justify-center">
+                    <Icon
+                      name={r.type === "chapter" ? "clipboard" : "check"}
+                      size={14}
+                      className="text-muted"
+                    />
+                  </div>
+                )}
+                <span className="text-sm font-semibold text-text">{r.label}</span>
               </div>
             ))
           )}

@@ -79,18 +79,18 @@ export default function ChapterLessons() {
                 <div
                   key={l.id}
                   onClick={() => !locked && navigate(`/lesson/${l.id}`)}
-                  className={`flex items-center gap-3 px-[15px] py-3.5 rounded-2xl border-[1.5px] ${
+                  className={`flex items-center gap-3 px-[15px] py-3.5 rounded-[14px] border border-[#E4E9F0] ${
                     current ? "border-ink-300 bg-ink-50" : "border-border bg-white"
                   } ${locked ? "opacity-55" : "cursor-pointer"}`}
                 >
                   <div
                     className={`w-[30px] h-[30px] flex-none rounded-full flex items-center justify-center ${
-                      done ? "bg-success-600 text-white" : current ? "bg-ink-700 text-white" : "bg-ink-100 text-muted"
+                      done ? "bg-success-600 text-white" : current ? "bg-brand-600 text-white" : "bg-ink-100 text-muted"
                     }`}
                   >
                     <Icon name={done ? "check" : locked ? "lock" : "book"} size={13} />
                   </div>
-                  <div className="flex-1 text-sm font-semibold text-ink-900">{lang === "fr" ? l.title_fr : l.title_en}</div>
+                  <div className="flex-1 text-sm font-semibold text-text">{lang === "fr" ? l.title_fr : l.title_en}</div>
                   <div
                     className={`text-[10.5px] font-bold uppercase tracking-wide ${
                       done ? "text-success-600" : current ? "text-ink-700" : "text-muted"

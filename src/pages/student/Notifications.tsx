@@ -53,13 +53,13 @@ export default function Notifications() {
             items.map((n) => (
               <div
                 key={n.id}
-                className={`flex items-start gap-3 p-3.5 rounded-2xl border ${n.is_read ? "border-border bg-white" : "border-ink-300 bg-ink-50"}`}
+                className={`flex items-start gap-3 p-3.5 rounded-[14px] border border-[#E4E9F0] ${n.is_read ? "bg-white" : "bg-ink-50"}`}
               >
                 <div className="w-9 h-9 flex-none rounded-[10px] bg-ink-100 flex items-center justify-center text-ink-700">
                   <Icon name="bell" size={16} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-bold text-ink-900">{lang === "fr" ? n.title_fr : n.title_en}</div>
+                  <div className="text-[13px] font-bold text-text">{lang === "fr" ? n.title_fr : n.title_en}</div>
                   <div className="text-[12px] text-muted mt-0.5">{lang === "fr" ? n.body_fr : n.body_en}</div>
                 </div>
               </div>

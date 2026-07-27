@@ -47,11 +47,46 @@ export type IconName =
   | "menu"
   | "edit"
   | "upload"
-  | "shield";
+  | "shield"
+  | "dna"
+  | "atom"
+  | "ruler"
+  | "quill";
 
 interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
   size?: number;
+}
+
+// Per-subject icon, keyed by `subjects.slug` (see supabase/seed.sql) — used
+// anywhere a subject is listed (Dashboard progress grid, SubjectChapters
+// hero, etc.) so each of the 6 fixed subjects reads as itself instead of
+// all sharing one generic icon.
+const SUBJECT_ICONS: Record<string, IconName> = {
+  biologie: "dna",
+  chimie: "flask",
+  physique: "atom",
+  mathematiques: "ruler",
+  francais: "quill",
+  "culture-generale": "globe",
+};
+
+export function subjectIcon(slug: string): IconName {
+  return SUBJECT_ICONS[slug] ?? "book";
+}
+
+/** Per-subject accent color + gradient for badge backgrounds. */
+export const SUBJECT_COLORS: Record<string, { gradient: string; accent: string }> = {
+  biologie:        { gradient: "from-[#7DD9A0] to-[#22A652]", accent: "#22A652" },
+  chimie:          { gradient: "from-[#F5A6AD] to-[#DC3545]", accent: "#DC3545" },
+  physique:        { gradient: "from-[#FFD699] to-[#E8860C]", accent: "#E8860C" },
+  mathematiques:   { gradient: "from-[#93C5FD] to-[#2563EB]", accent: "#2563EB" },
+  francais:        { gradient: "from-[#C4B5FD] to-[#7C3AED]", accent: "#7C3AED" },
+  "culture-generale": { gradient: "from-[#99F6E4] to-[#0D9488]", accent: "#0D9488" },
+};
+
+export function subjectColors(slug: string): { gradient: string; accent: string } {
+  return SUBJECT_COLORS[slug] ?? { gradient: "from-ink-200 to-ink-400", accent: "#6B7280" };
 }
 
 function paths(name: IconName): string[] {
@@ -99,7 +134,10 @@ function paths(name: IconName): string[] {
     case "flask":
       return ["M9 3H15", "M10 3V8L4.7 18.5C4.2 19.6 5 21 6.2 21H17.8C19 21 19.8 19.6 19.3 18.5L14 8V3"];
     case "gear":
-      return [];
+      return [
+        "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
+        "M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z",
+      ];
     case "scale":
       return ["M12 3V21", "M5 7H19", "M5 7L3 13H8Z", "M19 7L17 13H22Z", "M8 21H16"];
     case "medcross":
@@ -151,6 +189,37 @@ function paths(name: IconName): string[] {
       return ["M12 16V4", "M7 9L12 4L17 9", "M5 16V19C5 19.6 5.4 20 6 20H18C18.6 20 19 19.6 19 19V16"];
     case "shield":
       return ["M12 3L20 6.5V11.5C20 16.2 16.9 19.9 12 21C7.1 19.9 4 16.2 4 11.5V6.5Z"];
+    case "dna":
+      return [
+        "M8 3C8 7 16 7 16 11C16 15 8 15 8 19",
+        "M16 3C16 7 8 7 8 11C8 15 16 15 16 19",
+        "M8 7L16 7",
+        "M8 11L16 11",
+        "M8 15L16 15",
+      ];
+    case "atom":
+      return [
+        "M3 12C3 7 7 4 12 4C17 4 21 7 21 12C21 17 17 20 12 20C7 20 3 17 3 12",
+        "M7 3C3 6 2 11 4 15C6 19 10 22 14 20C18 18 21 14 20 10C19 6 15 3 12 3C10 3 8 3 7 3",
+        "M17 3C21 6 22 11 20 15C18 19 14 22 10 20C6 18 3 14 4 10C5 6 9 3 12 3C14 3 16 3 17 3",
+      ];
+    case "ruler":
+      return [
+        "M5 4V20H20",
+        "M5 8H8",
+        "M5 12H8",
+        "M5 16H8",
+        "M8 20V17",
+        "M12 20V17",
+        "M16 20V17",
+      ];
+    case "quill":
+      return [
+        "M18 3L7 14",
+        "M7 14L5 20L9 18",
+        "M15 6C17 4 20 3 21 4",
+        "M13 8C15 6 18 5 20 5",
+      ];
     default:
       return [];
   }
@@ -170,10 +239,7 @@ function circles(name: IconName): { cx: number; cy: number; r: number; fill?: bo
         { cx: 12, cy: 12, r: 1.4, fill: true },
       ];
     case "gear":
-      return [
-        { cx: 12, cy: 12, r: 4.2 },
-        { cx: 12, cy: 12, r: 7.4 },
-      ];
+      return [];
     case "users":
       return [
         { cx: 9, cy: 8, r: 3 },
@@ -196,6 +262,8 @@ function circles(name: IconName): { cx: number; cy: number; r: number; fill?: bo
       ];
     case "bell":
       return [];
+    case "atom":
+      return [{ cx: 12, cy: 12, r: 1.5, fill: true }];
     default:
       return [];
   }
