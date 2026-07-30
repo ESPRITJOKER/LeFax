@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
-import { CoinsBadge } from "../../components/CoinsBadge";
-import { Icon, type IconName } from "../../lib/icons";
+import { TopBar } from "../../components/TopBar";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ShopItemRow } from "../../lib/database.types";
 
-const ITEM_ICON: Record<ShopItemRow["item_type"], IconName> = {
-  past_paper: "clipboard",
-  correction: "flask",
-  premium_lesson: "book",
-  mock_correction: "target",
-  exclusive_content: "medal",
+const ITEM_STYLE: Record<ShopItemRow["item_type"], { emoji: string; bg: string; fr: string; en: string }> = {
+  past_paper: { emoji: "📘", bg: "#e8f4ff", fr: "Anciennes épreuves", en: "Past exam papers" },
+  correction: { emoji: "🎯", bg: "#fff4e0", fr: "Corrigés détaillés", en: "Detailed corrections" },
+  premium_lesson: { emoji: "📖", bg: "#f3e8ff", fr: "Leçon premium", en: "Premium lesson" },
+  mock_correction: { emoji: "🖼️", bg: "#fdeaf0", fr: "Correction de concours blanc", en: "Mock exam correction" },
+  exclusive_content: { emoji: "🚀", bg: "#dcf5e3", fr: "Contenu exclusif", en: "Exclusive content" },
 };
 
 export default function Shop() {
   const { t, lang } = useI18n();
+  const navigate = useNavigate();
   const { profile, refreshProfile } = useAuth();
 
   const [items, setItems] = useState<ShopItemRow[]>([]);
@@ -53,20 +54,22 @@ export default function Shop() {
       await refreshProfile();
       await load();
     } catch {
-      // Backend not reachable yet — no-op, balance stays authoritative server-side.
+      // Backend not reachable yet — balance stays authoritative server-side.
     }
     setPendingId(null);
   }
 
   return (
     <PhoneFrame>
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <div className="flex items-center justify-between px-[22px] pt-4">
-          <div className="font-serif font-bold text-xl text-text">{t("shop_title")}</div>
-          <CoinsBadge balance={profile?.faxcoins ?? 0} />
-        </div>
+      <div className="flex-1 min-h-0 flex flex-col">
+        <TopBar variant="back" coins={profile?.faxcoins ?? 0} onBack={() => navigate("/dashboard")} />
 
-        <div className="px-[22px] pt-4.5 pt-[18px] pb-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+          <h2 className="font-serif font-bold text-[18px] text-ink-900 mb-1">{lang === "fr" ? "Boutique FaxCoins" : "FaxCoins shop"}</h2>
+          <p className="text-[12.5px] text-[#647084] mb-[18px]">
+            {lang === "fr" ? "Dépense tes FaxCoins pour débloquer du contenu premium" : "Spend your FaxCoins to unlock premium content"}
+          </p>
+
           {loading ? (
             <Spinner />
           ) : items.length === 0 ? (
@@ -75,40 +78,38 @@ export default function Shop() {
             items.map((it) => {
               const unlocked = unlockedIds.has(it.id);
               const canAfford = (profile?.faxcoins ?? 0) >= it.price_coins;
+              const st = ITEM_STYLE[it.item_type] ?? { emoji: "📦", bg: "#e8f4ff" };
+              const disabled = unlocked || !canAfford || pendingId === it.id;
               return (
-                <div key={it.id} className="p-3.5 rounded-2xl border border-border flex flex-col gap-2">
-                  <div className="w-full aspect-[4/3] rounded-[10px] bg-ink-50 flex items-center justify-center text-ink-700">
-                    <Icon name={ITEM_ICON[it.item_type]} size={24} />
+                <div key={it.id} className="flex items-center gap-3.5 bg-card rounded-[12px] px-4 py-3.5 shadow-[0_2px_8px_rgba(20,30,60,0.05)] mb-2.5">
+                  <div className="w-11 h-11 rounded-[10px] flex items-center justify-center text-[20px] flex-shrink-0" style={{ background: st.bg }}>
+                    {st.emoji}
                   </div>
-                  <div className="text-xs font-bold text-text leading-snug">{lang === "fr" ? it.name_fr : it.name_en}</div>
-                  <div className="text-[11.5px] font-bold text-ochre-700 flex items-center gap-1">
-                    <Icon name="coin" size={11} />
-                    {it.price_coins}
+                  <div className="flex-1">
+                    <div className="font-serif font-semibold text-[13.5px] text-ink-900">{lang === "fr" ? it.name_fr : it.name_en}</div>
+                    <div className="text-[11.5px] text-muted mt-0.5">{lang === "fr" ? st.fr : st.en}</div>
                   </div>
                   <button
-                    disabled={unlocked || !canAfford || pendingId === it.id}
+                    disabled={disabled}
                     onClick={() => unlock(it)}
-                    className={`py-2 rounded-[9px] border-none text-[11.5px] font-bold ${
-                      unlocked ? "bg-success-100 text-success-600" : canAfford ? "bg-brand-600 text-white" : "bg-ink-100 text-muted"
-                    }`}
+                    className="rounded-[8px] px-3 py-2 font-serif font-bold text-[12px] whitespace-nowrap"
+                    style={{
+                      background: unlocked ? "#eef1f5" : "#f5b400",
+                      color: unlocked ? "#94a3b8" : "#1e2a3a",
+                    }}
                   >
                     {unlocked
-                      ? lang === "fr"
-                        ? "Débloqué"
-                        : "Unlocked"
+                      ? lang === "fr" ? "Débloqué" : "Unlocked"
                       : canAfford
-                      ? lang === "fr"
-                        ? "Débloquer"
-                        : "Unlock"
-                      : lang === "fr"
-                      ? "Solde insuffisant"
-                      : "Insufficient balance"}
+                        ? `${it.price_coins} f`
+                        : lang === "fr" ? "Solde bas" : "Low balance"}
                   </button>
                 </div>
               );
             })
           )}
         </div>
+
         <BottomTabs />
       </div>
     </PhoneFrame>

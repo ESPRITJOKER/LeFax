@@ -89,6 +89,21 @@ export function subjectColors(slug: string): { gradient: string; accent: string 
   return SUBJECT_COLORS[slug] ?? { gradient: "from-ink-200 to-ink-400", accent: "#6B7280" };
 }
 
+/** Per-subject emoji + soft tint background, matching the LeFax design's
+ * subject cards. Keyed by `subjects.slug`. */
+const SUBJECT_EMOJI: Record<string, { emoji: string; bg: string }> = {
+  biologie: { emoji: "🧬", bg: "#dcf5e3" },
+  physique: { emoji: "⚛️", bg: "#e8f4ff" },
+  chimie: { emoji: "🧪", bg: "#fff4e0" },
+  mathematiques: { emoji: "📐", bg: "#e0f2fe" },
+  francais: { emoji: "📖", bg: "#fdeaf0" },
+  "culture-generale": { emoji: "🌍", bg: "#f3e8ff" },
+};
+
+export function subjectEmoji(slug: string): { emoji: string; bg: string } {
+  return SUBJECT_EMOJI[slug] ?? { emoji: "📘", bg: "#e8f4ff" };
+}
+
 function paths(name: IconName): string[] {
   switch (name) {
     case "home":

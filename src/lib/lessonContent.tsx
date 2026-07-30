@@ -58,18 +58,20 @@ function ImageBlock({ caption, url }: { caption: string; url?: string }) {
 function Callout({ kind, text }: { kind: "piege" | "info"; text: string }) {
   const { t } = useI18n();
   const isPiege = kind === "piege";
-  const wrap = isPiege
-    ? "border-ochre-600/40 bg-ochre-600/10"
-    : "border-ink-300 bg-ink-50";
+  // LeFax design callouts: amber "exam trap" and blue "key point", each with a
+  // 4px left accent border and a tinted fill.
+  const s = isPiege
+    ? { bg: "#fff4e0", border: "#f5b400", label: "#a35b00", body: "#5c3b00", mark: "⚠" }
+    : { bg: "#e8f4ff", border: "#29b6f6", label: "#0b5f96", body: "#0b4a75", mark: "ℹ" };
   const label = isPiege ? t("lesson_calloutPiege") : t("lesson_calloutInfo");
-  const labelColor = isPiege ? "text-ochre-600" : "text-ink-700";
   return (
-    <div className={`my-3.5 rounded-xl border-[1.5px] ${wrap} px-3.5 py-3`}>
-      <div className={`flex items-center gap-1.5 text-[11px] font-bold mb-1 ${labelColor}`}>
-        <Icon name={isPiege ? "target" : "book"} size={13} />
-        {label}
+    <div className="my-4 rounded-lg px-3.5 py-3" style={{ background: s.bg, borderLeft: `4px solid ${s.border}` }}>
+      <div className="font-serif font-bold text-[12px] mb-1" style={{ color: s.label }}>
+        {s.mark} {label}
       </div>
-      <div className="text-[12.5px] leading-relaxed text-text">{inline(text)}</div>
+      <div className="text-[13px] leading-[1.55]" style={{ color: s.body }}>
+        {inline(text)}
+      </div>
     </div>
   );
 }

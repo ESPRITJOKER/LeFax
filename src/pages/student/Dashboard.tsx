@@ -2,27 +2,27 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
-import { CoinsBadge } from "../../components/CoinsBadge";
-import { ProgressBar, Spinner } from "../../components/ui";
-import { Icon, type IconName } from "../../lib/icons";
-import { SubjectBadge } from "../../components/SubjectBadge";
+import { TopBar } from "../../components/TopBar";
+import { Drawer } from "../../components/Drawer";
+import { Spinner } from "../../components/ui";
+import { subjectEmoji } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
-import type { SubjectRow, MockExamRow } from "../../lib/database.types";
+import type { SubjectRow } from "../../lib/database.types";
 
 interface SubjectProgress extends SubjectRow {
   progressPct: number;
 }
 
 export default function Dashboard() {
-  const { t, lang } = useI18n();
+  const { lang } = useI18n();
   const navigate = useNavigate();
   const { profile } = useAuth();
 
   const [subjects, setSubjects] = useState<SubjectProgress[]>([]);
-  const [nextMock, setNextMock] = useState<MockExamRow | null>(null);
   const [loading, setLoading] = useState(true);
+  const [drawer, setDrawer] = useState(false);
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -31,21 +31,12 @@ export default function Dashboard() {
     }
     (async () => {
       const { data: subjectRows } = await supabase.from("subjects").select("*").eq("track", "medicine").order("position");
-      const { data: mockRows } = await supabase
-        .from("mock_exams")
-        .select("*")
-        .in("status", ["scheduled", "open"])
-        .order("opens_at")
-        .limit(1);
 
       let progressBySubject: Record<string, number> = {};
       if (profile && subjectRows) {
         const { data: chapterRows } = await supabase.from("chapters").select("id, subject_id");
         const { data: lessonRows } = await supabase.from("lessons").select("id, chapter_id").eq("published", true);
-        const { data: progressRows } = await supabase
-          .from("lesson_progress")
-          .select("lesson_id, status")
-          .eq("user_id", profile.id);
+        const { data: progressRows } = await supabase.from("lesson_progress").select("lesson_id, status").eq("user_id", profile.id);
 
         const chapterToSubject = new Map((chapterRows ?? []).map((c) => [c.id, c.subject_id]));
         const lessonToSubject = new Map((lessonRows ?? []).map((l) => [l.id, chapterToSubject.get(l.chapter_id)]));
@@ -65,95 +56,86 @@ export default function Dashboard() {
       }
 
       setSubjects((subjectRows ?? []).map((s) => ({ ...s, progressPct: progressBySubject[s.id] ?? 0 })));
-      setNextMock(mockRows?.[0] ?? null);
       setLoading(false);
     })();
   }, [profile]);
 
   const firstName = profile?.first_name || (lang === "fr" ? "Étudiant" : "Student");
-
-  const quickAccess: { label: string; icon: IconName; bg: string; color: string; action: () => void }[] = [
-    { label: t("nav_courses"), icon: "book", bg: "bg-ink-100", color: "text-ink-700", action: () => navigate("/subjects/biologie") },
-    { label: t("nav_mockExam"), icon: "target", bg: "bg-ochre-100", color: "text-ochre-700", action: () => navigate("/mock-exam") },
-    { label: t("nav_tasks"), icon: "clipboard", bg: "bg-success-50", color: "text-success-600", action: () => navigate("/tasks") },
-    { label: t("nav_leaderboard"), icon: "trophy", bg: "bg-ochre-100", color: "text-ochre-700", action: () => navigate("/leaderboard") },
-    { label: t("nav_profile"), icon: "user", bg: "bg-ink-100", color: "text-ink-700", action: () => navigate("/profile") },
-  ];
+  const initial = (profile?.first_name?.[0] ?? "?").toUpperCase();
 
   return (
     <PhoneFrame>
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <div className="bg-brand-800 px-[22px] pt-5 pb-6.5 pb-[26px] rounded-b-[22px] text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-xs opacity-70 font-semibold">{t("dash_hello")}</div>
-              <div className="font-serif font-bold text-[21px] mt-0.5">{firstName}</div>
-            </div>
-            <CoinsBadge balance={profile?.faxcoins ?? 0} />
-          </div>
-          <div className="flex items-center gap-2 mt-4 bg-brand-700/55 w-fit px-3.5 py-2 rounded-xl">
-            <Icon name="flame" size={17} className="text-[oklch(70%_0.15_55)] animate-flamepulse" />
-            <span className="text-[13.5px] font-bold">{profile?.streak_count ?? 0}</span>
-            <span className="text-xs opacity-75">{t("dash_streakLabel")}</span>
-          </div>
-        </div>
+      <div className="flex-1 min-h-0 flex flex-col">
+        <TopBar
+          variant="menu"
+          coins={profile?.faxcoins ?? 0}
+          initial={initial}
+          onMenu={() => setDrawer(true)}
+          onCoins={() => navigate("/shop")}
+          onAvatar={() => navigate("/profile")}
+        />
 
-        <div className="px-[22px] pt-5 pb-2">
-          <div className="text-[13.5px] font-bold text-text mb-3">{t("dash_progressTitle")}</div>
-          {loading ? (
-            <Spinner />
-          ) : subjects.length === 0 ? (
-            <div className="text-sm text-muted py-4">{isSupabaseConfigured ? t("common_error") : t("backend_banner")}</div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {subjects.map((s) => (
-                <div
-                  key={s.id}
-                  onClick={() => navigate(`/subjects/${s.slug}`)}
-                  className="cursor-pointer p-3.5 rounded-2xl border border-border hover:bg-ink-50"
-                >
-                    <div className="flex items-center justify-between text-[13.5px] mb-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <SubjectBadge slug={s.slug} size="sm" />
-                      <span className="font-bold text-text truncate">{lang === "fr" ? s.name_fr : s.name_en}</span>
-                    </div>
-                    <span className="text-muted font-semibold flex-none">{s.progressPct}%</span>
-                  </div>
-                  <ProgressBar pct={s.progressPct} />
+        <div className="flex-1 min-h-0 overflow-auto pb-[90px]">
+          <div className="px-5 pt-5">
+            <p className="font-serif font-bold text-[19px] text-ink-900 mb-0.5">
+              {lang === "fr" ? `Bonjour ${firstName} 👋` : `Hi ${firstName} 👋`}
+            </p>
+            <p className="text-[13px] text-[#647084] mb-[18px]">
+              {lang === "fr" ? "Continue sur ta lancée aujourd'hui" : "Keep up the momentum today"}
+            </p>
+
+            <div className="bg-brand-800 rounded-[14px] px-[18px] py-4 flex items-center justify-between mb-5">
+              <div>
+                <div className="font-serif font-bold text-[14px] text-white">
+                  {lang === "fr" ? `Série de ${profile?.streak_count ?? 0} jours` : `${profile?.streak_count ?? 0}-day streak`}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {nextMock && (
-          <div className="px-[22px] pb-2">
-            <div className="text-[13.5px] font-bold text-text mb-2">{t("dash_nextMock")}</div>
-            <div onClick={() => navigate("/mock-exam")} className="cursor-pointer p-3.5 rounded-2xl bg-ochre-50 border border-ochre-100 text-sm font-semibold text-ochre-700">
-              {lang === "fr" ? nextMock.title_fr : nextMock.title_en}
-            </div>
-          </div>
-        )}
-
-        <div className="px-[22px] pt-3.5 pb-6">
-          <div className="text-[13.5px] font-bold text-text mb-3">{t("dash_quickAccess")}</div>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-            {quickAccess.map((q) => (
-              <div
-                key={q.label}
-                onClick={q.action}
-                className="cursor-pointer flex flex-col items-center gap-2 py-3.5 px-1.5 rounded-2xl bg-ink-50 hover:bg-ink-100"
-              >
-                <div className={`w-10 h-10 rounded-[11px] flex items-center justify-center ${q.bg} ${q.color}`}>
-                  <Icon name={q.icon} size={19} />
+                <div className="text-[12px] text-[#9fb3cc] mt-0.5">
+                  {lang === "fr" ? "Termine une leçon aujourd'hui" : "Finish a lesson today"}
                 </div>
-                <div className="text-[11.5px] font-semibold text-text text-center">{q.label}</div>
               </div>
-            ))}
+              <div className="bg-ochre-600 text-ink-900 font-serif font-extrabold text-[16px] rounded-[10px] px-3 py-2">
+                {profile?.streak_count ?? 0}🔥
+              </div>
+            </div>
+
+            <p className="font-serif font-bold text-[15px] text-ink-900 mb-3">{lang === "fr" ? "Mes matières" : "My subjects"}</p>
+          </div>
+
+          <div className="px-5 flex flex-col gap-3">
+            {loading ? (
+              <Spinner />
+            ) : subjects.length === 0 ? (
+              <div className="text-sm text-muted py-4">
+                {isSupabaseConfigured ? (lang === "fr" ? "Aucune matière" : "No subjects") : (lang === "fr" ? "Backend non configuré" : "Backend not configured")}
+              </div>
+            ) : (
+              subjects.map((s) => {
+                const se = subjectEmoji(s.slug);
+                return (
+                  <div
+                    key={s.id}
+                    onClick={() => navigate(`/subjects/${s.slug}`)}
+                    className="flex items-center gap-3.5 bg-card rounded-[14px] px-4 py-3.5 shadow-[0_2px_10px_rgba(20,30,60,0.06)] cursor-pointer"
+                  >
+                    <div className="w-[46px] h-[46px] rounded-xl flex items-center justify-center text-[22px]" style={{ background: se.bg }}>
+                      {se.emoji}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-serif font-semibold text-[14.5px] text-ink-900">{lang === "fr" ? s.name_fr : s.name_en}</div>
+                      <div className="h-[6px] bg-ink-100 rounded-pill mt-2 overflow-hidden">
+                        <div className="h-full bg-brand-500 rounded-pill" style={{ width: `${s.progressPct}%` }} />
+                      </div>
+                    </div>
+                    <div className="text-[12px] text-muted font-semibold">{s.progressPct}%</div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
-        <div className="flex-1" />
-        <BottomTabs />
+
+        <BottomTabs active="revisions" />
+        <Drawer open={drawer} onClose={() => setDrawer(false)} />
       </div>
     </PhoneFrame>
   );

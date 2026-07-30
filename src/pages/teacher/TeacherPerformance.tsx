@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
+import { isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 
 interface QuizStat {
   quizId: string;

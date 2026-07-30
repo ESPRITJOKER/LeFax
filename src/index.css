@@ -3,59 +3,61 @@
 @tailwind utilities;
 
 :root {
-  /* Deep ink blue — dominant color (CDC section 11) */
-  --color-ink-950: oklch(20% 0.045 258);
-  --color-ink-900: oklch(22% 0.05 258);
-  --color-ink-800: oklch(26% 0.07 258);
-  --color-ink-700: oklch(30% 0.07 258);
-  --color-ink-600: oklch(38% 0.09 255);
-  --color-ink-300: oklch(60% 0.1 258);
-  --color-ink-100: oklch(93% 0.02 258);
-  --color-ink-50: oklch(97% 0.02 258);
+  /* LeFax design system — palette taken verbatim from the Claude Design
+   * prototype (LeFax App.dc.html). `ink` = the dark navy/slate scale used for
+   * text and dark surfaces (#1e2a3a); `brand` = the friendly primary blue
+   * (#29b6f6 / #2f9bf0); `ochre` = FaxCoins gold (#f5b400); `success` green
+   * (#22c55e); `danger` red (#ef4444). */
+  --color-ink-950: #131c28;
+  --color-ink-900: #1e2a3a; /* design ink — darkest text + dark surfaces */
+  --color-ink-800: #2a3a4f;
+  --color-ink-700: #3a4a63;
+  --color-ink-600: #647084; /* secondary text */
+  --color-ink-300: #94a3b8; /* muted text / icons */
+  --color-ink-100: #eef1f5; /* light tracks / hairlines */
+  --color-ink-50: #f8fafc;
 
-  /* Chalkboard green — success */
-  --color-success-700: oklch(40% 0.1 150);
-  --color-success-600: oklch(45% 0.09 150);
-  --color-success-100: oklch(94% 0.04 150);
-  --color-success-50: oklch(95% 0.03 150);
+  /* Green — success */
+  --color-success-700: #16a34a;
+  --color-success-600: #22c55e;
+  --color-success-100: #dcf5e3;
+  --color-success-50: #f0fdf4;
 
-  /* Ochre — merit badges / FaxCoins */
-  --color-ochre-700: oklch(50% 0.13 78);
-  --color-ochre-600: oklch(60% 0.13 78);
-  --color-ochre-100: oklch(96% 0.03 78);
-  --color-ochre-50: oklch(97% 0.02 78);
+  /* Gold — merit badges / FaxCoins */
+  --color-ochre-700: #a35b00;
+  --color-ochre-600: #f5b400;
+  --color-ochre-100: #fff4e0;
+  --color-ochre-50: #fff8e5;
 
   /* Red — reserved strictly for errors / corrections */
-  --color-danger-700: oklch(55% 0.18 25);
-  --color-danger-600: oklch(55% 0.18 25);
-  --color-danger-100: oklch(94% 0.04 25);
-  --color-danger-50: oklch(98% 0.02 25);
+  --color-danger-700: #dc2626;
+  --color-danger-600: #ef4444;
+  --color-danger-100: #fee2e2;
+  --color-danger-50: #fef2f2;
 
   /* Hearts — QCM lives mechanic */
-  --color-heart: #FF5A7A;
-  --color-heart-empty: #DADFE6;
+  --color-heart: #ef4444;
+  --color-heart-empty: #3a4a63;
 
   /* Blue accent — interactive highlights, primary buttons */
-  --color-accent: #2F9BEE;
+  --color-accent: #2f9bf0;
 
-  /* Friendly brand blue — the platform's primary surfaces and buttons.
-   * A lighter, more saturated blue than the near-black `ink` navy, so the
-   * app reads warm and approachable instead of heavy/dark. Kept dark enough
-   * for white text (all values pass AA against #fff). `ink` stays reserved
-   * for readable dark TEXT; `brand` is for coloured surfaces. */
-  --color-brand-800: oklch(46% 0.15 256);  /* large surfaces: language screen, sidebars, headers */
-  --color-brand-700: oklch(50% 0.17 258);  /* darker chips / hover states */
-  --color-brand-600: oklch(54% 0.19 260);  /* primary buttons */
-  --color-brand-500: oklch(63% 0.17 256);  /* lighter accent / hover-light */
-  --color-brand-100: oklch(93% 0.045 256); /* light tint fills */
-  --color-brand-50: oklch(97% 0.022 256);
+  /* Friendly brand blue — primary surfaces & buttons. `brand-800` is the
+   * dark navy used for the coin pill / streak card / admin sidebar; the
+   * lighter values are the interactive blues. */
+  --color-brand-800: #1e2a3a;
+  --color-brand-700: #1c7fd8;
+  --color-brand-600: #2f9bf0; /* primary buttons */
+  --color-brand-500: #29b6f6; /* lighter primary / accents */
+  --color-brand-100: #e8f4ff;
+  --color-brand-50: #f4f9ff;
 
-  --color-surface: oklch(96% 0.012 250);
+  --color-surface: #eef3f9;
   --color-card: #ffffff;
-  --color-border: oklch(92% 0.01 250);
-  --color-muted: oklch(45% 0.01 258);
+  --color-border: #eef1f5;
+  --color-muted: #94a3b8;
 
-  --color-text: oklch(20% 0.03 258);
+  --color-text: #1e2a3a;
   color-scheme: light;
 }
 
@@ -91,16 +93,16 @@ body {
   margin: 0;
   background: var(--color-surface);
   color: var(--color-text);
-  font-family: "Public Sans", sans-serif;
+  font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--color-ink-600);
+  color: var(--color-brand-600);
   text-decoration: none;
 }
 a:hover {
-  color: var(--color-ink-700);
+  color: var(--color-brand-700);
 }
 
 ::-webkit-scrollbar {
@@ -116,5 +118,5 @@ input,
 select,
 textarea,
 button {
-  font-family: "Public Sans", sans-serif;
+  font-family: "Inter", sans-serif;
 }

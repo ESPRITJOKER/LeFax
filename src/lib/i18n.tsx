@@ -127,6 +127,10 @@ const dict = {
     nav_search: "Recherche",
     nav_tasks: "Tâches",
     nav_mockExam: "Concours blanc",
+    nav_revisions: "Révisions",
+    nav_evaluations: "Evaluations",
+    nav_questions: "Questions",
+    nav_perfs: "Perfs",
 
     profile_title: "Profil",
     profile_editPhoto: "Changer la photo",
@@ -356,6 +360,10 @@ const dict = {
     nav_search: "Search",
     nav_tasks: "Tasks",
     nav_mockExam: "Mock exam",
+    nav_revisions: "Lessons",
+    nav_evaluations: "Evaluations",
+    nav_questions: "Questions",
+    nav_perfs: "Perfs",
 
     profile_title: "Profile",
     profile_editPhoto: "Change photo",

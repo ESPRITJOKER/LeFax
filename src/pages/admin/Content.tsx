@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
-import { SubjectBadge } from "../../components/SubjectBadge";
 import { Pill, Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
-import { Button } from "../../components/ui";
+
+const inputClass =
+  "w-full box-border border border-[#e2e8f0] rounded-[8px] px-3.5 py-[13px] text-[14px] outline-none focus:border-brand-500";
 
 export default function Login() {
-  const { t } = useI18n();
+  const { lang } = useI18n();
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +18,7 @@ export default function Login() {
   async function submitLogin() {
     setError(null);
     if (!isSupabaseConfigured) {
-      setError(t("backend_banner"));
+      setError(lang === "fr" ? "Backend non configuré." : "Backend not configured.");
       return;
     }
     setSubmitting(true);
@@ -31,47 +32,43 @@ export default function Login() {
   }
 
   return (
-    <PhoneFrame nav={false}>
-      <div className="flex-1 flex flex-col px-[22px] pb-6">
-        <div className="flex items-center gap-2.5 my-2 mb-5">
-          <Icon name="cap" size={22} className="text-ink-700" />
-          <div className="font-serif font-semibold text-[19px] text-text">{t("appName")}</div>
+    <PhoneFrame>
+      <div className="bg-white flex-1 min-h-0 overflow-y-auto flex flex-col px-[26px] pt-[60px] pb-[30px] text-center">
+        <span className="font-serif font-extrabold text-[22px] text-ink-900">LeFax</span>
+        <h2 className="font-serif font-bold text-[19px] text-ink-900 mt-[26px] mb-[22px]">
+          {lang === "fr" ? "Content de te revoir" : "Welcome back"}
+        </h2>
+        <input
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder={lang === "fr" ? "Numéro de téléphone" : "Phone number"}
+          className={`${inputClass} mb-3`}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder={lang === "fr" ? "Mot de passe" : "Password"}
+          className={`${inputClass} mb-2`}
+        />
+        <div className="text-right mb-[18px]">
+          <a className="text-[12.5px] cursor-pointer">{lang === "fr" ? "Mot de passe oublié ?" : "Forgot password?"}</a>
         </div>
-        <div className="font-serif font-bold text-2xl text-text mb-1">{t("login_title")}</div>
-        <div className="text-[13.5px] text-muted mb-6">{t("login_sub")}</div>
-
-        <div className="flex flex-col gap-4">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[12.5px] font-semibold text-text">{t("reg_phone")}</span>
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+237 6XX XXX XXX" className={inputClass} />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[12.5px] font-semibold text-text">{t("reg_password")}</span>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className={inputClass} />
-          </label>
-        </div>
-
-        <div className="text-right mt-2">
-          <a href="#" className="text-xs font-semibold text-ink-700">
-            {t("login_forgot")}
-          </a>
-        </div>
-
-        {error && <div className="mt-3 text-xs font-semibold text-danger-700">{error}</div>}
-
-        <Button onClick={submitLogin} disabled={submitting} className="mt-6 w-full">
-          {t("login_cta")}
-        </Button>
-        <div className="text-center mt-4 text-[13px] text-muted">
-          {t("login_noaccount")}{" "}
-          <a href="#" onClick={(e) => (e.preventDefault(), navigate("/register"))} className="font-semibold">
-            {t("login_signup")}
+        {error && <div className="mb-3 text-xs font-semibold text-danger-600">{error}</div>}
+        <button
+          onClick={submitLogin}
+          disabled={submitting}
+          className="w-full bg-brand-500 text-white rounded-[8px] py-[15px] font-bold text-[14px] tracking-[0.5px] disabled:opacity-50"
+        >
+          {submitting ? "..." : lang === "fr" ? "CONNEXION" : "LOG IN"}
+        </button>
+        <div className="mt-4 text-[13px] text-[#647084]">
+          {lang === "fr" ? "Pas encore de compte ?" : "No account yet?"}{" "}
+          <a onClick={() => navigate("/register")} className="cursor-pointer font-semibold">
+            {lang === "fr" ? "INSCRIPTION" : "SIGN UP"}
           </a>
         </div>
       </div>
     </PhoneFrame>
   );
 }
-
-const inputClass =
-  "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-text bg-card w-full";

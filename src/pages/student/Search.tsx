@@ -1,27 +1,33 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { ScreenHeader } from "../../components/ScreenHeader";
-import { Icon } from "../../lib/icons";
-import { SubjectBadge } from "../../components/SubjectBadge";
+import { BottomTabs } from "../../components/BottomTabs";
+import { TopBar } from "../../components/TopBar";
+import { Drawer } from "../../components/Drawer";
 import { EmptyState, Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
+import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 
+type ResultType = "subject" | "chapter" | "lesson";
+type FilterKey = "all" | ResultType;
+
 interface Result {
-  type: "subject" | "chapter" | "lesson";
+  type: ResultType;
   id: string;
   label: string;
   navigateTo: string;
-  slug?: string;
 }
 
 export default function Search() {
-  const { t, lang } = useI18n();
+  const { lang } = useI18n();
   const navigate = useNavigate();
+  const { profile } = useAuth();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[]>([]);
+  const [filter, setFilter] = useState<FilterKey>("all");
   const [loading, setLoading] = useState(false);
+  const [drawer, setDrawer] = useState(false);
 
   async function runSearch(q: string) {
     setQuery(q);
@@ -40,7 +46,7 @@ export default function Search() {
     ]);
 
     const built: Result[] = [
-      ...(subjects ?? []).map((s) => ({ type: "subject" as const, id: s.id, label: lang === "fr" ? s.name_fr : s.name_en, navigateTo: `/subjects/${s.slug}`, slug: s.slug })),
+      ...(subjects ?? []).map((s) => ({ type: "subject" as const, id: s.id, label: lang === "fr" ? s.name_fr : s.name_en, navigateTo: `/subjects/${s.slug}` })),
       ...(chapters ?? []).map((c) => ({ type: "chapter" as const, id: c.id, label: lang === "fr" ? c.name_fr : c.name_en, navigateTo: `/lessons/${c.id}` })),
       ...(lessons ?? []).map((l) => ({ type: "lesson" as const, id: l.id, label: lang === "fr" ? l.title_fr : l.title_en, navigateTo: `/lesson/${l.id}` })),
     ];
@@ -48,49 +54,92 @@ export default function Search() {
     setLoading(false);
   }
 
+  const FILTERS: { key: FilterKey; fr: string; en: string }[] = [
+    { key: "all", fr: "Tout", en: "All" },
+    { key: "subject", fr: "Matières", en: "Subjects" },
+    { key: "chapter", fr: "Chapitres", en: "Chapters" },
+    { key: "lesson", fr: "Leçons", en: "Lessons" },
+  ];
+  const TYPE_LABEL: Record<ResultType, { fr: string; en: string }> = {
+    subject: { fr: "Matière", en: "Subject" },
+    chapter: { fr: "Chapitre", en: "Chapter" },
+    lesson: { fr: "Leçon", en: "Lesson" },
+  };
+  const shown = results.filter((r) => filter === "all" || r.type === filter);
+  const initial = (profile?.first_name?.[0] ?? "?").toUpperCase();
+
   return (
     <PhoneFrame>
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <ScreenHeader title={t("search_title")} />
-        <div className="px-[22px] pt-3.5 pb-2">
-          <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border-[1.5px] border-border">
-            <Icon name="search" size={16} className="text-muted" />
+      <div className="flex-1 min-h-0 flex flex-col">
+        <TopBar
+          variant="menu"
+          coins={profile?.faxcoins ?? 0}
+          initial={initial}
+          onMenu={() => setDrawer(true)}
+          onCoins={() => navigate("/shop")}
+          onAvatar={() => navigate("/profile")}
+        />
+
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+          <div className="flex items-center gap-2.5 bg-card rounded-[10px] px-3.5 py-3 mb-3.5 shadow-[0_2px_8px_rgba(20,30,60,0.05)]">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="7" stroke="#94a3b8" strokeWidth="1.8" />
+              <path d="M21 21l-4-4" stroke="#94a3b8" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
             <input
               value={query}
               onChange={(e) => runSearch(e.target.value)}
-              placeholder={t("search_placeholder")}
-              className="flex-1 outline-none border-none text-sm text-text"
+              placeholder={lang === "fr" ? "Rechercher une leçon, un chapitre..." : "Search a lesson, chapter..."}
+              className="border-none outline-none flex-1 text-[13.5px] bg-transparent"
             />
           </div>
-        </div>
-        <div className="px-[22px] pt-2 pb-6 flex flex-col gap-2">
+
+          <div className="flex gap-2 overflow-auto mb-4">
+            {FILTERS.map((f) => {
+              const active = filter === f.key;
+              return (
+                <button
+                  key={f.key}
+                  onClick={() => setFilter(f.key)}
+                  className="px-3.5 py-2 rounded-pill text-[12.5px] font-semibold whitespace-nowrap border"
+                  style={{
+                    background: active ? "#2f9bf0" : "#fff",
+                    color: active ? "#fff" : "#334155",
+                    borderColor: active ? "#2f9bf0" : "#e2e8f0",
+                  }}
+                >
+                  {lang === "fr" ? f.fr : f.en}
+                </button>
+              );
+            })}
+          </div>
+
           {loading ? (
             <Spinner />
-          ) : !query ? null : results.length === 0 ? (
-            <EmptyState label={isSupabaseConfigured ? t("search_empty") : t("backend_banner")} />
+          ) : !query ? (
+            <div className="text-center text-muted text-[13px] py-10">
+              {lang === "fr" ? "Recherche une leçon, un chapitre ou une matière" : "Search a lesson, chapter or subject"}
+            </div>
+          ) : shown.length === 0 ? (
+            <EmptyState label={isSupabaseConfigured ? (lang === "fr" ? "Aucun résultat" : "No results") : "Backend not configured"} />
           ) : (
-            results.map((r) => (
+            shown.map((r) => (
               <div
                 key={`${r.type}-${r.id}`}
                 onClick={() => navigate(r.navigateTo)}
-                className="cursor-pointer flex items-center gap-3 p-3 rounded-[14px] border border-border hover:bg-ink-50"
+                className="bg-card rounded-[12px] px-4 py-3.5 mb-2.5 shadow-[0_2px_8px_rgba(20,30,60,0.05)] cursor-pointer"
               >
-                {r.type === "subject" ? (
-                  <SubjectBadge slug={r.slug ?? ""} size="sm" />
-                ) : (
-                  <div className="w-7 h-7 rounded-[9px] bg-ink-100 flex items-center justify-center">
-                    <Icon
-                      name={r.type === "chapter" ? "clipboard" : "check"}
-                      size={14}
-                      className="text-muted"
-                    />
-                  </div>
-                )}
-                <span className="text-sm font-semibold text-text">{r.label}</span>
+                <div className="inline-block bg-brand-100 text-brand-700 text-[10.5px] font-bold px-2.5 py-[3px] rounded-md mb-2">
+                  {lang === "fr" ? TYPE_LABEL[r.type].fr : TYPE_LABEL[r.type].en}
+                </div>
+                <div className="text-[13.5px] text-ink-900 leading-[1.5]">{r.label}</div>
               </div>
             ))
           )}
         </div>
+
+        <BottomTabs active="questions" />
+        <Drawer open={drawer} onClose={() => setDrawer(false)} />
       </div>
     </PhoneFrame>
   );

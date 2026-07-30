@@ -4,8 +4,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ["'Newsreader'", "serif"],
-        sans: ["'Public Sans'", "sans-serif"],
+        // LeFax design system: Poppins for headings/display/bold, Inter for body.
+        // `serif` is kept as an alias to the display font so existing
+        // `font-serif` headings across the app pick up Poppins with no churn.
+        serif: ["'Poppins'", "sans-serif"],
+        display: ["'Poppins'", "sans-serif"],
+        sans: ["'Inter'", "sans-serif"],
       },
       colors: {
         // Deep ink blue — dominant brand color (section 11 of the CDC)
@@ -75,11 +79,16 @@ export default {
           "60%": { transform: "scale(1.05)", opacity: "1" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
+        fadeup: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         flamepulse: "flamepulse 1.6s ease-in-out infinite",
         coinspin: "coinspin 5s linear infinite",
         lazyreveal: "lazyreveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both",
+        fadeup: "fadeup 0.6s ease both",
       },
     },
   },

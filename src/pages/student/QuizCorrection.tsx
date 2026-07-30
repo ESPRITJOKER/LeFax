@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { ScreenHeader } from "../../components/ScreenHeader";
+import { TopBar } from "../../components/TopBar";
 import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
@@ -12,11 +12,12 @@ interface CorrectionItem {
   question: string;
   yourAnswer: string;
   correctAnswer: string;
+  explanation: string;
   correct: boolean;
 }
 
 export default function QuizCorrection() {
-  const { t, lang } = useI18n();
+  const { lang } = useI18n();
   const navigate = useNavigate();
   const { quizId } = useParams<{ quizId: string }>();
   const { profile } = useAuth();
@@ -61,6 +62,7 @@ export default function QuizCorrection() {
           question: lang === "fr" ? q.text_fr : q.text_en,
           yourAnswer: yourChoice ? (lang === "fr" ? yourChoice.text_fr : yourChoice.text_en) : lang === "fr" ? "Sans réponse" : "No answer",
           correctAnswer: correctChoice ? (lang === "fr" ? correctChoice.text_fr : correctChoice.text_en) : "",
+          explanation: (lang === "fr" ? q.explanation_fr : q.explanation_en) ?? "",
           correct: Boolean(answer?.is_correct),
         };
       });
@@ -71,32 +73,38 @@ export default function QuizCorrection() {
 
   return (
     <PhoneFrame>
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <ScreenHeader title={t("corr_title")} onBack={() => navigate(-1)} />
-        <div className="px-[22px] pt-4 pb-6 flex flex-col gap-3.5">
+      <div className="flex-1 min-h-0 flex flex-col bg-white">
+        <TopBar variant="title" title={lang === "fr" ? "Correction" : "Correction"} onBack={() => navigate(-1)} />
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-6">
           {loading ? (
             <Spinner />
           ) : items.length === 0 ? (
-            <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
+            <EmptyState label={isSupabaseConfigured ? (lang === "fr" ? "Aucune correction" : "No correction") : "Backend not configured"} />
           ) : (
             items.map((ci) => (
-              <div
-                key={ci.index}
-                className={`p-3.5 rounded-[14px] border-[1.5px] ${
-                  ci.correct ? "border-success-100 bg-success-50" : "border-danger-100 bg-danger-50"
-                }`}
-              >
-                <div className="text-[13px] font-bold text-text mb-2">
-                  {ci.index}. {ci.question}
-                </div>
-                <div className={`text-xs font-semibold ${ci.correct ? "text-success-600" : "text-danger-700"}`}>
-                  {t("corr_yourAnswer")}: {ci.yourAnswer}
-                </div>
-                {!ci.correct && (
-                  <div className="text-xs font-semibold text-success-600 mt-0.5">
-                    {t("corr_correctAnswer")}: {ci.correctAnswer}
+              <div key={ci.index} className="border border-ink-100 rounded-[12px] px-4 py-3.5 mb-3">
+                <div className="flex gap-2 items-start mb-2.5">
+                  <div
+                    className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5"
+                    style={{ background: ci.correct ? "#22c55e" : "#ef4444" }}
+                  >
+                    {ci.correct ? (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12l5 5L20 7" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+                      </svg>
+                    ) : (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+                      </svg>
+                    )}
                   </div>
-                )}
+                  <div className="text-[13.5px] font-semibold text-ink-900 leading-[1.4]">
+                    {ci.index}. {ci.question}
+                  </div>
+                </div>
+                <div className="text-[12.5px] text-success-600 font-semibold mb-0.5 pl-7">✓ {ci.correctAnswer}</div>
+                {!ci.correct && <div className="text-[12.5px] text-danger-600 font-semibold mb-1.5 pl-7">✕ {ci.yourAnswer}</div>}
+                {ci.explanation && <div className="text-[12px] text-[#647084] pl-7 leading-[1.5]">{ci.explanation}</div>}
               </div>
             ))
           )}

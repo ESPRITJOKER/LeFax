@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { CoinsBadge } from "../../components/CoinsBadge";
-import { HeartsDisplay } from "../../components/HeartsDisplay";
-import { LetterCircle } from "../../components/LetterCircle";
-import { ProgressDots } from "../../components/ProgressDots";
 import { Spinner } from "../../components/ui";
-import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
@@ -25,7 +20,7 @@ interface AnswerState {
 }
 
 export default function Quiz() {
-  const { t, lang } = useI18n();
+  const { lang } = useI18n();
   const navigate = useNavigate();
   const { quizId } = useParams<{ quizId: string }>();
   const { profile } = useAuth();
@@ -40,10 +35,6 @@ export default function Quiz() {
   const [heartsRemaining, setHeartsRemaining] = useState(3);
   const [answerFailed, setAnswerFailed] = useState(false);
 
-  // Synchronous guards (refs, not state) against finishQuiz firing twice —
-  // once from the hearts-depleted auto-advance timeout and once from a
-  // manual tap landing in the same window. React state updates aren't
-  // synchronous enough to prevent that race on their own.
   const finishingRef = useRef(false);
   const heartsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -81,11 +72,16 @@ export default function Quiz() {
     })();
   }, [quizId, profile]);
 
-  if (loading) return <PhoneFrame><Spinner /></PhoneFrame>;
+  if (loading)
+    return (
+      <PhoneFrame>
+        <Spinner />
+      </PhoneFrame>
+    );
   if (!quiz || questions.length === 0)
     return (
       <PhoneFrame>
-        <div className="p-6 text-sm text-muted">{isSupabaseConfigured ? t("common_error") : t("backend_banner")}</div>
+        <div className="p-6 text-sm text-muted">{isSupabaseConfigured ? (lang === "fr" ? "Une erreur est survenue" : "Something went wrong") : "Backend not configured"}</div>
       </PhoneFrame>
     );
 
@@ -121,8 +117,6 @@ export default function Quiz() {
         }, 1200);
       }
     } catch (err) {
-      // Surface the real cause: supabase-js wraps a non-2xx function response
-      // in a FunctionsHttpError whose `.context` is the raw Response.
       const ctx = (err as { context?: Response })?.context;
       if (ctx && typeof ctx.json === "function") {
         ctx.json().then((b: unknown) => console.error("[quiz-submit answer] failed:", ctx.status, b)).catch(() => {});
@@ -173,75 +167,101 @@ export default function Quiz() {
     setSubmitting(false);
   }
 
-  const completedIndices = Object.keys(answers)
-    .filter((qid) => answers[qid]?.isCorrect !== null && answers[qid]?.isCorrect !== undefined)
-    .map((qid) => questions.findIndex((q) => q.id === qid));
+  const progressPct = Math.round(((index + (hasAnswered ? 1 : 0)) / questions.length) * 100);
+  const continueDisabled = (!selectedChoice && !hasAnswered) || submitting || !attemptReady;
 
   return (
     <PhoneFrame>
-      <div className="flex-1 flex flex-col h-full bg-white">
-        <div className="flex items-center justify-between bg-brand-800 px-4 py-3">
-          <button onClick={() => navigate(-1)} className="flex items-center justify-center w-8 h-8">
-            <Icon name="close" size={22} className="text-white" />
+      <div className="flex-1 min-h-0 flex flex-col bg-white">
+        <div className="bg-brand-800 px-5 py-4 flex items-center justify-between">
+          <button onClick={() => navigate(-1)} aria-label="Close">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="1.6" />
+              <path d="M9 9l6 6M15 9l-6 6" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
           </button>
-          <div className="flex items-center gap-3">
-            <CoinsBadge balance={profile?.faxcoins ?? 0} />
-            <HeartsDisplay total={3} remaining={heartsRemaining} />
+          <div className="flex items-center gap-1.5 rounded-pill px-3 py-[5px]" style={{ background: "#12203a" }}>
+            <span className="w-4 h-4 rounded-full bg-ochre-600 text-ink-900 text-[9px] font-serif font-extrabold flex items-center justify-center">f</span>
+            <span className="text-white font-bold text-[13px]">{profile?.faxcoins ?? 0}</span>
+          </div>
+          <div className="flex gap-1">
+            {[0, 1, 2].map((i) => (
+              <svg key={i} width="18" height="18" viewBox="0 0 24 24" fill={i < heartsRemaining ? "#ef4444" : "#3a4a63"}>
+                <path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.6 5 6 5c2 0 3.5 1.1 4 2.6C10.5 6.1 12 5 14 5c3.4 0 5.3 3.4 3.5 7-2.5 4.4-9.5 9-9.5 9z" />
+              </svg>
+            ))}
           </div>
         </div>
 
-        <div className="px-5 pt-4 pb-2">
-          <div className="text-[15px] font-bold text-text leading-[1.4] mb-4">
+        <div className="h-1 bg-ink-100">
+          <div className="h-full bg-success-600 transition-[width] duration-300" style={{ width: `${progressPct}%` }} />
+        </div>
+
+        <div className="flex-1 min-h-0 overflow-auto px-[22px] pt-7">
+          <p className="font-serif font-semibold text-[17px] text-ink-900 leading-[1.5] text-center mb-6">
             {lang === "fr" ? question.text_fr : question.text_en}
-          </div>
-          <div className="flex flex-col gap-2.5">
+          </p>
+
+          <div className="flex flex-col">
             {question.choices.map((c, ci) => {
               const letter = LETTERS[ci] ?? String(ci + 1);
               const isSelected = selectedChoice === c.id;
-              const isCorrectAnswer = hasAnswered && currentAnswer?.isCorrect && currentAnswer?.choiceId === c.id;
-              const isWrongAnswer = hasAnswered && currentAnswer?.isWrong && currentAnswer?.choiceId === c.id;
+              const showCorrect = hasAnswered && c.is_correct;
+              const showWrong = hasAnswered && !c.is_correct && isSelected;
 
-              let cardBorder = "border-[#E4E9F0] bg-white";
-              if (isCorrectAnswer) cardBorder = "border-success-600 bg-success-600/10";
-              else if (isWrongAnswer) cardBorder = "border-danger-600 bg-danger-600/10";
-              else if (isSelected) cardBorder = "border-ink-300 bg-ink-50";
-
-              let letterCorrect = false;
-              let letterWrong = false;
-              if (isCorrectAnswer) letterCorrect = true;
-              else if (isWrongAnswer) letterWrong = true;
+              let borderColor = "#eef1f5";
+              let bgColor = "#fff";
+              let circleColor = "#c3cbd6";
+              let circleBg = "#fff";
+              let circleText = "#94a3b8";
+              let tag = "";
+              let tagColor = "";
+              if (showCorrect) {
+                borderColor = "#22c55e";
+                bgColor = "#f0fdf4";
+                circleColor = "#22c55e";
+                circleBg = "#22c55e";
+                circleText = "#fff";
+                tag = lang === "fr" ? "Bonne réponse" : "Correct";
+                tagColor = "#22c55e";
+              } else if (showWrong) {
+                borderColor = "#ef4444";
+                bgColor = "#fef2f2";
+                circleColor = "#ef4444";
+                circleBg = "#ef4444";
+                circleText = "#fff";
+                tag = lang === "fr" ? "Mauvaise réponse" : "Wrong";
+                tagColor = "#ef4444";
+              } else if (isSelected && !hasAnswered) {
+                borderColor = "#29b6f6";
+                circleColor = "#29b6f6";
+              }
 
               return (
                 <div
                   key={c.id}
                   onClick={() => {
                     if (!hasAnswered && !submitting) {
-                      setAnswers((prev) => ({
-                        ...prev,
-                        [question.id]: { choiceId: c.id, isCorrect: null, isWrong: null },
-                      }));
+                      setAnswers((prev) => ({ ...prev, [question.id]: { choiceId: c.id, isCorrect: null, isWrong: null } }));
                     }
                   }}
-                  className={`relative cursor-pointer flex items-center gap-3 border-[1.5px] rounded-[12px] px-[14px] py-[13px] ${cardBorder}`}
+                  className="relative flex items-center gap-3.5 rounded-[12px] px-4 py-3.5 mb-3 cursor-pointer border-2"
+                  style={{ borderColor, background: bgColor }}
                 >
-                  <LetterCircle
-                    letter={letter}
-                    selected={isSelected && !hasAnswered}
-                    correct={letterCorrect}
-                    wrong={letterWrong}
-                  />
-                  <div className="text-[13px] font-semibold text-text">
-                    {lang === "fr" ? c.text_fr : c.text_en}
+                  <div
+                    className="w-[26px] h-[26px] rounded-full flex items-center justify-center text-[12px] font-bold flex-shrink-0 border-2"
+                    style={{ borderColor: circleColor, background: circleBg, color: circleText }}
+                  >
+                    {letter}
                   </div>
-                  {isCorrectAnswer && (
-                    <span className="absolute -top-2.5 right-3 text-[9.5px] font-extrabold px-2 py-0.5 rounded-md text-white bg-success-600">
-                      {lang === "fr" ? "Bonne réponse" : "Correct"}
-                    </span>
-                  )}
-                  {isWrongAnswer && (
-                    <span className="absolute -top-2.5 right-3 text-[9.5px] font-extrabold px-2 py-0.5 rounded-md text-white bg-danger-600">
-                      {lang === "fr" ? "Mauvaise réponse" : "Wrong answer"}
-                    </span>
+                  <div className="flex-1 text-[14.5px] text-ink-900 leading-[1.4]">{lang === "fr" ? c.text_fr : c.text_en}</div>
+                  {tag && (
+                    <div
+                      className="absolute -top-px -right-px text-white text-[10px] font-bold px-2 py-[3px]"
+                      style={{ background: tagColor, borderRadius: "0 10px 0 8px" }}
+                    >
+                      {tag}
+                    </div>
                   )}
                 </div>
               );
@@ -249,39 +269,37 @@ export default function Quiz() {
           </div>
         </div>
 
-        <div className="mt-auto px-5 pb-2 flex justify-center">
-          <ProgressDots total={questions.length} current={index} completed={completedIndices} />
-        </div>
-
-        <div className="sticky bottom-0 bg-white px-[22px] py-3">
-          {heartsRemaining <= 0 && !hasAnswered ? (
-            <div className="text-center text-danger-600 font-bold text-sm py-3.5">
-              Plus de vies
+        <div className="px-5 py-4">
+          <div className="flex gap-1.5 justify-center mb-3.5">
+            {questions.map((_, i) => (
+              <div
+                key={i}
+                className="w-[7px] h-[7px] rounded-full"
+                style={{ background: i < index ? "#22c55e" : i === index ? "#29b6f6" : "#e2e8f0" }}
+              />
+            ))}
+          </div>
+          {answerFailed && !hasAnswered && (
+            <div className="text-center text-danger-600 text-xs font-semibold mb-2">
+              {lang === "fr" ? "Une erreur est survenue — réessayez" : "Something went wrong — try again"}
             </div>
-          ) : (
-            <>
-              {answerFailed && !hasAnswered && (
-                <div className="text-center text-danger-600 text-xs font-semibold mb-2">
-                  {t("common_error")} — {lang === "fr" ? "réessayez" : "try again"}
-                </div>
-              )}
-              <button
-                disabled={(!selectedChoice && !hasAnswered) || submitting || !attemptReady}
-                onClick={handleContinue}
-                className="w-full py-3.5 rounded-[12px] bg-[#2F9BEE] text-white text-[14px] font-extrabold disabled:opacity-40"
-              >
-                {!attemptReady
-                  ? "..."
-                  : hasAnswered
-                    ? isLast || heartsRemaining <= 0
-                      ? t("quiz_finish")
-                      : t("next")
-                    : submitting
-                      ? "..."
-                      : "Continuer"}
-              </button>
-            </>
           )}
+          <button
+            onClick={handleContinue}
+            disabled={continueDisabled}
+            className="w-full rounded-[10px] py-[15px] font-serif font-bold text-[14.5px] text-white"
+            style={{ background: continueDisabled ? "#cfe8fb" : "#29b6f6" }}
+          >
+            {!attemptReady
+              ? "..."
+              : hasAnswered
+                ? isLast || heartsRemaining <= 0
+                  ? lang === "fr" ? "Terminer" : "Finish"
+                  : lang === "fr" ? "Continuer" : "Continue"
+                : submitting
+                  ? "..."
+                  : lang === "fr" ? "Continuer" : "Continue"}
+          </button>
         </div>
       </div>
     </PhoneFrame>

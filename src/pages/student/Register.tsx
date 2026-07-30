@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
-import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { REGIONS, TOWNS } from "../../lib/regions";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
-import { Button, Select } from "../../components/ui";
 
 // Flip to true once a real SMS provider is configured (CDC section 8/13) —
 // see supabase/functions/auth-otp for the bypass this currently uses instead.
 const AUTH_OTP_ENABLED = import.meta.env.VITE_AUTH_OTP_ENABLED === "true";
+
+const inputClass =
+  "w-full box-border border border-[#e2e8f0] rounded-[8px] px-3.5 py-[13px] text-[14px] outline-none focus:border-brand-500 mb-3";
 
 export default function Register() {
   const { t, lang } = useI18n();
@@ -47,11 +48,6 @@ export default function Register() {
     setSubmitting(true);
 
     if (!AUTH_OTP_ENABLED) {
-      // No SMS provider is configured yet (CDC section 8/13 — paid, not
-      // provisioned). supabase.auth.signUp always tries to send a real SMS
-      // for phone sign-ups, which fails outright without one. Bypass it via
-      // the auth-otp Edge Function (creates the user pre-confirmed through
-      // the Admin API, no SMS involved), then sign in normally.
       const { data: fnData, error: fnError } = await supabase.functions.invoke("auth-otp", {
         body: { phone, action: "signup", password, firstName, lastName, region, town },
       });
@@ -73,9 +69,7 @@ export default function Register() {
     const { error: signUpError } = await supabase.auth.signUp({
       phone,
       password,
-      options: {
-        data: { first_name: firstName, last_name: lastName, region, town },
-      },
+      options: { data: { first_name: firstName, last_name: lastName, region, town } },
     });
     setSubmitting(false);
     if (signUpError) {
@@ -107,124 +101,99 @@ export default function Register() {
   }
 
   return (
-    <PhoneFrame nav={false}>
-      {step === "form" && (
-        <div className="flex-1 flex flex-col px-[22px] pb-6 overflow-y-auto">
-          <div className="flex items-center gap-2.5 my-2 mb-5">
-            <Icon name="cap" size={22} className="text-ink-700" />
-            <div className="font-serif font-semibold text-[19px] text-text">{t("appName")}</div>
-          </div>
-          <div className="font-serif font-bold text-2xl text-text mb-1">{t("reg_title")}</div>
-          <div className="text-[13.5px] text-muted mb-6">{t("reg_sub")}</div>
+    <PhoneFrame>
+      <div className="bg-white flex-1 min-h-0 flex flex-col pb-[30px]">
+        <div className="flex items-center justify-between px-5 py-[18px]">
+          <span className="font-serif font-extrabold text-[20px] text-ink-900">LeFax</span>
+        </div>
 
-          <div className="flex flex-col gap-4">
-            <Field label={t("reg_firstname")}>
-              <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Jean Paul" className={inputClass} />
-            </Field>
-            <Field label={t("reg_lastname")}>
-              <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Abessolo" className={inputClass} />
-            </Field>
-            <Field label={t("reg_phone")}>
+        {step === "form" && (
+          <div className="flex-1 min-h-0 overflow-y-auto px-[26px] text-center">
+            <div className="w-[110px] h-[110px] mx-auto mb-2.5 rounded-[14px] bg-brand-50 flex items-center justify-center text-[48px]">
+              🎓
+            </div>
+            <h2 className="font-serif font-bold text-[19px] text-ink-900 mb-5">
+              {lang === "fr" ? "Commence ta préparation" : "Start your prep"}
+            </h2>
+
+            <div className="text-left">
+              <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("reg_firstname")} className={inputClass} />
+              <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("reg_lastname")} className={inputClass} />
               <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+237 6XX XXX XXX" className={inputClass} />
-            </Field>
-            <Field label={t("reg_region")}>
-              <Select
+              <select
                 value={region}
                 onChange={(e) => {
                   setRegion(e.target.value);
                   setTown("");
                 }}
-                className={inputClass}
-                wrapperClassName="w-full"
+                className={`${inputClass} appearance-none bg-white`}
               >
-                <option value="">{t("reg_selectPlaceholder")}</option>
+                <option value="">{t("reg_region")}</option>
                 {REGIONS.map((r) => (
                   <option key={r.id} value={r.id}>
                     {lang === "fr" ? r.fr : r.en}
                   </option>
                 ))}
-              </Select>
-            </Field>
-            <Field label={t("reg_town")}>
-              <input
-                value={town}
-                onChange={(e) => setTown(e.target.value)}
-                list="townList"
-                placeholder={t("reg_selectPlaceholder")}
-                className={inputClass}
-              />
+              </select>
+              <input value={town} onChange={(e) => setTown(e.target.value)} list="townList" placeholder={t("reg_town")} className={inputClass} />
               <datalist id="townList">
                 {townOptions.map((tw) => (
                   <option key={tw} value={tw} />
                 ))}
               </datalist>
-            </Field>
-            <Field label={t("reg_password")}>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className={inputClass} />
-            </Field>
-            <Field label={t("reg_confirmPassword")}>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t("reg_password")} className={inputClass} />
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t("reg_confirmPassword")}
                 className={inputClass}
               />
-            </Field>
-            <label className="flex items-start gap-2 text-[12.5px] text-text">
-              <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="mt-0.5" />
-              <span>{t("reg_terms")}</span>
-            </label>
-          </div>
+              <label className="flex items-start gap-2 text-[12.5px] text-ink-900 mb-3.5">
+                <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="mt-0.5" />
+                <span>{t("reg_terms")}</span>
+              </label>
+            </div>
 
-          {error && <div className="mt-3 text-xs font-semibold text-danger-700">{error}</div>}
+            {error && <div className="mb-3 text-xs font-semibold text-danger-600">{error}</div>}
 
-          <Button onClick={submitRegister} disabled={submitting} className="mt-6 w-full">
-            {t("reg_cta")}
-          </Button>
-          <div className="text-center mt-4 text-[13px] text-muted">
-            {t("reg_haveaccount")}{" "}
-            <a href="#" onClick={(e) => (e.preventDefault(), navigate("/login"))} className="font-semibold">
-              {t("reg_login")}
-            </a>
+            <button
+              onClick={submitRegister}
+              disabled={submitting}
+              className="w-full bg-brand-500 text-white rounded-[8px] py-[15px] font-bold text-[14px] tracking-[0.5px] disabled:opacity-50"
+            >
+              {submitting ? "..." : lang === "fr" ? "INSCRIPTION" : "SIGN UP"}
+            </button>
+            <div className="mt-4 text-[13px] text-[#647084]">
+              {t("reg_haveaccount")}{" "}
+              <a onClick={() => navigate("/login")} className="cursor-pointer font-semibold">
+                {t("reg_login")}
+              </a>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {step === "otp" && (
-        <div className="flex-1 flex flex-col px-[22px] pb-6">
-          <div className="font-serif font-bold text-2xl text-text mb-1 mt-6">{t("reg_otp_title")}</div>
-          <div className="text-[13.5px] text-muted mb-6">
-            {t("reg_otp_sub")} {phone}
+        {step === "otp" && (
+          <div className="px-[26px]">
+            <div className="font-serif font-bold text-[22px] text-ink-900 mb-1 mt-6">{t("reg_otp_title")}</div>
+            <div className="text-[13.5px] text-muted mb-6">
+              {t("reg_otp_sub")} {phone}
+            </div>
+            <input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="123456" inputMode="numeric" className={inputClass} />
+            {error && <div className="mb-3 text-xs font-semibold text-danger-600">{error}</div>}
+            <button
+              onClick={verifyOtp}
+              disabled={submitting}
+              className="w-full bg-brand-500 text-white rounded-[8px] py-[15px] font-bold text-[14px] tracking-[0.5px] disabled:opacity-50"
+            >
+              {t("reg_otp_cta")}
+            </button>
+            <button onClick={resendOtp} className="mt-4 text-[13px] text-brand-600 font-semibold">
+              {t("reg_otp_resend")}
+            </button>
           </div>
-          <input
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            placeholder="123456"
-            inputMode="numeric"
-            className={inputClass}
-          />
-          {error && <div className="mt-3 text-xs font-semibold text-danger-700">{error}</div>}
-          <Button onClick={verifyOtp} disabled={submitting} className="mt-6 w-full">
-            {t("reg_otp_cta")}
-          </Button>
-          <button onClick={resendOtp} className="mt-4 text-[13px] text-ink-700 font-semibold">
-            {t("reg_otp_resend")}
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </PhoneFrame>
-  );
-}
-
-const inputClass =
-  "px-3.5 py-3 rounded-xl border-[1.5px] border-border text-[14.5px] outline-none text-text bg-card w-full";
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-[12.5px] font-semibold text-text">{label}</span>
-      {children}
-    </label>
   );
 }
