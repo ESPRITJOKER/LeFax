@@ -5,6 +5,7 @@ import { Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { parseImagePlaceholders } from "../../lib/lessonContent";
+import { LessonCardsPanel } from "./LessonCardsPanel";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow } from "../../lib/database.types";
 
@@ -268,6 +269,10 @@ export default function AdminLessonEditor() {
           })}
         </div>
       )}
+
+      {/* Story cards (new lesson viewer) */}
+      <div className="h-px bg-border my-6" />
+      <LessonCardsPanel lessonId={lessonId!} />
     </div>
   );
 }

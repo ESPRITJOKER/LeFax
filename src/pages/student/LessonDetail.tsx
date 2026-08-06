@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { TopBar } from "../../components/TopBar";
 import { Spinner } from "../../components/ui";
+import { LessonCardDeck } from "../../components/LessonCardDeck";
 import { useI18n } from "../../lib/i18n";
 import { LessonContent } from "../../lib/lessonContent";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
-import type { LessonRow, QuizRow } from "../../lib/database.types";
+import type { LessonRow, LessonCardRow, QuizRow, ChapterRow } from "../../lib/database.types";
 
 export default function LessonDetail() {
   const { t, lang } = useI18n();
@@ -16,6 +17,8 @@ export default function LessonDetail() {
   const { profile } = useAuth();
 
   const [lesson, setLesson] = useState<LessonRow | null>(null);
+  const [cards, setCards] = useState<LessonCardRow[]>([]);
+  const [chapter, setChapter] = useState<ChapterRow | null>(null);
   const [siblings, setSiblings] = useState<LessonRow[]>([]);
   const [quiz, setQuiz] = useState<QuizRow | null>(null);
   const [images, setImages] = useState<Record<number, string>>({});
@@ -32,6 +35,17 @@ export default function LessonDetail() {
       setLesson(lessonRow ?? null);
 
       if (lessonRow) {
+        // Story cards (new model). Empty → fall back to the document viewer.
+        const { data: cardRows } = await supabase
+          .from("lesson_cards")
+          .select("*")
+          .eq("lesson_id", lessonRow.id)
+          .order("position");
+        setCards(cardRows ?? []);
+
+        const { data: chapterRow } = await supabase.from("chapters").select("*").eq("id", lessonRow.chapter_id).maybeSingle();
+        setChapter(chapterRow ?? null);
+
         const { data: siblingRows } = await supabase
           .from("lessons")
           .select("*")
@@ -90,13 +104,31 @@ export default function LessonDetail() {
 
   const idx = siblings.findIndex((l) => l.id === lesson.id);
   const isLast = idx >= siblings.length - 1;
+  const title = lang === "fr" ? lesson.title_fr : lesson.title_en;
 
+  // Reaching the end of the deck (or the document viewer's button) routes into
+  // that topic's practice session, else the next lesson, else back to chapter.
   function goNext() {
     if (quiz) navigate(`/quiz/${quiz.id}`);
     else if (!isLast) navigate(`/lesson/${siblings[idx + 1].id}`);
     else navigate(`/lessons/${lesson!.chapter_id}`);
   }
 
+  // ── New story-card viewer ────────────────────────────────────────────────
+  if (cards.length > 0) {
+    return (
+      <PhoneFrame>
+        <LessonCardDeck
+          cards={cards}
+          lessonTitle={title}
+          chapterName={chapter ? (lang === "fr" ? chapter.name_fr : chapter.name_en) : null}
+          onFinish={goNext}
+        />
+      </PhoneFrame>
+    );
+  }
+
+  // ── Fallback: legacy document viewer for lessons without cards ────────────
   const objectives = lang === "fr" ? lesson.objectives_fr : lesson.objectives_en;
   const keyPoints = lang === "fr" ? lesson.key_points_fr : lesson.key_points_en;
 
@@ -106,7 +138,7 @@ export default function LessonDetail() {
         <TopBar variant="title" title={lang === "fr" ? "Leçon" : "Lesson"} onBack={() => navigate(-1)} />
 
         <div className="flex-1 min-h-0 overflow-auto px-[22px] pt-5 pb-[100px]">
-          <h2 className="font-serif font-bold text-[20px] text-ink-900 mb-3.5">{lang === "fr" ? lesson.title_fr : lesson.title_en}</h2>
+          <h2 className="font-serif font-bold text-[20px] text-ink-900 mb-3.5">{title}</h2>
 
           <div className="flex items-center gap-2.5 mb-4 text-[11.5px] text-muted font-semibold">
             <span>

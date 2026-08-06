@@ -81,6 +81,40 @@ export type LessonRow = {
   updated_at: string;
 }
 
+export type LessonCardRow = {
+  id: string;
+  lesson_id: string;
+  position: number;
+  point_fr: string;
+  point_en: string;
+  sub_fr: string;
+  sub_en: string;
+  image_fr: string | null;
+  image_en: string | null;
+  explanation_fr: string;
+  explanation_en: string;
+  structural_question_fr: string;
+  structural_question_en: string;
+  structural_answer_fr: string;
+  structural_answer_en: string;
+  tips_fr: string;
+  tips_en: string;
+  traps_fr: string;
+  traps_en: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type QuestionExposureRow = {
+  id: string;
+  user_id: string;
+  item_kind: "mcq" | "structural";
+  item_id: string;
+  topic_id: string;
+  last_seen_at: string;
+  seen_count: number;
+}
+
 export type LessonProgressRow = {
   id: string;
   user_id: string;
@@ -100,6 +134,7 @@ export type QuizRow = {
   title_en: string;
   difficulty: DifficultyLevel;
   passing_score: number;
+  session_size: number | null;
   created_at: string;
 }
 
@@ -318,7 +353,9 @@ export interface Database {
       subjects: TableDef<SubjectRow>;
       chapters: TableDef<ChapterRow>;
       lessons: TableDef<LessonRow>;
+      lesson_cards: TableDef<LessonCardRow>;
       lesson_progress: TableDef<LessonProgressRow>;
+      question_exposure: TableDef<QuestionExposureRow>;
       quizzes: TableDef<QuizRow>;
       questions: TableDef<QuestionRow>;
       choices: TableDef<ChoiceRow>;

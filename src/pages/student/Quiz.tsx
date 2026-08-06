@@ -5,6 +5,7 @@ import { Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
+import { selectWithNoRepeat } from "../../lib/practiceBank";
 import type { QuizRow, QuestionRow, ChoiceRow } from "../../lib/database.types";
 
 const LETTERS = ["A", "B", "C", "D", "E"];
@@ -52,12 +53,27 @@ export default function Quiz() {
       setLoading(true);
       const { data: quizRow } = await supabase.from("quizzes").select("*").eq("id", quizId).maybeSingle();
       setQuiz(quizRow ?? null);
-      const { data: questionRows } = await supabase.from("questions").select("*").eq("quiz_id", quizId).order("position");
-      const questionIds = (questionRows ?? []).map((q) => q.id);
+
+      // The quiz's full question set is the BANK (CDC Step 6). Draw a shuffled
+      // subset biased away from what this student has recently seen, so a
+      // restart doesn't replay the same questions. Falls back to
+      // least-recently-seen when the bank is too small to avoid repeats.
+      const { data: poolRows } = await supabase.from("questions").select("*").eq("quiz_id", quizId).order("position");
+      const pool = poolRows ?? [];
+      const topicId = quizRow?.lesson_id ?? quizId!; // scope exposure per lesson (mock exams: per quiz)
+      const selected = await selectWithNoRepeat({
+        kind: "mcq",
+        topicId,
+        userId: profile?.id ?? null,
+        pool,
+        sessionSize: quizRow?.session_size ?? null,
+      });
+
+      const questionIds = selected.map((q) => q.id);
       const { data: choiceRows } = questionIds.length
         ? await supabase.from("choices").select("*").in("question_id", questionIds).order("position")
         : { data: [] };
-      const withChoices = (questionRows ?? []).map((q) => ({ ...q, choices: (choiceRows ?? []).filter((c) => c.question_id === q.id) }));
+      const withChoices = selected.map((q) => ({ ...q, choices: (choiceRows ?? []).filter((c) => c.question_id === q.id) }));
       setQuestions(withChoices);
 
       if (profile) {

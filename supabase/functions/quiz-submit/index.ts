@@ -119,7 +119,11 @@ Deno.serve(async (req: Request) => {
       if (isCorrect) correctCount += 1;
       return { question_id: a.question_id, choice_id: a.choice_id, is_correct: isCorrect };
     });
-    const total = questionIds.length || answers.length || 1;
+    // Score over the questions actually SERVED this session, not the whole
+    // quiz bank: with no-repeat shuffling (CDC Step 6) a practice session is a
+    // subset of the quiz's questions, so dividing by the full bank would
+    // understate the score. `answers` is exactly the served session set.
+    const total = answers.length || questionIds.length || 1;
     const score = Math.round((correctCount / total) * 100);
 
     // --- Attempt bookkeeping -------------------------------------------
