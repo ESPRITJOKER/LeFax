@@ -1,0 +1,807 @@
+{
+  "schema_version": 1,
+  "subject_slug": "biologie",
+  "chapter_slug": "cytologie-i",
+  "chapter_name_fr": "Cytologie I — La cellule",
+  "chapter_name_en": "Cytology I — The Cell",
+  "chapter_position": 2,
+  "chapter_new": false,
+  "lessons": [
+    {
+      "slug": "introduction-organisation",
+      "position": 1,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La cytologie étudie la cellule",
+          "point_en": "Cytology studies the cell",
+          "sub_fr": "La cellule est l'unité structurale et fonctionnelle de base du vivant.",
+          "sub_en": "The cell is the basic structural and functional unit of life.",
+          "image_fr": "cellule.PNG",
+          "image_en": "cellule.PNG",
+          "explanation_fr": "La cytologie est la branche de la biologie qui étudie la cellule. La cellule est l'unité structurale et fonctionnelle de base de tous les êtres vivants : c'est la plus petite entité capable d'accomplir les fonctions de la vie (métabolisme, multiplication, échanges). Robert Hooke l'a observée pour la première fois en 1665 sur des coupes de liège.",
+          "explanation_en": "Cytology is the branch of biology that studies the cell. The cell is the basic structural and functional unit of every living being: it is the smallest entity able to carry out the functions of life (metabolism, reproduction, exchanges). Robert Hooke first observed it in 1665 on slices of cork.",
+          "structural_question_fr": "Quelle est l'unité de base du vivant ?",
+          "structural_answer_fr": "La cellule",
+          "structural_question_en": "What is the basic unit of life?",
+          "structural_answer_en": "The cell",
+          "tips_fr": "La cellule est la première unité capable de vivre de façon autonome.",
+          "tips_en": "The cell is the first unit able to live on its own.",
+          "traps_fr": "Un organite ou une molécule n'est pas vivant par lui-même.",
+          "traps_en": "An organelle or a molecule is not alive on its own."
+        },
+        {
+          "position": 2,
+          "point_fr": "Procaryotes : pas de noyau",
+          "point_en": "Prokaryotes: no nucleus",
+          "sub_fr": "Eucaryotes à vrai noyau, procaryotes sans enveloppe nucléaire.",
+          "sub_en": "Eukaryotes with a true nucleus, prokaryotes without a nuclear envelope.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Les procaryotes (bactéries) n'ont pas de noyau individualisé : leur matériel génétique baigne librement dans le cytosol et ils sont dépourvus d'organites délimités par une membrane. Les eucaryotes possèdent un vrai noyau délimité par une enveloppe nucléaire et des organites compartimentés. Toutes les cellules, même procaryotes, possèdent des ribosomes.",
+          "explanation_en": "Prokaryotes (bacteria) have no defined nucleus: their genetic material floats freely in the cytosol and they lack membrane-bound organelles. Eukaryotes have a true nucleus enclosed by a nuclear envelope and compartmentalised organelles. All cells, even prokaryotes, have ribosomes.",
+          "structural_question_fr": "Caractéristique principale d'une cellule procaryote ?",
+          "structural_answer_fr": "Absence de noyau",
+          "structural_question_en": "Main feature of a prokaryotic cell?",
+          "structural_answer_en": "No nucleus",
+          "tips_fr": "Pro-karyon = « avant le noyau » : la racine suffit pour répondre.",
+          "tips_en": "Pro-karyon = « before the nucleus »: the root alone answers.",
+          "traps_fr": "Procaryotes et eucaryotes possèdent tous des ribosomes.",
+          "traps_en": "Prokaryotes and eukaryotes both have ribosomes."
+        },
+        {
+          "position": 3,
+          "point_fr": "Cellule = membrane + protoplasme",
+          "point_en": "Cell = membrane + protoplasm",
+          "sub_fr": "Le protoplasme contient le noyau et le cytoplasme.",
+          "sub_en": "The protoplasm holds the nucleus and the cytoplasm.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "La cellule eucaryote est délimitée par la membrane plasmique (plasmalemme). Tout le contenu interne forme le protoplasme, divisé en noyau et cytoplasme. Le cytoplasme comprend le cytosol liquide et les organites. Hyaloplasme + morphoplasme ne représentent que le cytoplasme, pas toute la cellule.",
+          "explanation_en": "The eukaryotic cell is bounded by the plasma membrane (plasmalemma). All the inner content forms the protoplasm, divided into the nucleus and the cytoplasm. The cytoplasm includes the liquid cytosol and the organelles. Hyaloplasm + morphoplasm is only the cytoplasm, not the whole cell.",
+          "structural_question_fr": "De quoi est formée une cellule ?",
+          "structural_answer_fr": "Membrane + protoplasme",
+          "structural_question_en": "What is a cell made of?",
+          "structural_answer_en": "Membrane + protoplasm",
+          "tips_fr": "Distinguer protoplasme (noyau + cytoplasme) du cytoplasme seul.",
+          "tips_en": "Tell protoplasm (nucleus + cytoplasm) apart from cytoplasm alone.",
+          "traps_fr": "Hyaloplasme + membrane ne suffisent pas : il manque le noyau.",
+          "traps_en": "Hyaloplasm + membrane is not enough: the nucleus is missing."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — Introduction et organisation cellulaire",
+        "title_en": "Quiz — Introduction and Cell Organization",
+        "difficulty": "easy",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quelle est la principale caractéristique d'un organisme procaryote ?",
+            "text_en": "What is the main defining feature of a prokaryotic organism?",
+            "explanation_fr": "Les procaryotes (comme les bactéries) ont leur matériel génétique libre dans le cytoplasme, sans enveloppe nucléaire individualisée.",
+            "explanation_en": "Prokaryotes (such as bacteria) have their genetic material free in the cytoplasm, with no defined nuclear envelope.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "Ils n'ont pas de membrane plasmique", "text_en": "They have no plasma membrane", "is_correct": false},
+              {"text_fr": "Ils sont dépourvus d'enveloppe nucléaire individualisée", "text_en": "They lack a defined nuclear envelope", "is_correct": true},
+              {"text_fr": "Leur matériel génétique est de l'ARN", "text_en": "Their genetic material is RNA", "is_correct": false},
+              {"text_fr": "Ils sont toujours pluricellulaires", "text_en": "They are always multicellular", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle est la caractéristique des organismes eucaryotes ?",
+            "text_en": "What is the defining feature of eukaryotic organisms?",
+            "explanation_fr": "Les eucaryotes possèdent un vrai noyau (eu-karyon) délimité par une enveloppe nucléaire, ainsi que des organites compartimentés.",
+            "explanation_en": "Eukaryotes have a true nucleus (eu-karyon) enclosed by a nuclear envelope, as well as compartmentalised organelles.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "Posséder un vrai noyau délimité", "text_en": "Having a true, well-defined nucleus", "is_correct": true},
+              {"text_fr": "Être toujours unicellulaires", "text_en": "Being always single-celled", "is_correct": false},
+              {"text_fr": "Être dépourvus d'organites", "text_en": "Lacking organelles", "is_correct": false},
+              {"text_fr": "Ne pas avoir de membrane plasmique", "text_en": "Having no plasma membrane", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "La cellule est formée de :",
+            "text_en": "A cell is made of:",
+            "explanation_fr": "La cellule est délimitée par la membrane plasmique ; tout le contenu interne (noyau + cytoplasme) forme le protoplasme.",
+            "explanation_en": "The cell is bounded by the plasma membrane; all the inner content (nucleus + cytoplasm) forms the protoplasm.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Uniquement de protoplasme", "text_en": "Protoplasm only", "is_correct": false},
+              {"text_fr": "Protoplasme + membrane plasmique", "text_en": "Protoplasm + plasma membrane", "is_correct": true},
+              {"text_fr": "Hyaloplasme + membrane plasmique", "text_en": "Hyaloplasm + plasma membrane", "is_correct": false},
+              {"text_fr": "Morphoplasme + membrane plasmique", "text_en": "Morphoplasm + plasma membrane", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle affirmation concernant les cellules procaryotes est exacte ?",
+            "text_en": "Which statement about prokaryotic cells is correct?",
+            "explanation_fr": "Les procaryotes ne possèdent aucun organite délimité par une membrane ; ils n'ont ni noyau, ni centriole, mais ils ont des ribosomes.",
+            "explanation_en": "Prokaryotes have no membrane-bound organelles; they have no nucleus, no centriole, but they do have ribosomes.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Ils possèdent un noyau et une paroi cellulaire", "text_en": "They have a nucleus and a cell wall", "is_correct": false},
+              {"text_fr": "Ils n'ont pas d'organites délimités par des membranes", "text_en": "They have no membrane-bound organelles", "is_correct": true},
+              {"text_fr": "Ils possèdent un centriole", "text_en": "They have a centriole", "is_correct": false},
+              {"text_fr": "Ils sont dépourvus de ribosomes", "text_en": "They lack ribosomes", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "membrane-plasmique",
+      "position": 2,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La mosaïque fluide",
+          "point_en": "The fluid mosaic",
+          "sub_fr": "Une bicouche lipidique dans laquelle nagent des protéines.",
+          "sub_en": "A lipid bilayer in which proteins float.",
+          "image_fr": "Membrane.jpg",
+          "image_en": "Membrane.jpg",
+          "explanation_fr": "La membrane plasmique suit le modèle de la mosaïque fluide de Singer et Nicolson : une bicouche de phospholipides dans laquelle sont insérées des protéines intrinsèques (transmembranaires) et extrinsèques (périphériques). La membrane est fluide, asymétrique et dotée d'une perméabilité sélective.",
+          "explanation_en": "The plasma membrane follows the Singer-Nicolson fluid mosaic model: a phospholipid bilayer with intrinsic (transmembrane) and extrinsic (peripheral) proteins embedded in it. The membrane is fluid, asymmetric and selectively permeable.",
+          "structural_question_fr": "Quel modèle décrit la membrane plasmique ?",
+          "structural_answer_fr": "Mosaïque fluide",
+          "structural_question_en": "Which model describes the plasma membrane?",
+          "structural_answer_en": "Fluid mosaic",
+          "tips_fr": "Imaginer une mer de lipides où flottent des icebergs de protéines.",
+          "tips_en": "Picture a sea of lipids with protein icebergs floating in it.",
+          "traps_fr": "Le modèle en sandwich (protéines entre deux couches de lipides) est faux.",
+          "traps_en": "The sandwich model (proteins between two lipid layers) is wrong."
+        },
+        {
+          "position": 2,
+          "point_fr": "Composition : protéines majoritaires en masse",
+          "point_en": "Composition: proteins dominate by mass",
+          "sub_fr": "Protéines ~55 %, lipides 25-40 %, glucides 3-10 %.",
+          "sub_en": "Proteins ~55%, lipids 25-40%, carbohydrates 3-10%.",
+          "image_fr": "Membrane.jpg",
+          "image_en": "Membrane.jpg",
+          "explanation_fr": "En masse, la membrane contient environ 55 % de protéines, 25 à 40 % de lipides et seulement 3 à 10 % de glucides. Les glucides ne se trouvent que sur la face extracellulaire, où ils forment le glycocalyx, essentiel à la reconnaissance cellulaire. Les récepteurs membranaires sont de nature protéique.",
+          "explanation_en": "By mass, the membrane contains about 55% proteins, 25-40% lipids and only 3-10% carbohydrates. Carbohydrates sit only on the extracellular face, where they form the glycocalyx, essential for cell recognition. Membrane receptors are protein in nature.",
+          "structural_question_fr": "Composant majoritaire en masse de la membrane ?",
+          "structural_answer_fr": "Les protéines",
+          "structural_question_en": "Which component dominates the membrane by mass?",
+          "structural_answer_en": "Proteins",
+          "tips_fr": "Les glucides sont exclusivement sur la face externe : le glycocalyx.",
+          "tips_en": "Carbohydrates are found only on the outer face: the glycocalyx.",
+          "traps_fr": "On croit les lipides majoritaires ; en masse ce sont les protéines.",
+          "traps_en": "People think lipids dominate; by mass it is proteins."
+        },
+        {
+          "position": 3,
+          "point_fr": "Phospholipides amphiphiles et cholestérol",
+          "point_en": "Amphiphilic phospholipids and cholesterol",
+          "sub_fr": "Tête hydrophile, queues hydrophobes ; cholestérol = tampon de fluidité.",
+          "sub_en": "Hydrophilic head, hydrophobic tails; cholesterol = fluidity buffer.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Chaque phospholipide est amphiphile : une tête hydrophile tournée vers les milieux aqueux et deux queues hydrophobes vers l'intérieur de la bicouche. Cette double affinité permet l'auto-assemblage de la membrane. Le cholestérol s'intercale entre les phospholipides et régule la fluidité : il stabilise la membrane à chaud et l'empêche de se figer à froid.",
+          "explanation_en": "Each phospholipid is amphiphilic: a hydrophilic head facing the watery media and two hydrophobic tails facing the bilayer's interior. This double affinity allows the membrane to self-assemble. Cholesterol slots between the phospholipids and regulates fluidity: it stabilises the membrane when hot and stops it freezing when cold.",
+          "structural_question_fr": "Pourquoi un phospholipide est-il amphiphile ?",
+          "structural_answer_fr": "Tête hydrophile, queues hydrophobes",
+          "structural_question_en": "Why is a phospholipid amphiphilic?",
+          "structural_answer_en": "Hydrophilic head, hydrophobic tails",
+          "tips_fr": "Amphiphile = les deux affinités, eau et graisse, en une seule molécule.",
+          "tips_en": "Amphiphilic = both affinities, water and fat, in one molecule.",
+          "traps_fr": "Le cholestérol ne transporte rien : il module la fluidité membranaire.",
+          "traps_en": "Cholesterol does not transport anything: it modulates membrane fluidity."
+        }
+      ],
+      "quiz": {
+        "session_size": 5,
+        "title_fr": "Quiz — La membrane plasmique",
+        "title_en": "Quiz — The Plasma Membrane",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quel composant est majoritaire en masse dans la membrane plasmique ?",
+            "text_en": "Which component is the majority by mass in the plasma membrane?",
+            "explanation_fr": "La membrane contient en moyenne environ 55 % de protéines, 25-40 % de lipides et seulement 3-10 % de glucides.",
+            "explanation_en": "The membrane contains on average about 55% proteins, 25-40% lipids and only 3-10% carbohydrates.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Les glucides", "text_en": "Carbohydrates", "is_correct": false},
+              {"text_fr": "Les lipides", "text_en": "Lipids", "is_correct": false},
+              {"text_fr": "Les protéines", "text_en": "Proteins", "is_correct": true},
+              {"text_fr": "L'eau", "text_en": "Water", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Sur quelle face de la membrane trouve-t-on exclusivement les glucides ?",
+            "text_en": "On which face of the membrane are carbohydrates found exclusively?",
+            "explanation_fr": "Les glucides sont liés aux lipides ou aux protéines sur la face extracellulaire, formant le glycocalyx essentiel à la reconnaissance cellulaire.",
+            "explanation_en": "Carbohydrates are bound to lipids or proteins on the extracellular face, forming the glycocalyx essential for cell recognition.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Uniquement la face extracellulaire", "text_en": "The extracellular face only", "is_correct": true},
+              {"text_fr": "Uniquement la face cytosolique", "text_en": "The cytosolic face only", "is_correct": false},
+              {"text_fr": "Les deux faces de façon symétrique", "text_en": "Both faces symmetrically", "is_correct": false},
+              {"text_fr": "À l'intérieur de la bicouche", "text_en": "Inside the bilayer", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Pourquoi un phospholipide membranaire est-il dit « amphiphile » ?",
+            "text_en": "Why is a membrane phospholipid called « amphiphilic »?",
+            "explanation_fr": "Il possède une tête hydrophile et deux queues hydrophobes, ce qui permet l'auto-assemblage en bicouche.",
+            "explanation_en": "It has a hydrophilic head and two hydrophobic tails, which lets it self-assemble into a bilayer.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "Il est soluble dans l'eau chaude et froide", "text_en": "It dissolves in hot and cold water", "is_correct": false},
+              {"text_fr": "Il possède deux têtes chargées", "text_en": "It has two charged heads", "is_correct": false},
+              {"text_fr": "Il a une tête hydrophile et deux queues hydrophobes", "text_en": "It has a hydrophilic head and two hydrophobic tails", "is_correct": true},
+              {"text_fr": "Il change de charge selon le pH", "text_en": "It changes charge with pH", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle proposition décrit la microstructure de la membrane plasmique ?",
+            "text_en": "Which statement describes the microstructure of the plasma membrane?",
+            "explanation_fr": "Selon le modèle de la mosaïque fluide, des protéines sont insérées de façon asymétrique dans une bicouche de phospholipides.",
+            "explanation_en": "According to the fluid mosaic model, proteins are inserted asymmetrically within a phospholipid bilayer.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Une couche de protéines enrobant une couche de phospholipides", "text_en": "A protein layer coating a phospholipid layer", "is_correct": false},
+              {"text_fr": "Des protéines incorporées dans une bicouche de phospholipides", "text_en": "Proteins embedded in a phospholipid bilayer", "is_correct": true},
+              {"text_fr": "Des phospholipides pris en sandwich entre deux couches de protéines", "text_en": "Phospholipids sandwiched between two protein layers", "is_correct": false},
+              {"text_fr": "Uniquement des lipides, sans protéines", "text_en": "Only lipids, no proteins", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Une bicouche lipidique pure est perméable à :",
+            "text_en": "A pure lipid bilayer is permeable to:",
+            "explanation_fr": "La partie centrale hydrophobe laisse passer les molécules hydrophobes ou liposolubles (comme O2 et CO2), mais bloque les ions et les grosses molécules polaires.",
+            "explanation_en": "The hydrophobic core lets hydrophobic or lipid-soluble molecules through (like O2 and CO2), but blocks ions and large polar molecules.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Les ions sodium (Na+)", "text_en": "Sodium ions (Na+)", "is_correct": false},
+              {"text_fr": "Les molécules liposolubles (ex. O2, CO2)", "text_en": "Lipid-soluble molecules (e.g. O2, CO2)", "is_correct": true},
+              {"text_fr": "Le glucose", "text_en": "Glucose", "is_correct": false},
+              {"text_fr": "Les acides aminés", "text_en": "Amino acids", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "transports-membranaires",
+      "position": 3,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Transport passif : dans le sens du gradient",
+          "point_en": "Passive transport: down the gradient",
+          "sub_fr": "Diffusion simple, diffusion facilitée et osmose sans ATP.",
+          "sub_en": "Simple diffusion, facilitated diffusion and osmosis without ATP.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Le transport passif déplace les substances selon leur gradient de concentration, du milieu le plus concentré vers le moins concentré, sans dépense d'énergie. La diffusion simple concerne les petites molécules liposolubles (O2, CO2). La diffusion facilitée utilise des protéines (canaux ou perméases), par exemple pour le glucose et les ions.",
+          "explanation_en": "Passive transport moves substances down their concentration gradient, from the most to the least concentrated medium, with no energy cost. Simple diffusion concerns small lipid-soluble molecules (O2, CO2). Facilitated diffusion uses proteins (channels or permeases), for example for glucose and ions.",
+          "structural_question_fr": "Le transport passif nécessite-t-il de l'ATP ?",
+          "structural_answer_fr": "Non",
+          "structural_question_en": "Does passive transport require ATP?",
+          "structural_answer_en": "No",
+          "tips_fr": "Le mot « passif » indique l'absence d'énergie : tout suit le gradient.",
+          "tips_en": "The word « passive » means no energy: everything follows the gradient.",
+          "traps_fr": "Les canaux ioniques sont passifs, pas actifs.",
+          "traps_en": "Ion channels are passive, not active."
+        },
+        {
+          "position": 2,
+          "point_fr": "Osmose : l'eau vers le côté hypertonique",
+          "point_en": "Osmosis: water towards the hypertonic side",
+          "sub_fr": "L'eau traverse la membrane semi-perméable vers le milieu le plus concentré.",
+          "sub_en": "Water crosses the semi-permeable membrane toward the more concentrated medium.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "L'osmose est la diffusion du solvant, l'eau, à travers une membrane semi-perméable, du milieu hypotonique (moins concentré en soluté) vers le milieu hypertonique (plus concentré). L'eau, très polaire, ne traverse pas directement la bicouche mais passe par des pores protéiques spécialisés appelés aquaporines.",
+          "explanation_en": "Osmosis is the diffusion of the solvent, water, through a semi-permeable membrane, from the hypotonic medium (less solute) toward the hypertonic medium (more solute). Water, being highly polar, does not cross the bilayer directly but passes through specialised protein pores called aquaporins.",
+          "structural_question_fr": "Vers quel milieu l'eau migre-t-elle par osmose ?",
+          "structural_answer_fr": "Hypertonique",
+          "structural_question_en": "Toward which medium does water move by osmosis?",
+          "structural_answer_en": "Hypertonic",
+          "tips_fr": "Retenir : l'eau va où il y a le plus de solutés.",
+          "tips_en": "Remember: water goes where solutes are most concentrated.",
+          "traps_fr": "Le soluté ne suit pas : seule l'eau franchit la membrane semi-perméable.",
+          "traps_en": "The solute does not follow: only water crosses the semi-permeable membrane."
+        },
+        {
+          "position": 3,
+          "point_fr": "Transport actif : contre le gradient, avec ATP",
+          "point_en": "Active transport: against the gradient, with ATP",
+          "sub_fr": "Pompes protéiques et transports vésiculaires consomment de l'énergie.",
+          "sub_en": "Protein pumps and vesicular transport consume energy.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Le transport actif déplace des molécules contre leur gradient grâce à des pompes protéiques, au prix d'une consommation d'ATP. La pompe Na+/K+ rejette 3 ions sodium et fait entrer 2 ions potassium : c'est un antiport. Les transports vésiculaires (endocytose, exocytose) requièrent aussi de l'énergie.",
+          "explanation_en": "Active transport moves molecules against their gradient using protein pumps, at the cost of ATP. The Na+/K+ pump expels 3 sodium ions and brings in 2 potassium ions: it is an antiport. Vesicular transport (endocytosis, exocytosis) also requires energy.",
+          "structural_question_fr": "Que consomme le transport actif ?",
+          "structural_answer_fr": "ATP",
+          "structural_question_en": "What does active transport consume?",
+          "structural_answer_en": "ATP",
+          "tips_fr": "Retenir 3 Na+ sortis et 2 K+ entrés pour la pompe Na+/K+.",
+          "tips_en": "Remember 3 Na+ out and 2 K+ in for the Na+/K+ pump.",
+          "traps_fr": "Un blocage de la pompe Na+/K+ fait gonfler la cellule jusqu'à la lyse.",
+          "traps_en": "Blocking the Na+/K+ pump makes the cell swell until it lyses."
+        }
+      ],
+      "quiz": {
+        "session_size": 5,
+        "title_fr": "Quiz — Les transports membranaires",
+        "title_en": "Quiz — Membrane Transport",
+        "difficulty": "hard",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quelle affirmation concernant la pompe Na+/K+ est exacte ?",
+            "text_en": "Which statement about the Na+/K+ pump is correct?",
+            "explanation_fr": "La pompe Na+/K+ est une ATPase qui consomme de l'énergie pour transporter les ions contre leur gradient : c'est un transport actif.",
+            "explanation_en": "The Na+/K+ pump is an ATPase that consumes energy to move ions against their gradient: it is active transport.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "C'est une ATPase qui consomme de l'énergie", "text_en": "It is an ATPase that consumes energy", "is_correct": true},
+              {"text_fr": "Elle fonctionne sans dépense d'énergie", "text_en": "It works with no energy cost", "is_correct": false},
+              {"text_fr": "Elle n'oppose jamais le gradient électrochimique", "text_en": "It never opposes the electrochemical gradient", "is_correct": false},
+              {"text_fr": "Elle consiste en une diffusion simple", "text_en": "It is a simple diffusion", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Que se produit-il si la pompe Na+/K+ est bloquée ?",
+            "text_en": "What happens if the Na+/K+ pump is blocked?",
+            "explanation_fr": "Le sodium entrant n'est plus rejeté : il s'accumule dans la cellule, provoquant un appel d'eau par osmose et la lyse de la cellule.",
+            "explanation_en": "Incoming sodium is no longer expelled: it accumulates in the cell, causing water to enter by osmosis and the cell to lyse.",
+            "difficulty": "hard",
+            "choices": [
+              {"text_fr": "Le Na+ s'accumule, l'eau entre par osmose et la cellule lyse", "text_en": "Na+ accumulates, water enters by osmosis and the cell lyses", "is_correct": true},
+              {"text_fr": "La cellule se dessèche et perd de l'eau", "text_en": "The cell dries out and loses water", "is_correct": false},
+              {"text_fr": "Le potassium s'accumule à l'extérieur", "text_en": "Potassium accumulates outside", "is_correct": false},
+              {"text_fr": "Rien ne change", "text_en": "Nothing changes", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "L'osmose signifie :",
+            "text_en": "Osmosis means:",
+            "explanation_fr": "L'osmose est le passage de l'eau à travers une membrane semi-perméable, du milieu hypotonique vers le milieu hypertonique.",
+            "explanation_en": "Osmosis is the passage of water through a semi-permeable membrane, from the hypotonic toward the hypertonic medium.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Le passage de cations à travers une membrane biologique", "text_en": "The passage of cations through a biological membrane", "is_correct": false},
+              {"text_fr": "Le passage de l'eau à travers une membrane", "text_en": "The passage of water through a membrane", "is_correct": true},
+              {"text_fr": "Un transport qui va toujours du milieu intracellulaire vers le milieu extracellulaire", "text_en": "A transport always going from the intracellular to the extracellular medium", "is_correct": false},
+              {"text_fr": "Le passage actif des protéines", "text_en": "The active passage of proteins", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Le passage des ions par les canaux ioniques est :",
+            "text_en": "The passage of ions through ion channels is:",
+            "explanation_fr": "Les canaux ioniques réalisent une diffusion facilitée, dans le sens du gradient électrochimique, sans ATP : c'est un transport passif.",
+            "explanation_en": "Ion channels perform facilitated diffusion, down the electrochemical gradient, without ATP: it is passive transport.",
+            "difficulty": "hard",
+            "choices": [
+              {"text_fr": "Un exemple typique du transport actif", "text_en": "A typical example of active transport", "is_correct": false},
+              {"text_fr": "Un exemple de diffusion facilitée (transport passif)", "text_en": "An example of facilitated diffusion (passive transport)", "is_correct": true},
+              {"text_fr": "Un mécanisme toujours couplé à une source d'énergie", "text_en": "A mechanism always coupled to an energy source", "is_correct": false},
+              {"text_fr": "Un transport impossible sans récepteur", "text_en": "A transport impossible without a receptor", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "La pompe Na+/K+ réalise :",
+            "text_en": "The Na+/K+ pump performs:",
+            "explanation_fr": "La pompe Na+/K+ catalyse un antiport : elle fait sortir 3 ions sodium et entrer 2 ions potassium, contre leurs gradients.",
+            "explanation_en": "The Na+/K+ pump catalyses an antiport: it expels 3 sodium ions and brings in 2 potassium ions, against their gradients.",
+            "difficulty": "hard",
+            "choices": [
+              {"text_fr": "Un symport des ions Na+ et K+", "text_en": "A symport of Na+ and K+ ions", "is_correct": false},
+              {"text_fr": "Un antiport : 3 Na+ sortis, 2 K+ entrés", "text_en": "An antiport: 3 Na+ out, 2 K+ in", "is_correct": true},
+              {"text_fr": "Un transport ionique électroneutre", "text_en": "An electroneutral ionic transport", "is_correct": false},
+              {"text_fr": "Une diffusion simple de l'eau", "text_en": "A simple diffusion of water", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "noyau-cytoplasme",
+      "position": 4,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Le noyau, centre de la cellule",
+          "point_en": "The nucleus, the cell's control centre",
+          "sub_fr": "Enveloppe à double membrane, pores, chromatine et nucléole.",
+          "sub_en": "Double-membrane envelope, pores, chromatin and nucleolus.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Le noyau est délimité par une enveloppe nucléaire formée de deux membranes percées de pores nucléaires qui permettent les échanges avec le cytoplasme. Il contient la chromatine (ADN et protéines) et le nucléole, site de synthèse des ribosomes. Le noyau commande les activités cellulaires.",
+          "explanation_en": "The nucleus is bounded by a nuclear envelope made of two membranes pierced by nuclear pores that allow exchanges with the cytoplasm. It contains chromatin (DNA and proteins) and the nucleolus, the site of ribosome synthesis. The nucleus directs cellular activities.",
+          "structural_question_fr": "De quoi est formée l'enveloppe nucléaire ?",
+          "structural_answer_fr": "Deux membranes",
+          "structural_question_en": "What is the nuclear envelope made of?",
+          "structural_answer_en": "Two membranes",
+          "tips_fr": "Le nucléole fabrique les ribosomes ; la chromatine porte l'ADN.",
+          "tips_en": "The nucleolus builds ribosomes; chromatin carries DNA.",
+          "traps_fr": "L'enveloppe nucléaire est double, contrairement à la membrane plasmique.",
+          "traps_en": "The nuclear envelope is double, unlike the plasma membrane."
+        },
+        {
+          "position": 2,
+          "point_fr": "Cytoplasme : hyaloplasme + morphoplasme",
+          "point_en": "Cytoplasm: hyaloplasm + morphoplasm",
+          "sub_fr": "Le cytosol et le cytosquelette (hyaloplasme) entourent les organites.",
+          "sub_en": "Cytosol and cytoskeleton (hyaloplasm) surround the organelles.",
+          "image_fr": "hyalop.PNG",
+          "image_en": "hyalop.PNG",
+          "explanation_fr": "Le cytoplasme se divise en deux parties : l'hyaloplasme, phase liquide (cytosol) qui contient aussi le cytosquelette, et le morphoplasme, ensemble des organites (mitochondries, réticulum, appareil de Golgi, etc.). Le cytoplasme entoure le noyau et est limité par la membrane plasmique.",
+          "explanation_en": "The cytoplasm splits into two parts: the hyaloplasm, a liquid phase (cytosol) that also contains the cytoskeleton, and the morphoplasm, the set of organelles (mitochondria, reticulum, Golgi apparatus, etc.). The cytoplasm surrounds the nucleus and is bounded by the plasma membrane.",
+          "structural_question_fr": "Quelles sont les deux composantes du cytoplasme ?",
+          "structural_answer_fr": "Hyaloplasme et morphoplasme",
+          "structural_question_en": "What are the two components of the cytoplasm?",
+          "structural_answer_en": "Hyaloplasm and morphoplasm",
+          "tips_fr": "Hyaloplasme = liquide + squelette ; morphoplasme = les organites.",
+          "tips_en": "Hyaloplasm = liquid + skeleton; morphoplasm = the organelles.",
+          "traps_fr": "Le cytoplasme n'inclut pas le noyau.",
+          "traps_en": "The cytoplasm does not include the nucleus."
+        },
+        {
+          "position": 3,
+          "point_fr": "Hématies : cellules sans noyau",
+          "point_en": "Red blood cells: cells without a nucleus",
+          "sub_fr": "Les globules rouges matures ont perdu leur noyau.",
+          "sub_en": "Mature red blood cells have lost their nucleus.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Les hématies (globules rouges) matures sont anucléées : elles ont perdu leur noyau et leurs organites au cours de leur maturation, laissant toute la place à l'hémoglobine. Chez l'homme, la chromatine et le nucléole sont donc absents de ces cellules.",
+          "explanation_en": "Mature red blood cells (erythrocytes) are anucleate: they lose their nucleus and organelles during maturation, leaving all the room for haemoglobin. In humans, chromatin and the nucleolus are therefore absent from these cells.",
+          "structural_question_fr": "Quelle cellule humaine est dépourvue de noyau ?",
+          "structural_answer_fr": "L'hématie",
+          "structural_question_en": "Which human cell lacks a nucleus?",
+          "structural_answer_en": "The red blood cell",
+          "tips_fr": "L'hématie adulte est la cellule humaine sans noyau la plus connue.",
+          "tips_en": "The adult red blood cell is the best-known human cell without a nucleus.",
+          "traps_fr": "Un noyau est nécessaire dans la plupart des cellules, mais pas dans les hématies.",
+          "traps_en": "A nucleus is needed in most cells, but not in red blood cells."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — Noyau et cytoplasme",
+        "title_en": "Quiz — Nucleus and Cytoplasm",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quelle structure manque aux hématies matures ?",
+            "text_en": "Which structure is missing from mature red blood cells?",
+            "explanation_fr": "Les hématies matures sont anucléées : elles ont perdu leur noyau lors de leur maturation. Elles gardent leur membrane, leur cytosol et leur hémoglobine.",
+            "explanation_en": "Mature red blood cells are anucleate: they lost their nucleus during maturation. They keep their membrane, cytosol and haemoglobin.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Un noyau", "text_en": "A nucleus", "is_correct": true},
+              {"text_fr": "La membrane plasmique", "text_en": "The plasma membrane", "is_correct": false},
+              {"text_fr": "L'hémoglobine", "text_en": "Haemoglobin", "is_correct": false},
+              {"text_fr": "Le cytosol", "text_en": "The cytosol", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle affirmation concernant l'enveloppe nucléaire est exacte ?",
+            "text_en": "Which statement about the nuclear envelope is correct?",
+            "explanation_fr": "L'enveloppe nucléaire est formée de deux membranes percées de pores nucléaires qui assurent les échanges avec le cytoplasme.",
+            "explanation_en": "The nuclear envelope is made of two membranes pierced by nuclear pores that ensure exchanges with the cytoplasm.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Elle est formée d'une membrane unique", "text_en": "It is made of a single membrane", "is_correct": false},
+              {"text_fr": "Elle est identique à la membrane plasmique", "text_en": "It is identical to the plasma membrane", "is_correct": false},
+              {"text_fr": "Elle est formée de deux membranes percées de pores", "text_en": "It is made of two membranes pierced by pores", "is_correct": true},
+              {"text_fr": "Elle est absente chez les eucaryotes", "text_en": "It is absent in eukaryotes", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Le cytoplasme est formé de :",
+            "text_en": "The cytoplasm is made of:",
+            "explanation_fr": "Le cytoplasme comprend l'hyaloplasme (cytosol et cytosquelette) et le morphoplasme (les organites).",
+            "explanation_en": "The cytoplasm comprises the hyaloplasm (cytosol and cytoskeleton) and the morphoplasm (the organelles).",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Protoplasme + membrane", "text_en": "Protoplasm + membrane", "is_correct": false},
+              {"text_fr": "Hyaloplasme + morphoplasme", "text_en": "Hyaloplasm + morphoplasm", "is_correct": true},
+              {"text_fr": "Noyau + hyaloplasme", "text_en": "Nucleus + hyaloplasm", "is_correct": false},
+              {"text_fr": "Membrane + cytosol", "text_en": "Membrane + cytosol", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quel est le rôle du nucléole ?",
+            "text_en": "What is the role of the nucleolus?",
+            "explanation_fr": "Le nucléole, situé dans le noyau, est le site de synthèse des ribosomes.",
+            "explanation_en": "The nucleolus, located in the nucleus, is the site of ribosome synthesis.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "La synthèse des ribosomes", "text_en": "Ribosome synthesis", "is_correct": true},
+              {"text_fr": "La production de l'ATP", "text_en": "ATP production", "is_correct": false},
+              {"text_fr": "La digestion intracellulaire", "text_en": "Intracellular digestion", "is_correct": false},
+              {"text_fr": "La synthèse des lipides", "text_en": "Lipid synthesis", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "organites",
+      "position": 5,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La mitochondrie : centrale énergétique",
+          "point_en": "The mitochondrion: the powerhouse",
+          "sub_fr": "Organite semi-autonome qui produit l'ATP.",
+          "sub_en": "Semi-autonomous organelle that produces ATP.",
+          "image_fr": "Mito.jpg",
+          "image_en": "Mito.jpg",
+          "explanation_fr": "La mitochondrie est le siège de la respiration cellulaire et produit la majeure partie de l'ATP. Elle est semi-autonome : elle possède son propre ADN, ses propres ribosomes et se divise de façon indépendante. Elle présente une double membrane, la membrane interne formant des crêtes.",
+          "explanation_en": "The mitochondrion is the site of cellular respiration and produces most of the ATP. It is semi-autonomous: it has its own DNA, its own ribosomes and divides independently. It has a double membrane, its inner membrane forming cristae.",
+          "structural_question_fr": "Quel organite produit l'ATP ?",
+          "structural_answer_fr": "La mitochondrie",
+          "structural_question_en": "Which organelle produces ATP?",
+          "structural_answer_en": "The mitochondrion",
+          "tips_fr": "Double membrane + ADN propre = semi-autonomie de la mitochondrie.",
+          "tips_en": "Double membrane + own DNA = semi-autonomy of the mitochondrion.",
+          "traps_fr": "La mitochondrie synthétise l'ATP ; elle ne le décompose pas.",
+          "traps_en": "The mitochondrion makes ATP; it does not break it down."
+        },
+        {
+          "position": 2,
+          "point_fr": "RER, Golgi et ribosomes : la chaîne de synthèse",
+          "point_en": "RER, Golgi and ribosomes: the synthesis chain",
+          "sub_fr": "RER pour les protéines, REL pour les lipides, Golgi pour le tri.",
+          "sub_en": "RER for proteins, SER for lipids, Golgi for sorting.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Le réticulum endoplasmique rugueux (RER), hérissé de ribosomes, assure la synthèse des protéines ; le réticulum lisse (REL) synthétise les lipides. Les cellules qui sécrètent beaucoup de protéines (ex. cellules glandulaires) ont un RER très développé. L'appareil de Golgi modifie, trie et exporte les molécules.",
+          "explanation_en": "The rough endoplasmic reticulum (RER), studded with ribosomes, synthesises proteins; the smooth reticulum (SER) synthesises lipids. Cells that secrete many proteins (e.g. glandular cells) have a highly developed RER. The Golgi apparatus modifies, sorts and exports molecules.",
+          "structural_question_fr": "Quel est le rôle du RER ?",
+          "structural_answer_fr": "Synthèse des protéines",
+          "structural_question_en": "What is the role of the RER?",
+          "structural_answer_en": "Protein synthesis",
+          "tips_fr": "RER = rugueux = ribosomes = protéines ; REL = lisse = lipides.",
+          "tips_en": "RER = rough = ribosomes = proteins; SER = smooth = lipids.",
+          "traps_fr": "Ne pas inverser RER et REL : c'est l'erreur classique.",
+          "traps_en": "Do not swap RER and SER: that is the classic mistake."
+        },
+        {
+          "position": 3,
+          "point_fr": "Lysosomes, peroxysomes, centrioles",
+          "point_en": "Lysosomes, peroxisomes, centrioles",
+          "sub_fr": "Digestion (pH 5), détoxication (catalase) et division cellulaire.",
+          "sub_en": "Digestion (pH 5), detoxification (catalase) and cell division.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Le lysosome est un sac d'enzymes digestives actives à pH acide (environ 5) ; il participe à la phagocytose et à la digestion intracellulaire. Le peroxysome contient la catalase et détoxifie ; il est abondant dans le foie. Le centriole intervient dans la division cellulaire ; il est absent des cellules végétales.",
+          "explanation_en": "The lysosome is a bag of digestive enzymes active at acidic pH (about 5); it takes part in phagocytosis and intracellular digestion. The peroxisome contains catalase and detoxifies; it is abundant in the liver. The centriole is involved in cell division; it is absent from plant cells.",
+          "structural_question_fr": "Quelle enzyme caractérise le peroxysome ?",
+          "structural_answer_fr": "La catalase",
+          "structural_question_en": "Which enzyme characterises the peroxisome?",
+          "structural_answer_en": "Catalase",
+          "tips_fr": "Lysosome = pH 5 ; peroxysome = catalase ; centriole = absent des végétaux.",
+          "tips_en": "Lysosome = pH 5; peroxisome = catalase; centriole = absent in plants.",
+          "traps_fr": "Les cellules végétales n'ont pas de centrioles mais ont paroi, chloroplastes et vacuole.",
+          "traps_en": "Plant cells have no centrioles but have a wall, chloroplasts and a vacuole."
+        }
+      ],
+      "quiz": {
+        "session_size": 5,
+        "title_fr": "Quiz — Les organites",
+        "title_en": "Quiz — Organelles",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quel organite est semi-autonome et fournit l'énergie de la cellule ?",
+            "text_en": "Which organelle is semi-autonomous and supplies the cell's energy?",
+            "explanation_fr": "La mitochondrie possède son propre ADN, se divise de façon indépendante et produit l'ATP par la respiration cellulaire.",
+            "explanation_en": "The mitochondrion has its own DNA, divides independently and produces ATP through cellular respiration.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "La mitochondrie", "text_en": "The mitochondrion", "is_correct": true},
+              {"text_fr": "Le noyau", "text_en": "The nucleus", "is_correct": false},
+              {"text_fr": "L'appareil de Golgi", "text_en": "The Golgi apparatus", "is_correct": false},
+              {"text_fr": "Le lysosome", "text_en": "The lysosome", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle structure est absente des cellules végétales ?",
+            "text_en": "Which structure is absent from plant cells?",
+            "explanation_fr": "Les cellules végétales n'ont pas de centriole ; elles possèdent en revanche une paroi, des chloroplastes et une vacuole.",
+            "explanation_en": "Plant cells have no centriole; they do have a wall, chloroplasts and a vacuole.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Le centriole", "text_en": "The centriole", "is_correct": true},
+              {"text_fr": "L'appareil de Golgi", "text_en": "The Golgi apparatus", "is_correct": false},
+              {"text_fr": "Le lysosome", "text_en": "The lysosome", "is_correct": false},
+              {"text_fr": "Les ribosomes", "text_en": "The ribosomes", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Les cellules qui sécrètent beaucoup de protéines présentent :",
+            "text_en": "Cells that secrete many proteins show:",
+            "explanation_fr": "Les cellules à forte activité de sécrétion protéique possèdent un réticulum endoplasmique rugueux très développé.",
+            "explanation_en": "Cells with strong protein-secretion activity have a highly developed rough endoplasmic reticulum.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Un réticulum endoplasmique rugueux très développé", "text_en": "A highly developed rough endoplasmic reticulum", "is_correct": true},
+              {"text_fr": "Une quantité accrue d'ADN", "text_en": "An increased amount of DNA", "is_correct": false},
+              {"text_fr": "De très grandes mitochondries", "text_en": "Very large mitochondria", "is_correct": false},
+              {"text_fr": "Un grand nombre de lysosomes", "text_en": "A large number of lysosomes", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle affirmation est exacte ?",
+            "text_en": "Which statement is correct?",
+            "explanation_fr": "Les lysosomes interviennent dans la phagocytose et la digestion intracellulaire ; le peroxysome est retrouvé en grande quantité dans le foie.",
+            "explanation_en": "Lysosomes take part in phagocytosis and intracellular digestion; the peroxisome is found in large numbers in the liver.",
+            "difficulty": "hard",
+            "choices": [
+              {"text_fr": "Les lysosomes interviennent dans la phagocytose", "text_en": "Lysosomes take part in phagocytosis", "is_correct": true},
+              {"text_fr": "Le peroxysome est absent du foie", "text_en": "The peroxisome is absent from the liver", "is_correct": false},
+              {"text_fr": "Les lysosomes travaillent à pH basique", "text_en": "Lysosomes work at basic pH", "is_correct": false},
+              {"text_fr": "Le peroxysome ne contient pas d'enzymes", "text_en": "The peroxisome contains no enzymes", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle affirmation concernant le réticulum endoplasmique est exacte ?",
+            "text_en": "Which statement about the endoplasmic reticulum is correct?",
+            "explanation_fr": "Le RER assure la synthèse des protéines (grâce à ses ribosomes) et le REL la synthèse des lipides.",
+            "explanation_en": "The RER synthesises proteins (thanks to its ribosomes) and the SER synthesises lipids.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Le RER assure la synthèse des protéines", "text_en": "The RER synthesises proteins", "is_correct": true},
+              {"text_fr": "Le RER assure la synthèse des lipides", "text_en": "The RER synthesises lipids", "is_correct": false},
+              {"text_fr": "Le REL assure la synthèse des protéines", "text_en": "The SER synthesises proteins", "is_correct": false},
+              {"text_fr": "Le REL ne joue aucun rôle dans la cellule", "text_en": "The SER plays no role in the cell", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "acides-nucleiques",
+      "position": 6,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Nucléotide et nucléoside",
+          "point_en": "Nucleotide and nucleoside",
+          "sub_fr": "Nucléotide = pentose + phosphate + base ; nucléoside = pentose + base.",
+          "sub_en": "Nucleotide = pentose + phosphate + base; nucleoside = pentose + base.",
+          "image_fr": "ADN-ARN.jpg",
+          "image_en": "ADN-ARN.jpg",
+          "explanation_fr": "Un nucléotide est formé d'un pentose (ribose ou désoxyribose), d'un groupe phosphate et d'une base azotée. Un nucléoside ne contient que le pentose et la base, sans phosphate. Le pentose possède cinq atomes de carbone ; le glucose, lui, est un hexose.",
+          "explanation_en": "A nucleotide is made of a pentose (ribose or deoxyribose), a phosphate group and a nitrogenous base. A nucleoside contains only the pentose and the base, with no phosphate. The pentose has five carbon atoms; glucose, by contrast, is a hexose.",
+          "structural_question_fr": "De quoi est composé un nucléoside ?",
+          "structural_answer_fr": "Pentose + base azotée",
+          "structural_question_en": "What is a nucleoside made of?",
+          "structural_answer_en": "Pentose + nitrogenous base",
+          "tips_fr": "Nucléoside = sucre + base ; nucléotide = sucre + base + phosphate.",
+          "tips_en": "Nucleoside = sugar + base; nucleotide = sugar + base + phosphate.",
+          "traps_fr": "Le nucléoside n'a pas de phosphate ; l'ajout du phosphate donne le nucléotide.",
+          "traps_en": "A nucleoside has no phosphate; adding one makes a nucleotide."
+        },
+        {
+          "position": 2,
+          "point_fr": "Purines et pyrimidines",
+          "point_en": "Purines and pyrimidines",
+          "sub_fr": "Purines A et G ; pyrimidines C, T et U.",
+          "sub_en": "Purines A and G; pyrimidines C, T and U.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Les bases azotées se classent en deux familles : les purines (adénine A, guanine G), à double cycle, et les pyrimidines (cytosine C, thymine T, uracile U), à simple cycle. L'ADN contient A, T, C, G ; l'ARN contient A, U, C, G : l'uracile remplace la thymine.",
+          "explanation_en": "Nitrogenous bases fall into two families: purines (adenine A, guanine G), with a double ring, and pyrimidines (cytosine C, thymine T, uracil U), with a single ring. DNA contains A, T, C, G; RNA contains A, U, C, G: uracil replaces thymine.",
+          "structural_question_fr": "Citer les deux purines.",
+          "structural_answer_fr": "Adénine, guanine",
+          "structural_question_en": "Name the two purines.",
+          "structural_answer_en": "Adenine, guanine",
+          "tips_fr": "Purines = « AG » ; pyrimidines = « CUT » (cytosine, uracile, thymine).",
+          "tips_en": "Purines = « AG »; pyrimidines = « CUT » (cytosine, uracil, thymine).",
+          "traps_fr": "L'uracile est une pyrimidine propre à l'ARN.",
+          "traps_en": "Uracil is a pyrimidine found only in RNA."
+        },
+        {
+          "position": 3,
+          "point_fr": "ADN : double hélice antiparallèle",
+          "point_en": "DNA: antiparallel double helix",
+          "sub_fr": "A=T (2 liaisons H), C≡G (3 liaisons H), brins antiparallèles.",
+          "sub_en": "A=T (2 H-bonds), C≡G (3 H-bonds), antiparallel strands.",
+          "image_fr": "watson-crick.png",
+          "image_en": "watson-crick.png",
+          "explanation_fr": "Watson et Crick ont montré en 1953 que l'ADN forme une double hélice bicaténaire : les deux brins courent en sens opposés, antiparallèles (5' vers 3' et 3' vers 5'). L'adénine s'apparie à la thymine par deux liaisons hydrogène, la cytosine à la guanine par trois liaisons hydrogène.",
+          "explanation_en": "In 1953 Watson and Crick showed that DNA forms a double helical duplex: the two strands run in opposite, antiparallel directions (5' to 3' and 3' to 5'). Adenine pairs with thymine via two hydrogen bonds, cytosine with guanine via three.",
+          "structural_question_fr": "Combien de liaisons hydrogène unissent A et T ?",
+          "structural_answer_fr": "Deux",
+          "structural_question_en": "How many hydrogen bonds join A and T?",
+          "structural_answer_en": "Two",
+          "tips_fr": "Retenir : A-T = 2 liaisons (courtes), C-G = 3 liaisons (longues).",
+          "tips_en": "Remember: A-T = 2 bonds (short), C-G = 3 bonds (long).",
+          "traps_fr": "Les brins de l'ADN sont antiparallèles, jamais parallèles.",
+          "traps_en": "The DNA strands are antiparallel, never parallel."
+        }
+      ],
+      "quiz": {
+        "session_size": 5,
+        "title_fr": "Quiz — Les acides nucléiques",
+        "title_en": "Quiz — Nucleic Acids",
+        "difficulty": "hard",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Un nucléotide est formé de :",
+            "text_en": "A nucleotide is made of:",
+            "explanation_fr": "Un nucléotide associe un sucre à cinq atomes de carbone (pentose), des molécules d'acide phosphorique et une base azotée.",
+            "explanation_en": "A nucleotide combines a five-carbon sugar (pentose), phosphoric acid molecules and a nitrogenous base.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Un pentose, un acide phosphorique et une base azotée", "text_en": "A pentose, a phosphoric acid and a nitrogenous base", "is_correct": true},
+              {"text_fr": "Un sucre et une base uniquement", "text_en": "A sugar and a base only", "is_correct": false},
+              {"text_fr": "Un acide phosphorique et une base sodée", "text_en": "A phosphoric acid and a soda base", "is_correct": false},
+              {"text_fr": "Deux pentoses et une base azotée", "text_en": "Two pentoses and a nitrogenous base", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle base azotée est une purine ?",
+            "text_en": "Which nitrogenous base is a purine?",
+            "explanation_fr": "Les purines sont l'adénine et la guanine ; la cytosine, la thymine et l'uracile sont des pyrimidines.",
+            "explanation_en": "The purines are adenine and guanine; cytosine, thymine and uracil are pyrimidines.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "L'adénine", "text_en": "Adenine", "is_correct": true},
+              {"text_fr": "La cytosine", "text_en": "Cytosine", "is_correct": false},
+              {"text_fr": "La thymine", "text_en": "Thymine", "is_correct": false},
+              {"text_fr": "L'uracile", "text_en": "Uracil", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Watson et Crick ont démontré en 1953 que l'ADN :",
+            "text_en": "In 1953 Watson and Crick showed that DNA:",
+            "explanation_fr": "Watson et Crick ont établi que l'ADN forme une double hélice bicaténaire dont les deux brins sont antiparallèles (5' vers 3' et 3' vers 5').",
+            "explanation_en": "Watson and Crick established that DNA forms a double helical duplex whose two strands are antiparallel (5' to 3' and 3' to 5').",
+            "difficulty": "hard",
+            "choices": [
+              {"text_fr": "Forme une double hélice aux brins antiparallèles", "text_en": "Forms a double helix with antiparallel strands", "is_correct": true},
+              {"text_fr": "Est une molécule simple brin", "text_en": "Is a single-stranded molecule", "is_correct": false},
+              {"text_fr": "A des brins parallèles et linéaires", "text_en": "Has parallel, linear strands", "is_correct": false},
+              {"text_fr": "Est toujours circulaire", "text_en": "Is always circular", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quel est le sucre de l'ARN ?",
+            "text_en": "What is the sugar of RNA?",
+            "explanation_fr": "Le sucre de l'ARN est le ribose ; celui de l'ADN est le désoxyribose. Le glucose est un hexose, pas un pentose.",
+            "explanation_en": "RNA's sugar is ribose; DNA's sugar is deoxyribose. Glucose is a hexose, not a pentose.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Le ribose", "text_en": "Ribose", "is_correct": true},
+              {"text_fr": "Le désoxyribose", "text_en": "Deoxyribose", "is_correct": false},
+              {"text_fr": "Le glucose", "text_en": "Glucose", "is_correct": false},
+              {"text_fr": "Le fructose", "text_en": "Fructose", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Chez les eucaryotes, l'ARN :",
+            "text_en": "In eukaryotes, RNA:",
+            "explanation_fr": "Chez les eucaryotes, l'ARN est synthétisé dans le noyau mais peut être cytoplasmique ; l'ADN, lui, reste intranucléaire.",
+            "explanation_en": "In eukaryotes, RNA is made in the nucleus but can be cytoplasmic; DNA, by contrast, stays inside the nucleus.",
+            "difficulty": "hard",
+            "choices": [
+              {"text_fr": "Peut être cytoplasmique", "text_en": "Can be cytoplasmic", "is_correct": true},
+              {"text_fr": "Est uniquement intranucléaire", "text_en": "Is found only in the nucleus", "is_correct": false},
+              {"text_fr": "Est toujours bicaténaire", "text_en": "Is always double-stranded", "is_correct": false},
+              {"text_fr": "Ne contient jamais d'uracile", "text_en": "Never contains uracil", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

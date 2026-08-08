@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "subject_slug": "biologie",
+  "chapter_slug": "organisation-etre-humain",
+  "chapter_name_fr": "Organisation générale de l'être humain",
+  "chapter_name_en": "General Organization of the Human Body",
+  "chapter_position": 1,
+  "chapter_new": false,
+  "lessons": [
+    {
+      "slug": "niveaux-organisation",
+      "position": 1,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La cellule, unité de base du vivant",
+          "point_en": "The cell, the basic unit of life",
+          "sub_fr": "Des atomes aux systèmes, chaque niveau s'emboîte dans le suivant.",
+          "sub_en": "From atoms to systems, each level nests within the next.",
+          "image_fr": "Organisation.PNG",
+          "image_en": "Organisation.PNG",
+          "explanation_fr": "L'organisme s'organise en niveaux emboîtés : atomes, molécules, cellules, tissus, organes, appareils et systèmes, puis organisme entier. La cellule est la première unité vivante : elle se nourrit, croît, se reproduit et échange avec son milieu. Chaque niveau supérieur est construit à partir du niveau inférieur.",
+          "explanation_en": "The body is organized in nested levels: atoms, molecules, cells, tissues, organs, systems, then the whole organism. The cell is the first living unit: it feeds, grows, reproduces and exchanges with its environment. Each higher level is built from the one below it.",
+          "structural_question_fr": "Citer l'ordre des niveaux d'organisation de l'atome à l'organisme.",
+          "structural_answer_fr": "Atomes, molécules, cellules, tissus, organes, appareils",
+          "structural_question_en": "State the order of organization levels from atom to organism.",
+          "structural_answer_en": "Atoms, molecules, cells, tissues, organs, systems",
+          "tips_fr": "Apprendre la chaîne comme une pyramide : chaque niveau contient le précédent.",
+          "tips_en": "Learn the chain as a pyramid: each level contains the one below.",
+          "traps_fr": "Ne pas inverser tissus et organes : les tissus précèdent les organes.",
+          "traps_en": "Do not swap tissues and organs: tissues come before organs."
+        },
+        {
+          "position": 2,
+          "point_fr": "C, H, O, N : 96 % de la masse corporelle",
+          "point_en": "C, H, O, N: 96% of body mass",
+          "sub_fr": "Quatre bioéléments majoritaires constituent presque tout le corps.",
+          "sub_en": "Four major bio-elements make up almost the whole body.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Le carbone (C), l'hydrogène (H), l'oxygène (O) et l'azote (N) représentent à eux seuls environ 96 % de la masse du corps humain. Ce sont les bioéléments majoritaires. Les autres éléments (Na, K, Ca, Cl, Fe) ne sont présents qu'à l'état de traces.",
+          "explanation_en": "Carbon (C), hydrogen (H), oxygen (O) and nitrogen (N) alone represent about 96% of the human body's mass. They are the major bio-elements. The other elements (Na, K, Ca, Cl, Fe) are present only in trace amounts.",
+          "structural_question_fr": "Quels sont les quatre bioéléments majoritaires du corps ?",
+          "structural_answer_fr": "Carbone, hydrogène, oxygène, azote",
+          "structural_question_en": "What are the four major bio-elements of the body?",
+          "structural_answer_en": "Carbon, hydrogen, oxygen, nitrogen",
+          "tips_fr": "Repère mnémotechnique : CHON forme le squelette des molécules organiques.",
+          "tips_en": "Mnemonic: CHON builds the backbone of organic molecules.",
+          "traps_fr": "Ne pas confondre les éléments majoritaires (C, H, O, N) avec les ions indispensables (Na+, K+, Ca2+).",
+          "traps_en": "Do not mix up the major elements (C, H, O, N) with essential ions (Na+, K+, Ca2+)."
+        },
+        {
+          "position": 3,
+          "point_fr": "Molécules organiques et inorganiques",
+          "point_en": "Organic and inorganic molecules",
+          "sub_fr": "La chaîne carbonée distingue les molécules organiques des minérales.",
+          "sub_en": "The carbon chain separates organic from mineral molecules.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Une molécule organique est bâtie autour d'une chaîne de carbone : glucides, lipides, protides et acides nucléiques (ADN, ARN). Les molécules inorganiques sont l'eau (environ 60-70 % de l'organisme), les sels minéraux et les ions (Na+, K+, Cl-). Le glucose est organique ; l'eau et les ions sont inorganiques.",
+          "explanation_en": "An organic molecule is built around a carbon chain: carbohydrates, lipids, proteins and nucleic acids (DNA, RNA). Inorganic molecules are water (about 60-70% of the body), mineral salts and ions (Na+, K+, Cl-). Glucose is organic; water and ions are inorganic.",
+          "structural_question_fr": "Quel critère définit une molécule organique ?",
+          "structural_answer_fr": "Chaîne de carbone",
+          "structural_question_en": "What criterion defines an organic molecule?",
+          "structural_answer_en": "Carbon chain",
+          "tips_fr": "Tester la définition avec le glucose (organique) contre l'eau et les ions (inorganiques).",
+          "tips_en": "Test the definition with glucose (organic) against water and ions (inorganic).",
+          "traps_fr": "Une molécule contenant du carbone n'est pas forcément organique : le CO2 reste inorganique.",
+          "traps_en": "A molecule containing carbon is not necessarily organic: CO2 remains inorganic."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — Les niveaux d'organisation",
+        "title_en": "Quiz — Levels of Organization",
+        "difficulty": "easy",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quel est l'ordre correct des niveaux d'organisation, du plus simple au plus complexe ?",
+            "text_en": "What is the correct ordering of organization levels, from the simplest to the most complex?",
+            "explanation_fr": "Les niveaux s'emboîtent du plus simple au plus complexe : molécules, cellules, tissus, organes, puis appareils et systèmes.",
+            "explanation_en": "Levels nest from simplest to most complex: molecules, cells, tissues, organs, then apparatuses and systems.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "Molécules, cellules, tissus, organes, appareils", "text_en": "Molecules, cells, tissues, organs, systems", "is_correct": true},
+              {"text_fr": "Cellules, tissus, appareils, organes, molécules", "text_en": "Cells, tissues, systems, organs, molecules", "is_correct": false},
+              {"text_fr": "Appareils, organes, tissus, cellules, molécules", "text_en": "Systems, organs, tissues, cells, molecules", "is_correct": false},
+              {"text_fr": "Tissus, cellules, organes, molécules, appareils", "text_en": "Tissues, cells, organs, molecules, systems", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle est l'unité structurale et fonctionnelle de base du vivant ?",
+            "text_en": "What is the basic structural and functional unit of life?",
+            "explanation_fr": "La cellule est la plus petite entité capable d'accomplir de façon autonome les fonctions de la vie.",
+            "explanation_en": "The cell is the smallest entity able to carry out the functions of life on its own.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "L'organite", "text_en": "The organelle", "is_correct": false},
+              {"text_fr": "La cellule", "text_en": "The cell", "is_correct": true},
+              {"text_fr": "Le tissu", "text_en": "The tissue", "is_correct": false},
+              {"text_fr": "La molécule", "text_en": "The molecule", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quels quatre éléments représentent environ 96 % de la masse du corps humain ?",
+            "text_en": "Which four elements make up about 96% of the human body's mass?",
+            "explanation_fr": "Le carbone, l'hydrogène, l'oxygène et l'azote sont les quatre bioéléments majoritaires de l'organisme.",
+            "explanation_en": "Carbon, hydrogen, oxygen and nitrogen are the four major bio-elements of the body.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "C, H, O, N", "text_en": "C, H, O, N", "is_correct": true},
+              {"text_fr": "Na, K, Ca, Cl", "text_en": "Na, K, Ca, Cl", "is_correct": false},
+              {"text_fr": "C, O, Fe, S", "text_en": "C, O, Fe, S", "is_correct": false},
+              {"text_fr": "H, O, P, Ca", "text_en": "H, O, P, Ca", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Parmi ces molécules du sang, laquelle est organique ?",
+            "text_en": "Among these molecules found in blood, which one is organic?",
+            "explanation_fr": "Le glucose possède une chaîne carbonée : c'est une molécule organique. L'eau, les sels et les ions sont inorganiques.",
+            "explanation_en": "Glucose has a carbon chain, so it is organic. Water, salts and ions are inorganic.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "L'eau (H2O)", "text_en": "Water (H2O)", "is_correct": false},
+              {"text_fr": "L'ion chlorure (Cl-)", "text_en": "Chloride ion (Cl-)", "is_correct": false},
+              {"text_fr": "Le glucose", "text_en": "Glucose", "is_correct": true},
+              {"text_fr": "Le sel minéral (NaCl)", "text_en": "Mineral salt (NaCl)", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "tissus-organes-appareils",
+      "position": 2,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Les 4 tissus primaires",
+          "point_en": "The 4 primary tissues",
+          "sub_fr": "Épithélial, conjonctif, musculaire et nerveux forment les tissus.",
+          "sub_en": "Epithelial, connective, muscle and nervous form the tissues.",
+          "image_fr": "TISSU.PNG",
+          "image_en": "TISSU.PNG",
+          "explanation_fr": "Un tissu est un groupe de cellules semblables qui coopèrent pour une même fonction. Le corps compte quatre types de tissus primaires : épithélial (revêtement et sécrétion), conjonctif (soutien, protection, liaison), musculaire (mouvement) et nerveux (communication). Le sang est une sous-catégorie du tissu conjonctif.",
+          "explanation_en": "A tissue is a group of similar cells cooperating for one function. The body has four primary tissue types: epithelial (covering and secretion), connective (support, protection, linkage), muscle (movement) and nervous (communication). Blood is a sub-category of connective tissue.",
+          "structural_question_fr": "Citer les quatre tissus primaires.",
+          "structural_answer_fr": "Épithélial, conjonctif, musculaire, nerveux",
+          "structural_question_en": "Name the four primary tissues.",
+          "structural_answer_en": "Epithelial, connective, muscle, nervous",
+          "tips_fr": "Le sang est un tissu conjonctif : c'est l'astuce la plus souvent posée.",
+          "tips_en": "Blood is a connective tissue: the most commonly asked trick.",
+          "traps_fr": "Le sang n'est pas un cinquième tissu : il appartient au tissu conjonctif.",
+          "traps_en": "Blood is not a fifth tissue: it belongs to connective tissue."
+        },
+        {
+          "position": 2,
+          "point_fr": "Un organe : plusieurs tissus, une fonction",
+          "point_en": "An organ: several tissues, one function",
+          "sub_fr": "L'organe associe des tissus différents pour remplir une fonction précise.",
+          "sub_en": "An organ combines different tissues to carry out a precise function.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Un organe est une structure composée de plusieurs tissus différents qui remplissent ensemble une fonction précise. La peau, par exemple, associe un épiderme épithélial et un derme conjonctif. L'épiderme seul est un tissu, pas un organe.",
+          "explanation_en": "An organ is a structure made of several different tissues that together carry out a precise function. The skin, for instance, combines an epithelial epidermis and a connective dermis. The epidermis alone is a tissue, not an organ.",
+          "structural_question_fr": "De quoi un organe est-il composé ?",
+          "structural_answer_fr": "Plusieurs tissus différents",
+          "structural_question_en": "What is an organ made of?",
+          "structural_answer_en": "Several different tissues",
+          "tips_fr": "L'épiderme est un tissu ; la peau (épiderme + derme) est un organe.",
+          "tips_en": "The epidermis is a tissue; the skin (epidermis + dermis) is an organ.",
+          "traps_fr": "Ne pas confondre organe et tissu : un organe contient plusieurs tissus.",
+          "traps_en": "Do not mix organ and tissue: an organ contains several tissues."
+        },
+        {
+          "position": 3,
+          "point_fr": "Système ou appareil ?",
+          "point_en": "System or apparatus?",
+          "sub_fr": "Tissu semblable pour le système, tissus différents pour l'appareil.",
+          "sub_en": "Similar tissue for a system, different tissues for an apparatus.",
+          "image_fr": "Les Appareils.PNG",
+          "image_en": "Les Appareils.PNG",
+          "explanation_fr": "Un système réunit des organes de structure histologique semblable (même tissu prédominant), répartis dans tout le corps : système nerveux, système endocrinien. Un appareil réunit des organes dissemblables (tissus différents) concourant à une même fonction : appareil digestif, appareil respiratoire.",
+          "explanation_en": "A system groups organs of similar histological structure (same predominant tissue), spread throughout the body: the nervous system, the endocrine system. An apparatus groups dissimilar organs (different tissues) serving one function: the digestive apparatus, the respiratory apparatus.",
+          "structural_question_fr": "Le système nerveux est-il un système ou un appareil ?",
+          "structural_answer_fr": "Système",
+          "structural_question_en": "Is the nervous system a system or an apparatus?",
+          "structural_answer_en": "System",
+          "tips_fr": "Le mot « système » implique un tissu semblable réparti dans tout le corps.",
+          "tips_en": "The word « system » implies a similar tissue spread throughout the body.",
+          "traps_fr": "Dans l'usage courant, système et appareil s'échangent ; au concours, seule la structure compte.",
+          "traps_en": "In everyday speech, system and apparatus are swapped; in exams, only structure counts."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — Tissus, organes, appareils et systèmes",
+        "title_en": "Quiz — Tissues, Organs and Systems",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quelle affirmation concernant le tissu épithélial est exacte ?",
+            "text_en": "Which statement about epithelial tissue is correct?",
+            "explanation_fr": "Le tissu épithélial consiste en des feuillets de cellules jointives qui tapissent les cavités et les surfaces du corps (peau, muqueuses) et forment les glandes.",
+            "explanation_en": "Epithelial tissue consists of sheets of closely joined cells lining the body cavities and surfaces (skin, mucosae) and forming the glands.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Il consiste en des feuillets cellulaires tapissant les cavités du corps", "text_en": "It consists of cellular sheets lining the body cavities", "is_correct": true},
+              {"text_fr": "Il est composé uniquement de matrice extracellulaire", "text_en": "It is made only of extracellular matrix", "is_correct": false},
+              {"text_fr": "Il est toujours constitué de cellules isolées les unes des autres", "text_en": "It is always made of cells isolated from one another", "is_correct": false},
+              {"text_fr": "Sa fonction principale est la production de mouvement", "text_en": "Its main function is producing movement", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Lequel de ces éléments n'est PAS l'un des quatre tissus primaires ?",
+            "text_en": "Which of these is NOT one of the four primary tissues?",
+            "explanation_fr": "Le sang est une sous-catégorie du tissu conjonctif. Les quatre familles primaires sont : épithélial, conjonctif, musculaire et nerveux.",
+            "explanation_en": "Blood is a sub-category of connective tissue. The four primary families are: epithelial, connective, muscle and nervous.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Le tissu épithélial", "text_en": "Epithelial tissue", "is_correct": false},
+              {"text_fr": "Le tissu sanguin", "text_en": "Blood tissue", "is_correct": true},
+              {"text_fr": "Le tissu musculaire", "text_en": "Muscle tissue", "is_correct": false},
+              {"text_fr": "Le tissu nerveux", "text_en": "Nervous tissue", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Un ensemble d'organes de même tissu prédominant, répartis dans tout le corps, définit :",
+            "text_en": "A set of organs sharing one predominant tissue, spread throughout the body, defines:",
+            "explanation_fr": "C'est la définition d'un système (ex. système nerveux). Un appareil réunit au contraire des organes de tissus différents.",
+            "explanation_en": "That is the definition of a system (e.g. the nervous system). An apparatus, by contrast, groups organs of different tissues.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Un appareil", "text_en": "An apparatus", "is_correct": false},
+              {"text_fr": "Un système", "text_en": "A system", "is_correct": true},
+              {"text_fr": "Un organe", "text_en": "An organ", "is_correct": false},
+              {"text_fr": "Un tissu", "text_en": "A tissue", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Pourquoi la peau est-elle considérée comme un organe ?",
+            "text_en": "Why is the skin considered an organ?",
+            "explanation_fr": "La peau associe plusieurs tissus différents (épiderme épithélial, derme conjonctif) pour une fonction précise : c'est donc un organe.",
+            "explanation_en": "The skin combines several different tissues (epithelial epidermis, connective dermis) for a precise function, so it is an organ.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Parce qu'elle est faite d'un seul tissu", "text_en": "Because it is made of a single tissue", "is_correct": false},
+              {"text_fr": "Parce qu'elle associe plusieurs tissus pour une fonction", "text_en": "Because it combines several tissues for one function", "is_correct": true},
+              {"text_fr": "Parce qu'elle est un système", "text_en": "Because it is a system", "is_correct": false},
+              {"text_fr": "Parce qu'elle ne contient pas de cellules", "text_en": "Because it contains no cells", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "homeostasie-fonctions",
+      "position": 3,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Homéostasie : stabilité du milieu intérieur",
+          "point_en": "Homeostasis: stable internal environment",
+          "sub_fr": "Le corps maintient ses constantes malgré les variations du milieu extérieur.",
+          "sub_en": "The body keeps its constants despite outside variations.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "L'homéostasie est la capacité de l'organisme à maintenir une stabilité relative de son milieu intérieur (sang, lymphe, liquide interstitiel). Des boucles de rétroaction corrigent toute dérive : stimulus, récepteur, centre de contrôle, effecteur. Sans homéostasie, les cellules ne peuvent pas fonctionner.",
+          "explanation_en": "Homeostasis is the body's ability to keep its internal environment (blood, lymph, interstitial fluid) relatively stable. Feedback loops correct any drift: stimulus, receptor, control centre, effector. Without homeostasis, cells cannot function.",
+          "structural_question_fr": "Définir le milieu intérieur.",
+          "structural_answer_fr": "Sang, lymphe, liquide interstitiel",
+          "structural_question_en": "Define the internal environment.",
+          "structural_answer_en": "Blood, lymph, interstitial fluid",
+          "tips_fr": "Le milieu intérieur est le liquide extracellulaire qui baigne les cellules.",
+          "tips_en": "The internal environment is the extracellular fluid bathing the cells.",
+          "traps_fr": "L'homéostasie ne vise pas l'immobilité absolue mais une stabilité relative.",
+          "traps_en": "Homeostasis is not absolute immobility but relative stability."
+        },
+        {
+          "position": 2,
+          "point_fr": "Trois constantes à connaître",
+          "point_en": "Three constants to remember",
+          "sub_fr": "37 °C, glycémie ≈ 1 g/L, pH sanguin 7,35-7,45.",
+          "sub_en": "37 °C, blood glucose ≈ 1 g/L, blood pH 7.35-7.45.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Trois paramètres sont finement régulés : la température corporelle environ 37 °C, la glycémie environ 1 g/L et le pH sanguin entre 7,35 et 7,45. Toute dérive (fièvre, hypoglycémie, acidose) menace le fonctionnement cellulaire et déclenche des mécanismes correcteurs.",
+          "explanation_en": "Three parameters are tightly regulated: body temperature around 37 °C, blood glucose around 1 g/L and blood pH between 7.35 and 7.45. Any drift (fever, hypoglycaemia, acidosis) threatens cell function and triggers corrective mechanisms.",
+          "structural_question_fr": "Quelle est la glycémie normale ?",
+          "structural_answer_fr": "1 g/L",
+          "structural_question_en": "What is the normal blood glucose level?",
+          "structural_answer_en": "1 g/L",
+          "tips_fr": "Retenir le trio : 37 °C, 1 g/L, pH 7,4.",
+          "tips_en": "Remember the trio: 37 °C, 1 g/L, pH 7.4.",
+          "traps_fr": "Le pH sanguin normal est légèrement alcalin, jamais acide.",
+          "traps_en": "Normal blood pH is slightly alkaline, never acidic."
+        },
+        {
+          "position": 3,
+          "point_fr": "Les 4 grandes fonctions physiologiques",
+          "point_en": "The 4 major physiological functions",
+          "sub_fr": "Nutrition, relation, reproduction et maintien de l'intégrité.",
+          "sub_en": "Nutrition, relation, reproduction and maintaining integrity.",
+          "image_fr": "FONCTIO.PNG",
+          "image_en": "FONCTIO.PNG",
+          "explanation_fr": "Quatre grandes fonctions complémentaires assurent la vie : la nutrition (croissance et entretien : appareils digestif, respiratoire, cardiovasculaire, urinaire), la relation (avec le milieu extérieur via le système nerveux), la reproduction (pérennité de l'espèce) et le maintien de l'intégrité (protection et stabilité du milieu intérieur).",
+          "explanation_en": "Four complementary functions sustain life: nutrition (growth and maintenance: digestive, respiratory, cardiovascular, urinary apparatuses), relation (with the outside world via the nervous system), reproduction (survival of the species) and maintaining integrity (protection and stability of the internal environment).",
+          "structural_question_fr": "Citer les quatre grandes fonctions physiologiques.",
+          "structural_answer_fr": "Nutrition, relation, reproduction, intégrité",
+          "structural_question_en": "Name the four major physiological functions.",
+          "structural_answer_en": "Nutrition, relation, reproduction, integrity",
+          "tips_fr": "Relier chaque fonction à ses appareils : digestion, respiration, circulation, urines pour la nutrition.",
+          "tips_en": "Link each function to its apparatuses: digestion, respiration, circulation, urine for nutrition.",
+          "traps_fr": "Les fonctions ne travaillent jamais isolément : elles sont interdépendantes.",
+          "traps_en": "The functions never work alone: they are interdependent."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — Homéostasie et grandes fonctions",
+        "title_en": "Quiz — Homeostasis and the Major Functions",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Qu'est-ce que l'homéostasie ?",
+            "text_en": "What is homeostasis?",
+            "explanation_fr": "L'homéostasie est le maintien d'une stabilité relative du milieu intérieur malgré les variations de l'environnement externe.",
+            "explanation_en": "Homeostasis is keeping the internal environment relatively stable despite changes in the external environment.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "La multiplication des cellules", "text_en": "Cell multiplication", "is_correct": false},
+              {"text_fr": "Le maintien de la stabilité du milieu intérieur", "text_en": "Keeping the internal environment stable", "is_correct": true},
+              {"text_fr": "La production de mouvement", "text_en": "Producing movement", "is_correct": false},
+              {"text_fr": "La transmission de l'information génétique", "text_en": "Transmitting genetic information", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle est la fourchette normale du pH sanguin ?",
+            "text_en": "What is the normal range of blood pH?",
+            "explanation_fr": "Le pH sanguin est finement régulé entre 7,35 et 7,45.",
+            "explanation_en": "Blood pH is tightly regulated between 7.35 and 7.45.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "6,8 – 7,0", "text_en": "6.8 – 7.0", "is_correct": false},
+              {"text_fr": "7,35 – 7,45", "text_en": "7.35 – 7.45", "is_correct": true},
+              {"text_fr": "7,8 – 8,0", "text_en": "7.8 – 8.0", "is_correct": false},
+              {"text_fr": "5,0 – 5,5", "text_en": "5.0 – 5.5", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelle est la température corporelle normale de l'être humain ?",
+            "text_en": "What is the normal body temperature of a human being?",
+            "explanation_fr": "La température corporelle est maintenue autour de 37 °C par des mécanismes homéostatiques.",
+            "explanation_en": "Body temperature is kept around 37 °C by homeostatic mechanisms.",
+            "difficulty": "easy",
+            "choices": [
+              {"text_fr": "35 °C", "text_en": "35 °C", "is_correct": false},
+              {"text_fr": "37 °C", "text_en": "37 °C", "is_correct": true},
+              {"text_fr": "39 °C", "text_en": "39 °C", "is_correct": false},
+              {"text_fr": "40,5 °C", "text_en": "40.5 °C", "is_correct": false}
+            ]
+          },
+          {
+            "text_fr": "Quelles sont les quatre grandes fonctions physiologiques ?",
+            "text_en": "What are the four major physiological functions?",
+            "explanation_fr": "Les quatre grandes fonctions interdépendantes sont : nutrition, relation, reproduction et maintien de l'intégrité.",
+            "explanation_en": "The four interdependent major functions are: nutrition, relation, reproduction and maintaining integrity.",
+            "difficulty": "medium",
+            "choices": [
+              {"text_fr": "Digestion, respiration, circulation, excrétion", "text_en": "Digestion, respiration, circulation, excretion", "is_correct": false},
+              {"text_fr": "Nutrition, relation, reproduction, maintien de l'intégrité", "text_en": "Nutrition, relation, reproduction, maintaining integrity", "is_correct": true},
+              {"text_fr": "Sensation, mouvement, parole, mémoire", "text_en": "Sensation, movement, speech, memory", "is_correct": false},
+              {"text_fr": "Croissance, digestion, sommeil, défense", "text_en": "Growth, digestion, sleep, defence", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

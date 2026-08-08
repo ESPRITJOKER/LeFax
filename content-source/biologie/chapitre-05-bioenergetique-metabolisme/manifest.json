@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "subject_slug": "biologie",
+  "chapter_slug": "bioenergetique-metabolisme",
+  "chapter_name_fr": "Bioénergétique et métabolisme cellulaire",
+  "chapter_name_en": "Bioenergetics and Cell Metabolism",
+  "chapter_position": 6,
+  "chapter_new": true,
+  "lessons": [
+    {
+      "slug": "energie-et-atp",
+      "title_fr": "L'énergie cellulaire et l'ATP",
+      "title_en": "Cellular energy and ATP",
+      "objectives_fr": [
+        "Expliquer pourquoi la cellule vivante est un système thermodynamique ouvert.",
+        "Décrire les quatre formes d'échange d'énergie et le rôle de l'ATP.",
+        "Distinguer catabolisme et anabolisme, et expliquer le rôle catalytique des enzymes."
+      ],
+      "objectives_en": [
+        "Explain why the living cell is an open thermodynamic system.",
+        "Describe the four forms of energy exchange and the role of ATP.",
+        "Distinguish catabolism from anabolism, and explain the catalytic role of enzymes."
+      ],
+      "content_fr": "## La cellule vivante, système ouvert\n\nLa cellule vivante est un système thermodynamique ouvert : elle échange de la matière et de l'énergie avec son milieu extérieur. L'énergie ne se crée ni ne se détruit : elle ne fait que se transformer en énergie utilisable (ATP).\n\n## Les quatre formes d'énergie\n\nL'échange d'énergie se fait sous 4 formes :\n\n- Chimique : production et consommation d'ATP à partir des glucides, lipides et protéines.\n- Électrique : génération du potentiel de membrane dans les neurones et les muscles (gradients d'ions Na+ et K+).\n- Thermique : maintien de la température corporelle à 37 °C chez les homéothermes, assurant l'activité optimale des enzymes.\n- Mécanique : maintien de la posture, mouvements et déplacements cellulaires (ex. : contraction musculaire, complexe actine/myosine).\n\n[[IMG: Les échanges d'énergie de la cellule]]\n\n[!INFO]\nLe type d'échange engagé est fonction du but recherché : produire de l'ATP, déplacer, transmettre un signal ou maintenir la température.\n\n## L'ATP, monnaie énergétique universelle\n\nL'ATP (adénosine triphosphate) est la molécule fondamentale : la monnaie énergétique universelle de la cellule, le convertisseur universel entre les 4 formes d'énergie.\n\n- Hydrolyse : ATP → ADP + Pi. La rupture de la liaison phosphate libère environ 30,5 kJ par mole d'ATP.\n- Source d'énergie à court terme : le glucose.\n- Stockage d'énergie à long terme : les triglycérides (tissu adipeux).\n\n## Le métabolisme, une balance énergétique\n\nLe métabolisme désigne l'ensemble des réactions chimiques coordonnées de la cellule. Il fonctionne comme une balance à deux plateaux :\n\n- Catabolisme : molécules complexes → molécules simples (ex. : dégradation du glucose en CO2 et H2O). Réaction exergonique : elle libère de l'énergie en brisant des liaisons chimiques.\n- Anabolisme : molécules simples + énergie → molécules complexes (ex. : assemblage d'une protéine). Réaction endergonique : elle consomme de l'énergie pour la stocker.\n\n[!PIEGE]\n« Catabolisme » commence comme « Casser » : c'est la dégradation qui libère de l'énergie. « Anabolisme » commence comme « Amasser/Assembler » : c'est la synthèse qui consomme de l'énergie.\n\n## Les enzymes, catalyseurs biologiques\n\nLes enzymes sont des protéines qui accélèrent les réactions chimiques (jusqu'à des millions de fois) sans être consommées : elles restent intactes en fin de réaction et ne modifient pas l'équilibre final.\n\n- L'enzyme (E) se lie à son substrat pour former un complexe enzyme-substrat, au niveau de son site actif (modèle clé-serrure ou ajustement induit).\n- Spécificité de substrat : une enzyme n'agit que sur un seul substrat ou un groupe très restreint.\n- Spécificité de réaction : une enzyme ne réalise qu'un seul type de transformation chimique.\n\n[[IMG: Les enzymes]]\n\n## Inhibition et dénaturation\n\n- Inhibition compétitive : l'inhibiteur ressemble au substrat et occupe le site actif ; une forte concentration de substrat déplace la compétition.\n- Inhibition non compétitive : l'inhibiteur se lie à un site allostérique, modifie la conformation de l'enzyme et bloque la catalyse.\n- Dénaturation : la chaleur ou un pH extrême dénaturent la protéine enzymatique (température optimale 37-40 °C chez l'Homme ; à 0 °C l'enzyme est simplement ralentie).\n\n[!INFO]\nCertaines enzymes ont besoin d'un cofacteur : s'il est une molécule organique complexe, on parle de coenzyme (NAD+, FAD, dérivés de vitamines).\n\n[!APP]\nPourquoi l'amylase salivaire cesse-t-elle d'agir efficacement une fois le bol alimentaire dans l'estomac ? ||| Le pH gastrique très acide (environ 1,5-2) dénature l'enzyme, dont le pH optimum est proche de 7.",
+      "content_en": "## The living cell, an open system\n\nThe living cell is an open thermodynamic system: it exchanges matter and energy with its surroundings. Energy is neither created nor destroyed: it is only converted into usable energy (ATP).\n\n## The four forms of energy\n\nEnergy exchange takes place in 4 forms:\n\n- Chemical: production and consumption of ATP from carbohydrates, lipids and proteins.\n- Electrical: generation of the membrane potential in neurons and muscles (ion gradients of Na+ and K+).\n- Thermal: maintenance of body temperature at 37 °C in homeotherms, ensuring optimal enzyme activity.\n- Mechanical: maintaining posture, movements and cell displacements (e.g. muscle contraction, actin/myosin complex).\n\n[[IMG: The energy exchanges of the cell]]\n\n[!INFO]\nThe type of exchange involved depends on the goal: producing ATP, moving, transmitting a signal or maintaining temperature.\n\n## ATP, the universal energy currency\n\nATP (adenosine triphosphate) is the fundamental molecule: the universal energy currency of the cell, the universal converter between the 4 forms of energy.\n\n- Hydrolysis: ATP → ADP + Pi. Breaking the phosphate bond releases about 30.5 kJ per mole of ATP.\n- Short-term energy source: glucose.\n- Long-term energy storage: triglycerides (adipose tissue).\n\n## Metabolism, an energy balance\n\nMetabolism is the set of coordinated chemical reactions in the cell. It works like a two-pan balance:\n\n- Catabolism: complex molecules → simple molecules (e.g. breakdown of glucose into CO2 and H2O). Exergonic reaction: it releases energy by breaking chemical bonds.\n- Anabolism: simple molecules + energy → complex molecules (e.g. assembly of a protein). Endergonic reaction: it consumes energy to store it.\n\n[!PIEGE]\n'Catabolism' starts like 'cut down': it is the breakdown that releases energy. 'Anabolism' starts like 'accumulate/assemble': it is the synthesis that consumes energy.\n\n## Enzymes, biological catalysts\n\nEnzymes are proteins that speed up chemical reactions (by up to millions of times) without being consumed: they remain intact at the end of the reaction and do not change the final equilibrium.\n\n- The enzyme (E) binds to its substrate to form an enzyme-substrate complex, at its active site (lock-and-key or induced-fit model).\n- Substrate specificity: an enzyme acts on only one substrate (or a very restricted group).\n- Reaction specificity: an enzyme performs only one type of chemical transformation.\n\n[[IMG: Enzymes]]\n\n## Inhibition and denaturation\n\n- Competitive inhibition: the inhibitor resembles the substrate and occupies the active site; a high substrate concentration shifts the competition in its favour.\n- Non-competitive inhibition: the inhibitor binds to an allosteric site, changes the enzyme's conformation and blocks catalysis.\n- Denaturation: heat or extreme pH denatures the enzyme protein (optimal temperature 37-40 °C in humans; at 0 °C the enzyme is simply slowed down).\n\n[!INFO]\nSome enzymes need a cofactor: if it is a complex organic molecule, it is called a coenzyme (NAD+, FAD, vitamin derivatives).\n\n[!APP]\nWhy does salivary amylase stop working efficiently once the food bolus reaches the stomach? ||| The highly acidic gastric pH (about 1.5-2) denatures the enzyme, whose optimum pH is close to 7.",
+      "summary_fr": "Cette leçon présente la cellule comme un système ouvert qui échange de l'énergie sous quatre formes, l'ATP comme monnaie énergétique universelle, et le rôle des enzymes dans le métabolisme.",
+      "summary_en": "This lesson presents the cell as an open system exchanging energy in four forms, ATP as the universal energy currency, and the role of enzymes in metabolism.",
+      "key_points_fr": [
+        "La cellule est un système ouvert : elle échange de la matière et de l'énergie avec son milieu.",
+        "L'ATP est la monnaie énergétique universelle ; son hydrolyse libère environ 30,5 kJ par mole.",
+        "Le catabolisme libère de l'énergie, l'anabolisme en consomme ; les enzymes catalysent sans être consommées."
+      ],
+      "key_points_en": [
+        "The cell is an open system: it exchanges matter and energy with its surroundings.",
+        "ATP is the universal energy currency; its hydrolysis releases about 30.5 kJ per mole.",
+        "Catabolism releases energy, anabolism consumes it; enzymes catalyse without being consumed."
+      ],
+      "duration_minutes": 12,
+      "difficulty": "medium",
+      "position": 1,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La cellule, système ouvert qui échange de l'énergie",
+          "point_en": "The cell, an open system that exchanges energy",
+          "sub_fr": "Les quatre formes d'énergie : chimique, électrique, thermique et mécanique.",
+          "sub_en": "The four forms of energy: chemical, electrical, thermal and mechanical.",
+          "image_fr": "Echange d'énergie.png",
+          "image_en": "Echange d'énergie.png",
+          "explanation_fr": "La cellule vivante est un système thermodynamique ouvert : elle échange de la matière et de l'énergie avec son milieu extérieur. Les échanges d'énergie se font sous quatre formes : chimique (production d'ATP), électrique (potentiel de membrane), thermique (maintien de la température à 37 °C) et mécanique (contraction musculaire). L'énergie ne se crée ni ne se détruit : elle se transforme d'une forme en une autre.",
+          "explanation_en": "The living cell is an open thermodynamic system: it exchanges matter and energy with its surroundings. Energy exchanges take four forms: chemical (ATP production), electrical (membrane potential), thermal (maintaining the temperature at 37 °C) and mechanical (muscle contraction). Energy is neither created nor destroyed: it is converted from one form into another.",
+          "structural_question_fr": "Qu'est-ce qu'un système ouvert ?",
+          "structural_question_en": "What is an open system?",
+          "structural_answer_fr": "échange de matière et d'énergie",
+          "structural_answer_en": "exchanges matter and energy",
+          "tips_fr": "Associez chaque forme à un exemple : chimique → ATP, électrique → neurone, thermique → 37 °C, mécanique → muscle.",
+          "tips_en": "Link each form to an example: chemical → ATP, electrical → neuron, thermal → 37 °C, mechanical → muscle.",
+          "traps_fr": "Un système fermé n'échange pas de matière ; la cellule vivante, elle, est ouverte.",
+          "traps_en": "A closed system does not exchange matter; the living cell, on the contrary, is open."
+        },
+        {
+          "position": 2,
+          "point_fr": "L'ATP, monnaie énergétique universelle de la cellule",
+          "point_en": "ATP, the universal energy currency of the cell",
+          "sub_fr": "Hydrolyse ATP → ADP + Pi ; glucose à court terme, triglycérides à long terme.",
+          "sub_en": "Hydrolysis ATP → ADP + Pi; glucose short-term, triglycerides long-term.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "L'ATP est la monnaie énergétique universelle : elle sert de convertisseur entre les quatre formes d'énergie. Son hydrolyse (ATP → ADP + Pi) libère environ 30,5 kJ par mole en rompant une liaison phosphate. Le glucose fournit l'énergie rapidement mobilisable, tandis que les triglycérides constituent la réserve énergétique à long terme.",
+          "explanation_en": "ATP is the universal energy currency: it acts as a converter between the four forms of energy. Its hydrolysis (ATP → ADP + Pi) releases about 30.5 kJ per mole by breaking a phosphate bond. Glucose provides rapidly mobilisable energy, while triglycerides form the long-term energy reserve.",
+          "structural_question_fr": "Que libère l'hydrolyse de l'ATP ?",
+          "structural_question_en": "What does the hydrolysis of ATP release?",
+          "structural_answer_fr": "ADP et Pi",
+          "structural_answer_en": "ADP and Pi",
+          "tips_fr": "ATP = pile rechargée, ADP = pile usée ; la phosphorylation (ADP + Pi) recharge la pile.",
+          "tips_en": "ATP = charged battery, ADP = spent battery; phosphorylation (ADP + Pi) recharges the battery.",
+          "traps_fr": "Ne confondez pas ATP et glucose : l'ATP transporte l'énergie immédiate, le glucose est un stock mobilisable.",
+          "traps_en": "Do not confuse ATP and glucose: ATP carries immediate energy, glucose is a mobilisable store."
+        },
+        {
+          "position": 3,
+          "point_fr": "Métabolisme : catabolisme, anabolisme et enzymes",
+          "point_en": "Metabolism: catabolism, anabolism and enzymes",
+          "sub_fr": "Le catabolisme libère de l'énergie, l'anabolisme en consomme, les enzymes catalysent.",
+          "sub_en": "Catabolism releases energy, anabolism consumes it, enzymes catalyse.",
+          "image_fr": "Enzy.PNG",
+          "image_en": "Enzy.PNG",
+          "explanation_fr": "Le métabolisme est l'ensemble des réactions chimiques de la cellule, comme une balance à deux plateaux : le catabolisme dégrade des molécules complexes en molécules simples et libère de l'énergie (exergonique), l'anabolisme assemble des molécules simples en molécules complexes et consomme de l'énergie (endergonique). Les enzymes catalysent ces réactions : elles accélèrent la réaction sans être consommées, en se liant au substrat au niveau de leur site actif.",
+          "explanation_en": "Metabolism is the set of chemical reactions in the cell, like a two-pan balance: catabolism breaks down complex molecules into simple ones and releases energy (exergonic), anabolism assembles simple molecules into complex ones and consumes energy (endergonic). Enzymes catalyse these reactions: they speed up the reaction without being consumed, by binding to the substrate at their active site.",
+          "structural_question_fr": "Quelle est la fonction d'une enzyme ?",
+          "structural_question_en": "What is the function of an enzyme?",
+          "structural_answer_fr": "accélérer les réactions chimiques",
+          "structural_answer_en": "speed up chemical reactions",
+          "tips_fr": "« Catabolisme » = casser (libère), « anabolisme » = amasser (consomme) ; les enzymes accélèrent sans être consommées.",
+          "tips_en": "'Catabolism' = cut down (releases), 'anabolism' = accumulate (consumes); enzymes speed up without being consumed.",
+          "traps_fr": "Une enzyme n'est ni un substrat ni un produit : elle ressort intacte de la réaction qu'elle catalyse.",
+          "traps_en": "An enzyme is neither a substrate nor a product: it comes out intact from the reaction it catalyses."
+        }
+      ]
+    },
+    {
+      "slug": "respiration-fermentation",
+      "title_fr": "La respiration cellulaire et la fermentation",
+      "title_en": "Cellular respiration and fermentation",
+      "objectives_fr": [
+        "Décrire les étapes de la respiration cellulaire et leur localisation.",
+        "Comparer le rendement énergétique de la respiration et de la fermentation.",
+        "Expliquer les fermentations lactique et alcoolique et la fatigue musculaire en anaérobie."
+      ],
+      "objectives_en": [
+        "Describe the steps of cellular respiration and their location.",
+        "Compare the energy yield of respiration and fermentation.",
+        "Explain lactic and alcoholic fermentation and muscle fatigue in anaerobiosis."
+      ],
+      "content_fr": "## Vue d'ensemble\n\nLa cellule peut produire son ATP de deux façons : la respiration cellulaire (voie aérobie) et la fermentation (voie anaérobie, de secours).\n\n## La respiration cellulaire\n\nLa respiration débute dans le cytosol et s'achève dans la mitochondrie. Elle permet la dégradation complète du glucose, avec un rendement élevé.\n\n## 1. La glycolyse (cytosol)\n\n- Se déroule dans le cytoplasme, sans oxygène : c'est la phase initiale anaérobie universelle.\n- Phosphorylation et clivage du glucose (C6H12O6) : elle consomme d'abord 2 ATP pour en produire 4, soit un gain net de 2 ATP.\n- Bilan : 1 glucose → 2 pyruvates + 2 ATP + 2 NADH.\n\n[[IMG: La glycolyse]]\n\n## 2. La décarboxylation du pyruvate (étape de transition)\n\n- Se déroule dans la matrice mitochondriale.\n- Chaque pyruvate subit une décarboxylation (perte de CO2) et devient l'acétyl-CoA.\n- Bilan : 2 pyruvates → 2 acétyl-CoA + 2 CO2 + 2 NADH.\n\n## 3. Le cycle de Krebs (matrice mitochondriale)\n\n- Se déroule entièrement dans la matrice mitochondriale.\n- L'acétyl-CoA se condense avec l'oxaloacétate (4C) pour former du citrate (6C), qui subit des décarboxylations et des oxydations.\n- Bilan (pour 2 acétyl-CoA) : 2 ATP + 4 CO2 + 6 NADH + 2 FADH2.\n\n## 4. La phosphorylation oxydative (crêtes mitochondriales)\n\n- Les coenzymes réduits (NADH et FADH2) cèdent leurs électrons à la chaîne respiratoire, créant un gradient de protons : la force proton-motrice.\n- Le retour des protons vers la matrice à travers l'ATP synthase active la phosphorylation de l'ADP en ATP.\n- Le dioxygène (O2) est l'accepteur final d'électrons et de protons : il forme de l'eau (H2O).\n\n[[IMG: La mitochondrie]]\n\n[!INFO]\nBilan de la respiration : C6H12O6 + 6 O2 + 38 ADP + 38 Pi → 6 CO2 + 6 H2O + 36 à 38 ATP. Le rendement théorique est d'environ 36 à 38 ATP par glucose.\n\n## La fermentation, voie anaérobie\n\nLa fermentation est une voie de dégradation incomplète des composés organiques, entièrement cytoplasmique, avec un rendement très faible : seulement 2 ATP par glucose.\n\n## La fermentation lactique\n\n- Dans les cellules musculaires squelettiques en effort intense, en absence d'oxygène.\n- Le pyruvate est réduit en lactate (acide lactique) par la lactate déshydrogénase (LDH), ce qui régénère le NAD+ nécessaire à la poursuite de la glycolyse.\n- Bilan : 1 glucose → 2 lactates + 2 ATP.\n\n## La fermentation alcoolique\n\n- Réalisée par les levures (boulangerie, fabrication du pain et des boissons alcoolisées).\n- Le pyruvate est transformé en acétaldéhyde (libérant du CO2), puis réduit en éthanol.\n- Bilan : 1 glucose → 2 éthanol + 2 CO2 + 2 ATP.\n\n[!APP]\nUn muscle en effort intense manque temporairement d'oxygène. Quelle voie prend le relais et quel est son rendement ? ||| La fermentation lactique (voie anaérobie) : seulement 2 ATP, d'où la fatigue musculaire rapide en effort anaérobie intense.\n\n[!PIEGE]\nLe déchet de la glycolyse anaérobie est l'acide lactique : il reste encore riche en énergie, car le glucose n'a pas été totalement oxydé en CO2 et H2O.",
+      "content_en": "## Overview\n\nThe cell can produce its ATP in two ways: cellular respiration (aerobic pathway) and fermentation (anaerobic, back-up pathway).\n\n## Cellular respiration\n\nRespiration starts in the cytosol and ends in the mitochondria. It completely breaks down glucose with a high yield.\n\n## 1. Glycolysis (cytosol)\n\n- Occurs in the cytoplasm, without oxygen: it is the universal anaerobic initial phase.\n- Phosphorylation and cleavage of glucose (C6H12O6): it first consumes 2 ATP to produce 4, i.e. a net gain of 2 ATP.\n- Balance: 1 glucose → 2 pyruvates + 2 ATP + 2 NADH.\n\n[[IMG: Glycolysis]]\n\n## 2. Pyruvate decarboxylation (transition step)\n\n- Occurs in the mitochondrial matrix.\n- Each pyruvate undergoes decarboxylation (loss of CO2) and becomes acetyl-CoA.\n- Balance: 2 pyruvates → 2 acetyl-CoA + 2 CO2 + 2 NADH.\n\n## 3. The Krebs cycle (mitochondrial matrix)\n\n- Takes place entirely in the mitochondrial matrix.\n- Acetyl-CoA condenses with oxaloacetate (4C) to form citrate (6C), which undergoes decarboxylations and oxidations.\n- Balance (for 2 acetyl-CoA): 2 ATP + 4 CO2 + 6 NADH + 2 FADH2.\n\n## 4. Oxidative phosphorylation (cristae of the mitochondria)\n\n- Reduced coenzymes (NADH and FADH2) hand over their electrons to the respiratory chain, creating a proton gradient: the proton-motive force.\n- The return of protons towards the matrix through ATP synthase activates the phosphorylation of ADP into ATP.\n- Oxygen (O2) is the final acceptor of electrons and protons: it forms water (H2O).\n\n[[IMG: The mitochondrion]]\n\n[!INFO]\nBalance of respiration: C6H12O6 + 6 O2 + 38 ADP + 38 Pi → 6 CO2 + 6 H2O + 36 to 38 ATP. The theoretical yield is about 36 to 38 ATP per glucose.\n\n## Fermentation, the anaerobic pathway\n\nFermentation is an incomplete degradation pathway of organic compounds, entirely cytoplasmic, with a very low yield: only 2 ATP per glucose.\n\n## Lactic acid fermentation\n\n- In skeletal muscle cells during intense effort, in the absence of oxygen.\n- Pyruvate is reduced to lactate (lactic acid) by lactate dehydrogenase (LDH), which regenerates the NAD+ needed for glycolysis to continue.\n- Balance: 1 glucose → 2 lactates + 2 ATP.\n\n## Alcoholic fermentation\n\n- Carried out by yeasts (baking, making bread and alcoholic drinks).\n- Pyruvate is converted into acetaldehyde (releasing CO2), then reduced into ethanol.\n- Balance: 1 glucose → 2 ethanol + 2 CO2 + 2 ATP.\n\n[!APP]\nA muscle in intense effort temporarily lacks oxygen. Which pathway takes over and what is its yield? ||| Lactic acid fermentation (anaerobic pathway): only 2 ATP, hence the rapid muscle fatigue during intense anaerobic effort.\n\n[!PIEGE]\nThe waste product of anaerobic glycolysis is lactic acid: it is still rich in energy, because glucose has not been fully oxidised into CO2 and H2O.",
+      "summary_fr": "Cette leçon décrit la respiration cellulaire (glycolyse, cycle de Krebs, phosphorylation oxydative) et la compare à la fermentation, voie anaérobie de faible rendement.",
+      "summary_en": "This lesson describes cellular respiration (glycolysis, Krebs cycle, oxidative phosphorylation) and compares it with fermentation, an anaerobic pathway of low yield.",
+      "key_points_fr": [
+        "La respiration, aérobie et mitochondriale, produit environ 36 à 38 ATP par glucose.",
+        "La fermentation, anaérobie et cytoplasmique, ne produit que 2 ATP par glucose.",
+        "En anaérobie, l'acide lactique s'accumule et la fatigue musculaire apparaît rapidement."
+      ],
+      "key_points_en": [
+        "Respiration, aerobic and mitochondrial, produces about 36 to 38 ATP per glucose.",
+        "Fermentation, anaerobic and cytoplasmic, produces only 2 ATP per glucose.",
+        "In anaerobiosis, lactic acid accumulates and muscle fatigue sets in quickly."
+      ],
+      "duration_minutes": 13,
+      "difficulty": "hard",
+      "position": 2,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La glycolyse : la phase initiale anaérobie universelle",
+          "point_en": "Glycolysis: the universal anaerobic initial phase",
+          "sub_fr": "Dans le cytosol, le glucose devient 2 pyruvates avec un gain net de 2 ATP.",
+          "sub_en": "In the cytosol, glucose becomes 2 pyruvates with a net gain of 2 ATP.",
+          "image_fr": "Glycolyse.PNG",
+          "image_en": "Glycolyse.PNG",
+          "explanation_fr": "La glycolyse se déroule dans le cytosol, sans oxygène : c'est la phase initiale anaérobie universelle, présente chez tous les organismes. Elle consomme d'abord 2 ATP, puis en produit 4, soit un gain net de 2 ATP. Bilan : un glucose (C6H12O6) → 2 pyruvates + 2 ATP + 2 NADH. Si l'oxygène est présent, la cellule poursuit la dégradation dans la mitochondrie.",
+          "explanation_en": "Glycolysis takes place in the cytosol, without oxygen: it is the universal anaerobic initial phase, present in all organisms. It first consumes 2 ATP, then produces 4, i.e. a net gain of 2 ATP. Balance: one glucose (C6H12O6) → 2 pyruvates + 2 ATP + 2 NADH. If oxygen is present, the cell continues the breakdown in the mitochondria.",
+          "structural_question_fr": "Où se déroule la glycolyse ?",
+          "structural_question_en": "Where does glycolysis take place?",
+          "structural_answer_fr": "dans le cytosol",
+          "structural_answer_en": "in the cytosol",
+          "tips_fr": "La glycolyse ne nécessite pas d'oxygène : c'est pourquoi elle fonctionne aussi en anaérobie.",
+          "tips_en": "Glycolysis does not require oxygen: that is why it also works in anaerobiosis.",
+          "traps_fr": "Le bilan net est de 2 ATP (et non 4) : 2 ATP sont investis avant les 4 produits.",
+          "traps_en": "The net yield is 2 ATP (not 4): 2 ATP are invested before the 4 produced."
+        },
+        {
+          "position": 2,
+          "point_fr": "Respiration mitochondriale : Krebs et phosphorylation oxydative",
+          "point_en": "Mitochondrial respiration: Krebs cycle and oxidative phosphorylation",
+          "sub_fr": "Cycle de Krebs (matrice), chaîne respiratoire et ATP synthase (crêtes), accepteur final O2.",
+          "sub_en": "Krebs cycle (matrix), respiratory chain and ATP synthase (cristae), final acceptor O2.",
+          "image_fr": "mito.PNG",
+          "image_en": "mito.PNG",
+          "explanation_fr": "Le cycle de Krebs se déroule dans la matrice mitochondriale et fournit les coenzymes réduits (NADH, FADH2). Au niveau des crêtes, la chaîne respiratoire crée un gradient de protons (force proton-motrice) ; leur retour par l'ATP synthase phosphoryle l'ADP en ATP. Le dioxygène est l'accepteur final d'électrons et de protons et forme de l'eau. Bilan total : environ 36 à 38 ATP par glucose.",
+          "explanation_en": "The Krebs cycle takes place in the mitochondrial matrix and provides the reduced coenzymes (NADH, FADH2). At the cristae, the respiratory chain creates a proton gradient (proton-motive force); their return through ATP synthase phosphorylates ADP into ATP. Oxygen is the final acceptor of electrons and protons and forms water. Total yield: about 36 to 38 ATP per glucose.",
+          "structural_question_fr": "Quel est l'accepteur final d'électrons de la respiration ?",
+          "structural_question_en": "What is the final electron acceptor of respiration?",
+          "structural_answer_fr": "le dioxygène",
+          "structural_answer_en": "oxygen",
+          "tips_fr": "La mitochondrie est la principale source d'ATP : la phosphorylation oxydative fournit la grande majorité des ATP.",
+          "tips_en": "The mitochondrion is the main source of ATP: oxidative phosphorylation provides the vast majority of the ATP.",
+          "traps_fr": "Le cycle de Krebs se déroule dans la matrice, et la phosphorylation oxydative sur les crêtes : ne les confondez pas.",
+          "traps_en": "The Krebs cycle takes place in the matrix, and oxidative phosphorylation on the cristae: do not confuse them."
+        },
+        {
+          "position": 3,
+          "point_fr": "La fermentation : lactique et alcoolique, 2 ATP par glucose",
+          "point_en": "Fermentation: lactic and alcoholic, 2 ATP per glucose",
+          "sub_fr": "Dégradation incomplète cytoplasmique ; l'acide lactique explique la fatigue rapide.",
+          "sub_en": "Incomplete cytoplasmic breakdown; lactic acid explains rapid fatigue.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "La fermentation est une voie anaérobie de secours, entièrement cytoplasmique, qui dégrade incomplètement le glucose : elle ne produit que 2 ATP par molécule. Dans le muscle en effort intense, le pyruvate est réduit en acide lactique (fermentation lactique), ce qui régénère le NAD+ pour que la glycolyse continue. Chez les levures, la fermentation alcoolique produit de l'éthanol et du CO2. Le faible rendement (2 ATP contre 36 à 38) explique la fatigue rapide en effort anaérobie.",
+          "explanation_en": "Fermentation is an anaerobic back-up pathway, entirely cytoplasmic, which incompletely breaks down glucose: it produces only 2 ATP per molecule. In a muscle under intense effort, pyruvate is reduced to lactic acid (lactic fermentation), which regenerates the NAD+ needed for glycolysis to continue. In yeasts, alcoholic fermentation produces ethanol and CO2. The low yield (2 ATP versus 36 to 38) explains the rapid fatigue during anaerobic effort.",
+          "structural_question_fr": "Combien d'ATP produit la fermentation par glucose ?",
+          "structural_question_en": "How many ATP does fermentation produce per glucose?",
+          "structural_answer_fr": "2 ATP",
+          "structural_answer_en": "2 ATP",
+          "tips_fr": "Fermentation = secours rapide mais pauvre : 2 ATP seulement, contre 36 à 38 pour la respiration.",
+          "tips_en": "Fermentation = quick but poor back-up: only 2 ATP, versus 36 to 38 for respiration.",
+          "traps_fr": "Le déchet de la glycolyse anaérobie est l'acide lactique, encore riche en énergie : la dégradation est incomplète.",
+          "traps_en": "The waste of anaerobic glycolysis is lactic acid, still rich in energy: the breakdown is incomplete."
+        }
+      ],
+      "quiz": {
+        "session_size": 10,
+        "title_fr": "Quiz — La respiration et la fermentation",
+        "title_en": "Quiz — Respiration and Fermentation",
+        "difficulty": "hard",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Une cellule vivante est un système thermodynamique ouvert car elle :",
+            "text_en": "A living cell is an open thermodynamic system because it:",
+            "explanation_fr": "Par définition, un système ouvert échange de la matière et de l'énergie avec son milieu extérieur, contrairement à un système fermé ou isolé.",
+            "explanation_en": "By definition, an open system exchanges matter and energy with its surroundings, unlike a closed or isolated system.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "échange de la matière et de l'énergie avec le milieu extérieur", "text_en": "exchanges matter and energy with its surroundings", "is_correct": true },
+              { "text_fr": "n'échange que de l'énergie, jamais de matière", "text_en": "exchanges only energy, never matter", "is_correct": false },
+              { "text_fr": "n'échange ni matière ni énergie", "text_en": "exchanges neither matter nor energy", "is_correct": false },
+              { "text_fr": "échange seulement de la chaleur avec l'extérieur", "text_en": "exchanges only heat with the outside", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Quelle molécule est appelée la monnaie énergétique universelle de la cellule ?",
+            "text_en": "Which molecule is called the universal energy currency of the cell?",
+            "explanation_fr": "L'ATP (adénosine triphosphate) est la monnaie énergétique universelle : la cellule l'utilise comme convertisseur entre les quatre formes d'énergie.",
+            "explanation_en": "ATP (adenosine triphosphate) is the universal energy currency: the cell uses it as a converter between the four forms of energy.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "l'ATP", "text_en": "ATP", "is_correct": true },
+              { "text_fr": "le glucose", "text_en": "glucose", "is_correct": false },
+              { "text_fr": "l'acide lactique", "text_en": "lactic acid", "is_correct": false },
+              { "text_fr": "la mitochondrie", "text_en": "the mitochondrion", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Le catabolisme correspond à :",
+            "text_en": "Catabolism corresponds to:",
+            "explanation_fr": "Le catabolisme est une réaction exergonique : il dégrade (C comme Casser) des molécules complexes en molécules simples et libère de l'énergie.",
+            "explanation_en": "Catabolism is an exergonic reaction: it breaks down (C for cut down) complex molecules into simple ones and releases energy.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "la dégradation de molécules complexes en molécules simples, qui libère de l'énergie (réaction exergonique)", "text_en": "the breakdown of complex molecules into simple ones, which releases energy (exergonic reaction)", "is_correct": true },
+              { "text_fr": "la synthèse de molécules complexes à partir de molécules simples, qui consomme de l'énergie", "text_en": "the synthesis of complex molecules from simple ones, which consumes energy", "is_correct": false },
+              { "text_fr": "le maintien de la température corporelle constante", "text_en": "the maintenance of constant body temperature", "is_correct": false },
+              { "text_fr": "le stockage de l'énergie dans les triglycérides", "text_en": "the storage of energy in triglycerides", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "L'anabolisme, qui assemble des molécules complexes (ex. : une protéine) :",
+            "text_en": "Anabolism, which assembles complex molecules (e.g. a protein):",
+            "explanation_fr": "L'anabolisme est endergonique : il consomme de l'énergie pour édifier des molécules complexes. Sans le vecteur ATP, l'édification cellulaire cesse immédiatement.",
+            "explanation_en": "Anabolism is endergonic: it consumes energy to build complex molecules. Without the ATP carrier, cell building stops immediately.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "requiert impérativement de l'énergie, fournie par l'ATP", "text_en": "absolutely requires energy, provided by ATP", "is_correct": true },
+              { "text_fr": "libère de l'énergie sans jamais en consommer", "text_en": "releases energy without ever consuming any", "is_correct": false },
+              { "text_fr": "ne nécessite aucune enzyme", "text_en": "requires no enzymes", "is_correct": false },
+              { "text_fr": "se déroule sans dépense énergétique", "text_en": "takes place without any energy cost", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "À la fin de la réaction qu'elles catalysent, les enzymes :",
+            "text_en": "At the end of the reaction they catalyse, enzymes:",
+            "explanation_fr": "Les enzymes sont des catalyseurs : elles accélèrent les réactions (jusqu'à des millions de fois) sans être consommées. Elles ne changent pas l'équilibre final, elles permettent seulement de l'atteindre plus vite.",
+            "explanation_en": "Enzymes are catalysts: they speed up reactions (by up to millions of times) without being consumed. They do not change the final equilibrium, they only help reach it faster.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "se retrouvent intactes, elles ne sont pas consommées", "text_en": "are found intact, they are not consumed", "is_correct": true },
+              { "text_fr": "sont dégradées et remplacées", "text_en": "are degraded and replaced", "is_correct": false },
+              { "text_fr": "disparaissent avec le substrat", "text_en": "disappear with the substrate", "is_correct": false },
+              { "text_fr": "sont transformées en produit", "text_en": "are converted into the product", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "L'hydrolyse de l'ATP en ADP et phosphate inorganique libère environ :",
+            "text_en": "The hydrolysis of ATP into ADP and inorganic phosphate releases about:",
+            "explanation_fr": "La rupture d'une liaison phosphate de l'ATP libère environ 30,5 kJ par mole : c'est cette énergie qui alimente les réactions endergoniques.",
+            "explanation_en": "Breaking a phosphate bond of ATP releases about 30.5 kJ per mole: it is this energy that fuels the endergonic reactions.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "30,5 kJ par mole", "text_en": "30.5 kJ per mole", "is_correct": true },
+              { "text_fr": "7,6 kJ par mole", "text_en": "7.6 kJ per mole", "is_correct": false },
+              { "text_fr": "305 kJ par mole", "text_en": "305 kJ per mole", "is_correct": false },
+              { "text_fr": "3,05 kJ par mole", "text_en": "3.05 kJ per mole", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "La glycolyse est dite phase initiale anaérobie universelle car :",
+            "text_en": "Glycolysis is called the universal anaerobic initial phase because:",
+            "explanation_fr": "La glycolyse se déroule dans le cytosol, sans oxygène, et constitue la première étape commune à tous les organismes. Si l'oxygène est présent, la cellule poursuit la dégradation dans la mitochondrie.",
+            "explanation_en": "Glycolysis takes place in the cytosol, without oxygen, and is the first step common to all organisms. If oxygen is present, the cell continues the breakdown in the mitochondria.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "elle se déroule dans le cytosol sans oxygène et existe chez tous les organismes", "text_en": "it takes place in the cytosol without oxygen and exists in all organisms", "is_correct": true },
+              { "text_fr": "elle exige l'oxygène et se déroule dans la mitochondrie", "text_en": "it requires oxygen and takes place in the mitochondrion", "is_correct": false },
+              { "text_fr": "elle n'existe que chez les levures", "text_en": "it only exists in yeasts", "is_correct": false },
+              { "text_fr": "elle ne produit jamais d'ATP", "text_en": "it never produces ATP", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Par rapport à la respiration cellulaire, la fermentation :",
+            "text_en": "Compared with cellular respiration, fermentation:",
+            "explanation_fr": "La fermentation est une dégradation incomplète et entièrement cytoplasmique : elle ne produit que 2 ATP par glucose, contre 36 à 38 pour la respiration.",
+            "explanation_en": "Fermentation is an incomplete and entirely cytoplasmic breakdown: it produces only 2 ATP per glucose, versus 36 to 38 for respiration.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "a un rendement bien plus faible : seulement 2 ATP par glucose", "text_en": "has a much lower yield: only 2 ATP per glucose", "is_correct": true },
+              { "text_fr": "produit environ 36 à 38 ATP par glucose", "text_en": "produces about 36 to 38 ATP per glucose", "is_correct": false },
+              { "text_fr": "se déroule dans la mitochondrie", "text_en": "takes place in the mitochondrion", "is_correct": false },
+              { "text_fr": "oxyde totalement le glucose en CO2 et H2O", "text_en": "fully oxidises glucose into CO2 and H2O", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Le bilan énergétique théorique de la respiration complète d'une molécule de glucose est d'environ :",
+            "text_en": "The theoretical energy yield of the complete respiration of one glucose molecule is about:",
+            "explanation_fr": "L'oxydation complète du glucose en aérobiose produit environ 36 à 38 ATP, grâce surtout à la phosphorylation oxydative.",
+            "explanation_en": "The complete oxidation of glucose in aerobiosis produces about 36 to 38 ATP, mainly thanks to oxidative phosphorylation.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "36 à 38 ATP", "text_en": "36 to 38 ATP", "is_correct": true },
+              { "text_fr": "2 ATP", "text_en": "2 ATP", "is_correct": false },
+              { "text_fr": "4 ATP", "text_en": "4 ATP", "is_correct": false },
+              { "text_fr": "100 ATP", "text_en": "100 ATP", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Chez un muscle en effort intense sans oxygène, le déchet de la glycolyse anaérobie est :",
+            "text_en": "In a muscle under intense effort without oxygen, the waste of anaerobic glycolysis is:",
+            "explanation_fr": "En anaérobiose, le glucose n'est pas totalement oxydé : le pyruvate est réduit en acide lactique, qui contient encore beaucoup d'énergie potentielle inutilisée.",
+            "explanation_en": "In anaerobiosis, glucose is not fully oxidised: pyruvate is reduced into lactic acid, which still contains a lot of unused potential energy.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "l'acide lactique, encore riche en énergie", "text_en": "lactic acid, still rich in energy", "is_correct": true },
+              { "text_fr": "l'éthanol", "text_en": "ethanol", "is_correct": false },
+              { "text_fr": "le dioxyde de carbone uniquement", "text_en": "carbon dioxide only", "is_correct": false },
+              { "text_fr": "l'eau et l'oxygène", "text_en": "water and oxygen", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Quel est le siège de la production maximale d'ATP de la cellule ?",
+            "text_en": "Where is the cell's maximal ATP production located?",
+            "explanation_fr": "La mitochondrie est le siège de la production maximale d'ATP grâce à la chaîne respiratoire (phosphorylation oxydative) : son blocage prive la cellule de sa source principale d'énergie.",
+            "explanation_en": "The mitochondrion is the site of maximal ATP production thanks to the respiratory chain (oxidative phosphorylation): blocking it deprives the cell of its main energy source.",
+            "difficulty": "hard",
+            "choices": [
+              { "text_fr": "la mitochondrie, via la phosphorylation oxydative (chaîne respiratoire)", "text_en": "the mitochondrion, via oxidative phosphorylation (respiratory chain)", "is_correct": true },
+              { "text_fr": "le cytosol, via la glycolyse", "text_en": "the cytosol, via glycolysis", "is_correct": false },
+              { "text_fr": "le noyau, via la transcription de l'ADN", "text_en": "the nucleus, via DNA transcription", "is_correct": false },
+              { "text_fr": "la membrane plasmique, via les transports passifs", "text_en": "the plasma membrane, via passive transports", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Laquelle de ces affirmations concernant le stockage de l'énergie est exacte ?",
+            "text_en": "Which of these statements about energy storage is correct?",
+            "explanation_fr": "Les glucides (glucose) fournissent l'énergie rapidement mobilisable, tandis que les triglycérides (lipides) constituent la réserve énergétique à long terme.",
+            "explanation_en": "Carbohydrates (glucose) provide rapidly mobilisable energy, while triglycerides (lipids) form the long-term energy reserve.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "Le glucose fournit l'énergie rapidement mobilisable ; les triglycérides sont la réserve à long terme.", "text_en": "Glucose provides rapidly mobilisable energy; triglycerides are the long-term reserve.", "is_correct": true },
+              { "text_fr": "Les triglycérides fournissent l'énergie immédiate des muscles.", "text_en": "Triglycerides provide the immediate energy of muscles.", "is_correct": false },
+              { "text_fr": "Le glucose est la principale réserve énergétique à long terme.", "text_en": "Glucose is the main long-term energy reserve.", "is_correct": false },
+              { "text_fr": "Les protéines sont la première source d'énergie de la cellule.", "text_en": "Proteins are the cell's primary source of energy.", "is_correct": false }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lefax — Aperçu cartes de leçon</title>
+<style>
+  :root{
+    --navy:#101B3D; --gold:#F5C518; --gold-dark:#B8880A;
+    --blue:#2F9BEE;
+    --bg:#EEF3F9; --card:#FFFFFF;
+    --text:#1A2138; --text-2:#6B7280; --text-3:#9AA3B2;
+    --line:#E4E9F0;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#F4F6F9;padding:32px 16px;}
+  .hint{max-width:390px;margin:0 auto 18px;text-align:center;font-size:12.5px;color:#6B7280;}
+
+  .phone{width:390px;height:760px;margin:0 auto;background:#000;border-radius:44px;padding:12px;box-shadow:0 20px 50px rgba(16,27,61,.25);position:relative;}
+  .screen-frame{width:100%;height:100%;background:var(--navy);border-radius:32px;overflow:hidden;position:relative;display:flex;flex-direction:column;}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:22px;background:#000;border-radius:0 0 14px 14px;z-index:30;}
+
+  .story-top{padding:32px 14px 10px;flex-shrink:0;position:relative;z-index:8;}
+  .progress-row{display:flex;gap:5px;margin-bottom:14px;}
+  .seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;}
+  .seg i{display:block;height:100%;background:#fff;width:0%;}
+  .seg.done i{width:100%;}
+  .head-row{display:flex;align-items:center;justify-content:space-between;}
+  .head-left{display:flex;align-items:center;gap:10px;}
+  .subject-badge{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#8BE0A6,#4CAF50);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .subject-badge svg{width:16px;height:16px;}
+  .head-left h1{margin:0;font-size:13.5px;color:#fff;font-weight:800;}
+  .head-left p{margin:0;font-size:10.5px;color:rgba(255,255,255,.6);}
+  .close-x{color:rgba(255,255,255,.8);font-size:17px;padding:4px;}
+
+  .stage{flex:1;position:relative;perspective:1200px;}
+  .tapzone{position:absolute;top:0;bottom:0;width:34%;z-index:5;}
+  .tapzone.left{left:0;} .tapzone.right{right:0;}
+
+  .cine-vignette{position:absolute;inset:0;z-index:15;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 52%, rgba(255,222,150,.55) 0%, rgba(245,197,24,.18) 32%, rgba(245,197,24,0) 62%);}
+
+  .cards{position:relative;height:100%;}
+
+  /* outer slot: handles card-to-card flip navigation */
+  .slot{position:absolute;inset:0;display:none;z-index:10;pointer-events:none;}
+  .slot.active{display:block;}
+
+  /* inner flip: handles front/back detail reveal */
+  .flip{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1);pointer-events:none;}
+  .flip.flipped{transform:rotateY(180deg);}
+  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;pointer-events:none;}
+  .face.back{transform:rotateY(180deg);}
+
+  .sweep{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit;}
+  .sweep i{position:absolute;top:-30%;left:0;width:42%;height:160%;background:linear-gradient(75deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 48%, rgba(255,255,255,0) 100%);transform:translateX(-160%) rotate(0deg);display:block;}
+
+  .front{justify-content:center;padding:18px 24px 28px;}
+  .card-illustration{width:74px;height:74px;border-radius:20px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
+  .card-illustration svg{width:36px;height:36px;}
+  .card-eyebrow{font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+  .card-point{font-size:21px;font-weight:800;color:#fff;line-height:1.35;margin-bottom:14px;}
+  .card-sub{font-size:13.5px;color:rgba(255,255,255,.68);line-height:1.5;margin-bottom:26px;}
+
+  .more-btn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:rgba(255,255,255,.12);color:#fff;font-size:12.5px;font-weight:700;padding:9px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.2);position:relative;pointer-events:auto;}
+  .more-btn svg{width:14px;height:14px;}
+
+  .back{background:var(--bg);padding:0;}
+  .back-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px;border-bottom:1px solid var(--line);flex-shrink:0;}
+  .back-head h3{margin:0;font-size:14.5px;color:var(--text);}
+  .back-flip{display:flex;align-items:center;gap:5px;color:var(--blue);font-size:12.5px;font-weight:700;padding:5px 4px;position:relative;pointer-events:auto;}
+  .back-flip svg{width:14px;height:14px;}
+  .back-body{flex:1;overflow-y:auto;padding:16px 20px 24px;font-size:13.5px;color:var(--text);line-height:1.65;pointer-events:auto;}
+  .back-body p{margin:0 0 12px;}
+
+  .final .front{align-items:center;text-align:center;}
+  .final .check{width:64px;height:64px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .final .check svg{width:30px;height:30px;color:var(--navy);}
+  .final h2{color:#fff;font-size:19px;margin:0 0 8px;}
+  .final p{color:rgba(255,255,255,.65);font-size:13px;margin:0 0 24px;max-width:260px;}
+  .quiz-btn{background:var(--blue);color:#fff;font-weight:800;font-size:14px;padding:14px 28px;border-radius:12px;position:relative;pointer-events:auto;}
+</style>
+</head>
+<body>
+
+<p class="hint">Gauche/droite = carte suivante (avec effet de bascule) &middot; bouton doré = la carte se retourne pour montrer le détail</p>
+
+<div class="phone">
+  <div class="screen-frame" id="frame">
+    <div class="notch"></div>
+
+    <div class="story-top">
+      <div class="progress-row" id="progressRow"></div>
+      <div class="head-row">
+        <div class="head-left">
+          <div class="subject-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2C9 6 6 8 6 13a6 6 0 0012 0c0-5-3-7-6-11z"/></svg></div>
+          <div>
+            <h1>Cytologie 1</h1>
+            <p>La Cellule &middot; Biologie</p>
+          </div>
+        </div>
+        <span class="close-x">&#10005;</span>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="tapzone left" onclick="goPrev()"></div>
+      <div class="tapzone right" onclick="goNext()"></div>
+      <div class="cards" id="cards"></div>
+      <div class="cine-vignette" id="vignette"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var data = [
+  {eyebrow:"Carte 1 / 6",point:"Qu'est-ce qu'une cellule ?",sub:"L'unité de base de tout être vivant, capable de se nourrir, se reproduire et réagir à son environnement.",
+   detailTitle:"La cellule, unité du vivant",
+   detail:["Toute forme de vie connue est composée d'au moins une cellule. Certains organismes n'en ont qu'une seule (bactéries), d'autres — comme l'être humain — en comptent des dizaines de milliers de milliards.",
+     "Une cellule est délimitée par une membrane, contient un cytoplasme et, chez les organismes eucaryotes, un noyau qui abrite le matériel génétique.",
+     "C'est un point de départ classique aux concours : sachez définir la cellule et citer ses trois fonctions essentielles — nutrition, reproduction, réaction aux stimuli."]},
+  {eyebrow:"Carte 2 / 6",point:"La membrane plasmique",sub:"Une barrière sélective qui contrôle ce qui entre et sort de la cellule.",
+   detailTitle:"La membrane plasmique",
+   detail:["Composée d'une double couche de phospholipides, elle sépare l'intérieur de la cellule du milieu extérieur.",
+     "Elle est dite « semi-perméable » : certaines substances la traversent librement, d'autres ont besoin de protéines de transport spécifiques.",
+     "C'est elle qui permet le phénomène d'osmose, un sujet fréquent aux concours de médecine."]},
+  {eyebrow:"Carte 3 / 6",point:"Le noyau",sub:"Le centre de contrôle de la cellule, où est conservé l'ADN.",
+   detailTitle:"Le noyau cellulaire",
+   detail:["Entouré d'une enveloppe nucléaire percée de pores, le noyau protège et organise le matériel génétique (ADN).",
+     "Il dirige l'activité de la cellule en contrôlant la production des protéines.",
+     "Seules les cellules eucaryotes possèdent un noyau — c'est une différence clé avec les cellules procaryotes (bactéries)."]},
+  {eyebrow:"Carte 4 / 6",point:"Les organites clés",sub:"Mitochondries, ribosomes, appareil de Golgi : chacun a un rôle précis.",
+   detailTitle:"Les organites",
+   detail:["Les mitochondries produisent l'énergie de la cellule (ATP) — on les appelle souvent « la centrale énergétique » de la cellule.",
+     "Les ribosomes fabriquent les protéines à partir des instructions de l'ADN.",
+     "L'appareil de Golgi trie, modifie et achemine les protéines vers leur destination finale."]},
+  {eyebrow:"Carte 5 / 6",point:"Cellule animale vs végétale",sub:"Deux structures proches, mais trois différences à connaître par cœur.",
+   detailTitle:"Animale vs végétale",
+   detail:["La cellule végétale possède une paroi cellulosique rigide, absente chez la cellule animale.",
+     "Elle contient aussi des chloroplastes, responsables de la photosynthèse.",
+     "Enfin, la cellule végétale a généralement une grande vacuole centrale, alors que les vacuoles animales sont petites et nombreuses."]}
+];
+
+var current = 0;
+var animating = false;
+var cardsEl = document.getElementById('cards');
+var progressEl = document.getElementById('progressRow');
+var total = data.length + 1;
+
+data.forEach(function(d, i){
+  var seg = document.createElement('div');
+  seg.className = 'seg';
+  seg.innerHTML = '<i></i>';
+  progressEl.appendChild(seg);
+
+  var slot = document.createElement('div');
+  slot.className = 'slot';
+  slot.innerHTML =
+    '<div class="flip" id="flip-'+i+'">'+
+      '<div class="face front">'+
+        '<div class="sweep"><i></i></div>'+
+        '<div class="card-illustration"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.4" fill="#F5C518" stroke="none"/></svg></div>'+
+        '<div class="card-eyebrow">'+d.eyebrow+'</div>'+
+        '<div class="card-point">'+d.point+'</div>'+
+        '<div class="card-sub">'+d.sub+'</div>'+
+        '<button class="more-btn" onclick="flipCard('+i+')">Voir plus <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg></button>'+
+      '</div>'+
+      '<div class="face back">'+
+        '<div class="back-head"><h3>'+d.detailTitle+'</h3><span class="back-flip" onclick="flipCard('+i+')">Retourner <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 4v6h6M20 20v-6h-6"/><path d="M5 15a8 8 0 0014-4M19 9a8 8 0 00-14 4"/></svg></span></div>'+
+        '<div class="back-body">'+d.detail.map(function(p){return '<p>'+p+'</p>';}).join('')+'</div>'+
+      '</div>'+
+    '</div>';
+  cardsEl.appendChild(slot);
+});
+
+var segF = document.createElement('div');
+segF.className = 'seg';
+segF.innerHTML = '<i></i>';
+progressEl.appendChild(segF);
+
+var finalSlot = document.createElement('div');
+finalSlot.className = 'slot final';
+finalSlot.innerHTML =
+  '<div class="flip"><div class="face front">'+
+  '<div class="sweep"><i></i></div>'+
+  '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>'+
+  '<h2>Leçon terminée</h2>'+
+  '<p>Tu as vu les points clés de Cytologie 1. Prêt à tester ce que tu as retenu ?</p>'+
+  '<button class="quiz-btn">Commencer le quiz &rarr;</button>'+
+  '</div></div>';
+cardsEl.appendChild(finalSlot);
+
+var allSlots = document.querySelectorAll('.slot');
+var segs = document.querySelectorAll('.seg');
+allSlots[0].classList.add('active');
+updateProgress();
+
+function updateProgress(){
+  segs.forEach(function(s,i){
+    s.classList.remove('done');
+    var bar = s.querySelector('i');
+    if(i < current){ s.classList.add('done'); bar.style.width='100%'; }
+    else if(i === current){ bar.style.width = '100%'; s.classList.add('done'); }
+    else { bar.style.width = '0%'; }
+  });
+}
+
+function flipCard(i){
+  document.getElementById('flip-'+i).classList.toggle('flipped');
+}
+
+function goTo(newIndex, dir){
+  if(animating || newIndex<0 || newIndex>total-1 || newIndex===current) return;
+  animating = true;
+  var oldEl = allSlots[current];
+  var newEl = allSlots[newIndex];
+  var innerFlip = newEl.querySelector('.flip');
+  if(innerFlip){ innerFlip.classList.remove('flipped'); }
+  var oldInner = oldEl.querySelector('.flip');
+  if(oldInner){ oldInner.classList.remove('flipped'); }
+
+  newEl.classList.add('active');
+  newEl.style.transform = 'translate(0px,90px) scale(0.5) rotateY(90deg)';
+  newEl.style.opacity = '0';
+
+  requestAnimationFrame(function(){
+    var vignette = document.getElementById('vignette');
+    vignette.animate(
+      [{opacity:0, offset:0},{opacity:0, offset:0.4},{opacity:1, offset:0.66},{opacity:0, offset:0.95}],
+      {duration:520, easing:'ease-out'}
+    );
+
+    oldEl.animate(
+      [
+        {transform:'translate(0px,0px) scale(1) rotateY(0deg) rotate(0deg)', opacity:1, offset:0},
+        {transform:'translate(0px,3px) scale(0.96) rotateY(0deg) rotate(0deg)', opacity:1, offset:0.14},
+        {transform:'translate('+(dir*50)+'px,-14px) scale(0.82) rotateY('+(dir*-70)+'deg) rotate('+(dir*-6)+'deg)', opacity:0, offset:1}
+      ],
+      {duration:440, easing:'cubic-bezier(.4,0,.7,0)', fill:'forwards'}
+    );
+    var newAnim = newEl.animate(
+      [
+        {transform:'translate(0px,90px) scale(0.5) rotateY(90deg) rotate('+(dir*4)+'deg)', opacity:0, offset:0},
+        {transform:'translate(0px,20px) scale(0.78) rotateY(58deg) rotate('+(dir*2)+'deg)', opacity:0.7, offset:0.5},
+        {transform:'translate(0px,-10px) scale(1.04) rotateY(14deg) rotate(0deg)', opacity:1, offset:0.85},
+        {transform:'translate(0px,0px) scale(1) rotateY(0deg) rotate(0deg)', opacity:1, offset:1}
+      ],
+      {duration:500, easing:'cubic-bezier(.22,.8,.3,1.1)', fill:'forwards'}
+    );
+
+    var sweepEl = newEl.querySelector('.sweep i');
+    if(sweepEl){
+      sweepEl.style.transform = 'translateX(-160%) rotate(0deg)';
+      sweepEl.animate(
+        [
+          {transform:'translateX(-160%) rotate(0deg)', offset:0},
+          {transform:'translateX(-160%) rotate(0deg)', offset:0.38},
+          {transform:'translateX(320%) rotate(0deg)', offset:0.78},
+          {transform:'translateX(320%) rotate(0deg)', offset:1}
+        ],
+        {duration:520, easing:'cubic-bezier(.3,.6,.4,1)'}
+      );
+    }
+
+    newAnim.onfinish = function(){
+      oldEl.classList.remove('active');
+      oldEl.style.transform=''; oldEl.style.opacity='';
+      newEl.style.transform=''; newEl.style.opacity='';
+      current = newIndex;
+      animating = false;
+      updateProgress();
+    };
+  });
+}
+function goNext(){ goTo(current+1, 1); }
+function goPrev(){ goTo(current-1, -1); }
+
+var startX = null;
+var stage = document.querySelector('.stage');
+stage.addEventListener('pointerdown', function(e){ startX = e.clientX; });
+stage.addEventListener('pointerup', function(e){
+  if(startX === null) return;
+  var dx = e.clientX - startX;
+  if(Math.abs(dx) > 40){ dx < 0 ? goNext() : goPrev(); }
+  startX = null;
+});
+</script>
+
+</body>
+</html>

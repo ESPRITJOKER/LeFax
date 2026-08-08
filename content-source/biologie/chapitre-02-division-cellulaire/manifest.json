@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "subject_slug": "biologie",
+  "chapter_slug": "division-cellulaire",
+  "chapter_name_fr": "Division cellulaire",
+  "chapter_name_en": "Cell Division",
+  "chapter_position": 3,
+  "chapter_new": true,
+  "lessons": [
+    {
+      "slug": "cycle-cellulaire-interphase",
+      "title_fr": "Le cycle cellulaire et l'interphase",
+      "title_en": "The Cell Cycle and Interphase",
+      "objectives_fr": [
+        "Décrire les phases de l'interphase : G1, S et G2.",
+        "Distinguer diploïdie (2n) et haploïdie (n) ainsi que la structure d'un chromosome.",
+        "Expliquer la régulation du cycle cellulaire et la différence entre mitose et amitose."
+      ],
+      "objectives_en": [
+        "Describe the phases of interphase: G1, S and G2.",
+        "Distinguish diploidy (2n) from haploidy (n) and the structure of a chromosome.",
+        "Explain cell cycle regulation and the difference between mitosis and amitosis."
+      ],
+      "content_fr": "## Le cycle cellulaire\nLe cycle cellulaire s'étend de la formation d'une cellule à sa division en deux cellules filles. Il comprend deux grandes périodes :\n- L'interphase (environ 90 % du cycle) : période de préparation et d'activité métabolique intense.\n- La division cellulaire (mitose ou méiose) : la mitose concerne les cellules somatiques.\n\n[[IMG: Schéma du cycle cellulaire : interphase (G1, S, G2) et mitose]]\n\n## L'interphase en trois étapes\n- Phase G1 (Growth 1) : croissance cellulaire, synthèse de protéines et duplication des organites.\n- Phase S (Synthèse) : réplication de l'ADN sous l'action de l'ADN polymérase ; la quantité d'ADN double (2Q à 4Q) mais le nombre de chromosomes reste 2n.\n- Phase G2 (Growth 2) : la plus courte ; la cellule achève sa croissance, synthétise les protéines nécessaires à la division (tubulines du fuseau) et vérifie l'intégrité de l'ADN.\n\n## Ploïdie et chromosomes\n- Une cellule diploïde (2n) possède deux exemplaires de chaque chromosome : des paires d'homologues, l'un d'origine paternelle, l'autre maternelle. Chez l'Homme : 2n = 46 (22 paires d'autosomes et 1 paire de gonosomes).\n- Une cellule haploïde (n) ne possède qu'un seul représentant de chaque paire (les gamètes, n = 23). La fusion d'un gamète mâle et d'un gamète femelle rétablit la diploïdie (2n = 46).\n\n## Régulation du cycle\n[!INFO] Des points de contrôle (G1/S, G2/M, M) vérifient la taille de la cellule, l'intégrité de l'ADN et l'attachement du fuseau avant d'autoriser l'étape suivante.\n\nAprès différenciation, certaines cellules matures cessent de se diviser et sortent du cycle pour entrer en phase G0 (quiescence) : un arrêt réversible (hépatocytes, lymphocytes) ou définitif (hématies matures, qui perdent leur noyau).\n\n## Mitose ou amitose ?\n- Les procaryotes ne font pas de mitose : ils se divisent par amitose (scissiparité).\n- La mitose est la division équationnelle des cellules eucaryotes : 2n donne 2 cellules filles 2n.\n\n[!PIEGE] En phase S, la quantité d'ADN double (2Q à 4Q) mais le nombre de chromosomes reste 2n = 46 : seules les chromatides par chromosome passent de 1 à 2. Le nombre de chromosomes ne varie qu'à la cytodiérèse.\n\n[!APP] Une cellule somatique humaine possède 2n = 46 chromosomes. Juste avant la mitose, combien de chromatides contient-elle au total ? ||| 92 chromatides (46 chromosomes × 2 chromatides)",
+      "content_en": "## The cell cycle\nThe cell cycle spans from the formation of a cell to its division into two daughter cells. It includes two main periods:\n- Interphase (about 90% of the cycle): a preparation period of intense metabolic activity.\n- Cell division (mitosis or meiosis): mitosis concerns somatic cells.\n\n[[IMG: Schéma du cycle cellulaire : interphase (G1, S, G2) et mitose]]\n\n## Interphase in three steps\n- G1 phase (Growth 1): cell growth, protein synthesis and organelle duplication.\n- S phase (Synthesis): DNA replication under the action of DNA polymerase; the amount of DNA doubles (2Q to 4Q) but the chromosome number stays 2n.\n- G2 phase (Growth 2): the shortest; the cell finishes growing, synthesizes the proteins needed for division (spindle tubulins) and checks DNA integrity.\n\n## Ploidy and chromosomes\n- A diploid cell (2n) carries two copies of each chromosome: homologous pairs, one of paternal origin, the other maternal. In humans: 2n = 46 (22 autosome pairs and 1 gonosome pair).\n- A haploid cell (n) carries only one member of each pair (the gametes, n = 23). The fusion of a male and a female gamete restores diploidy (2n = 46).\n\n## Regulation of the cycle\n[!INFO] Checkpoints (G1/S, G2/M, M) verify cell size, DNA integrity and spindle attachment before allowing the next step.\n\nAfter differentiation, some mature cells stop dividing and leave the cycle to enter the G0 phase (quiescence): a reversible arrest (hepatocytes, lymphocytes) or a permanent one (mature red blood cells, which lose their nucleus).\n\n## Mitosis or amitosis?\n- Prokaryotes do not perform mitosis: they divide by amitosis (binary fission).\n- Mitosis is the equational division of eukaryotic cells: 2n gives two 2n daughter cells.\n\n[!PIEGE] In S phase, the amount of DNA doubles (2Q to 4Q) but the chromosome number stays 2n = 46: only the chromatids per chromosome go from 1 to 2. The chromosome number changes only at cytokinesis.\n\n[!APP] A human somatic cell has 2n = 46 chromosomes. Just before mitosis, how many chromatids does it contain in total? ||| 92 chromatids (46 chromosomes x 2 chromatids)",
+      "summary_fr": "Le cycle cellulaire alterne interphase (G1, S, G2) et division ; les cellules somatiques diploïdes (2n = 46) se divisent par mitose, tandis que les procaryotes utilisent l'amitose.",
+      "summary_en": "The cell cycle alternates interphase (G1, S, G2) with division; diploid somatic cells (2n = 46) divide by mitosis, while prokaryotes use amitosis.",
+      "key_points_fr": [
+        "L'interphase comprend trois phases : G1 (croissance), S (réplication de l'ADN) et G2 (préparation à la division).",
+        "Les cellules somatiques humaines sont diploïdes (2n = 46, 23 paires d'homologues) ; les gamètes sont haploïdes (n = 23).",
+        "Le cycle est contrôlé par des points de contrôle ; les cellules matures peuvent entrer en phase G0 et les procaryotes se divisent par amitose."
+      ],
+      "key_points_en": [
+        "Interphase has three phases: G1 (growth), S (DNA replication) and G2 (preparation for division).",
+        "Human somatic cells are diploid (2n = 46, 23 pairs of homologues); gametes are haploid (n = 23).",
+        "The cycle is controlled by checkpoints; mature cells may enter the G0 phase and prokaryotes divide by amitosis."
+      ],
+      "duration_minutes": 10,
+      "difficulty": "easy",
+      "position": 1,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Le cycle cellulaire : interphase et division",
+          "point_en": "The cell cycle: interphase and division",
+          "sub_fr": "De la formation d'une cellule à sa division en deux cellules filles.",
+          "sub_en": "From the formation of a cell to its division into two daughter cells.",
+          "image_fr": "Cycle cellulaire.png",
+          "image_en": "Cycle cellulaire.png",
+          "explanation_fr": "Le cycle cellulaire s'étend de la formation d'une cellule à sa propre division en deux cellules filles. Il comprend deux grandes périodes : l'interphase (environ 90 % du cycle), phase de préparation, et la division cellulaire (mitose ou méiose). L'interphase se déroule elle-même en trois étapes : G1, S et G2.",
+          "explanation_en": "The cell cycle spans from the formation of a cell to its division into two daughter cells. It comprises two main periods: interphase (about 90% of the cycle), a preparation phase, and cell division (mitosis or meiosis). Interphase itself proceeds through three stages: G1, S and G2.",
+          "structural_question_fr": "Quel est le nom de la période de préparation qui occupe environ 90 % du cycle cellulaire ?",
+          "structural_answer_fr": "Interphase",
+          "structural_question_en": "What is the name of the preparation period occupying about 90% of the cell cycle?",
+          "structural_answer_en": "Interphase",
+          "tips_fr": "Retenez l'ordre G1 puis S puis G2, avec la réplication de l'ADN uniquement en phase S.",
+          "tips_en": "Remember the order G1 then S then G2, with DNA replication occurring only in S phase.",
+          "traps_fr": "Ne confondez pas phase S (réplication de l'ADN) et phases G1 ou G2 : la synthèse d'ADN n'a lieu qu'en phase S.",
+          "traps_en": "Do not confuse S phase (DNA replication) with G1 or G2: DNA synthesis occurs only during S phase."
+        },
+        {
+          "position": 2,
+          "point_fr": "Diploïdie et haploïdie : les chromosomes",
+          "point_en": "Diploidy and haploidy: chromosomes",
+          "sub_fr": "2n = 46 chez l'Homme (23 paires d'homologues) ; les gamètes sont haploïdes, n = 23.",
+          "sub_en": "In humans 2n = 46 (23 pairs of homologues); gametes are haploid, n = 23.",
+          "image_fr": "Anatomie du chromosome.jfif",
+          "image_en": "Anatomie du chromosome.jfif",
+          "explanation_fr": "Une cellule diploïde (2n) possède deux exemplaires de chaque chromosome : pour chaque paire, l'un est d'origine paternelle, l'autre maternelle. Chez l'Homme, 2n = 46 chromosomes, soit 23 paires : 22 paires d'autosomes et 1 paire de gonosomes (chromosomes sexuels). Une cellule haploïde (n) ne contient qu'un seul représentant de chaque paire : c'est le cas des gamètes (n = 23).",
+          "explanation_en": "A diploid cell (2n) carries two copies of each chromosome: for every pair, one is of paternal origin, the other maternal. In humans, 2n = 46 chromosomes, i.e. 23 pairs: 22 pairs of autosomes and 1 pair of gonosomes (sex chromosomes). A haploid cell (n) contains only one member of each pair: this is the case of gametes (n = 23).",
+          "structural_question_fr": "Nombre de chromosomes d'une cellule somatique humaine diploïde ?",
+          "structural_answer_fr": "46",
+          "structural_question_en": "How many chromosomes does a human diploid somatic cell have?",
+          "structural_answer_en": "46",
+          "tips_fr": "Homologues = chromosomes d'une même paire, l'un paternel, l'autre maternel.",
+          "tips_en": "Homologues are the two chromosomes of a pair, one paternal and one maternal.",
+          "traps_fr": "Ne confondez pas chromosomes et chromatides : 46 chromosomes à 2 chromatides font 92 chromatides avant la division.",
+          "traps_en": "Do not confuse chromosomes with chromatids: 46 chromosomes with 2 chromatids each make 92 chromatids before division."
+        },
+        {
+          "position": 3,
+          "point_fr": "Régulation du cycle et phase G0",
+          "point_en": "Cell cycle regulation and the G0 phase",
+          "sub_fr": "Points de contrôle (G1/S, G2/M) ; les cellules matures peuvent sortir du cycle en G0.",
+          "sub_en": "Checkpoints (G1/S, G2/M); mature cells may exit the cycle into G0.",
+          "image_fr": "Interphase.gif",
+          "image_en": "Interphase.gif",
+          "explanation_fr": "Le cycle cellulaire est régulé par des points de contrôle qui vérifient la croissance de la cellule, l'intégrité de l'ADN et le bon attachement du fuseau avant chaque transition. Après différenciation, certaines cellules matures cessent de se diviser et entrent en phase G0 (quiescence) : l'arrêt peut être réversible (lymphocytes, hépatocytes) ou définitif, comme pour les hématies qui ont perdu leur noyau.",
+          "explanation_en": "The cell cycle is regulated by checkpoints that verify cell growth, DNA integrity and proper spindle attachment before each transition. After differentiation, some mature cells stop dividing and enter the G0 phase (quiescence): the arrest may be reversible (lymphocytes, hepatocytes) or permanent, as for red blood cells that have lost their nucleus.",
+          "structural_question_fr": "Nom de la phase de quiescence où les cellules matures sortent du cycle ?",
+          "structural_answer_fr": "G0",
+          "structural_question_en": "What is the name of the quiescent phase where mature cells exit the cycle?",
+          "structural_answer_en": "G0",
+          "tips_fr": "La phase G0 est hors cycle : les cellules ne se divisent plus mais restent fonctionnelles.",
+          "tips_en": "The G0 phase is out of the cycle: cells no longer divide but remain functional.",
+          "traps_fr": "Une hématie mature (globule rouge) ne se divise plus : elle a perdu son noyau au stade réticulocyte.",
+          "traps_en": "A mature red blood cell no longer divides: it lost its nucleus at the reticulocyte stage."
+        }
+      ]
+    },
+    {
+      "slug": "la-mitose",
+      "title_fr": "La mitose : les quatre phases",
+      "title_en": "Mitosis: the four phases",
+      "objectives_fr": [
+        "Décrire les quatre phases de la mitose : prophase, métaphase, anaphase et télophase.",
+        "Expliquer le rôle du fuseau mitotique et de la cytodiérèse.",
+        "Énoncer le résultat de la mitose : deux cellules filles diploïdes identiques."
+      ],
+      "objectives_en": [
+        "Describe the four phases of mitosis: prophase, metaphase, anaphase and telophase.",
+        "Explain the role of the mitotic spindle and of cytokinesis.",
+        "State the outcome of mitosis: two identical diploid daughter cells."
+      ],
+      "content_fr": "## La mitose : division équationnelle\nLa mitose concerne les cellules somatiques et permet la croissance, la réparation et le renouvellement des tissus. C'est une division équationnelle : elle conserve la ploïdie (2n donne 2 × 2n).\n\n[[IMG: Les quatre étapes de la mitose : prophase, métaphase, anaphase, télophase]]\n\n## Les quatre phases\n- Prophase : l'ADN s'enroule fortement, les chromosomes bichromatidiens deviennent individualisés et visibles. Le fuseau mitotique se met en place à partir des centrosomes qui migrent aux pôles ; l'enveloppe nucléaire se dissout.\n- Métaphase : les chromosomes s'alignent sur la plaque équatoriale (plan médian) ; chaque chromosome est attaché au fuseau par son centromère.\n- Anaphase : les centromères se divisent, les chromatides sœurs se séparent et migrent vers les pôles opposés grâce à la rétraction des microtubules.\n- Télophase : les chromatides (devenues monochromatidiennes) se décondensent ; l'enveloppe nucléaire et les nucléoles se reconstituent dans chaque cellule fille.\n\n## Cytodiérèse\n- Chez les cellules animales, la division du cytoplasme se fait par étranglement de la membrane plasmique via un anneau contractile d'actine et de myosine.\n- Chez les cellules végétales, elle se fait par formation d'une plaque cellulaire.\n\n## Résultat\n[!INFO] La mitose produit deux cellules filles diploïdes (2n), identiques entre elles et identiques à la cellule mère.\n\n[!PIEGE] Ne confondez pas mitose et méiose : la méiose (cellules germinales) comporte deux divisions et produit quatre cellules haploïdes (n) différentes, les gamètes.\n\n[!APP] Un chercheur observe des chromatides sœurs migrant vers des pôles opposés. Quelle phase observe-t-il ? ||| L'anaphase",
+      "content_en": "## Mitosis: an equational division\nMitosis concerns somatic cells and allows growth, repair and tissue renewal. It is an equational division: it preserves ploidy (2n gives 2 x 2n).\n\n[[IMG: Les quatre étapes de la mitose : prophase, métaphase, anaphase, télophase]]\n\n## The four phases\n- Prophase: DNA condenses tightly, the bichromatid chromosomes become individualized and visible. The mitotic spindle forms from centrosomes that migrate to the poles; the nuclear envelope dissolves.\n- Metaphase: chromosomes align on the equatorial plate (median plane); each chromosome is attached to the spindle at its centromere.\n- Anaphase: centromeres split, sister chromatids separate and migrate toward opposite poles as the microtubules retract.\n- Telophase: the (now monochromatid) chromatids decondense; the nuclear envelope and nucleoli reform in each daughter cell.\n\n## Cytokinesis\n- In animal cells, the cytoplasm divides by constriction of the plasma membrane via a contractile ring of actin and myosin.\n- In plant cells, it divides by formation of a cell plate.\n\n## Outcome\n[!INFO] Mitosis produces two diploid daughter cells (2n), identical to each other and to the mother cell.\n\n[!PIEGE] Do not confuse mitosis with meiosis: meiosis (germ cells) involves two divisions and produces four different haploid cells (n), the gametes.\n\n[!APP] A researcher observes sister chromatids migrating toward opposite poles. Which phase is observed? ||| Anaphase",
+      "summary_fr": "La mitose est une division équationnelle en quatre phases (prophase, métaphase, anaphase, télophase) suivie de la cytodiérèse : deux cellules filles diploïdes identiques à la cellule mère.",
+      "summary_en": "Mitosis is an equational division in four phases (prophase, metaphase, anaphase, telophase) followed by cytokinesis: two diploid daughter cells identical to the mother cell.",
+      "key_points_fr": [
+        "La mitose se déroule en quatre phases : prophase, métaphase, anaphase et télophase.",
+        "Le fuseau mitotique (microtubules issus des centrosomes) oriente et sépare les chromosomes ; les chromatides migrent vers les pôles à l'anaphase.",
+        "Résultat : 2n donne 2 × 2n, deux cellules filles diploïdes identiques ; à ne pas confondre avec la méiose (4 cellules haploïdes)."
+      ],
+      "key_points_en": [
+        "Mitosis proceeds through four phases: prophase, metaphase, anaphase and telophase.",
+        "The mitotic spindle (microtubules from the centrosomes) orients and separates the chromosomes; chromatids migrate to the poles in anaphase.",
+        "Outcome: 2n gives 2 x 2n, two identical diploid daughter cells; not to be confused with meiosis (4 haploid cells)."
+      ],
+      "duration_minutes": 12,
+      "difficulty": "medium",
+      "position": 2,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La prophase : condensation et fuseau mitotique",
+          "point_en": "Prophase: condensation and the mitotic spindle",
+          "sub_fr": "Chromosomes bichromatidiens visibles, centrosomes aux pôles, enveloppe nucléaire dissoute.",
+          "sub_en": "Bichromatid chromosomes become visible, centrosomes at the poles, nuclear envelope dissolved.",
+          "image_fr": "Prophase.png",
+          "image_en": "Prophase.png",
+          "explanation_fr": "Lors de la prophase, l'ADN s'enroule fortement : les chromosomes bichromatidiens deviennent individualisés et visibles au microscope. Le centrosome se dédouble et migre vers les pôles, où s'organisent les microtubules du fuseau mitotique. L'enveloppe nucléaire et les nucléoles se dissolvent.",
+          "explanation_en": "During prophase, DNA condenses tightly: the bichromatid chromosomes become individualized and visible under the microscope. The centrosome divides and migrates toward the poles, where the microtubules of the mitotic spindle organize. The nuclear envelope and nucleoli dissolve.",
+          "structural_question_fr": "Structure de fibres qui sépare les chromosomes pendant la mitose ?",
+          "structural_answer_fr": "Fuseau mitotique",
+          "structural_question_en": "Which fiber structure separates the chromosomes during mitosis?",
+          "structural_answer_en": "Mitotic spindle",
+          "tips_fr": "À la prophase, chaque chromosome est encore bichromatidien (2 chromatides reliées au centromère).",
+          "tips_en": "In prophase, each chromosome is still bichromatid (2 chromatids joined at the centromere).",
+          "traps_fr": "La condensation des chromosomes se fait en prophase, pas en interphase.",
+          "traps_en": "Chromosome condensation occurs in prophase, not in interphase."
+        },
+        {
+          "position": 2,
+          "point_fr": "Métaphase et anaphase : alignement puis séparation",
+          "point_en": "Metaphase and anaphase: alignment then separation",
+          "sub_fr": "Alignement sur la plaque équatoriale, puis clivage des centromères et migration des chromatides.",
+          "sub_en": "Alignment on the equatorial plate, then centromere splitting and chromatid migration.",
+          "image_fr": "Métaphase.png",
+          "image_en": "Métaphase.png",
+          "explanation_fr": "En métaphase, les chromosomes s'alignent sur la plaque équatoriale, chaque chromosome étant attaché au fuseau par son centromère. En anaphase, les centromères se divisent : les chromatides sœurs se séparent et migrent vers des pôles opposés, tirées par la rétraction des microtubules.",
+          "explanation_en": "In metaphase, chromosomes align on the equatorial plate, each chromosome attached to the spindle at its centromere. In anaphase, centromeres split: sister chromatids separate and migrate to opposite poles, pulled by microtubule shortening.",
+          "structural_question_fr": "Plan médian de la cellule où s'alignent les chromosomes en métaphase ?",
+          "structural_answer_fr": "Plaque équatoriale",
+          "structural_question_en": "On which median plane do chromosomes align during metaphase?",
+          "structural_answer_en": "Equatorial plate",
+          "tips_fr": "Ordre mnémotechnique : prophase, métaphase, anaphase, télophase.",
+          "tips_en": "Mnemonic order: prophase, metaphase, anaphase, telophase.",
+          "traps_fr": "À l'anaphase, le clivage des centromères double temporairement le nombre de chromosomes au sein de la cellule (92 au total, répartis en 46 et 46).",
+          "traps_en": "In anaphase, centromere splitting temporarily doubles the chromosome count within the cell (92 in total, split 46 and 46)."
+        },
+        {
+          "position": 3,
+          "point_fr": "Résultat de la mitose : deux cellules filles 2n",
+          "point_en": "Outcome of mitosis: two 2n daughter cells",
+          "sub_fr": "Cytodiérèse puis deux cellules diploïdes identiques ; la méiose, elle, produit 4 cellules haploïdes.",
+          "sub_en": "Cytokinesis then two identical diploid cells; meiosis, by contrast, produces 4 haploid cells.",
+          "image_fr": "Mitose.png",
+          "image_en": "Mitose.png",
+          "explanation_fr": "Après la télophase, la cytodiérèse partage le cytoplasme : chez les animaux par étranglement de la membrane (anneau contractile d'actine et de myosine), chez les végétaux par formation d'une plaque cellulaire. La mitose est une division équationnelle : elle donne deux cellules filles diploïdes (2n), identiques entre elles et identiques à la cellule mère.",
+          "explanation_en": "After telophase, cytokinesis shares the cytoplasm: in animals by membrane constriction (a contractile ring of actin and myosin), in plants by formation of a cell plate. Mitosis is an equational division: it produces two diploid daughter cells (2n), identical to each other and to the mother cell.",
+          "structural_question_fr": "Nombre de cellules filles haploïdes produites par la méiose ?",
+          "structural_answer_fr": "4",
+          "structural_question_en": "How many haploid daughter cells does meiosis produce?",
+          "structural_answer_en": "4",
+          "tips_fr": "Mitose = 1 division équationnelle donnant 2 cellules 2n ; méiose = 2 divisions donnant 4 cellules n.",
+          "tips_en": "Mitosis = 1 equational division giving 2 cells 2n; meiosis = 2 divisions giving 4 cells n.",
+          "traps_fr": "La mitose ne réduit jamais la ploïdie : elle conserve 2n. La réduction à n est le propre de la méiose.",
+          "traps_en": "Mitosis never reduces ploidy: it preserves 2n. The reduction to n is specific to meiosis."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — La mitose : les quatre phases",
+        "title_en": "Quiz — Mitosis: the four phases",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Quel événement caractérise la métaphase ?",
+            "text_en": "Which event characterizes metaphase?",
+            "explanation_fr": "En métaphase, les chromosomes s'alignent sur la plaque équatoriale de la cellule, chacun étant fixé au fuseau mitotique par son centromère.",
+            "explanation_en": "In metaphase, chromosomes align on the equatorial plate of the cell, each attached to the mitotic spindle at its centromere.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "L'alignement des chromosomes sur la plaque équatoriale", "text_en": "The alignment of chromosomes on the equatorial plate", "is_correct": true },
+              { "text_fr": "La séparation des chromatides sœurs", "text_en": "The separation of sister chromatids", "is_correct": false },
+              { "text_fr": "La condensation des chromosomes et la dissolution de l'enveloppe nucléaire", "text_en": "Chromosome condensation and nuclear envelope breakdown", "is_correct": false },
+              { "text_fr": "La reconstitution de l'enveloppe nucléaire", "text_en": "Reformation of the nuclear envelope", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Quel est le résultat final de la mitose ?",
+            "text_en": "What is the final outcome of mitosis?",
+            "explanation_fr": "La mitose est équationnelle : elle produit deux cellules filles diploïdes (2n), identiques entre elles et identiques à la cellule mère.",
+            "explanation_en": "Mitosis is equational: it produces two diploid daughter cells (2n), identical to each other and to the mother cell.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "Deux cellules filles diploïdes (2n) identiques", "text_en": "Two identical diploid daughter cells (2n)", "is_correct": true },
+              { "text_fr": "Quatre cellules filles haploïdes (n)", "text_en": "Four haploid daughter cells (n)", "is_correct": false },
+              { "text_fr": "Deux cellules filles haploïdes (n)", "text_en": "Two haploid daughter cells (n)", "is_correct": false },
+              { "text_fr": "Une seule cellule fille géante", "text_en": "A single giant daughter cell", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Au cours de quelle phase de l'interphase l'ADN est-il répliqué ?",
+            "text_en": "During which interphase phase is DNA replicated?",
+            "explanation_fr": "La réplication de l'ADN a lieu pendant la phase S (Synthèse) de l'interphase, sous l'action de l'ADN polymérase.",
+            "explanation_en": "DNA replication occurs during the S phase (Synthesis) of interphase, under the action of DNA polymerase.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "Phase S", "text_en": "S phase", "is_correct": true },
+              { "text_fr": "Phase G1", "text_en": "G1 phase", "is_correct": false },
+              { "text_fr": "Phase G2", "text_en": "G2 phase", "is_correct": false },
+              { "text_fr": "Phase M", "text_en": "M phase", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Quelle phase de la mitose observe-t-on lorsque les chromatides sœurs migrent vers des pôles opposés ?",
+            "text_en": "Which phase of mitosis is observed when sister chromatids migrate toward opposite poles?",
+            "explanation_fr": "L'anaphase débute par le clivage des centromères : les chromatides sœurs se séparent et migrent vers les pôles opposés le long des microtubules du fuseau.",
+            "explanation_en": "Anaphase begins with centromere splitting: sister chromatids separate and migrate to opposite poles along the spindle microtubules.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "L'anaphase", "text_en": "Anaphase", "is_correct": true },
+              { "text_fr": "La prophase", "text_en": "Prophase", "is_correct": false },
+              { "text_fr": "La métaphase", "text_en": "Metaphase", "is_correct": false },
+              { "text_fr": "La télophase", "text_en": "Telophase", "is_correct": false }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
