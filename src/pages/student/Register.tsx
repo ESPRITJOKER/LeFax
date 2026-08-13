@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { useI18n } from "../../lib/i18n";
 import { REGIONS, TOWNS } from "../../lib/regions";
+import { normalizePhone } from "../../lib/phone";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 
 // Flip to true once a real SMS provider is configured (CDC section 8/13) —
@@ -47,16 +48,20 @@ export default function Register() {
     }
     setSubmitting(true);
 
+    // Canonicalize to E.164 so the identifier stored now matches what login
+    // sends later (corrections doc note 5 — the "must create a new account" bug).
+    const normalizedPhone = normalizePhone(phone);
+
     if (!AUTH_OTP_ENABLED) {
       const { data: fnData, error: fnError } = await supabase.functions.invoke("auth-otp", {
-        body: { phone, action: "signup", password, firstName, lastName, region, town },
+        body: { phone: normalizedPhone, action: "signup", password, firstName, lastName, region, town },
       });
       if (fnError || fnData?.error) {
         setSubmitting(false);
         setError(fnData?.error ?? fnError?.message ?? "Sign-up failed.");
         return;
       }
-      const { error: signInError } = await supabase.auth.signInWithPassword({ phone, password });
+      const { error: signInError } = await supabase.auth.signInWithPassword({ phone: normalizedPhone, password });
       setSubmitting(false);
       if (signInError) {
         setError(signInError.message);
@@ -67,7 +72,7 @@ export default function Register() {
     }
 
     const { error: signUpError } = await supabase.auth.signUp({
-      phone,
+      phone: normalizedPhone,
       password,
       options: { data: { first_name: firstName, last_name: lastName, region, town } },
     });
@@ -86,7 +91,7 @@ export default function Register() {
       return;
     }
     setSubmitting(true);
-    const { error: verifyError } = await supabase.auth.verifyOtp({ phone, token: otp, type: "sms" });
+    const { error: verifyError } = await supabase.auth.verifyOtp({ phone: normalizePhone(phone), token: otp, type: "sms" });
     setSubmitting(false);
     if (verifyError) {
       setError(verifyError.message);
@@ -97,7 +102,7 @@ export default function Register() {
 
   async function resendOtp() {
     if (!isSupabaseConfigured) return;
-    await supabase.auth.resend({ type: "sms", phone });
+    await supabase.auth.resend({ type: "sms", phone: normalizePhone(phone) });
   }
 
   return (
@@ -119,7 +124,18 @@ export default function Register() {
             <div className="text-left">
               <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("reg_firstname")} className={inputClass} />
               <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("reg_lastname")} className={inputClass} />
-              <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+237 6XX XXX XXX" className={inputClass} />
+              <div className="flex items-stretch mb-3">
+                <span className="flex items-center gap-1 px-3 rounded-l-[8px] border border-r-0 border-[#e2e8f0] bg-[#f8fafc] text-[14px] text-ink-900 font-semibold whitespace-nowrap">
+                  🇨🇲 +237
+                </span>
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  placeholder="6 XX XX XX XX"
+                  className="flex-1 min-w-0 box-border border border-[#e2e8f0] rounded-r-[8px] px-3.5 py-[13px] text-[14px] outline-none focus:border-brand-500"
+                />
+              </div>
               <select
                 value={region}
                 onChange={(e) => {
@@ -164,10 +180,9 @@ export default function Register() {
             >
               {submitting ? "..." : lang === "fr" ? "INSCRIPTION" : "SIGN UP"}
             </button>
-            <div className="mt-4 text-[13px] text-[#647084]">
-              {t("reg_haveaccount")}{" "}
-              <a onClick={() => navigate("/login")} className="cursor-pointer font-semibold">
-                {t("reg_login")}
+            <div className="mt-4 text-[13px]">
+              <a onClick={() => navigate("/login")} className="cursor-pointer font-semibold text-brand-600">
+                {lang === "fr" ? "J'ai déjà un compte" : "I already have an account"}
               </a>
             </div>
           </div>

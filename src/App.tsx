@@ -9,6 +9,8 @@ import Track from "./pages/student/Track";
 import Dashboard from "./pages/student/Dashboard";
 import SubjectChapters from "./pages/student/SubjectChapters";
 import ChapterLessons from "./pages/student/ChapterLessons";
+import ChapterStories from "./pages/student/ChapterStories";
+import ChapterPractice from "./pages/student/ChapterPractice";
 import LessonDetail from "./pages/student/LessonDetail";
 import Quiz from "./pages/student/Quiz";
 import QuizResult from "./pages/student/QuizResult";
@@ -18,6 +20,7 @@ import MockExamResult from "./pages/student/MockExamResult";
 import Shop from "./pages/student/Shop";
 import Tasks from "./pages/student/Tasks";
 import Leaderboard from "./pages/student/Leaderboard";
+import Performance from "./pages/student/Performance";
 import Profile from "./pages/student/Profile";
 import Notifications from "./pages/student/Notifications";
 import Search from "./pages/student/Search";
@@ -78,6 +81,22 @@ export default function App() {
           element={
             <ProtectedRoute roles={["student"]}>
               <ChapterLessons />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chapter/:chapterId/stories"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <ChapterStories />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chapter/:chapterId/practice/:level"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <ChapterPractice />
             </ProtectedRoute>
           }
         />
@@ -150,6 +169,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Leaderboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/performance"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <Performance />
             </ProtectedRoute>
           }
         />

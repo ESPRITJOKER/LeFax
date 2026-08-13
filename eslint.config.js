@@ -20,6 +20,7 @@ export default [
       "ds-bundle/**",
       "stitch_lefax_course_exam_prep/**",
       "supabase/**",
+      "scripts/**",
       "*.config.js",
       "*.config.ts",
       "*.config.cjs",

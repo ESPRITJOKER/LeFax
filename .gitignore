@@ -20,6 +20,8 @@ supabase/.temp
 .vercel
 .env*
 
+scripts/tmp/
+
 .ds-sync/
 ds-bundle/
 .design-sync/.cache/

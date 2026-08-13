@@ -24,18 +24,34 @@ interface StructAnswerState {
   correct: boolean;
 }
 
+// A lightweight swipe-direction hint (a pointing finger) shows on the first
+// card of a lesson, fading with familiarity (corrections doc: "une main qui
+// donne avec l'index la direction du défilement… plus l'utilisateur est
+// habitué, moins elle s'affiche. Pas besoin d'écrire de long textes"). We
+// count how many times it has been shown across lessons and stop after a few.
+const HINT_KEY = "lefax_swipe_hint_seen";
+function hintSeenCount(): number {
+  if (typeof localStorage === "undefined") return 99;
+  return Number(localStorage.getItem(HINT_KEY) ?? "0");
+}
+
 export function LessonCardDeck({
   cards,
   lessonTitle,
   chapterName,
   onFinish,
+  onClose,
 }: {
   cards: LessonCardRow[];
   lessonTitle: string;
   chapterName?: string | null;
   onFinish: () => void;
+  onClose?: () => void;
 }) {
   const { t, lang } = useI18n();
+  // Show the finger hint on the very first card until the user has seen it a
+  // handful of times, then retire it.
+  const [showHint, setShowHint] = useState(hintSeenCount() < 3);
 
   // Slots: one per card, plus a final "lesson complete" slot.
   const totalSlots = cards.length + 1;
@@ -48,7 +64,14 @@ export function LessonCardDeck({
   const vignetteRef = useRef<HTMLDivElement | null>(null);
   const startXRef = useRef<number | null>(null);
 
+  function dismissHint() {
+    if (!showHint) return;
+    setShowHint(false);
+    if (typeof localStorage !== "undefined") localStorage.setItem(HINT_KEY, String(hintSeenCount() + 1));
+  }
+
   function goTo(newIndex: number, dir: 1 | -1) {
+    dismissHint();
     if (animatingRef.current || newIndex < 0 || newIndex > totalSlots - 1 || newIndex === current) return;
     const oldEl = slotRefs.current[current];
     const newEl = slotRefs.current[newIndex];
@@ -162,11 +185,20 @@ export function LessonCardDeck({
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <h1 className="font-serif font-extrabold text-[14px] truncate">{lessonTitle}</h1>
             {chapterName && <p className="text-[10.5px] text-white/60 truncate">{chapterName}</p>}
           </div>
+          {/* Close (symbol only — corrections doc: "On rentre comment au menu ou
+              sur les stories ?" → an always-visible ✕ back to the stories grid). */}
+          {onClose && (
+            <button onClick={onClose} aria-label={lang === "fr" ? "Fermer" : "Close"} className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-4 h-4" strokeLinecap="round">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
@@ -175,6 +207,25 @@ export function LessonCardDeck({
         {/* Side tap-zones navigate — front face only, so back-face taps reach its controls. */}
         {!flipped && <div className="absolute top-0 bottom-0 left-0 w-[34%] z-[5]" onClick={goPrev} />}
         {!flipped && <div className="absolute top-0 bottom-0 right-0 w-[34%] z-[5]" onClick={goNext} />}
+
+        {/* Visible chevron affordances (symbols, matching the original reader). */}
+        {!flipped && current > 0 && (
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 z-[6] w-8 h-8 rounded-full bg-white/10 flex items-center justify-center pointer-events-none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" className="w-4 h-4"><path d="M15 6l-6 6 6 6" /></svg>
+          </div>
+        )}
+        {!flipped && current < totalSlots - 1 && (
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 z-[6] w-8 h-8 rounded-full bg-white/10 flex items-center justify-center pointer-events-none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" className="w-4 h-4"><path d="M9 6l6 6-6 6" /></svg>
+          </div>
+        )}
+
+        {/* First-card swipe hint: a pointing finger nudging rightwards, no text. */}
+        {showHint && !flipped && current === 0 && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[7] pointer-events-none flex flex-col items-center gap-1">
+            <div style={{ animation: "fingerNudge 1.2s ease-in-out infinite" }} className="text-[30px]">👉</div>
+          </div>
+        )}
 
         <div className="relative h-full">
           {/* Content card slots */}
@@ -223,13 +274,15 @@ export function LessonCardDeck({
                     <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">{cardLabel(i)}</div>
                     <div className="font-serif text-[21px] font-extrabold leading-[1.35] mb-3.5">{point}</div>
                     {sub && <div className="text-[13.5px] text-white/70 leading-[1.5] mb-6">{sub}</div>}
+                    {/* Reveal the back face — symbol only (corrections doc:
+                        "pas besoin d'écrire : voir plus… juste de bons symboles"). */}
                     <button
                       onClick={() => setFlipped(true)}
-                      className="inline-flex items-center gap-1.5 self-start bg-white/[0.12] border border-white/20 rounded-pill px-4 py-2.5 text-[12.5px] font-bold"
+                      aria-label={t("card_more")}
+                      className="inline-flex items-center justify-center self-start w-11 h-11 bg-white/[0.12] border border-white/20 rounded-full"
                     >
-                      {t("card_more")}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="w-3.5 h-3.5">
-                        <path d="M9 18l6-6-6-6" />
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-5 h-5">
+                        <path d="M6 9l6 6 6-6" />
                       </svg>
                     </button>
                   </div>
@@ -241,9 +294,13 @@ export function LessonCardDeck({
                   >
                     <div className="flex items-center justify-between px-5 py-3.5 border-b border-border flex-shrink-0">
                       <h3 className="font-serif font-bold text-[14.5px] text-ink-900 truncate pr-2">{point}</h3>
-                      <button onClick={() => setFlipped(false)} className="flex items-center gap-1 text-brand-600 text-[12.5px] font-bold flex-shrink-0">
-                        {t("card_flipBack")}
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="w-3.5 h-3.5">
+                      {/* Flip back to the front — symbol only (no "Retourner" text). */}
+                      <button
+                        onClick={() => setFlipped(false)}
+                        aria-label={t("card_flipBack")}
+                        className="flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full bg-ink-100 text-brand-600"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-4 h-4">
                           <path d="M4 4v6h6M20 20v-6h-6" />
                           <path d="M5 15a8 8 0 0014-4M19 9a8 8 0 00-14 4" />
                         </svg>
@@ -356,7 +413,6 @@ export function LessonCardDeck({
         </div>
       </div>
 
-      <p className="text-center text-[10.5px] text-white/40 pb-2 pt-1 flex-shrink-0">{t("card_swipeHint")}</p>
     </div>
   );
 }

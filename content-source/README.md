@@ -51,3 +51,24 @@ compared to the stored expected answer. A correct answer phrased differently
 than the expected one will be marked wrong. This is an accepted MVP trade-off;
 revisit with AI-assisted grading if it becomes a real problem in practice. When
 authoring `structural_answer_*`, keep the expected answer short and canonical.
+
+## Content pipeline (manifest → DB)
+
+Each chapter folder's `manifest.json` (see `MANIFEST-SCHEMA.md`) is the reviewable
+source of truth. Two scripts turn it into content:
+
+| step | command | output |
+|------|---------|--------|
+| 1. build migration | `node scripts/build-ingest.mjs` | `supabase/migrations/0012_ingest_content.sql` |
+| 2. upload images | `node scripts/upload-images.mjs` | `lesson-media` Storage (needs service-role key) |
+| 3. apply | `supabase db push` (after `supabase login`) | live DB rows |
+
+Image URLs are **deterministic**:
+`https://<project>.supabase.co/storage/v1/object/public/lesson-media/biologie/<chapter>/<file>`,
+so the migration can embed them before the upload even runs — upload first anyway
+so the files exist when the app renders.
+
+Auth note: `.env.local` has an empty `SUPABASE_SERVICE_ROLE_KEY`. Running
+`upload-images.mjs` requires filling it (Dashboard → Project Settings → API →
+`service_role`). Applying `0012` requires `supabase login` (the stored CLI token
+is currently stale/unauthorized). Both are manual, credential-bound steps.

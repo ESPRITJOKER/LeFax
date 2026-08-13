@@ -12,8 +12,42 @@ import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { SubjectRow } from "../../lib/database.types";
 
 interface SubjectProgress extends SubjectRow {
-  progressPct: number;
+  chapterCount: number;
 }
+
+// Day/night greeting (corrections doc note 1: "Ça ne suit pas le cycle jour
+// nuit"). Bonjour in the day, Bonsoir in the evening, Bonne nuit late.
+function greeting(lang: "fr" | "en"): string {
+  const h = new Date().getHours();
+  if (lang === "fr") {
+    if (h >= 5 && h < 17) return "Bonjour";
+    if (h >= 17 && h < 22) return "Bonsoir";
+    return "Bonne nuit";
+  }
+  if (h >= 5 && h < 17) return "Good morning";
+  if (h >= 17 && h < 22) return "Good evening";
+  return "Good night";
+}
+
+// Rotating motivational subtitle (corrections doc note 2: "Tu peux mettre des
+// rotations : discret mais déterminé ; garde en vue l'objectif ; tu vas y
+// arriver…"). Picked by day so it's stable within a session but varies.
+const SUBTITLES: Record<"fr" | "en", string[]> = {
+  fr: [
+    "Continue sur ta lancée",
+    "Discret mais déterminé",
+    "Garde en vue l'objectif",
+    "Tu vas y arriver",
+    "Que souhaites-tu apprendre aujourd'hui ?",
+  ],
+  en: [
+    "Keep up the momentum",
+    "Quiet but determined",
+    "Keep your goal in sight",
+    "You'll get there",
+    "What would you like to learn today?",
+  ],
+};
 
 export default function Dashboard() {
   const { lang } = useI18n();
@@ -32,36 +66,22 @@ export default function Dashboard() {
     (async () => {
       const { data: subjectRows } = await supabase.from("subjects").select("*").eq("track", "medicine").order("position");
 
-      let progressBySubject: Record<string, number> = {};
-      if (profile && subjectRows) {
-        const { data: chapterRows } = await supabase.from("chapters").select("id, subject_id");
-        const { data: lessonRows } = await supabase.from("lessons").select("id, chapter_id").eq("published", true);
-        const { data: progressRows } = await supabase.from("lesson_progress").select("lesson_id, status").eq("user_id", profile.id);
+      // Chapter count per subject drives the "{N} chapitres" subtitle on each
+      // subject card (corrections doc note 3: keep the original presentation,
+      // drop the progress bar).
+      const { data: chapterRows } = await supabase.from("chapters").select("id, subject_id");
+      const chaptersBySubject: Record<string, number> = {};
+      for (const c of chapterRows ?? []) chaptersBySubject[c.subject_id] = (chaptersBySubject[c.subject_id] ?? 0) + 1;
 
-        const chapterToSubject = new Map((chapterRows ?? []).map((c) => [c.id, c.subject_id]));
-        const lessonToSubject = new Map((lessonRows ?? []).map((l) => [l.id, chapterToSubject.get(l.chapter_id)]));
-        const doneLessonIds = new Set((progressRows ?? []).filter((p) => p.status === "done").map((p) => p.lesson_id));
-
-        const totalsBySubject: Record<string, number> = {};
-        const doneBySubject: Record<string, number> = {};
-        for (const l of lessonRows ?? []) {
-          const subjectId = lessonToSubject.get(l.id);
-          if (!subjectId) continue;
-          totalsBySubject[subjectId] = (totalsBySubject[subjectId] ?? 0) + 1;
-          if (doneLessonIds.has(l.id)) doneBySubject[subjectId] = (doneBySubject[subjectId] ?? 0) + 1;
-        }
-        progressBySubject = Object.fromEntries(
-          subjectRows.map((s) => [s.id, totalsBySubject[s.id] ? Math.round(((doneBySubject[s.id] ?? 0) / totalsBySubject[s.id]) * 100) : 0])
-        );
-      }
-
-      setSubjects((subjectRows ?? []).map((s) => ({ ...s, progressPct: progressBySubject[s.id] ?? 0 })));
+      setSubjects((subjectRows ?? []).map((s) => ({ ...s, chapterCount: chaptersBySubject[s.id] ?? 0 })));
       setLoading(false);
     })();
   }, [profile]);
 
   const firstName = profile?.first_name || (lang === "fr" ? "Étudiant" : "Student");
   const initial = (profile?.first_name?.[0] ?? "?").toUpperCase();
+  const phrases = SUBTITLES[lang];
+  const subtitle = phrases[Math.floor(Date.now() / 86_400_000) % phrases.length];
 
   return (
     <PhoneFrame>
@@ -78,25 +98,9 @@ export default function Dashboard() {
         <div className="flex-1 min-h-0 overflow-auto pb-[90px]">
           <div className="px-5 pt-5">
             <p className="font-serif font-bold text-[19px] text-ink-900 mb-0.5">
-              {lang === "fr" ? `Bonjour ${firstName} 👋` : `Hi ${firstName} 👋`}
+              {`${greeting(lang)} ${firstName} 👋`}
             </p>
-            <p className="text-[13px] text-[#647084] mb-[18px]">
-              {lang === "fr" ? "Continue sur ta lancée aujourd'hui" : "Keep up the momentum today"}
-            </p>
-
-            <div className="bg-brand-800 rounded-[14px] px-[18px] py-4 flex items-center justify-between mb-5">
-              <div>
-                <div className="font-serif font-bold text-[14px] text-white">
-                  {lang === "fr" ? `Série de ${profile?.streak_count ?? 0} jours` : `${profile?.streak_count ?? 0}-day streak`}
-                </div>
-                <div className="text-[12px] text-[#9fb3cc] mt-0.5">
-                  {lang === "fr" ? "Termine une leçon aujourd'hui" : "Finish a lesson today"}
-                </div>
-              </div>
-              <div className="bg-ochre-600 text-ink-900 font-serif font-extrabold text-[16px] rounded-[10px] px-3 py-2">
-                {profile?.streak_count ?? 0}🔥
-              </div>
-            </div>
+            <p className="text-[13px] text-[#647084] mb-6">{subtitle}</p>
 
             <p className="font-serif font-bold text-[15px] text-ink-900 mb-3">{lang === "fr" ? "Mes matières" : "My subjects"}</p>
           </div>
@@ -122,11 +126,13 @@ export default function Dashboard() {
                     </div>
                     <div className="flex-1">
                       <div className="font-serif font-semibold text-[14.5px] text-ink-900">{lang === "fr" ? s.name_fr : s.name_en}</div>
-                      <div className="h-[6px] bg-ink-100 rounded-pill mt-2 overflow-hidden">
-                        <div className="h-full bg-brand-500 rounded-pill" style={{ width: `${s.progressPct}%` }} />
+                      <div className="text-[12.5px] text-muted mt-0.5">
+                        {s.chapterCount} {lang === "fr" ? (s.chapterCount === 1 ? "chapitre" : "chapitres") : s.chapterCount === 1 ? "chapter" : "chapters"}
                       </div>
                     </div>
-                    <div className="text-[12px] text-muted font-semibold">{s.progressPct}%</div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
+                      <path d="M9 6l6 6-6 6" stroke="#c3cbd6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </div>
                 );
               })

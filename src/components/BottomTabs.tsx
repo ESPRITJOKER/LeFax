@@ -7,18 +7,19 @@ const TABS: { key: NavKey; to: string; labelKey: "nav_revisions" | "nav_evaluati
   { key: "revisions", to: "/dashboard", labelKey: "nav_revisions" },
   { key: "evaluations", to: "/mock-exam", labelKey: "nav_evaluations" },
   { key: "questions", to: "/search", labelKey: "nav_questions" },
-  { key: "perfs", to: "/leaderboard", labelKey: "nav_perfs" },
+  { key: "perfs", to: "/performance", labelKey: "nav_perfs" },
 ];
 
 function deriveActive(pathname: string): NavKey | undefined {
   if (pathname.startsWith("/mock-exam")) return "evaluations";
   if (pathname.startsWith("/search")) return "questions";
-  if (pathname.startsWith("/leaderboard")) return "perfs";
+  if (pathname.startsWith("/performance") || pathname.startsWith("/leaderboard")) return "perfs";
   if (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/subjects") ||
     pathname.startsWith("/lessons") ||
-    pathname.startsWith("/lesson")
+    pathname.startsWith("/lesson") ||
+    pathname.startsWith("/chapter")
   )
     return "revisions";
   return undefined;
@@ -73,7 +74,9 @@ export function BottomTabs({ active }: { active?: NavKey }) {
     <div className="absolute left-0 right-0 bottom-0 bg-card border-t border-ink-100 flex px-2.5 pt-2.5 pb-[calc(14px+env(safe-area-inset-bottom))]">
       {TABS.map((tab) => {
         const isActive = activeKey === tab.key;
-        const color = isActive ? "#1e2a3a" : "#9aa5b1";
+        // Active tab reads in brand blue + bold (corrections doc: "colorer en
+        // bleu comme ça"); inactive stays muted grey.
+        const color = isActive ? "#2f9bf0" : "#9aa5b1";
         return (
           <button
             key={tab.key}

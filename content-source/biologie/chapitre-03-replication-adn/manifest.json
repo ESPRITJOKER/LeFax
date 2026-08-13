@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "subject_slug": "biologie",
+  "chapter_slug": "replication-adn",
+  "chapter_name_fr": "La réplication de l'ADN",
+  "chapter_name_en": "DNA Replication",
+  "chapter_position": 4,
+  "chapter_new": true,
+  "lessons": [
+    {
+      "slug": "replication-adn",
+      "title_fr": "La réplication de l'ADN",
+      "title_en": "DNA Replication",
+      "objectives_fr": [
+        "Expliquer le caractère semi-conservatif de la réplication de l'ADN.",
+        "Décrire le rôle de l'ADN polymérase et le sens 5' → 3' de la synthèse.",
+        "Distinguer brin direct et brin retardé (fragments d'Okazaki) et lier réplication et division cellulaire."
+      ],
+      "objectives_en": [
+        "Explain the semi-conservative nature of DNA replication.",
+        "Describe the role of DNA polymerase and the 5' to 3' direction of synthesis.",
+        "Distinguish the leading strand from the lagging strand (Okazaki fragments) and link replication to cell division."
+      ],
+      "content_fr": "## Répliquer l'ADN avant de diviser\nLa réplication est le processus moléculaire par lequel une cellule mère double son matériel génétique afin de transmettre une copie conforme de son ADN à chacune de ses deux cellules filles lors de la division (mitose). Elle a lieu durant la phase S de l'interphase et duplique l'intégralité du génome.\n\n## Semi-conservative et bidirectionnelle\n- Les deux brins de l'hélice parentale se séparent ; chacun sert de modèle (matrice) pour la synthèse d'un nouveau brin : chaque molécule d'ADN fille est donc formée d'un brin ancien et d'un brin néo-synthétisé (réplication semi-conservative).\n- Elle débute au niveau de séquences spécifiques appelées origines de réplication. L'ouverture de l'ADN forme une fourche de réplication qui progresse dans deux directions opposées grâce à deux fourches.\n\n[[IMG: Schéma de la réplication semi-conservative de l'ADN : fourche de réplication, brin direct et brin retardé (fragments d'Okazaki)]]\n\n## Les enzymes en action\n- Hélicase : ouvre la double hélice en rompant les liaisons hydrogène entre les bases.\n- Protéines SSB : stabilisent les brins séparés pour empêcher leur réappariement spontané.\n- Primase : synthétise une amorce d'ARN indispensable au démarrage.\n- ADN polymérase : se fixe sur l'amorce et ajoute des nucléotides d'ADN complémentaires de la matrice, dans le sens 5' → 3'.\n- ADN polymérase I ou nucléases : éliminent les amorces d'ARN et les remplacent par de l'ADN.\n- Ligase : soude les liaisons entre les fragments.\n\n## Brin direct et brin retardé\n[!INFO] Le brin direct (fils) est synthétisé en continu dans le sens 5' → 3', dans le même sens que la progression de la fourche. Le brin retardé est synthétisé en discontinu, à reculons, par fragments d'Okazaki, soudés ensuite par la ligase.\n\n## Fidélité et complémentarité\n- Les bases sont complémentaires : A = T et C ≡ G (liaisons hydrogène).\n- Le brin matrice est lu dans le sens 3' → 5', mais le nouveau brin est toujours synthétisé en 5' → 3'. L'ADN polymérase a besoin d'une amorce et ne peut pas démarrer seule.\n\n[!PIEGE] Réplication ≠ transcription : la réplication copie tout le génome (ADN → ADN, en phase S, avant la division), alors que la transcription ne copie qu'un gène précis (ADN → ARN, dans le noyau, selon les besoins de la cellule).\n\n[!APP] Une mutation rend la primase non fonctionnelle. Quel est l'effet direct sur la réplication ? ||| La réplication ne peut pas démarrer (l'ADN polymérase a besoin d'une amorce d'ARN)",
+      "content_en": "## Replicate DNA before dividing\nReplication is the molecular process by which a mother cell doubles its genetic material in order to pass an identical copy of its DNA to each of its two daughter cells at division (mitosis). It occurs during the S phase of interphase and duplicates the entire genome.\n\n## Semi-conservative and bidirectional\n- The two strands of the parental helix separate; each serves as a template for the synthesis of a new strand: each daughter DNA molecule is therefore made of one old strand and one newly synthesized strand (semi-conservative replication).\n- It begins at specific sequences called origins of replication. The opening of the DNA forms a replication fork that progresses in two opposite directions via two forks.\n\n[[IMG: Schéma de la réplication semi-conservative de l'ADN : fourche de réplication, brin direct et brin retardé (fragments d'Okazaki)]]\n\n## Enzymes at work\n- Helicase: opens the double helix by breaking the hydrogen bonds between bases.\n- SSB proteins: stabilize the separated strands to prevent spontaneous re-annealing.\n- Primase: synthesizes an RNA primer essential for initiation.\n- DNA polymerase: binds to the primer and adds DNA nucleotides complementary to the template, in the 5' to 3' direction.\n- DNA polymerase I or nucleases: remove the RNA primers and replace them with DNA.\n- Ligase: seals the bonds between fragments.\n\n## Leading and lagging strands\n[!INFO] The leading strand is synthesized continuously in the 5' to 3' direction, in the same direction as fork progression. The lagging strand is synthesized discontinuously, backward, in Okazaki fragments, later sealed by ligase.\n\n## Fidelity and complementarity\n- Bases are complementary: A = T and C = G (hydrogen bonds).\n- The template strand is read in the 3' to 5' direction, but the new strand is always synthesized in 5' to 3'. DNA polymerase needs a primer and cannot start on its own.\n\n[!PIEGE] Replication is not transcription: replication copies the whole genome (DNA to DNA, in S phase, before division), whereas transcription copies only one precise gene (DNA to RNA, in the nucleus, according to cell needs).\n\n[!APP] A mutation makes primase non-functional. What is the direct effect on replication? ||| Replication cannot start (DNA polymerase needs an RNA primer)",
+      "summary_fr": "La réplication semi-conservative de l'ADN se déroule en phase S : les deux brins se séparent et servent de matrice, et l'ADN polymérase synthétise les nouveaux brins en 5' → 3', en continu (brin direct) ou en fragments d'Okazaki (brin retardé).",
+      "summary_en": "Semi-conservative DNA replication occurs in S phase: the two strands separate and act as templates, and DNA polymerase synthesizes the new strands in the 5' to 3' direction, continuously (leading strand) or in Okazaki fragments (lagging strand).",
+      "key_points_fr": [
+        "La réplication est semi-conservative : chaque molécule d'ADN fille contient un brin parental et un brin néo-synthétisé.",
+        "L'ADN polymérase synthétise toujours dans le sens 5' → 3', avec l'aide de l'hélicase, de la primase et de la ligase.",
+        "Le brin direct est synthétisé en continu ; le brin retardé l'est en fragments d'Okazaki."
+      ],
+      "key_points_en": [
+        "Replication is semi-conservative: each daughter DNA molecule contains one parental strand and one newly synthesized strand.",
+        "DNA polymerase always synthesizes in the 5' to 3' direction, with the help of helicase, primase and ligase.",
+        "The leading strand is synthesized continuously; the lagging strand is synthesized in Okazaki fragments."
+      ],
+      "duration_minutes": 11,
+      "difficulty": "medium",
+      "position": 1,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "La réplication semi-conservative de l'ADN",
+          "point_en": "Semi-conservative DNA replication",
+          "sub_fr": "Chaque brin parental sert de matrice ; chaque molécule fille garde un brin ancien.",
+          "sub_en": "Each parental strand acts as a template; each daughter molecule keeps one old strand.",
+          "image_fr": "watson-crick.png",
+          "image_en": "watson-crick.png",
+          "explanation_fr": "La réplication de l'ADN est semi-conservative : la double hélice parentale se sépare en deux brins, et chacun sert de matrice à la synthèse d'un brin complémentaire. Chaque molécule d'ADN fille est donc composée d'un brin ancien et d'un brin nouvellement synthétisé. Elle débute aux origines de réplication et progresse le long de fourches de réplication.",
+          "explanation_en": "DNA replication is semi-conservative: the parental double helix separates into two strands, and each serves as a template for the synthesis of a complementary strand. Each daughter DNA molecule therefore consists of one old strand and one newly synthesized strand. It begins at origins of replication and progresses along replication forks.",
+          "structural_question_fr": "Nom du modèle de réplication où chaque molécule fille garde un brin parental ?",
+          "structural_answer_fr": "Semi-conservative",
+          "structural_question_en": "Which replication model keeps one parental strand in each daughter molecule?",
+          "structural_answer_en": "Semi-conservative",
+          "tips_fr": "Semi-conservative = un brin conservé sur deux, dans chaque molécule fille.",
+          "tips_en": "Semi-conservative = one of the two strands is conserved in each daughter molecule.",
+          "traps_fr": "Ce n'est ni conservatif (molécule 100 % ancienne) ni dispersif : chaque double hélice fille contient exactement un brin ancien.",
+          "traps_en": "It is neither conservative (a fully old molecule) nor dispersive: each daughter double helix contains exactly one old strand."
+        },
+        {
+          "position": 2,
+          "point_fr": "Brin direct et brin retardé : fragments d'Okazaki",
+          "point_en": "Leading and lagging strands: Okazaki fragments",
+          "sub_fr": "Synthèse continue 5' → 3' en avant de la fourche ; discontinue à reculons pour le brin retardé.",
+          "sub_en": "Continuous 5' to 3' synthesis ahead of the fork; discontinuous, backward synthesis on the lagging strand.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "L'ADN polymérase ne peut synthétiser que dans le sens 5' → 3'. Le brin direct est donc copié en continu dans le sens de la fourche de réplication. Le brin retardé, orienté à l'inverse, est synthétisé à reculons par vagues successives : amorces d'ARN (primase), puis fragments d'Okazaki, finalement soudés par la ligase.",
+          "explanation_en": "DNA polymerase can only synthesize in the 5' to 3' direction. The leading strand is therefore copied continuously in the direction of the replication fork. The lagging strand, oriented in reverse, is synthesized backward in successive waves: RNA primers (primase), then Okazaki fragments, finally sealed by ligase.",
+          "structural_question_fr": "Sur quel brin sont produits les fragments d'Okazaki ?",
+          "structural_answer_fr": "Brin retardé",
+          "structural_question_en": "On which strand are Okazaki fragments produced?",
+          "structural_answer_en": "Lagging strand",
+          "tips_fr": "Retenez : brin retardé = synthèse discontinue = fragments d'Okazaki.",
+          "tips_en": "Remember: lagging strand = discontinuous synthesis = Okazaki fragments.",
+          "traps_fr": "L'ADN polymérase lit le brin matrice en 3' → 5' mais synthétise toujours en 5' → 3' : ne l'écrivez pas à l'envers.",
+          "traps_en": "DNA polymerase reads the template strand in the 3' to 5' direction but always synthesizes in the 5' to 3' direction: do not write it backward."
+        },
+        {
+          "position": 3,
+          "point_fr": "ADN vs ARN et fidélité de la réplication",
+          "point_en": "DNA vs RNA and replication fidelity",
+          "sub_fr": "A = T, C ≡ G, synthèse 5' → 3' ; la réplication précède la mitose, la transcription copie un gène.",
+          "sub_en": "A = T, C = G, 5' to 3' synthesis; replication precedes mitosis, transcription copies one gene.",
+          "image_fr": "ADN-ARN.jpg",
+          "image_en": "ADN-ARN.jpg",
+          "explanation_fr": "L'appariement des bases est complémentaire : A = T et C ≡ G. La réplication (ADN → ADN) précède toute division cellulaire et copie l'intégralité du génome en phase S ; la transcription (ADN → ARN) ne copie, dans le noyau, qu'un gène précis. L'ARN est monocaténaire et contient l'uracile (U) à la place de la thymine.",
+          "explanation_en": "Base pairing is complementary: A = T and C = G. Replication (DNA to DNA) precedes any cell division and copies the whole genome during S phase; transcription (DNA to RNA) copies only one specific gene, in the nucleus. RNA is single-stranded and contains uracil (U) instead of thymine.",
+          "structural_question_fr": "Base qui remplace la thymine dans l'ARN ?",
+          "structural_answer_fr": "Uracile",
+          "structural_question_en": "Which base replaces thymine in RNA?",
+          "structural_answer_en": "Uracil",
+          "tips_fr": "Liaisons hydrogène entre les bases : deux pour A = T, trois pour C ≡ G.",
+          "tips_en": "Hydrogen bonds between bases: two for A = T, three for C = G.",
+          "traps_fr": "La réplication copie tout le génome ; la transcription n'en copie qu'une portion (un gène). Ne confondez pas les deux processus.",
+          "traps_en": "Replication copies the whole genome; transcription copies only a portion (one gene). Do not confuse the two processes."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — La réplication de l'ADN",
+        "title_en": "Quiz — DNA Replication",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Pourquoi la réplication est-elle dite semi-conservative ?",
+            "text_en": "Why is replication said to be semi-conservative?",
+            "explanation_fr": "Chaque molécule d'ADN fille est constituée d'un brin parental conservé et d'un brin néo-synthétisé : la moitié de l'information initiale est conservée dans chaque molécule.",
+            "explanation_en": "Each daughter DNA molecule consists of one conserved parental strand and one newly synthesized strand: half of the original information is conserved in each molecule.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "Chaque molécule fille garde un brin parental et un brin néo-synthétisé", "text_en": "Each daughter molecule keeps one parental strand and one newly synthesized strand", "is_correct": true },
+              { "text_fr": "Les deux brins parentaux restent associés dans la même molécule fille", "text_en": "The two parental strands stay together in the same daughter molecule", "is_correct": false },
+              { "text_fr": "Une molécule fille est entièrement ancienne, l'autre entièrement nouvelle", "text_en": "One daughter molecule is entirely old, the other entirely new", "is_correct": false },
+              { "text_fr": "L'ADN est copié sans utiliser de matrice", "text_en": "DNA is copied without using a template", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Quel est le rôle de l'ADN polymérase ?",
+            "text_en": "What is the role of DNA polymerase?",
+            "explanation_fr": "L'ADN polymérase se fixe sur l'amorce d'ARN et ajoute des nucléotides d'ADN complémentaires de la matrice, dans le sens 5' → 3'.",
+            "explanation_en": "DNA polymerase binds to the RNA primer and adds DNA nucleotides complementary to the template, in the 5' to 3' direction.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "Ajouter des nucléotides d'ADN complémentaires de la matrice en 5' → 3'", "text_en": "Adding DNA nucleotides complementary to the template in the 5' to 3' direction", "is_correct": true },
+              { "text_fr": "Ouvrir la double hélice d'ADN", "text_en": "Opening the DNA double helix", "is_correct": false },
+              { "text_fr": "Synthétiser une amorce d'ARN", "text_en": "Synthesizing an RNA primer", "is_correct": false },
+              { "text_fr": "Souder les fragments d'Okazaki", "text_en": "Sealing the Okazaki fragments", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Dans quel sens l'ADN polymérase synthétise-t-elle toujours le nouveau brin ?",
+            "text_en": "In which direction does DNA polymerase always synthesize the new strand?",
+            "explanation_fr": "La synthèse de l'ADN se fait toujours dans le sens 5' → 3', y compris sur le brin retardé, dont la synthèse est discontinue.",
+            "explanation_en": "DNA synthesis always proceeds in the 5' to 3' direction, including on the lagging strand, whose synthesis is discontinuous.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "5' → 3'", "text_en": "5' to 3'", "is_correct": true },
+              { "text_fr": "3' → 5'", "text_en": "3' to 5'", "is_correct": false },
+              { "text_fr": "Des deux sens alternativement", "text_en": "In both directions alternately", "is_correct": false },
+              { "text_fr": "Du centre vers les extrémités", "text_en": "From the center toward the ends", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Les fragments d'Okazaki appartiennent à quel brin ?",
+            "text_en": "Which strand do Okazaki fragments belong to?",
+            "explanation_fr": "Le brin retardé, orienté à l'inverse de la fourche, est synthétisé en discontinu sous forme de fragments d'Okazaki, soudés ensuite par la ligase.",
+            "explanation_en": "The lagging strand, oriented opposite to the fork, is synthesized discontinuously as Okazaki fragments, subsequently sealed by ligase.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "Au brin retardé", "text_en": "The lagging strand", "is_correct": true },
+              { "text_fr": "Au brin direct", "text_en": "The leading strand", "is_correct": false },
+              { "text_fr": "Aux deux brins", "text_en": "Both strands", "is_correct": false },
+              { "text_fr": "Aucun des deux", "text_en": "Neither of the two strands", "is_correct": false }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

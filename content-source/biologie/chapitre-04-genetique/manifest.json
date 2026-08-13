@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "subject_slug": "biologie",
+  "chapter_slug": "genetique",
+  "chapter_name_fr": "Génétique",
+  "chapter_name_en": "Genetics",
+  "chapter_position": 5,
+  "chapter_new": true,
+  "lessons": [
+    {
+      "slug": "vocabulaire-genetique",
+      "title_fr": "Le vocabulaire de la génétique",
+      "title_en": "The vocabulary of genetics",
+      "objectives_fr": [
+        "Définir le vocabulaire de base de la génétique : gène, allèle, locus, génotype et phénotype.",
+        "Distinguer homozygote et hétérozygote, allèle dominant et allèle récessif.",
+        "Expliquer la codominance à l'aide de l'exemple des groupes sanguins ABO."
+      ],
+      "objectives_en": [
+        "Define the basic vocabulary of genetics: gene, allele, locus, genotype and phenotype.",
+        "Distinguish homozygous from heterozygous, dominant from recessive allele.",
+        "Explain codominance using the example of the ABO blood groups."
+      ],
+      "content_fr": "## La science de l'hérédité\n\nLa génétique est la science qui étudie la transmission des caractères héréditaires, ainsi que les variations biologiques entre les générations. Les caractères d'un individu sont codés par des unités d'information portées par l'ADN.\n\n## Gène, allèle et locus\n\n- Le gène est l'unité de base de l'hérédité : un fragment d'ADN qui code un caractère.\n- L'allèle est une version alternative, ou variante, d'un gène. Exemple : le gène « groupe sanguin » possède trois allèles principaux (A, B, O), qui diffèrent par de légères variations de la séquence de nucléotides.\n- Le locus est l'emplacement physique précis et invariable d'un gène sur un chromosome.\n\n[[IMG: Du gène à l'allèle : locus, gène et allèles]]\n\n## Génotype et phénotype\n\n- Le génotype est l'ensemble des allèles d'un individu pour un ou plusieurs gènes donnés : c'est la combinaison génétique cachée.\n- Le phénotype est l'ensemble des caractères observables d'un individu (physiques, physiologiques ou moléculaires), résultant de l'expression du génotype en interaction avec l'environnement.\n\n## Homozygote ou hétérozygote ?\n\nChaque individu possède des chromosomes par paires (diploïdie) : il porte donc deux allèles pour chaque gène.\n\n- L'individu homozygote possède deux allèles identiques pour un gène donné.\n- L'individu hétérozygote possède deux allèles différents pour un gène donné.\n\n[[IMG: Homozygote et hétérozygote]]\n\n## Dominant, récessif et codominant\n\n- L'allèle dominant s'exprime dès qu'il est présent, en un seul ou deux exemplaires (noté en majuscule).\n- L'allèle récessif ne s'exprime que si l'individu est homozygote pour cet allèle : il est masqué par un allèle dominant (noté en minuscule).\n- En cas de codominance, deux allèles différents s'expriment simultanément et forment un phénotype mixte. Exemple : les groupes sanguins ABO (groupe AB = expression simultanée des allèles A et B).\n\n[[IMG: Dominance, récessivité et codominance]]\n\n## L'analogie didactique : la bibliothèque\n\n- Le génome est une encyclopédie complète.\n- Le chromosome est un volume (un tome) de cette encyclopédie.\n- Le gène est une recette précise dans un volume.\n- L'allèle est une variante de cette recette.\n- La protéine obtenue est le gâteau final, le caractère phénotypique observable.\n\n[!INFO]\nLe passage génome → chromosome → gène → allèle → protéine résume toute la chaîne de l'expression de l'hérédité.\n\n[!PIEGE]\nNe confondez pas génotype (la combinaison d'allèles, invisible) et phénotype (ce que l'on observe chez l'individu).\n\n[!APP]\nUn individu du groupe sanguin AB possède-t-il un allèle dominant ? ||| Non : les allèles A et B sont codominants, ils s'expriment tous les deux simultanément.",
+      "content_en": "## The science of heredity\n\nGenetics is the science that studies the transmission of hereditary traits, as well as the biological variations between generations. An individual's traits are encoded by units of information carried on DNA.\n\n## Gene, allele and locus\n\n- The gene is the basic unit of heredity: a fragment of DNA that codes for a trait.\n- The allele is an alternative version, or variant, of a gene. Example: the 'blood group' gene has three main alleles (A, B, O), which differ by slight variations in the nucleotide sequence.\n- The locus is the precise, fixed physical location of a gene on a chromosome.\n\n[[IMG: From gene to allele: locus, gene and alleles]]\n\n## Genotype and phenotype\n\n- The genotype is the set of alleles of an individual for one or more given genes: the hidden genetic combination.\n- The phenotype is the set of observable traits of an individual (physical, physiological or molecular), resulting from the expression of the genotype in interaction with the environment.\n\n## Homozygous or heterozygous?\n\nEach individual possesses chromosomes in pairs (diploidy): they therefore carry two alleles for each gene.\n\n- A homozygous individual has two identical alleles for a given gene.\n- A heterozygous individual has two different alleles for a given gene.\n\n[[IMG: Homozygous and heterozygous]]\n\n## Dominant, recessive and codominant\n\n- A dominant allele is expressed as soon as it is present, in one or two copies (written in capitals).\n- A recessive allele is only expressed if the individual is homozygous for that allele: it is masked by a dominant allele (written in lower case).\n- In codominance, two different alleles are expressed simultaneously and form a mixed phenotype. Example: the ABO blood groups (group AB = simultaneous expression of alleles A and B).\n\n[[IMG: Dominance, recessiveness and codominance]]\n\n## The didactic analogy: the library\n\n- The genome is a complete encyclopaedia.\n- A chromosome is a volume (a tome) of this encyclopaedia.\n- A gene is a precise recipe within a volume.\n- An allele is a variant of this recipe.\n- The protein obtained is the final cake, the observable phenotypic trait.\n\n[!INFO]\nThe path genome → chromosome → gene → allele → protein sums up the whole chain of hereditary expression.\n\n[!PIEGE]\nDo not confuse genotype (the combination of alleles, invisible) and phenotype (what is observed in the individual).\n\n[!APP]\nAn individual with blood group AB — does he or she carry a dominant allele? ||| No: alleles A and B are codominant, both are expressed simultaneously.",
+      "summary_fr": "Cette leçon définit le vocabulaire fondamental de la génétique et les relations entre gène, allèle, génotype et phénotype.",
+      "summary_en": "This lesson defines the fundamental vocabulary of genetics and the relationships between gene, allele, genotype and phenotype.",
+      "key_points_fr": [
+        "Le gène est l'unité de l'hérédité ; l'allèle en est une version alternative et le locus son emplacement fixe.",
+        "Le génotype (ensemble des allèles) détermine le phénotype (caractères observables) avec l'environnement.",
+        "Dominant, récessif et codominant décrivent comment les allèles s'expriment chez l'homozygote et l'hétérozygote."
+      ],
+      "key_points_en": [
+        "The gene is the unit of heredity; the allele is one of its variants and the locus its fixed location.",
+        "The genotype (set of alleles) determines the phenotype (observable traits) together with the environment.",
+        "Dominant, recessive and codominant describe how alleles are expressed in homozygotes and heterozygotes."
+      ],
+      "duration_minutes": 10,
+      "difficulty": "easy",
+      "position": 1,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Gène, allèle et locus : les unités de l'hérédité",
+          "point_en": "Gene, allele and locus: the units of heredity",
+          "sub_fr": "Définitions de l'unité d'hérédité, de sa variante et de son emplacement sur le chromosome.",
+          "sub_en": "Definitions of the unit of heredity, its variant and its location on the chromosome.",
+          "image_fr": "Gène, allèle, locus ok.png",
+          "image_en": "Gène, allèle, locus ok.png",
+          "explanation_fr": "Le gène est l'unité de l'hérédité : un fragment d'ADN qui code un caractère. L'allèle est une version alternative d'un gène, comme les allèles A, B et O du gène du groupe sanguin. Le locus désigne l'emplacement physique précis et invariable du gène sur le chromosome.",
+          "explanation_en": "The gene is the unit of heredity: a fragment of DNA that codes for a trait. An allele is an alternative version of a gene, like the A, B and O alleles of the blood group gene. The locus is the precise, fixed physical location of the gene on the chromosome.",
+          "structural_question_fr": "Qu'est-ce qu'un allèle ?",
+          "structural_question_en": "What is an allele?",
+          "structural_answer_fr": "une version alternative d'un gène",
+          "structural_answer_en": "an alternative version of a gene",
+          "tips_fr": "Pensez à l'analogie de la bibliothèque : le gène est une recette, l'allèle une variante de la recette.",
+          "tips_en": "Think of the library analogy: the gene is a recipe, the allele a variant of that recipe.",
+          "traps_fr": "Ne confondez pas allèle et gène : l'allèle est une version particulière du gène, pas le gène lui-même.",
+          "traps_en": "Do not confuse allele and gene: the allele is a particular version of the gene, not the gene itself."
+        },
+        {
+          "position": 2,
+          "point_fr": "Génotype, phénotype, homozygote et hétérozygote",
+          "point_en": "Genotype, phenotype, homozygous and heterozygous",
+          "sub_fr": "Distinguer la combinaison génétique cachée des caractères observables, et les deux allèles d'un gène.",
+          "sub_en": "Distinguish the hidden genetic combination from the observable traits, and the two alleles of a gene.",
+          "image_fr": "heterozygte-vs-homozygote.jpg",
+          "image_en": "heterozygte-vs-homozygote.jpg",
+          "explanation_fr": "Le génotype est l'ensemble des allèles d'un individu pour un ou plusieurs gènes : c'est la combinaison génétique cachée. Le phénotype est l'ensemble des caractères observables, issus de l'expression du génotype en interaction avec l'environnement. Un individu homozygote possède deux allèles identiques pour un gène ; un hétérozygote en possède deux différents.",
+          "explanation_en": "The genotype is the set of alleles of an individual for one or more genes: the hidden genetic combination. The phenotype is the set of observable traits, resulting from the expression of the genotype in interaction with the environment. A homozygous individual has two identical alleles for a gene; a heterozygous one has two different alleles.",
+          "structural_question_fr": "Que désigne le phénotype ?",
+          "structural_question_en": "What does the phenotype refer to?",
+          "structural_answer_fr": "l'ensemble des caractères observables",
+          "structural_answer_en": "the set of observable traits",
+          "tips_fr": "Le génotype se lit sur l'ADN, le phénotype se constate sur l'individu.",
+          "tips_en": "The genotype is read on the DNA, the phenotype is observed on the individual.",
+          "traps_fr": "Le phénotype ne dépend pas que du génotype : l'environnement influence aussi l'expression des gènes.",
+          "traps_en": "The phenotype depends on more than the genotype: the environment also influences gene expression."
+        },
+        {
+          "position": 3,
+          "point_fr": "Allèles dominant, récessif et codominant",
+          "point_en": "Dominant, recessive and codominant alleles",
+          "sub_fr": "Règles d'expression des allèles, illustrées par les groupes sanguins ABO.",
+          "sub_en": "Rules of allele expression, illustrated by the ABO blood groups.",
+          "image_fr": "Dominance, récessivité et codominance.png",
+          "image_en": "Dominance, récessivité et codominance.png",
+          "explanation_fr": "L'allèle dominant s'exprime dès qu'il est présent, en une ou deux copies (noté en majuscule). L'allèle récessif ne s'exprime que chez l'homozygote, car il est masqué par l'allèle dominant (noté en minuscule). En codominance, deux allèles différents s'expriment simultanément : c'est le cas du groupe AB, où les allèles A et B sont tous deux exprimés.",
+          "explanation_en": "A dominant allele is expressed as soon as it is present, in one or two copies (written in capitals). A recessive allele is only expressed in the homozygote, because it is masked by the dominant allele (written in lower case). In codominance, two different alleles are expressed simultaneously: this is the case of group AB, where both alleles A and B are expressed.",
+          "structural_question_fr": "Quand un allèle récessif s'exprime-t-il ?",
+          "structural_question_en": "When is a recessive allele expressed?",
+          "structural_answer_fr": "chez l'homozygote",
+          "structural_answer_en": "in the homozygote",
+          "tips_fr": "La codominance produit un phénotype mixte : ni dominant, ni récessif.",
+          "tips_en": "Codominance produces a mixed phenotype: neither dominant nor recessive.",
+          "traps_fr": "Un allèle récessif n'est pas « disparu » chez l'hétérozygote : il est simplement masqué et peut être transmis.",
+          "traps_en": "A recessive allele is not 'gone' in the heterozygote: it is simply masked and can be passed on."
+        }
+      ],
+      "quiz": {
+        "session_size": 4,
+        "title_fr": "Quiz — Le vocabulaire de la génétique",
+        "title_en": "Quiz — The Vocabulary of Genetics",
+        "difficulty": "medium",
+        "passing_score": 50,
+        "questions": [
+          {
+            "text_fr": "Un allèle est :",
+            "text_en": "An allele is:",
+            "explanation_fr": "L'allèle est une version alternative (une variante) d'un gène : le gène du groupe sanguin possède par exemple les allèles A, B et O.",
+            "explanation_en": "An allele is an alternative version (a variant) of a gene: for instance, the blood group gene has the alleles A, B and O.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "une version alternative d'un gène", "text_en": "an alternative version of a gene", "is_correct": true },
+              { "text_fr": "un chromosome porteur de gènes", "text_en": "a chromosome carrying genes", "is_correct": false },
+              { "text_fr": "une protéine codée par un gène", "text_en": "a protein encoded by a gene", "is_correct": false },
+              { "text_fr": "le caractère observable d'un individu", "text_en": "the observable trait of an individual", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Quelle est la différence entre génotype et phénotype ?",
+            "text_en": "What is the difference between genotype and phenotype?",
+            "explanation_fr": "Le génotype est la combinaison génétique cachée ; le phénotype est l'ensemble des caractères observables, résultant de l'expression du génotype en interaction avec l'environnement.",
+            "explanation_en": "The genotype is the hidden genetic combination; the phenotype is the set of observable traits, resulting from the expression of the genotype in interaction with the environment.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "Le génotype est l'ensemble des allèles ; le phénotype est l'ensemble des caractères observables.", "text_en": "The genotype is the set of alleles; the phenotype is the set of observable traits.", "is_correct": true },
+              { "text_fr": "Le génotype est visible ; le phénotype est caché.", "text_en": "The genotype is visible; the phenotype is hidden.", "is_correct": false },
+              { "text_fr": "Ils sont identiques chez un individu hétérozygote.", "text_en": "They are identical in a heterozygous individual.", "is_correct": false },
+              { "text_fr": "Le génotype dépend de l'environnement, pas le phénotype.", "text_en": "The genotype depends on the environment, not the phenotype.", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Un individu possédant deux allèles différents pour un même gène est dit :",
+            "text_en": "An individual carrying two different alleles for the same gene is said to be:",
+            "explanation_fr": "L'individu hétérozygote possède deux allèles différents pour un gène donné ; l'homozygote en possède deux identiques.",
+            "explanation_en": "A heterozygous individual has two different alleles for a given gene; a homozygous one has two identical alleles.",
+            "difficulty": "easy",
+            "choices": [
+              { "text_fr": "hétérozygote", "text_en": "heterozygous", "is_correct": true },
+              { "text_fr": "homozygote", "text_en": "homozygous", "is_correct": false },
+              { "text_fr": "dominant", "text_en": "dominant", "is_correct": false },
+              { "text_fr": "codominant", "text_en": "codominant", "is_correct": false }
+            ]
+          },
+          {
+            "text_fr": "Dans la codominance, comme pour le groupe sanguin AB :",
+            "text_en": "In codominance, as with blood group AB:",
+            "explanation_fr": "En codominance, deux allèles différents s'expriment simultanément et forment un phénotype mixte : chez une personne de groupe AB, les allèles A et B sont tous deux exprimés.",
+            "explanation_en": "In codominance, two different alleles are expressed simultaneously and form a mixed phenotype: in a person of group AB, both alleles A and B are expressed.",
+            "difficulty": "medium",
+            "choices": [
+              { "text_fr": "les deux allèles s'expriment simultanément", "text_en": "both alleles are expressed simultaneously", "is_correct": true },
+              { "text_fr": "un seul allèle s'exprime, l'autre disparaît", "text_en": "only one allele is expressed, the other disappears", "is_correct": false },
+              { "text_fr": "l'allèle récessif est éliminé de l'organisme", "text_en": "the recessive allele is eliminated from the body", "is_correct": false },
+              { "text_fr": "le phénotype reste identique à celui de l'homozygote", "text_en": "the phenotype stays identical to that of the homozygote", "is_correct": false }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slug": "transmission-mutations",
+      "title_fr": "Transmission et mutations",
+      "title_en": "Inheritance and mutations",
+      "objectives_fr": [
+        "Lire un arbre généalogique et reconnaître les transmissions autosomiques dominante et récessive.",
+        "Expliquer pourquoi les hommes sont plus souvent atteints par les maladies liées au chromosome X.",
+        "Décrire les mutations et distinguer mutation germinale et mutation somatique."
+      ],
+      "objectives_en": [
+        "Read a pedigree and recognise autosomal dominant and autosomal recessive inheritance.",
+        "Explain why males are more often affected by X-linked diseases.",
+        "Describe mutations and distinguish germline from somatic mutations."
+      ],
+      "content_fr": "## L'étude des arbres généalogiques\n\nChez l'Homme, la génétique ne peut pas se faire par croisements expérimentaux : les généticiens utilisent des arbres généalogiques (ou pedigrees), qui retracent la transmission d'un caractère sur plusieurs générations.\n\n## L'hérédité autosomique\n\nLes gènes autosomiques sont portés par les chromosomes non sexuels (autosomes).\n\n- Hérédité autosomique dominante : la maladie ou le caractère apparaît à chaque génération ; un enfant atteint a au moins un parent atteint.\n- Hérédité autosomique récessive : la maladie peut sauter des générations ; des parents sains, porteurs sains hétérozygotes, peuvent donner naissance à un enfant atteint (homozygote récessif).\n\n[!APP]\nUn couple de phénotype normal a un enfant atteint de drépanocytose. L'allèle responsable est-il dominant ou récessif ? ||| Il est récessif : les parents sains sont hétérozygotes (porteurs sains) et la maladie ne s'exprime que chez l'enfant homozygote.\n\n[!INFO]\nLa drépanocytose est une maladie autosomique récessive touchant l'hémoglobine ; le gène est porté par le chromosome 11.\n\n## L'hérédité liée au sexe\n\nLes gènes liés au sexe sont portés par les chromosomes sexuels, principalement par le chromosome X.\n\n- L'hémophilie et le daltonisme sont des maladies liées au chromosome X.\n- Les hommes (XY) sont plus fréquemment touchés : ils ne possèdent qu'un seul chromosome X. Si leur unique X porte l'allèle défectueux, ils expriment obligatoirement le phénotype malade.\n- Les femmes (XX) peuvent être porteuses saines si leur deuxième chromosome X est sain.\n\n[!PIEGE]\n« Un seul X chez l'homme = un seul ticket à jouer » : le risque d'expression de la maladie liée à l'X est donc plus visible chez l'homme.\n\n## Les mutations\n\nUne mutation est une modification rare, aléatoire et spontanée de la séquence de nucléotides de l'ADN.\n\n- La substitution : un nucléotide est remplacé par un autre.\n- La délétion : perte d'un ou plusieurs nucléotides.\n- L'insertion : ajout d'un ou plusieurs nucléotides.\n\n[[IMG: Les types de mutations]]\n\n## Mutation germinale ou somatique\n\n- La mutation somatique survient dans les cellules du corps (ex. : la peau). Elle n'est jamais transmise à la descendance : elle s'éteint avec l'individu.\n- La mutation germinale survient dans les cellules souches des gamètes. Elle est transmise à la descendance et peut s'installer dans la population, créant un nouveau polymorphisme.\n\n## Mutation et brassage méiotique : ne pas confondre\n\n- Le brassage interchromosomique (anaphase I) : la migration des chromosomes homologues vers les pôles se fait de manière aléatoire et indépendante pour chaque paire.\n- Le brassage intrachromosomique (prophase I) : crossing-over (enjambement), échange de fragments de chromatides entre chromosomes homologues.\n\n[!PIEGE]\nLa reproduction sexuée (méiose + fécondation) brasse les cartes existantes mais ne crée pas de nouvelles cartes. La source primaire, l'unique créateur de nouveaux allèles, est la mutation.\n\n[!APP]\nPour la drépanocytose, s'agit-il d'une transmission liée au sexe ? ||| Non, elle est autosomique : elle touche indifféremment garçons et filles, le gène étant porté par le chromosome 11.",
+      "content_en": "## The study of family trees\n\nIn humans, genetics cannot rely on experimental crosses: geneticists use family trees (or pedigrees), which trace the transmission of a trait over several generations.\n\n## Autosomal inheritance\n\nAutosomal genes are carried by the non-sex chromosomes (autosomes).\n\n- Autosomal dominant inheritance: the disease or trait appears in every generation; an affected child has at least one affected parent.\n- Autosomal recessive inheritance: the disease can skip generations; healthy parents who are heterozygous carriers can give birth to an affected child (homozygous recessive).\n\n[!APP]\nA couple with a normal phenotype has a child affected by sickle-cell disease. Is the responsible allele dominant or recessive? ||| It is recessive: the healthy parents are heterozygous (healthy carriers) and the disease is only expressed in the homozygous child.\n\n[!INFO]\nSickle-cell disease is an autosomal recessive disease affecting haemoglobin; the gene is carried on chromosome 11.\n\n## Sex-linked inheritance\n\nSex-linked genes are carried by the sex chromosomes, mainly the X chromosome.\n\n- Haemophilia and colour blindness are X-linked diseases.\n- Males (XY) are more frequently affected: they possess only one X chromosome. If their single X carries the defective allele, they necessarily express the affected phenotype.\n- Females (XX) can be healthy carriers if their second X chromosome is healthy.\n\n[!PIEGE]\n'One single X in males = one single ticket to play': the risk of expressing an X-linked disease is therefore more visible in males.\n\n## Mutations\n\nA mutation is a rare, random and spontaneous change in the nucleotide sequence of DNA.\n\n- Substitution: one nucleotide is replaced by another.\n- Deletion: loss of one or more nucleotides.\n- Insertion: addition of one or more nucleotides.\n\n[[IMG: The types of mutations]]\n\n## Germline or somatic mutation\n\n- A somatic mutation occurs in body cells (e.g. skin). It is never passed on to offspring: it dies out with the individual.\n- A germline mutation occurs in the germ cells (gamete stem cells). It is passed on to offspring and can settle in the population, creating a new polymorphism.\n\n## Mutation and meiotic reassortment: do not confuse\n\n- Interchromosomal reassortment (anaphase I): homologous chromosomes migrate to the poles randomly and independently for each pair.\n- Intrachromosomal reassortment (prophase I): crossing-over, an exchange of chromatid fragments between homologous chromosomes.\n\n[!PIEGE]\nSexual reproduction (meiosis + fertilisation) shuffles the existing cards but creates no new cards. The primary source, the only creator of new alleles, is mutation.\n\n[!APP]\nIs sickle-cell disease transmitted in a sex-linked way? ||| No, it is autosomal: it affects boys and girls alike, the gene being carried on chromosome 11.",
+      "summary_fr": "Cette leçon explique comment lire les arbres généalogiques, distingue la transmission autosomique de la transmission liée au sexe, puis décrit les mutations et leur rôle.",
+      "summary_en": "This lesson explains how to read pedigrees, distinguishes autosomal from sex-linked inheritance, then describes mutations and their role.",
+      "key_points_fr": [
+        "En autosomique récessive, la maladie peut sauter des générations : des parents porteurs sains hétérozygotes peuvent avoir un enfant atteint.",
+        "Les hommes, porteurs d'un seul chromosome X, sont plus souvent atteints par les maladies liées à l'X (hémophilie, daltonisme).",
+        "Seule la mutation germinale est transmise à la descendance ; la mutation est l'unique source de nouveaux allèles."
+      ],
+      "key_points_en": [
+        "In autosomal recessive inheritance, the disease can skip generations: healthy heterozygous carrier parents can have an affected child.",
+        "Males, who carry a single X chromosome, are more often affected by X-linked diseases (haemophilia, colour blindness).",
+        "Only the germline mutation is passed on to offspring; mutation is the only source of new alleles."
+      ],
+      "duration_minutes": 12,
+      "difficulty": "hard",
+      "position": 2,
+      "published": true,
+      "cards": [
+        {
+          "position": 1,
+          "point_fr": "Hérédité autosomique dominante et récessive",
+          "point_en": "Autosomal dominant and recessive inheritance",
+          "sub_fr": "Lire un pedigree : la maladie récessive peut sauter des générations.",
+          "sub_en": "Read a pedigree: a recessive disease can skip generations.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "En autosomique dominante, un enfant atteint a au moins un parent atteint et la maladie apparaît à chaque génération. En autosomique récessive, des parents sains mais hétérozygotes (porteurs sains) peuvent avoir un enfant atteint : la maladie peut donc sauter des générations. La drépanocytose est autosomique récessive, le gène étant porté par le chromosome 11.",
+          "explanation_en": "In autosomal dominant inheritance, an affected child has at least one affected parent and the disease appears in every generation. In autosomal recessive inheritance, healthy but heterozygous parents (healthy carriers) can have an affected child: the disease can therefore skip generations. Sickle-cell disease is autosomal recessive, the gene being carried on chromosome 11.",
+          "structural_question_fr": "Comment un enfant atteint naît-il de parents sains ?",
+          "structural_question_en": "How can an affected child be born to healthy parents?",
+          "structural_answer_fr": "parents sains hétérozygotes",
+          "structural_answer_en": "healthy heterozygous parents",
+          "tips_fr": "Chez des parents sains hétérozygotes, l'enfant atteint (homozygote récessif) a un risque sur quatre d'être touché.",
+          "tips_en": "With two healthy heterozygous parents, the affected child (homozygous recessive) has a one-in-four risk of being affected.",
+          "traps_fr": "Une maladie qui saute des générations n'est pas forcément liée au sexe : elle est souvent autosomique récessive.",
+          "traps_en": "A disease that skips generations is not necessarily sex-linked: it is often autosomal recessive."
+        },
+        {
+          "position": 2,
+          "point_fr": "Hérédité liée au sexe : pourquoi les hommes sont-ils plus touchés ?",
+          "point_en": "Sex-linked inheritance: why are males more affected?",
+          "sub_fr": "Hémophilie et daltonisme : le garçon n'a qu'un chromosome X.",
+          "sub_en": "Haemophilia and colour blindness: a boy has only one X chromosome.",
+          "image_fr": null,
+          "image_en": null,
+          "explanation_fr": "Les gènes liés au sexe sont portés par le chromosome X. L'homme (XY) ne possède qu'un seul X : si son unique chromosome X porte l'allèle défectueux, il exprime obligatoirement la maladie. La femme (XX) possède deux X : elle peut être porteuse saine si son deuxième chromosome X est sain. C'est pourquoi l'hémophilie et le daltonisme touchent surtout les hommes.",
+          "explanation_en": "Sex-linked genes are carried on the X chromosome. A male (XY) possesses only one X: if his single X chromosome carries the defective allele, he necessarily expresses the disease. A female (XX) has two X chromosomes: she can be a healthy carrier if her second X chromosome is healthy. This is why haemophilia and colour blindness mainly affect males.",
+          "structural_question_fr": "Pourquoi les hommes sont-ils plus souvent atteints par les maladies liées à l'X ?",
+          "structural_question_en": "Why are males more often affected by X-linked diseases?",
+          "structural_answer_fr": "un seul chromosome X",
+          "structural_answer_en": "a single X chromosome",
+          "tips_fr": "Un seul X chez l'homme = un seul ticket à jouer : l'expression de la maladie est plus visible chez lui.",
+          "tips_en": "One single X in males = one single ticket to play: the expression of the disease is more visible in them.",
+          "traps_fr": "Une femme atteinte est possible (homozygote), mais elle reste le plus souvent une porteuse saine.",
+          "traps_en": "An affected female is possible (homozygous), but she most often remains a healthy carrier."
+        },
+        {
+          "position": 3,
+          "point_fr": "Mutations : types, germinale ou somatique, source de nouveaux allèles",
+          "point_en": "Mutations: types, germline or somatic, source of new alleles",
+          "sub_fr": "Substitution, délétion et insertion ; seule la mutation crée de nouveaux allèles.",
+          "sub_en": "Substitution, deletion and insertion; only mutation creates new alleles.",
+          "image_fr": "Mutations.PNG",
+          "image_en": "Mutations.PNG",
+          "explanation_fr": "Une mutation est une modification rare, aléatoire et spontanée de la séquence de nucléotides de l'ADN : substitution, délétion ou insertion. La mutation somatique, survenue dans les cellules du corps, n'est pas transmise à la descendance ; la mutation germinale, survenue dans les cellules souches des gamètes, l'est. La mutation est l'unique source de nouveaux allèles : le brassage méiotique, inter- et intrachromosomique, mélange les allèles existants mais n'en crée pas.",
+          "explanation_en": "A mutation is a rare, random and spontaneous change in the nucleotide sequence of DNA: substitution, deletion or insertion. A somatic mutation, occurring in body cells, is not passed on to offspring; a germline mutation, occurring in the germ cells (gamete stem cells), is. Mutation is the only source of new alleles: meiotic reassortment, inter- and intrachromosomal, shuffles existing alleles but creates none.",
+          "structural_question_fr": "Quelle est l'unique source de nouveaux allèles ?",
+          "structural_question_en": "What is the only source of new alleles?",
+          "structural_answer_fr": "la mutation",
+          "structural_answer_en": "mutation",
+          "tips_fr": "Méiose et fécondation brassent les cartes existantes ; seule la mutation en crée de nouvelles.",
+          "tips_en": "Meiosis and fertilisation shuffle the existing cards; only mutation creates new ones.",
+          "traps_fr": "Ne confondez pas mutation germinale (transmise) et mutation somatique (jamais transmise à la descendance).",
+          "traps_en": "Do not confuse germline mutation (inherited) and somatic mutation (never passed on to offspring)."
+        }
+      ]
+    }
+  ]
+}
+
