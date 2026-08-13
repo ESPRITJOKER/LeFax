@@ -5,11 +5,14 @@ import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ContentApprovalRow } from "../../lib/database.types";
 
+type Difficulty = "easy" | "medium" | "hard";
+
 interface GeneratedQuestion {
   text_fr: string;
   text_en: string;
   explanation_fr?: string;
   explanation_en?: string;
+  difficulty?: Difficulty;
   options: { text_fr: string; text_en: string; is_correct: boolean }[];
   source?: string;
 }
@@ -70,6 +73,21 @@ export default function AdminAiReview() {
     await load();
   }
 
+  // Persist a difficulty choice onto the payload so `approve` materialises the
+  // question with it. Optimistic: patch local state, then write through.
+  async function setDifficulty(row: ContentApprovalRow, difficulty: Difficulty) {
+    const q = row.generated_payload as unknown as GeneratedQuestion;
+    const nextPayload = { ...q, difficulty };
+    setQueue((prev) => prev.map((r) => (r.id === row.id ? { ...r, generated_payload: nextPayload as unknown as ContentApprovalRow["generated_payload"] } : r)));
+    await supabase.from("content_approval").update({ generated_payload: nextPayload }).eq("id", row.id);
+  }
+
+  const DIFFICULTIES: { key: Difficulty; fr: string; en: string; color: string }[] = [
+    { key: "easy", fr: "Facile", en: "Easy", color: "#22c55e" },
+    { key: "medium", fr: "Moyen", en: "Medium", color: "#f5b400" },
+    { key: "hard", fr: "Difficile", en: "Hard", color: "#ef4444" },
+  ];
+
   return (
     <div>
       <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4.5 px-[18px] py-4 mb-4.5 mb-[18px] flex items-center gap-3">
@@ -111,6 +129,28 @@ export default function AdminAiReview() {
                     </div>
                   ) : null;
                 })()}
+                {!editing && (
+                  <div className="flex items-center gap-2 mb-3.5">
+                    <span className="text-[11px] font-semibold text-muted">{lang === "fr" ? "Difficulté" : "Difficulty"}:</span>
+                    {DIFFICULTIES.map((d) => {
+                      const active = (q.difficulty ?? "medium") === d.key;
+                      return (
+                        <button
+                          key={d.key}
+                          onClick={() => setDifficulty(row, d.key)}
+                          className="px-2.5 py-1 rounded-pill text-[11px] font-bold border"
+                          style={{
+                            background: active ? d.color : "#fff",
+                            color: active ? "#fff" : "#64748b",
+                            borderColor: active ? d.color : "#e2e8f0",
+                          }}
+                        >
+                          {lang === "fr" ? d.fr : d.en}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
                 {editing ? (
                   <div className="flex gap-2">
                     <button onClick={() => saveModify(row)} className="flex-1 py-2 rounded-lg border-none bg-brand-600 text-white text-xs font-bold">

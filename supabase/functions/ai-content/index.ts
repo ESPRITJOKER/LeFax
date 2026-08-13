@@ -69,7 +69,7 @@ Deno.serve(async (req: Request) => {
           messages: [
             {
               role: "user",
-              content: `You are generating multiple-choice exam questions (QCM) for a Cameroonian medicine entrance exam prep app, bilingual French/English. Based on this lesson content, produce 5 questions as a JSON array. Each item: { "text_fr": string, "text_en": string, "explanation_fr": string, "explanation_en": string, "options": [{ "text_fr": string, "text_en": string, "is_correct": boolean }] } with exactly 4 options and exactly one is_correct=true.\n\nLesson content:\n${sourceText}`,
+              content: `You are generating multiple-choice exam questions (QCM) for a Cameroonian medicine entrance exam prep app, bilingual French/English. Based on this lesson content, produce 5 questions as a JSON array. Each item: { "text_fr": string, "text_en": string, "explanation_fr": string, "explanation_en": string, "difficulty": "easy" | "medium" | "hard", "options": [{ "text_fr": string, "text_en": string, "is_correct": boolean }] } with exactly 4 options and exactly one is_correct=true. Set "difficulty" from the cognitive demand: "easy" = direct recall of a single fact, "medium" = applying/linking two ideas, "hard" = multi-step reasoning or a fine distinction. Aim for a spread across the five questions.\n\nLesson content:\n${sourceText}`,
             },
           ],
         }),
@@ -102,8 +102,13 @@ Deno.serve(async (req: Request) => {
         text_en: string;
         explanation_fr?: string;
         explanation_en?: string;
+        difficulty?: string;
         options: { text_fr: string; text_en: string; is_correct: boolean }[];
       };
+
+      // Difficulty carried on the payload (set by the generator or by an admin
+      // in the AI-Review UI). Validate against the enum; default to 'medium'.
+      const difficulty = ["easy", "medium", "hard"].includes(q.difficulty ?? "") ? (q.difficulty as string) : "medium";
 
       // Find or create the lesson's quiz, then attach the approved question.
       let quizId: string | null = null;
@@ -131,6 +136,7 @@ Deno.serve(async (req: Request) => {
           text_en: q.text_en,
           explanation_fr: q.explanation_fr ?? "",
           explanation_en: q.explanation_en ?? "",
+          difficulty,
           ai_generated: true,
         })
         .select()
