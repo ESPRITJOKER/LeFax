@@ -20,6 +20,7 @@ import MockExamResult from "./pages/student/MockExamResult";
 import Shop from "./pages/student/Shop";
 import Tasks from "./pages/student/Tasks";
 import Leaderboard from "./pages/student/Leaderboard";
+import Performance from "./pages/student/Performance";
 import Profile from "./pages/student/Profile";
 import Notifications from "./pages/student/Notifications";
 import Search from "./pages/student/Search";
@@ -168,6 +169,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Leaderboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/performance"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <Performance />
             </ProtectedRoute>
           }
         />

@@ -7,13 +7,13 @@ const TABS: { key: NavKey; to: string; labelKey: "nav_revisions" | "nav_evaluati
   { key: "revisions", to: "/dashboard", labelKey: "nav_revisions" },
   { key: "evaluations", to: "/mock-exam", labelKey: "nav_evaluations" },
   { key: "questions", to: "/search", labelKey: "nav_questions" },
-  { key: "perfs", to: "/leaderboard", labelKey: "nav_perfs" },
+  { key: "perfs", to: "/performance", labelKey: "nav_perfs" },
 ];
 
 function deriveActive(pathname: string): NavKey | undefined {
   if (pathname.startsWith("/mock-exam")) return "evaluations";
   if (pathname.startsWith("/search")) return "questions";
-  if (pathname.startsWith("/leaderboard")) return "perfs";
+  if (pathname.startsWith("/performance") || pathname.startsWith("/leaderboard")) return "perfs";
   if (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/subjects") ||
