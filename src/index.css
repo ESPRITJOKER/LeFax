@@ -120,3 +120,15 @@ textarea,
 button {
   font-family: "Inter", sans-serif;
 }
+
+/* Swipe-direction hint (LessonCardDeck): a pointing finger nudging sideways to
+ * show the scroll direction on the first card of a lesson. */
+@keyframes fingerNudge {
+  0%,
+  100% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}

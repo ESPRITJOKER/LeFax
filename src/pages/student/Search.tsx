@@ -81,6 +81,9 @@ export default function Search() {
         />
 
         <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+          <h2 className="font-serif font-bold text-[18px] text-ink-900 mb-3.5">
+            {lang === "fr" ? "Que souhaites-tu apprendre aujourd'hui ?" : "What would you like to learn today?"}
+          </h2>
           <div className="flex items-center gap-2.5 bg-card rounded-[10px] px-3.5 py-3 mb-3.5 shadow-[0_2px_8px_rgba(20,30,60,0.05)]">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
               <circle cx="11" cy="11" r="7" stroke="#94a3b8" strokeWidth="1.8" />

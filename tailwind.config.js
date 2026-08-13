@@ -60,6 +60,11 @@ export default {
         card: "var(--color-card)",
         border: "var(--color-border)",
         muted: "var(--color-muted)",
+        // Body text token — makes `text-text` / `bg-surface text-text` resolve.
+        // Without this key those classes were dropped, so back-face lesson text
+        // inherited `text-white` and rendered white-on-white (corrections doc:
+        // "Le blanc sur le blanc"). Themed via --color-text (light + dark).
+        text: "var(--color-text)",
       },
       borderRadius: {
         card: "16px",

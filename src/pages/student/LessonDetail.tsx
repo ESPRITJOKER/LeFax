@@ -123,6 +123,7 @@ export default function LessonDetail() {
           lessonTitle={title}
           chapterName={chapter ? (lang === "fr" ? chapter.name_fr : chapter.name_en) : null}
           onFinish={goNext}
+          onClose={() => navigate(`/chapter/${lesson!.chapter_id}/stories`)}
         />
       </PhoneFrame>
     );

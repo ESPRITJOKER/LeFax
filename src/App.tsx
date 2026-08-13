@@ -9,6 +9,8 @@ import Track from "./pages/student/Track";
 import Dashboard from "./pages/student/Dashboard";
 import SubjectChapters from "./pages/student/SubjectChapters";
 import ChapterLessons from "./pages/student/ChapterLessons";
+import ChapterStories from "./pages/student/ChapterStories";
+import ChapterPractice from "./pages/student/ChapterPractice";
 import LessonDetail from "./pages/student/LessonDetail";
 import Quiz from "./pages/student/Quiz";
 import QuizResult from "./pages/student/QuizResult";
@@ -78,6 +80,22 @@ export default function App() {
           element={
             <ProtectedRoute roles={["student"]}>
               <ChapterLessons />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chapter/:chapterId/stories"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <ChapterStories />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chapter/:chapterId/practice/:level"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <ChapterPractice />
             </ProtectedRoute>
           }
         />

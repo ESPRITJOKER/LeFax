@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { useI18n } from "../../lib/i18n";
+import { normalizePhone } from "../../lib/phone";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 
 const inputClass =
@@ -22,7 +23,7 @@ export default function Login() {
       return;
     }
     setSubmitting(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({ phone, password });
+    const { error: signInError } = await supabase.auth.signInWithPassword({ phone: normalizePhone(phone), password });
     setSubmitting(false);
     if (signInError) {
       setError(signInError.message);
@@ -38,12 +39,18 @@ export default function Login() {
         <h2 className="font-serif font-bold text-[19px] text-ink-900 mt-[26px] mb-[22px]">
           {lang === "fr" ? "Content de te revoir" : "Welcome back"}
         </h2>
-        <input
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder={lang === "fr" ? "Numéro de téléphone" : "Phone number"}
-          className={`${inputClass} mb-3`}
-        />
+        <div className="flex items-stretch mb-3 text-left">
+          <span className="flex items-center gap-1 px-3 rounded-l-[8px] border border-r-0 border-[#e2e8f0] bg-[#f8fafc] text-[14px] text-ink-900 font-semibold whitespace-nowrap">
+            🇨🇲 +237
+          </span>
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            inputMode="tel"
+            placeholder={lang === "fr" ? "6 XX XX XX XX" : "6 XX XX XX XX"}
+            className="flex-1 min-w-0 box-border border border-[#e2e8f0] rounded-r-[8px] px-3.5 py-[13px] text-[14px] outline-none focus:border-brand-500"
+          />
+        </div>
         <input
           type="password"
           value={password}
