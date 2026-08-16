@@ -68,7 +68,26 @@ export default function SubjectChapters() {
   const [subject, setSubject] = useState<SubjectRow | null>(null);
   const [chapters, setChapters] = useState<ChapterProgress[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState<string | null>(null);
+
+  // Remember which chapter's step "cards" (Stories/Niv 1/2/3) were open, keyed
+  // per subject, so returning from a practice round via navigate(-1) — which
+  // remounts this screen — lands the student back on the cards instead of a
+  // collapsed list with no visible path to them (corrections doc).
+  const cardsKey = `lefax_open_chapter:${subjectId ?? ""}`;
+  const [expanded, setExpanded] = useState<string | null>(() =>
+    typeof sessionStorage === "undefined" ? null : sessionStorage.getItem(cardsKey)
+  );
+
+  function toggleChapter(id: string) {
+    setExpanded((cur) => {
+      const next = cur === id ? null : id;
+      if (typeof sessionStorage !== "undefined") {
+        if (next) sessionStorage.setItem(cardsKey, next);
+        else sessionStorage.removeItem(cardsKey);
+      }
+      return next;
+    });
+  }
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -144,7 +163,7 @@ export default function SubjectChapters() {
                 <div key={c.id} className={`bg-card rounded-[14px] shadow-[0_2px_10px_rgba(20,30,60,0.06)] mb-3 overflow-hidden ${c.locked ? "opacity-60" : ""}`}>
                   {/* Chapter header — tap to expand the 4-step row (original image10). */}
                   <div
-                    onClick={() => !c.locked && setExpanded(isOpen ? null : c.id)}
+                    onClick={() => !c.locked && toggleChapter(c.id)}
                     className={`flex items-center gap-3 p-4 ${c.locked ? "" : "cursor-pointer"}`}
                   >
                     <div className="font-serif font-extrabold text-[18px] text-brand-500 w-7 flex-shrink-0 tabular-nums">
