@@ -69,22 +69,32 @@ export default function QuizResult() {
     };
   }, [state.coinsEarned]);
 
-  const perfect = state.total > 0 && state.correct === state.total;
-  const resultTitle = perfect
-    ? lang === "fr" ? "Score parfait !" : "Perfect score!"
-    : lang === "fr" ? "Bien joué !" : "Well done!";
+  // Tie both the ring colour and the encouragement to the actual score — a 0/9
+  // must not read "Bien joué" over a green ring (corrections doc). Green for a
+  // strong pass, amber mid, red when the lesson needs another pass.
+  const pct = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+  const tier =
+    pct >= 100
+      ? { ring: "#22c55e", title: lang === "fr" ? "Score parfait !" : "Perfect score!", sub: lang === "fr" ? "Sans faute, bravo !" : "Flawless — bravo!" }
+      : pct >= 80
+        ? { ring: "#22c55e", title: lang === "fr" ? "Excellent !" : "Excellent!", sub: lang === "fr" ? "Tu maîtrises ce chapitre." : "You've mastered this chapter." }
+        : pct >= 50
+          ? { ring: "#f5b400", title: lang === "fr" ? "Bien joué !" : "Well done!", sub: lang === "fr" ? "Bon travail, continue comme ça !" : "Good job, keep it up!" }
+          : pct >= 25
+            ? { ring: "#f97316", title: lang === "fr" ? "Continue tes efforts !" : "Keep going!", sub: lang === "fr" ? "Revois la leçon et réessaie." : "Review the lesson and try again." }
+            : { ring: "#ef4444", title: lang === "fr" ? "Ne lâche rien !" : "Don't give up!", sub: lang === "fr" ? "Reprends la leçon, tu vas y arriver." : "Go back over the lesson — you've got this." };
 
   return (
     <PhoneFrame>
       <div className="flex-1 min-h-0 overflow-y-auto bg-white px-[26px] pt-[60px] pb-[30px] text-center flex flex-col items-center">
-        <div className="w-[130px] h-[130px] rounded-full border-8 border-success-600 flex flex-col items-center justify-center mb-[22px]">
+        <div className="w-[130px] h-[130px] rounded-full border-8 flex flex-col items-center justify-center mb-[22px]" style={{ borderColor: tier.ring }}>
           <span className="font-serif font-extrabold text-[30px] text-ink-900">
             {state.correct}/{state.total}
           </span>
         </div>
 
-        <h2 className="font-serif font-bold text-[19px] text-ink-900 mb-2">{resultTitle}</h2>
-        <p className="text-[13.5px] text-[#647084] mb-6">{lang === "fr" ? "Bon travail, continue comme ça !" : "Good job, keep it up!"}</p>
+        <h2 className="font-serif font-bold text-[19px] text-ink-900 mb-2">{tier.title}</h2>
+        <p className="text-[13.5px] text-[#647084] mb-6">{tier.sub}</p>
 
         <div className="bg-[#fff8e5] rounded-[12px] px-[18px] py-3.5 flex items-center gap-2.5 mb-[26px]">
           <div className="w-[22px] h-[22px] rounded-full bg-ochre-600 text-ink-900 text-[11px] font-serif font-extrabold flex items-center justify-center">f</div>

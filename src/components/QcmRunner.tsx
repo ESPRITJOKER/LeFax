@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useI18n } from "../lib/i18n";
+import { useAuth } from "../lib/auth";
 import type { QuestionRow, ChoiceRow } from "../lib/database.types";
 
 /**
  * Reusable single-answer QCM runner for the chapter *révision* exercises
  * (Exercice Niveau 1/2/3). Visuals are lifted from the graded Quiz screen
- * (src/pages/student/Quiz.tsx) but grading is CLIENT-SIDE off `choices.is_correct`
- * — these are practice rounds, not the Concours-blanc under Evaluations, so
- * there are no hearts, no server scoring and no FaxCoins. `onFinish` reports the
- * raw score so the caller can show a simple result.
+ * (src/pages/student/Quiz.tsx). Grading is CLIENT-SIDE off `choices.is_correct`
+ * (these are practice rounds, not the Concours-blanc under Evaluations, so there
+ * is no server scoring), but — like the original platform — the header still
+ * shows the player's FaxCoins balance and three red hearts (lives): a wrong
+ * answer costs a heart and the round ends when they run out. `onFinish` reports
+ * the raw score so the caller can show a simple result.
  */
 
 export interface QuestionWithChoices extends QuestionRow {
@@ -31,23 +34,29 @@ export function QcmRunner({
   onFinish: (correct: number, total: number) => void;
 }) {
   const { lang } = useI18n();
+  const { profile } = useAuth();
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [heartsRemaining, setHeartsRemaining] = useState(3);
 
   const question = questions[index];
   const isLast = index === questions.length - 1;
+  const outOfHearts = heartsRemaining <= 0;
+  // The round ends on the last question OR as soon as the hearts run out.
+  const roundEnds = isLast || outOfHearts;
 
   function reveal() {
     if (!selected || revealed) return;
     const chosen = question.choices.find((c) => c.id === selected);
     if (chosen?.is_correct) setCorrectCount((n) => n + 1);
+    else setHeartsRemaining((h) => Math.max(0, h - 1));
     setRevealed(true);
   }
 
   function next() {
-    if (isLast) {
+    if (roundEnds) {
       onFinish(correctCount, questions.length);
       return;
     }
@@ -71,6 +80,23 @@ export function QcmRunner({
         <span className="text-white/90 font-bold text-[13px]">
           {index + 1}/{questions.length}
         </span>
+      </div>
+
+      {/* Stats strip — FaxCoins balance + three red hearts (lives). Kept on a
+          white band so the red hearts stay legible over any level colour,
+          including the red of Niveau 3. */}
+      <div className="px-5 py-2.5 flex items-center justify-between border-b border-ink-100 bg-white">
+        <div className="flex items-center gap-1.5 rounded-pill px-3 py-[5px] bg-brand-800">
+          <span className="w-[18px] h-[18px] rounded-full bg-ochre-600 text-ink-900 text-[10px] font-serif font-extrabold flex items-center justify-center">f</span>
+          <span className="text-white font-bold text-[13px]">{profile?.faxcoins ?? 0}</span>
+        </div>
+        <div className="flex gap-1">
+          {[0, 1, 2].map((i) => (
+            <svg key={i} width="18" height="18" viewBox="0 0 24 24" fill={i < heartsRemaining ? "#ef4444" : "#e2e8f0"}>
+              <path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.6 5 6 5c2 0 3.5 1.1 4 2.6C10.5 6.1 12 5 14 5c3.4 0 5.3 3.4 3.5 7-2.5 4.4-9.5 9-9.5 9z" />
+            </svg>
+          ))}
+        </div>
       </div>
 
       <div className="h-1 bg-ink-100">
@@ -147,7 +173,7 @@ export function QcmRunner({
           style={{ background: selected ? levelColor : "#cbd5e1" }}
         >
           {revealed
-            ? isLast
+            ? roundEnds
               ? lang === "fr"
                 ? "Terminer"
                 : "Finish"

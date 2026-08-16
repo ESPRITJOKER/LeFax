@@ -58,6 +58,9 @@ export function LessonCardDeck({
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [answers, setAnswers] = useState<Record<string, StructAnswerState>>({});
+  // Cards whose image URL failed to load — fall back to the illustration
+  // placeholder instead of a broken-image icon.
+  const [brokenImg, setBrokenImg] = useState<Record<string, boolean>>({});
 
   const animatingRef = useRef(false);
   const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -230,7 +233,8 @@ export function LessonCardDeck({
         <div className="relative h-full">
           {/* Content card slots */}
           {cards.map((card, i) => {
-            const image = lang === "fr" ? card.image_fr : card.image_en;
+            const rawImage = lang === "fr" ? card.image_fr : card.image_en;
+            const image = rawImage && !brokenImg[card.id] ? rawImage : null;
             const point = lang === "fr" ? card.point_fr : card.point_en;
             const sub = lang === "fr" ? card.sub_fr : card.sub_en;
             const explanation = lang === "fr" ? card.explanation_fr : card.explanation_en;
@@ -262,7 +266,12 @@ export function LessonCardDeck({
                     </div>
 
                     {image ? (
-                      <img src={image} alt="" className="w-full max-h-[38%] object-contain rounded-2xl mb-5 bg-white/5" />
+                      <img
+                        src={image}
+                        alt=""
+                        onError={() => setBrokenImg((p) => ({ ...p, [card.id]: true }))}
+                        className="w-full max-h-[38%] object-contain rounded-2xl mb-5 bg-white/5"
+                      />
                     ) : (
                       <div className="w-[74px] h-[74px] rounded-[20px] bg-white/[0.08] flex items-center justify-center mb-5">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#f5b400" strokeWidth="1.6" className="w-9 h-9">
@@ -308,6 +317,19 @@ export function LessonCardDeck({
                     </div>
 
                     <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 flex flex-col gap-4">
+                      {/* Keep the diagram in view while reading — tap to open it
+                          full-size in a new tab for the detail the user wants. */}
+                      {image && (
+                        <a href={image} target="_blank" rel="noopener noreferrer" className="block">
+                          <img
+                            src={image}
+                            alt=""
+                            onError={() => setBrokenImg((p) => ({ ...p, [card.id]: true }))}
+                            className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50"
+                          />
+                        </a>
+                      )}
+
                       {/* Explanation */}
                       {explanation && (
                         <div>
