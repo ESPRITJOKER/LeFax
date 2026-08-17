@@ -189,11 +189,11 @@ export default function AdminLessonEditor() {
         </div>
         <label className="flex flex-col gap-1.5">
           <span className="text-[11.5px] font-bold text-muted">{t("admin_contentFr")}</span>
-          <textarea value={contentFr} onChange={(e) => setContentFr(e.target.value)} rows={12} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed" />
+          <textarea value={contentFr} onChange={(e) => setContentFr(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
         </label>
         <label className="flex flex-col gap-1.5">
           <span className="text-[11.5px] font-bold text-muted">{t("admin_contentEn")}</span>
-          <textarea value={contentEn} onChange={(e) => setContentEn(e.target.value)} rows={12} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed" />
+          <textarea value={contentEn} onChange={(e) => setContentEn(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
         </label>
         <div className="text-[11px] text-muted leading-relaxed">{t("admin_markupHint")}</div>
         <div>

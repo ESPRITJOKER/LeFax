@@ -218,9 +218,12 @@ function Field({ label, value, onChange, area }: { label: string; value: string;
     <label className="flex flex-col gap-1.5">
       <span className="text-[11px] font-bold text-muted">{label}</span>
       {area ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={2} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y" />
+        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={5} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[120px]" />
       ) : (
-        <input value={value} onChange={(e) => onChange(e.target.value)} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px]" />
+        // Even the "short" fields are textareas now so long pasted text is
+        // fully visible without scrolling one line at a time (corrections doc
+        // note 4: "des carrés moyens à la place des rectangles").
+        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={2} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[60px]" />
       )}
     </label>
   );

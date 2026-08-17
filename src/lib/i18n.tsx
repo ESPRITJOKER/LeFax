@@ -265,6 +265,12 @@ const dict = {
     admin_unpublish: "Dépublier",
     admin_publishedHint: "Visible par les étudiants",
     admin_draftHint: "Masqué aux étudiants",
+    admin_addLesson: "Ajouter une leçon",
+    admin_newLesson: "Nouvelle leçon",
+    admin_deleteChapter: "Supprimer le chapitre",
+    admin_deleteLesson: "Supprimer la leçon",
+    admin_confirmDeleteChapter: "Supprimer ce chapitre et TOUTES ses leçons ? Cette action est irréversible.",
+    admin_confirmDeleteLesson: "Supprimer cette leçon ? Cette action est irréversible.",
 
     // Teacher
     teacher_dashboard: "Tableau de bord enseignant",
@@ -540,6 +546,12 @@ const dict = {
     admin_unpublish: "Unpublish",
     admin_publishedHint: "Visible to students",
     admin_draftHint: "Hidden from students",
+    admin_addLesson: "Add lesson",
+    admin_newLesson: "New lesson",
+    admin_deleteChapter: "Delete chapter",
+    admin_deleteLesson: "Delete lesson",
+    admin_confirmDeleteChapter: "Delete this chapter and ALL its lessons? This cannot be undone.",
+    admin_confirmDeleteLesson: "Delete this lesson? This cannot be undone.",
 
     // Teacher
     teacher_dashboard: "Teacher dashboard",

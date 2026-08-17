@@ -165,6 +165,9 @@ export function LessonCardDeck({
     startXRef.current = null;
     if (Math.abs(dx) > 40) (dx < 0 ? goNext : goPrev)();
   }
+  function onPointerCancel() {
+    startXRef.current = null;
+  }
 
   function submitStructural(card: LessonCardRow) {
     const expected = lang === "fr" ? card.structural_answer_fr : card.structural_answer_en;
@@ -206,7 +209,12 @@ export function LessonCardDeck({
       </div>
 
       {/* Stage */}
-      <div className="relative flex-1 min-h-0" style={{ perspective: "1200px" }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+      {/* touchAction:'pan-y' lets the browser keep vertical scroll (back-face
+          content) while handing us horizontal drags — without it, a right→left
+          swipe is claimed by the browser as a pan and the pointer stream is
+          cancelled before onPointerUp fires, so swipe-nav never triggers on a
+          phone (corrections doc note 7). */}
+      <div className="relative flex-1 min-h-0" style={{ perspective: "1200px", touchAction: "pan-y" }} onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={onPointerCancel}>
         {/* Side tap-zones navigate — front face only, so back-face taps reach its controls. */}
         {!flipped && <div className="absolute top-0 bottom-0 left-0 w-[34%] z-[5]" onClick={goPrev} />}
         {!flipped && <div className="absolute top-0 bottom-0 right-0 w-[34%] z-[5]" onClick={goNext} />}
@@ -265,20 +273,16 @@ export function LessonCardDeck({
                       <i className="absolute top-[-30%] left-0 w-[42%] h-[160%] block" style={{ background: "linear-gradient(75deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 48%, rgba(255,255,255,0) 100%)", transform: "translateX(-160%)" }} />
                     </div>
 
-                    {image ? (
+                    {/* No image → render nothing (previously a big yellow
+                        bullseye placeholder that confused users — corrections
+                        doc note 6). The card centres its text on its own. */}
+                    {image && (
                       <img
                         src={image}
                         alt=""
                         onError={() => setBrokenImg((p) => ({ ...p, [card.id]: true }))}
                         className="w-full max-h-[38%] object-contain rounded-2xl mb-5 bg-white/5"
                       />
-                    ) : (
-                      <div className="w-[74px] h-[74px] rounded-[20px] bg-white/[0.08] flex items-center justify-center mb-5">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#f5b400" strokeWidth="1.6" className="w-9 h-9">
-                          <circle cx="12" cy="12" r="8" />
-                          <circle cx="12" cy="12" r="2.4" fill="#f5b400" stroke="none" />
-                        </svg>
-                      </div>
                     )}
                     <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">{cardLabel(i)}</div>
                     <div className="font-serif text-[21px] font-extrabold leading-[1.35] mb-3.5">{point}</div>
