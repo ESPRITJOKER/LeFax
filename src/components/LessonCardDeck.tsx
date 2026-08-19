@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useI18n } from "../lib/i18n";
+import { inline } from "../lib/lessonContent";
 import { gradeStructural } from "../lib/practiceBank";
 import type { LessonCardRow } from "../lib/database.types";
 
@@ -285,8 +286,12 @@ export function LessonCardDeck({
                       />
                     )}
                     <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">{cardLabel(i)}</div>
-                    <div className="font-serif text-[21px] font-extrabold leading-[1.35] mb-3.5">{point}</div>
-                    {sub && <div className="text-[13.5px] text-white/70 leading-[1.5] mb-6">{sub}</div>}
+                    {/* The point is a serif headline, but rendered semibold (not
+                        extrabold) so a full sentence isn't one tiring block of
+                        bold — emphasis instead comes from *italic* / **bold**
+                        kept from the source text (Correction N3). */}
+                    <div className="font-serif text-[21px] font-semibold leading-[1.35] mb-3.5">{inline(point)}</div>
+                    {sub && <div className="text-[13.5px] text-white/70 leading-[1.5] mb-6">{inline(sub)}</div>}
                     {/* Reveal the back face — symbol only (corrections doc:
                         "pas besoin d'écrire : voir plus… juste de bons symboles"). */}
                     <button
@@ -306,7 +311,7 @@ export function LessonCardDeck({
                     style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                   >
                     <div className="flex items-center justify-between px-5 py-3.5 border-b border-border flex-shrink-0">
-                      <h3 className="font-serif font-bold text-[14.5px] text-ink-900 truncate pr-2">{point}</h3>
+                      <h3 className="font-serif font-bold text-[14.5px] text-ink-900 truncate pr-2">{inline(point)}</h3>
                       {/* Flip back to the front — symbol only (no "Retourner" text). */}
                       <button
                         onClick={() => setFlipped(false)}
@@ -338,7 +343,7 @@ export function LessonCardDeck({
                       {explanation && (
                         <div>
                           <div className="font-serif font-bold text-[12px] text-ink-900 mb-1.5">{t("card_explanation")}</div>
-                          <p className="text-[13.5px] leading-[1.6] text-text whitespace-pre-line">{explanation}</p>
+                          <p className="text-[13.5px] leading-[1.6] text-text whitespace-pre-line">{inline(explanation)}</p>
                         </div>
                       )}
 
@@ -348,7 +353,7 @@ export function LessonCardDeck({
                           <div className="flex items-center gap-1.5 text-[11px] font-bold text-brand-600 mb-1.5 uppercase tracking-wide">
                             {t("card_structuralQ")}
                           </div>
-                          <p className="text-[13px] leading-relaxed text-text mb-2.5">{structuralQ}</p>
+                          <p className="text-[13px] leading-relaxed text-text mb-2.5">{inline(structuralQ)}</p>
                           <textarea
                             value={ans?.value ?? ""}
                             onChange={(e) => setAnswers((prev) => ({ ...prev, [card.id]: { value: e.target.value, graded: false, correct: false } }))}
@@ -371,7 +376,7 @@ export function LessonCardDeck({
                               </div>
                               <div className="rounded-lg bg-white border border-border px-3 py-2">
                                 <div className="text-[10px] font-bold uppercase tracking-wide text-success-600 mb-0.5">{t("card_expectedAnswer")}</div>
-                                <div className="text-[12.5px] text-text leading-relaxed">{expectedAnswer}</div>
+                                <div className="text-[12.5px] text-text leading-relaxed">{inline(expectedAnswer)}</div>
                               </div>
                             </div>
                           )}
@@ -384,7 +389,7 @@ export function LessonCardDeck({
                           <div className="font-serif font-bold text-[12px] mb-1" style={{ color: "#0b5f96" }}>
                             💡 {t("card_tips")}
                           </div>
-                          <div className="text-[13px] leading-[1.55] whitespace-pre-line" style={{ color: "#0b4a75" }}>{tips}</div>
+                          <div className="text-[13px] leading-[1.55] whitespace-pre-line" style={{ color: "#0b4a75" }}>{inline(tips)}</div>
                         </div>
                       )}
 
@@ -394,7 +399,7 @@ export function LessonCardDeck({
                           <div className="font-serif font-bold text-[12px] mb-1" style={{ color: "#a35b00" }}>
                             ⚠ {t("card_traps")}
                           </div>
-                          <div className="text-[13px] leading-[1.55] whitespace-pre-line" style={{ color: "#5c3b00" }}>{traps}</div>
+                          <div className="text-[13px] leading-[1.55] whitespace-pre-line" style={{ color: "#5c3b00" }}>{inline(traps)}</div>
                         </div>
                       )}
                     </div>

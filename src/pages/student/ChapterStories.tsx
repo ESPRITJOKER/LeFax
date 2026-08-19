@@ -73,7 +73,14 @@ export default function ChapterStories() {
   return (
     <PhoneFrame>
       <div className="flex-1 min-h-0 flex flex-col">
-        <TopBar variant="back" coins={profile?.faxcoins ?? 0} onBack={() => navigate(-1)} />
+        {/* Back goes to the subject's chapter list — a fixed destination rather
+            than navigate(-1), which after opening/closing a story card could
+            otherwise land back on the card (Correction N3). */}
+        <TopBar
+          variant="back"
+          coins={profile?.faxcoins ?? 0}
+          onBack={() => (subjectSlug ? navigate(`/subjects/${subjectSlug}`) : navigate(-1))}
+        />
 
         <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[30px]">
           {/* Header: subject icon + "{Chapter} / N Stories" */}

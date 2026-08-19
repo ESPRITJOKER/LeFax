@@ -34,6 +34,30 @@ export default function AdminLessonEditor() {
   const [images, setImages] = useState<Record<number, string>>({});
   const [uploadingSlot, setUploadingSlot] = useState<number | null>(null);
   const fileInputs = useRef<Record<number, HTMLInputElement | null>>({});
+  const contentFrRef = useRef<HTMLTextAreaElement | null>(null);
+  const contentEnRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Insert an [[IMG: description]] placeholder at the caret of a content field so
+  // admins don't have to remember the markup (Correction N3: "je n'arrive
+  // toujours pas à insérer d'image"). After Save, its upload slot appears below.
+  function insertImagePlaceholder(which: "fr" | "en") {
+    const el = which === "fr" ? contentFrRef.current : contentEnRef.current;
+    const value = which === "fr" ? contentFr : contentEn;
+    const setValue = which === "fr" ? setContentFr : setContentEn;
+    const pos = el ? el.selectionStart : value.length;
+    const before = value.slice(0, pos);
+    const after = value.slice(pos);
+    const lead = before && !before.endsWith("\n") ? "\n" : "";
+    const trail = after && !after.startsWith("\n") ? "\n" : "";
+    setValue(`${before}${lead}[[IMG: description]]${trail}${after}`);
+    // Pre-select the word "description" so the admin types the caption over it.
+    requestAnimationFrame(() => {
+      if (!el) return;
+      el.focus();
+      const caret = before.length + lead.length + "[[IMG: ".length;
+      el.setSelectionRange(caret, caret + "description".length);
+    });
+  }
 
   async function loadMedia(id: string) {
     const { data } = await supabase
@@ -188,12 +212,22 @@ export default function AdminLessonEditor() {
           </label>
         </div>
         <label className="flex flex-col gap-1.5">
-          <span className="text-[11.5px] font-bold text-muted">{t("admin_contentFr")}</span>
-          <textarea value={contentFr} onChange={(e) => setContentFr(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
+          <span className="flex items-center justify-between">
+            <span className="text-[11.5px] font-bold text-muted">{t("admin_contentFr")}</span>
+            <button type="button" onClick={() => insertImagePlaceholder("fr")} className="border border-brand-600/40 bg-white text-brand-600 px-2.5 py-1 rounded-lg text-[11.5px] font-bold">
+              {t("admin_insertImage")}
+            </button>
+          </span>
+          <textarea ref={contentFrRef} value={contentFr} onChange={(e) => setContentFr(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-[11.5px] font-bold text-muted">{t("admin_contentEn")}</span>
-          <textarea value={contentEn} onChange={(e) => setContentEn(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
+          <span className="flex items-center justify-between">
+            <span className="text-[11.5px] font-bold text-muted">{t("admin_contentEn")}</span>
+            <button type="button" onClick={() => insertImagePlaceholder("en")} className="border border-brand-600/40 bg-white text-brand-600 px-2.5 py-1 rounded-lg text-[11.5px] font-bold">
+              {t("admin_insertImage")}
+            </button>
+          </span>
+          <textarea ref={contentEnRef} value={contentEn} onChange={(e) => setContentEn(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
         </label>
         <div className="text-[11px] text-muted leading-relaxed">{t("admin_markupHint")}</div>
         <div>

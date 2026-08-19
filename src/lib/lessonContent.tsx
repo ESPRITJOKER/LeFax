@@ -20,15 +20,34 @@ import { useI18n } from "./i18n";
  *   [!APP] consigne ||| correction → self-test box; correction hidden behind a
  *                                    toggle so students try first
  *   plain text                     → paragraph
- * Inline **bold** is supported everywhere.
+ * Inline **bold** and *italic* / _italic_ are supported everywhere. Italics are
+ * kept (and not flattened to bold) so emphasis from the source texts survives —
+ * a wall of uniform bold is tiring and doesn't help memory (Correction N3).
  */
 
-/** Render inline markup (**bold**) inside a single line of text. */
-function inline(text: string): ReactNode {
-  const parts = text.split(/\*\*/);
-  return parts.map((p, i) =>
-    i % 2 === 1 ? <strong key={i} className="font-bold text-text">{p}</strong> : <Fragment key={i}>{p}</Fragment>
-  );
+/**
+ * Render inline markup inside a single line of text:
+ *   **bold**            → <strong>
+ *   *italic* / _italic_ → <em>
+ * Colour is inherited from the surrounding text, so this renders correctly on
+ * both the light document viewer and the dark story cards. The italic forms
+ * require a non-space right after the opening mark so a lone `*` (e.g. "2 * 3")
+ * is left untouched.
+ */
+export function inline(text: string): ReactNode {
+  const re = /\*\*([^*]+?)\*\*|\*([^\s*][^*]*?)\*|_([^\s_][^_]*?)_/g;
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) nodes.push(<Fragment key={key++}>{text.slice(last, m.index)}</Fragment>);
+    if (m[1] !== undefined) nodes.push(<strong key={key++} className="font-bold">{m[1]}</strong>);
+    else nodes.push(<em key={key++} className="italic">{(m[2] ?? m[3]) as string}</em>);
+    last = re.lastIndex;
+  }
+  if (last < text.length) nodes.push(<Fragment key={key++}>{text.slice(last)}</Fragment>);
+  return nodes;
 }
 
 function ImageBlock({ caption, url }: { caption: string; url?: string }) {

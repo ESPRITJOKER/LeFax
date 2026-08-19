@@ -123,7 +123,11 @@ export default function LessonDetail() {
           lessonTitle={title}
           chapterName={chapter ? (lang === "fr" ? chapter.name_fr : chapter.name_en) : null}
           onFinish={goNext}
-          onClose={() => navigate(`/chapter/${lesson!.chapter_id}/stories`)}
+          // `replace` so closing the card doesn't push a *second* stories entry
+          // on top of the one we came from — otherwise the stories grid's back
+          // arrow would step back onto the card instead of the chapter list
+          // (Correction N3).
+          onClose={() => navigate(`/chapter/${lesson!.chapter_id}/stories`, { replace: true })}
         />
       </PhoneFrame>
     );
