@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
 import { Pill, Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
+import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { SubjectRow, ChapterRow } from "../../lib/database.types";
 
@@ -14,6 +15,7 @@ type LessonLite = { id: string; title_fr: string; title_en: string; published: b
 
 export default function AdminContent() {
   const { t, lang } = useI18n();
+  const { profile } = useAuth();
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<SubjectRow[]>([]);
   const [activeSubjectId, setActiveSubjectId] = useState<string>("");
@@ -147,6 +149,7 @@ export default function AdminContent() {
         title_en: "New lesson",
         position: nextPos,
         published: false, // start as draft — hidden from students until ready
+        author_id: profile?.id ?? null, // own the row so ownership-based RLS also passes
       })
       .select("id, title_fr, title_en, published, position")
       .single();

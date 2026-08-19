@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
@@ -7,51 +7,111 @@ import type { LessonCardRow } from "../../lib/database.types";
 
 const BUCKET = "lesson-media";
 
+/** Imperative handle so the lesson editor's single top "Enregistrer" can flush
+ *  every unsaved card in one click (Correction: users lost card edits because
+ *  the top save only wrote title/body, not the separately-saved cards). */
+export interface LessonCardsHandle {
+  /** Persist every dirty card. Resolves false if any write fails. */
+  saveAll: () => Promise<boolean>;
+  hasDirty: () => boolean;
+}
+
 /**
  * Admin editor for a lesson's story cards (CDC Steps 4 & 5). One panel per
  * lesson: create/reorder/delete cards, edit the four back-face blocks, and —
  * per Step 4 — assign a SEPARATE image for FR vs EN students (image_fr /
  * image_en), not a single shared field.
  */
-export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
+export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string }>(function LessonCardsPanel(
+  { lessonId },
+  ref
+) {
   const { t } = useI18n();
   const { profile } = useAuth();
   const [cards, setCards] = useState<LessonCardRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [flash, setFlash] = useState<{ ok: boolean; msg: string } | null>(null);
+  // Cards edited since their last successful save — used to flush them all from
+  // the top button and to warn before leaving.
+  const [dirty, setDirty] = useState<Set<string>>(new Set());
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  // Latest cards, readable inside the imperative saveAll without stale closures.
+  const cardsRef = useRef<LessonCardRow[]>([]);
+  cardsRef.current = cards;
 
   useEffect(() => {
     (async () => {
       const { data } = await supabase.from("lesson_cards").select("*").eq("lesson_id", lessonId).order("position");
       setCards(data ?? []);
+      setDirty(new Set());
       setLoading(false);
     })();
   }, [lessonId]);
 
+  function markDirty(id: string) {
+    setDirty((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  }
+  function clearDirty(id: string) {
+    setDirty((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }
+
   function setField<K extends keyof LessonCardRow>(id: string, key: K, value: LessonCardRow[K]) {
     setCards((prev) => prev.map((c) => (c.id === id ? { ...c, [key]: value } : c)));
+    markDirty(id);
   }
 
   async function addCard() {
     const nextPos = cards.length ? Math.max(...cards.map((c) => c.position)) + 1 : 0;
     const { data, error } = await supabase.from("lesson_cards").insert({ lesson_id: lessonId, position: nextPos }).select().single();
-    if (error || !data) return setFlash({ ok: false, msg: t("admin_saveError") });
+    if (error || !data) return setFlash({ ok: false, msg: error?.message || t("admin_saveError") });
     setCards((prev) => [...prev, data]);
+  }
+
+  // Persist one card. Returns true only if a row actually came back — an RLS
+  // 0-row "success" (no error, no data) is treated as a failure so we never
+  // claim a save that didn't happen.
+  async function persistCard(card: LessonCardRow): Promise<{ ok: boolean; error?: string }> {
+    const { id, created_at, updated_at, lesson_id, ...fields } = card;
+    void created_at;
+    void updated_at;
+    void lesson_id;
+    const { data, error } = await supabase.from("lesson_cards").update(fields).eq("id", id).select("id");
+    if (error) return { ok: false, error: error.message };
+    if (!data || data.length === 0) return { ok: false, error: t("admin_saveBlocked") };
+    return { ok: true };
   }
 
   async function saveCard(card: LessonCardRow) {
     setBusyId(card.id);
     setFlash(null);
-    const { id, created_at, updated_at, lesson_id, ...fields } = card;
-    void created_at;
-    void updated_at;
-    void lesson_id;
-    const { error } = await supabase.from("lesson_cards").update(fields).eq("id", id);
-    setFlash(error ? { ok: false, msg: t("admin_saveError") } : { ok: true, msg: t("admin_cardSaved") });
+    const res = await persistCard(card);
+    if (res.ok) clearDirty(card.id);
+    setFlash(res.ok ? { ok: true, msg: t("admin_cardSaved") } : { ok: false, msg: res.error || t("admin_saveError") });
     setBusyId(null);
   }
+
+  useImperativeHandle(ref, () => ({
+    hasDirty: () => cardsRef.current.some((c) => dirty.has(c.id)),
+    saveAll: async () => {
+      const toSave = cardsRef.current.filter((c) => dirty.has(c.id));
+      if (toSave.length === 0) return true;
+      const results = await Promise.all(toSave.map(persistCard));
+      const savedIds = toSave.filter((_, i) => results[i].ok).map((c) => c.id);
+      if (savedIds.length) setDirty((prev) => { const n = new Set(prev); savedIds.forEach((id) => n.delete(id)); return n; });
+      const firstErr = results.find((r) => !r.ok)?.error;
+      if (firstErr) setFlash({ ok: false, msg: firstErr });
+      return results.every((r) => r.ok);
+    },
+    // persistCard only closes over stable refs (supabase, t); dirty/cardsRef are
+    // read fresh, so re-deriving the handle on each dirty change is enough.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [dirty]);
 
   async function deleteCard(card: LessonCardRow) {
     setBusyId(card.id);
@@ -77,6 +137,12 @@ export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
     setBusyId(null);
   }
 
+  // Update a field in local state WITHOUT marking the card dirty — used after an
+  // image write that already persisted, so it doesn't look like an unsaved edit.
+  function setFieldSaved<K extends keyof LessonCardRow>(id: string, key: K, value: LessonCardRow[K]) {
+    setCards((prev) => prev.map((c) => (c.id === id ? { ...c, [key]: value } : c)));
+  }
+
   async function uploadImage(card: LessonCardRow, variant: "fr" | "en", file: File) {
     if (!profile || !file.type.startsWith("image/")) return;
     setBusyId(card.id);
@@ -88,11 +154,13 @@ export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
       const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
       const url = `${data.publicUrl}?t=${Date.now()}`;
       const patch: Partial<LessonCardRow> = variant === "fr" ? { image_fr: url } : { image_en: url };
-      const { error: dbErr } = await supabase.from("lesson_cards").update(patch).eq("id", card.id);
+      const { data: rows, error: dbErr } = await supabase.from("lesson_cards").update(patch).eq("id", card.id).select("id");
       if (dbErr) throw dbErr;
-      setField(card.id, variant === "fr" ? "image_fr" : "image_en", url);
-    } catch {
-      setFlash({ ok: false, msg: t("admin_saveError") });
+      if (!rows || rows.length === 0) throw new Error(t("admin_saveBlocked"));
+      setFieldSaved(card.id, variant === "fr" ? "image_fr" : "image_en", url);
+      setFlash({ ok: true, msg: t("admin_cardSaved") });
+    } catch (e) {
+      setFlash({ ok: false, msg: e instanceof Error ? e.message : t("admin_saveError") });
     }
     setBusyId(null);
   }
@@ -102,10 +170,12 @@ export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
     try {
       await supabase.storage.from(BUCKET).remove([`${lessonId}/card-${card.id}-${variant}`]);
       const patch: Partial<LessonCardRow> = variant === "fr" ? { image_fr: null } : { image_en: null };
-      await supabase.from("lesson_cards").update(patch).eq("id", card.id);
-      setField(card.id, variant === "fr" ? "image_fr" : "image_en", null);
-    } catch {
-      setFlash({ ok: false, msg: t("admin_saveError") });
+      const { data: rows, error: dbErr } = await supabase.from("lesson_cards").update(patch).eq("id", card.id).select("id");
+      if (dbErr) throw dbErr;
+      if (!rows || rows.length === 0) throw new Error(t("admin_saveBlocked"));
+      setFieldSaved(card.id, variant === "fr" ? "image_fr" : "image_en", null);
+    } catch (e) {
+      setFlash({ ok: false, msg: e instanceof Error ? e.message : t("admin_saveError") });
     }
     setBusyId(null);
   }
@@ -136,8 +206,13 @@ export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
           return (
             <div key={card.id} className="bg-white border border-border rounded-2xl p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-[12px] font-bold uppercase tracking-wide text-muted">
-                  {t("admin_card")} {i + 1}
+                <div className="flex items-center gap-2">
+                  <div className="text-[12px] font-bold uppercase tracking-wide text-muted">
+                    {t("admin_card")} {i + 1}
+                  </div>
+                  {dirty.has(card.id) && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">{t("admin_unsaved")}</span>
+                  )}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button onClick={() => move(card, -1)} disabled={busy || i === 0} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveUp")}>
@@ -197,7 +272,7 @@ export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
 
               <div className="mt-3">
                 <button onClick={() => saveCard(card)} disabled={busy} className="border-none px-5 py-2.5 rounded-xl text-[13px] font-bold bg-brand-600 text-white disabled:opacity-60">
-                  {busy ? t("admin_uploading") : t("admin_saveCard")}
+                  {busy ? t("admin_uploading") : dirty.has(card.id) ? `${t("admin_saveCard")} •` : t("admin_saveCard")}
                 </button>
               </div>
             </div>
@@ -211,7 +286,7 @@ export function LessonCardsPanel({ lessonId }: { lessonId: string }) {
       </button>
     </div>
   );
-}
+});
 
 function Field({ label, value, onChange, area }: { label: string; value: string; onChange: (v: string) => void; area?: boolean }) {
   return (

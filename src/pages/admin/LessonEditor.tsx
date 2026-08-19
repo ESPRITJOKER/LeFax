@@ -5,7 +5,7 @@ import { Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { parseImagePlaceholders } from "../../lib/lessonContent";
-import { LessonCardsPanel } from "./LessonCardsPanel";
+import { LessonCardsPanel, type LessonCardsHandle } from "./LessonCardsPanel";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow } from "../../lib/database.types";
 
@@ -36,6 +36,7 @@ export default function AdminLessonEditor() {
   const fileInputs = useRef<Record<number, HTMLInputElement | null>>({});
   const contentFrRef = useRef<HTMLTextAreaElement | null>(null);
   const contentEnRef = useRef<HTMLTextAreaElement | null>(null);
+  const cardsRef = useRef<LessonCardsHandle>(null);
 
   // Insert an [[IMG: description]] placeholder at the caret of a content field so
   // admins don't have to remember the markup (Correction N3: "je n'arrive
@@ -94,11 +95,27 @@ export default function AdminLessonEditor() {
     if (!lessonId) return;
     setSaving(true);
     setFlash(null);
-    const { error } = await supabase
+    // `.select()` so we can tell a real write from an RLS 0-row "success" that
+    // returns no error and no rows — the latter must NOT report "enregistré".
+    const { data, error } = await supabase
       .from("lessons")
       .update({ title_fr: titleFr, title_en: titleEn, content_fr: contentFr, content_en: contentEn })
-      .eq("id", lessonId);
-    setFlash(error ? { ok: false, msg: t("admin_saveError") } : { ok: true, msg: t("admin_lessonSaved") });
+      .eq("id", lessonId)
+      .select("id");
+    if (error) {
+      setFlash({ ok: false, msg: error.message || t("admin_saveError") });
+      setSaving(false);
+      return;
+    }
+    if (!data || data.length === 0) {
+      setFlash({ ok: false, msg: t("admin_saveBlocked") });
+      setSaving(false);
+      return;
+    }
+    // Also flush any unsaved story cards so the single top button really saves
+    // everything (users were losing card edits to the separate per-card button).
+    const cardsOk = (await cardsRef.current?.saveAll()) ?? true;
+    setFlash(cardsOk ? { ok: true, msg: t("admin_lessonSaved") } : { ok: false, msg: t("admin_cardsSaveError") });
     setSaving(false);
   }
 
@@ -107,9 +124,11 @@ export default function AdminLessonEditor() {
     setPublishing(true);
     setFlash(null);
     const next = !published;
-    const { error } = await supabase.from("lessons").update({ published: next }).eq("id", lessonId);
+    const { data, error } = await supabase.from("lessons").update({ published: next }).eq("id", lessonId).select("id");
     if (error) {
-      setFlash({ ok: false, msg: t("admin_saveError") });
+      setFlash({ ok: false, msg: error.message || t("admin_saveError") });
+    } else if (!data || data.length === 0) {
+      setFlash({ ok: false, msg: t("admin_saveBlocked") });
     } else {
       setPublished(next);
       setFlash({ ok: true, msg: next ? t("admin_published") : t("admin_draft") });
@@ -127,7 +146,7 @@ export default function AdminLessonEditor() {
       if (upErr) throw upErr;
       const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
       const url = `${data.publicUrl}?t=${Date.now()}`; // cache-bust: same key, new bytes
-      const { error: dbErr } = await supabase.from("media_library").upsert(
+      const { data: rows, error: dbErr } = await supabase.from("media_library").upsert(
         {
           lesson_id: lessonId,
           image_slot: slot,
@@ -137,11 +156,13 @@ export default function AdminLessonEditor() {
           uploaded_by: profile.id,
         },
         { onConflict: "lesson_id,image_slot" }
-      );
+      ).select("id");
       if (dbErr) throw dbErr;
+      if (!rows || rows.length === 0) throw new Error(t("admin_saveBlocked"));
       setImages((prev) => ({ ...prev, [slot]: url }));
-    } catch {
-      setFlash({ ok: false, msg: t("admin_saveError") });
+      setFlash({ ok: true, msg: t("admin_lessonSaved") });
+    } catch (e) {
+      setFlash({ ok: false, msg: e instanceof Error ? e.message : t("admin_saveError") });
     }
     setUploadingSlot(null);
   }
@@ -171,7 +192,13 @@ export default function AdminLessonEditor() {
 
   return (
     <div className="max-w-[820px]">
-      <button onClick={() => navigate("/admin/content")} className="flex items-center gap-1.5 text-[13px] font-semibold text-muted border-none bg-transparent p-0 mb-4">
+      <button
+        onClick={() => {
+          if (cardsRef.current?.hasDirty() && !window.confirm(t("admin_unsavedCardsWarn"))) return;
+          navigate("/admin/content");
+        }}
+        className="flex items-center gap-1.5 text-[13px] font-semibold text-muted border-none bg-transparent p-0 mb-4"
+      >
         <Icon name="chevleft" size={16} />
         {t("admin_backToContent")}
       </button>
@@ -230,10 +257,11 @@ export default function AdminLessonEditor() {
           <textarea ref={contentEnRef} value={contentEn} onChange={(e) => setContentEn(e.target.value)} rows={18} className="px-3 py-2.5 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] font-mono leading-relaxed resize-y min-h-[320px]" />
         </label>
         <div className="text-[11px] text-muted leading-relaxed">{t("admin_markupHint")}</div>
-        <div>
+        <div className="flex items-center gap-3">
           <button onClick={save} disabled={saving} className="border-none px-5 py-2.5 rounded-xl text-[13px] font-bold bg-brand-600 text-white disabled:opacity-60">
-            {saving ? t("admin_uploading") : t("admin_save")}
+            {saving ? t("admin_uploading") : t("admin_saveAll")}
           </button>
+          <span className="text-[11px] text-muted">{t("admin_saveAllHint")}</span>
         </div>
       </div>
 
@@ -306,7 +334,7 @@ export default function AdminLessonEditor() {
 
       {/* Story cards (new lesson viewer) */}
       <div className="h-px bg-border my-6" />
-      <LessonCardsPanel lessonId={lessonId!} />
+      <LessonCardsPanel ref={cardsRef} lessonId={lessonId!} />
     </div>
   );
 }
