@@ -5,6 +5,54 @@ Live Supabase project ref: `kjlgrgdryimazczrcvgx` ("Lefax MVP", eu-west-1).
 
 ---
 
+## 2026-08-22 — Ingest curated QCM from source docs + Niv display fix
+
+### Trigger (user)
+"Dans chaque chapitre il y a au moins 45 QCM. Mais je ne les vois pas (ni dans les quiz après
+les leçons, ni dans les QCM Niveau 1/2/3)… il y a très peu de QCMs." → the real ~45-per-chapter
+QCM live in Word/ODT files under **`C:\Users\AvenirTech\Desktop\lefax artifacts`**, not yet ingested.
+
+### Diagnosis
+- The questions built on 2026-08-21 were ~4–6 per lesson (≈12–31/chapter), never 45/chapter.
+- Two display effects made it look emptier: the **post-lesson quiz** shows only that one lesson's
+  questions; **Niv 1/2/3** filters by difficulty and runs 10-question rounds, so a thin tier (e.g.
+  1 hard) looked empty.
+
+### QCM source docs (in `lefax artifacts`)
+`QCM DE CYTOLOGIE I.docx`, `QCM CYTO II.docx`, `QCM.docx`, `QCMs.docx`, `Sujet complet 2025.docx`,
+`QCM BIOLOGIE 2015 ok.odt`, `QCM DIGESTIF.odt`, `QCM système digestif 2.odt`, `QCM.odt`, plus the
+lesson docs. **Two answer-marking styles:**
+- **Bold-marked correct option** (Set A) — only `QCM DE CYTOLOGIE I.docx` (332 bold runs). Fully,
+  reliably parseable. Organised by NIVEAU 1/2/3 = easy/medium/hard.
+- **Answer only implied by the "Explication"** (no bold, no key) — `QCM CYTO II.docx` (83 Q!),
+  `QCM.docx`, genetics/metabolism docs. **Cannot be auto-extracted without guessing the correct
+  option** → NOT ingested (won't inject unverified answers into an exam app).
+
+### What was done
+1. **Parser** `scripts/parse_qcm.mjs` — extracts Set A from a .docx: `QCM N:` prompt, A/B/C/D
+   options (bold = correct), `Explication:`, difficulty from the nearest NIVEAU header. Prints
+   stats; `--out` writes JSON.
+2. **Parsed & committed** `scripts/qcm_source/cytologie_i.json` — **45 QCM, exactly 15 easy /
+   15 medium / 15 hard**, all 4-option/1-correct; spot-checked answers vs explanations = accurate.
+3. **Ingest** `scripts/ingest_qcm_docs.mjs` (`--check` / `--apply`) attaches a parsed bank to a
+   target lesson's quiz (find-or-create), idempotent by `text_fr`, `ai_generated=false`. Source is
+   FR-only so **EN columns mirror FR** (platform is FR-first). **APPLIED**: 45 → `cytologie-i /
+   introduction-organisation`. `cytologie-i` now has **76 QCM (18/40/18)**.
+4. **Niv display fix** `src/pages/student/ChapterPractice.tsx`: a level now prefers its difficulty
+   tier, but if that tier has `< SESSION_SIZE (10)` it draws from the **whole chapter bank**, so no
+   level is ever near-empty and every QCM is reachable (removed the old thirds-slice fallback +
+   unused `slice` field). tsc ✅.
+
+### Still open (the rest of the ≥45/chapter goal) — NEEDS A DECISION
+Only `cytologie-i` is filled from source. The other chapters' QCM docs don't mark the answer, so to
+ingest them (CYTO II = 83 Q → division-cellulaire; QCM.docx, genetics, digestive, etc.) I need to
+**derive the correct option per question** — either (a) hand-verify each answer from its explanation
+(accurate, heavy), or (b) an explanation-matching heuristic + a verification pass. Also need to map
+each doc → chapter/holder-lesson (ODT parsing not built yet — ODT bold lives in named styles, not
+inline). Ask the user which docs/chapters to prioritise and which method.
+
+---
+
 ## 2026-08-21 — Quizzes built for every chapter + admin Quiz Editor
 
 ### Goal (from the user)

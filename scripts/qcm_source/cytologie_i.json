@@ -1,0 +1,1082 @@
+[
+ {
+  "difficulty": "easy",
+  "text_fr": "À quel chercheur attribue-t-on la première observation historique de la cellule au microscope en 1665 ?",
+  "options": [
+   {
+    "text_fr": "Antoine van Leeuwenhoek",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Louis Pasteur",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Robert Hooke",
+    "is_correct": true
+   },
+   {
+    "text_fr": "James Watson",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Robert Hooke a observé pour la première fois des compartiments dans des coupes de liège à l'aide d'un microscope rudimentaire et les a nommés \"cellules\".",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quelle est la principale caractéristique structurelle définissant un organisme procaryote ?",
+  "options": [
+   {
+    "text_fr": "Il ne possède pas de membrane plasmique.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Il est dépourvu d'enveloppe nucléaire individualisée.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Son matériel génétique est obligatoirement sous forme d'ARN.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Il est exclusivement pluricellulaire.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les procaryotes (comme les bactéries) possèdent leur matériel génétique libre dans le cytoplasme (nucléoïde), sans enveloppe nucléaire pour l'isoler.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Concernant la composition moyenne de la membrane plasmique, quel composant y est majoritaire en poids ?",
+  "options": [
+   {
+    "text_fr": "Les glucides",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Les lipides",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Les protéines",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'eau",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "La membrane plasmique contient en moyenne 55% de protéines, 25 à 40% de lipides et seulement 3% à 10% de glucides.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Sur quelle face de la membrane plasmique trouve-t-on exclusivement les glucides ?",
+  "options": [
+   {
+    "text_fr": "Uniquement sur la face extracellulaire (exoplasmique).",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Uniquement sur la face cytosolique (endoplasmique).",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Sur les deux hémi-couches de façon symétrique.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Uniquement à l'intérieur de la double hélice.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les glucides membranaires sont toujours liés à des lipides ou à des protéines sur la face extracellulaire, formant le glycocalix (rôle de reconnaissance et de protection).",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel type de transport membranaire se caractérise par un mouvement de molécules selon leur gradient de concentration, sans consommation d'énergie (ATP) ?",
+  "options": [
+   {
+    "text_fr": "Le transport actif",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le transport passif",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'endocytose",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La pinocytose",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le transport passif (diffusion simple et facilitée) utilise l'énergie thermique intrinsèque des molécules pour les déplacer spontanément du milieu le plus concentré vers le moins concentré.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Comment appelle-t-on le phénomène de diffusion d'un solvant (généralement l'eau) à travers une membrane à perméabilité sélective ?",
+  "options": [
+   {
+    "text_fr": "La pinocytose",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La phagocytose",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'osmose",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La beta-oxydation",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'osmose est la diffusion du solvant du milieu le moins concentré en soluté (hypotonique) vers le milieu le plus concentré (hypertonique) afin d'équilibrer les concentrations.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel organite cellulaire est la \"centrale énergétique\" de la cellule eucaryote, responsable de la synthèse d'ATP ?",
+  "options": [
+   {
+    "text_fr": "La mitochondrie",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le lysosome",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'appareil de Golgi",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le peroxysome",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les mitochondries produisent de l'ATP lors des réactions métaboliques de la respiration cellulaire aérobie (cycle de Krebs et chaîne respiratoire).",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel organite est caractérisé par la présence de ribosomes associés sur sa face externe ?",
+  "options": [
+   {
+    "text_fr": "Le réticulum endoplasmique lisse (REL)",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le réticulum endoplasmique rugueux (RER)",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'appareil de Golgi",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le centriole",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le RER (ou REG) doit son aspect granuleux aux ribosomes qui y adhèrent pour traduire les protéines destinées à être sécrétées ou intégrées aux membranes.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel organite assure la digestion intracellulaire grâce à son pH acide et ses enzymes d'hydrolyse ?",
+  "options": [
+   {
+    "text_fr": "Le peroxysome",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le lysosome",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'appareil de Golgi",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le ribosome",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les lysosomes contiennent des hydrolases acides capables de dégrader les protéines, acides nucléiques, lipides et polysaccharides usagés ou endocytés.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quelle base azotée est exclusive à la molécule d'ADN et absente de l'ARN ?",
+  "options": [
+   {
+    "text_fr": "L'adénine (A)",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'uracile (U)",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La thymine (T)",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La guanine (G)",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'ADN contient de la thymine (T) qui s'apparie à l'adénine. L'ARN remplace la thymine par l'uracile (U).",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel type d'acide ribonucléique transporte l'information génétique du noyau vers le cytoplasme pour y être traduit ?",
+  "options": [
+   {
+    "text_fr": "L'ARNm",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'ARNt",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ARNr",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ARNmi",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'ARN messager (ARNm) est la copie monocaténaire d'un gène nucléaire qui sert de matrice pour la synthèse protéique au niveau du ribosome.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel sucre à 5 atomes de carbone (pentose) entre dans la composition des nucléotides de l'ARN ?",
+  "options": [
+   {
+    "text_fr": "Le glucose",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le désoxyribose",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le ribose",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le fructose",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'ARN (Acide Ribonucléique) contient du ribose, tandis que l'ADN (Acide Désoxyribonucléique) contient du 2'-désoxyribose (sans groupement hydroxyle en position 2').",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Selon le modèle classique de Watson et Crick, la structure de l'ADN est :",
+  "options": [
+   {
+    "text_fr": "Monocatenante et linéaire",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Bicaténaire, hélicoïdale et antiparallèle",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Circulaire et double-brin uniquement cytoplasmique",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Antiparallèle et monocaténaire",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Watson et Crick ont démontré en 1953 que l'ADN forme une double hélice bicaténaire où les deux brins courent dans des directions opposées (antiparallèles : 5' $\\rightarrow$ 3' et 3' $\\rightarrow$ 5').",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Qu'est-ce qu'un nucléoside ?",
+  "options": [
+   {
+    "text_fr": "L'association d'un groupement phosphate et d'un sucre",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'association d'une base azotée et d'un sucre",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'association d'une base azotée, d'un sucre et de trois phosphates",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Un polymère d'acides aminés",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Un nucléoside est formé d'un pentose lié à une base azotée par une liaison N-glycosidique. L'ajout d'un ou plusieurs groupements phosphate le transforme en nucléotide.",
+  "ok": true
+ },
+ {
+  "difficulty": "easy",
+  "text_fr": "Quel organite, absent chez les cellules animales, capte l'énergie lumineuse chez les cellules végétales ?",
+  "options": [
+   {
+    "text_fr": "La mitochondrie",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le lysosome",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le chloropaste",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La vacuole",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les chloroplastes réalisent la photosynthèse chez les végétaux grâce à la chlorophylle qui capte l'énergie lumineuse.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Pourquoi dit-on qu'un phospholipide membranaire est une molécule \"amphiphile\" ?",
+  "options": [
+   {
+    "text_fr": "Elle est soluble à la fois dans l'eau chaude et l'eau froide.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elle possède deux têtes chargées positivement.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elle comporte une tête hydrophile/polaire et deux queues hydrophobes/lipophiles.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Elle peut modifier sa charge selon le pH cellulaire.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Cette double affinité permet l'auto-assemblage spontané des phospholipides en une bicouche stable dans un milieu aqueux.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "De quelle manière les molécules d'eau traversent-elles rapidement la membrane plasmique malgré leur forte polarité ?",
+  "options": [
+   {
+    "text_fr": "Par diffusion simple à travers les queues hydrophobes.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Par transport actif gourmand en ATP.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Par diffusion facilitée via des pores protéiques appelés aquaporines.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Par endocytose permanente.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "La bicouche de lipides est très imperméable à l'eau en raison de sa barrière hydrophobe centrale. Les aquaporines sont des canaux sélectifs qui facilitent le passage rapide de l'eau par osmose.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quelle est la principale fonction de l'appareil de Golgi ?",
+  "options": [
+   {
+    "text_fr": "La synthèse des acides gras membranaires.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La détoxification des radicaux libres.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La maturation, le tri et l'emballage des protéines dans des vésicules.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La traduction des protéines cytosoliques.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'appareil de Golgi reçoit les protéines synthétisées dans le RER, les modifie (notamment par glycosylation), puis les oriente vers leur destination finale (lysosomes, membrane ou sécrétion).",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Parmi les propositions suivantes, laquelle décrit correctement le transport actif primaire ?",
+  "options": [
+   {
+    "text_fr": "Le passage de molécules d'eau du milieu le plus concentré vers le moins concentré.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le transport de solutés contre leur gradient de concentration impliquant l'hydrolyse directe de l'ATP.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La diffusion de petites molécules hydrophobes à travers les lipides.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'entrée de nutriments par déformation de la membrane.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le transport actif primaire utilise des protéines appelées ATPases (ou pompes) qui consomment directement de l'énergie (ATP) pour forcer les ions ou molécules à franchir la membrane contre leur gradient.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quelles bases azotées appartiennent à la famille des bases pyrimidiques (à un seul cycle) ?",
+  "options": [
+   {
+    "text_fr": "L'adénine et la guanine",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La cytosine, la thymine et l'uracile",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'adénine, la thymine et l'uracile",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La guanine et la cytosine",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les pyrimidines possèdent un seul noyau hétérocyclique (C, T, U). Les purines possèdent deux cycles condensés (A, G).",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quelle liaison chimique unit deux nucléotides consécutifs le long d'un brin d'ADN ?",
+  "options": [
+   {
+    "text_fr": "Une liaison hydrogène",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Une liaison peptidique",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Une liaison phosphodiester",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Une liaison ionique",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "La liaison phosphodiester unit le carbone 3' du pentose d'un nucléotide au carbone 5' du pentose du nucléotide suivant via un groupement phosphate.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Qu'est-ce que le hyaloplasme ?",
+  "options": [
+   {
+    "text_fr": "La membrane externe de l'enveloppe nucléaire.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ensemble des organites de la cellule.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'association du cytosol et du cytosquelette.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le liquide à l'intérieur de la mitochondrie.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le hyaloplasme correspond à la fraction soluble de la cellule (cytosol) structurée par le réseau de fibres protéiques du cytosquelette.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Concernant l'enveloppe nucléaire, déterminez la proposition exacte :",
+  "options": [
+   {
+    "text_fr": "Elle est formée d'une membrane simple identique à la membrane plasmique.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elle est constituée d'un double feuillet membranaire percé de pores nucléaires.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Elle est totalement imperméable pour protéger l'ADN.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elle disparaît définitivement après la première division cellulaire.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'enveloppe nucléaire comporte une membrane interne et une membrane externe séparées par un espace périnucléaire. Les pores nucléaires permettent les échanges bidirectionnels sélectifs avec le cytoplasme.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quel organite participe activement à la synthèse des lipides (phospholipides et cholestérol) et à la détoxification cellulaire ?",
+  "options": [
+   {
+    "text_fr": "Le réticulum endoplasmique rugueux (RER)",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le réticulum endoplasmique lisse (REL)",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le lysosome",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le nucléole",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le REL est le site majeur de la synthèse lipidique et abrite des enzymes (comme le cytochrome P450) responsables de la détoxification des médicaments et des toxines.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quel type d'ARN possède une structure en forme de \"trèfle\" et contient un anticodon spécifique ?",
+  "options": [
+   {
+    "text_fr": "L'ARNm",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ARNt",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'ARNr",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ARNsn",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'ARN de transfert (ARNt) est l'adaptateur moléculaire qui lie un acide aminé spécifique à son extrémité 3' et présente un anticodon complémentaire du codon de l'ARNm pour assurer la traduction.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Qu'indique la complémentarité des bases azotées au sein de la double hélice d'ADN ?",
+  "options": [
+   {
+    "text_fr": "Une purine s'apparie toujours avec une autre purine.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'adénine s'apparie toujours avec la cytosine.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'adénine s'apparie à la thymine par 2 liaisons hydrogène, et la cytosine à la guanine par 3 liaisons hydrogène.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La thymine s'apparie à l'uracile.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Cette complémentarité stricte (A-T et C-G) est stabilisée par des liaisons hydrogène d'énergies différentes (2 pour A-T, 3 pour C-G), rendant les régions riches en C-G plus difficiles à dénaturer.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quelle structure protéique est organisée en 9 triplets de microtubules et participe activement à l'organisation du fuseau mitotique ?",
+  "options": [
+   {
+    "text_fr": "Le lysosome",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le centriole",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le ribosome",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le peroxysome",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le centriole est une structure cylindrique constituée de microtubules. Deux centrioles perpendiculaires forment le centrosome, le centre organisateur des microtubules (COMT) lors de la division cellulaire.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quelle affirmation concernant l'ADN mitochondrial est exacte ?",
+  "options": [
+   {
+    "text_fr": "Il est linéaire et d'origine paternelle.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Il est circulaire et hérité par voie maternelle.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Il est transcrit dans le noyau.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Il ne contient aucun gène fonctionnel.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Fidèle à son origine endosymbiotique procaryote, l'ADN de la mitochondrie est circulaire, double brin, et transmis presque exclusivement par l'ovocyte (hérédité maternelle chez l'Homme).",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Quelle est la fonction principale du nucléole ?",
+  "options": [
+   {
+    "text_fr": "Stocker les lipides de réserve.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Transcrire les ARNr et assembler les sous-unités des ribosomes.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Traduire les ARNm en protéines cytosoliques.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Réparer les mutations de l'ADN double-brin.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le nucléole est une région non délimitée par une membrane à l'intérieur du noyau, spécialisée dans la synthèse des ARN ribosomiques et la maturation des sous-unités ribosomiques.",
+  "ok": true
+ },
+ {
+  "difficulty": "medium",
+  "text_fr": "Les lysosomes contiennent des enzymes digestives actives uniquement à pH acide. Quel est ce pH ?",
+  "options": [
+   {
+    "text_fr": "pH 7,4",
+    "is_correct": false
+   },
+   {
+    "text_fr": "pH 8,2",
+    "is_correct": false
+   },
+   {
+    "text_fr": "pH 5,0",
+    "is_correct": true
+   },
+   {
+    "text_fr": "pH 2,0",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les hydrolases acides des lysosomes nécessitent un environnement acide (pH proche de 5) pour fonctionner, ce pH est maintenu grâce à des pompes à protons ($H^+$ ATPase) qui consomment de l'énergie.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quel mécanisme biochimique s'associe spécifiquement à la fonction du peroxysome ?",
+  "options": [
+   {
+    "text_fr": "La glycosylation des protéines destinées à la membrane.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La synthèse des ARNm codant pour les enzymes digestives.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La détoxification du peroxyde d'hydrogène ($H_2O_2$) par la catalase.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'épissage alternatif du transcrit primaire.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le peroxysome produit du peroxyde d'hydrogène (très toxique pour la cellule) lors de ses réactions d'oxydation, puis le neutralise immédiatement en eau et oxygène grâce à son enzyme signature : la catalase.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Les deux brins d'ADN d'une double hélice sont dits \"antiparallèles\". Qu'est-ce que cela signifie concrètement sur le plan moléculaire ?",
+  "options": [
+   {
+    "text_fr": "Les deux brins sont orientés de façon identique mais décalés de quelques nanomètres.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Un brin est composé de purines et l'autre uniquement de pyrimidines.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'extrémité 5'-phosphate d'un brin fait face à l'extrémité 3'-hydroxyle du brin complémentaire.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Les deux brins s'enroulent dans des sens opposés (gauche et droite).",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Un brin est orienté dans le sens $5' \\rightarrow 3'$ (du phosphate vers l'OH libre) tandis que son brin complémentaire est orienté dans le sens $3' \\rightarrow 5'$.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quelle anomalie biochimique résulterait d'un blocage de l'activité de la pompe $Na^+/K^+$ ATPase ?",
+  "options": [
+   {
+    "text_fr": "Une hyperpolarisation immédiate de la membrane plasmique.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Une augmentation de la perméabilité aux lipides hydrophobes.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Une perte des gradients ioniques de part et d'autre de la membrane et un gonflement osmotique de la cellule.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Une accélération de la synthèse d'ATP par la mitochondrie.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "La pompe $Na^+/K^+$ maintient le déséquilibre ionique en rejetant le sodium entrant. Son blocage entraîne une accumulation de $Na^+$ intracellulaire, provoquant un appel d'eau par osmose et la lyse de la cellule.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Parmi les propositions suivantes concernant les acides nucléiques chez les eucaryotes, laquelle est rigoureusement exacte ?",
+  "options": [
+   {
+    "text_fr": "L'ADN peut être transcrit directement dans le cytoplasme.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ADN n'est jamais cytoplasmique à l'état physiologique (hors organites semi-autonomes).",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'ARNt est le seul acide nucléique à contenir des liaisons phosphodiesters.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Les nucléosides sont des polymères de bases azotées.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Chez les eucaryotes, l'ADN génomique est strictement confiné au compartiment nucléaire. Les seuls fragments d'ADN cytoplasmiques physiologiques sont localisés dans la matrice des mitochondries.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quelle fonction cellulaire est directement impactée par une absence de protéines motrices associées aux microtubules du cytosquelette ?",
+  "options": [
+   {
+    "text_fr": "La synthèse des acides gras dans le REL.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le transport passif des molécules hydrophiles.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le transport axonal rétrograde des vésicules ou la motilité des cils/flagelles.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La transcription de l'ADN en ARNm.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les microtubules servent de \"rails\" pour les protéines motrices (dynéines et kinésines) qui transportent les organites et vésicules. Les microtubules forment également l'armature mobile des cils et flagelles.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quel est le devenir des protéines synthétisées au niveau des ribosomes libres (non associés au réticulum endoplasmique) ?",
+  "options": [
+   {
+    "text_fr": "Elles sont obligatoirement sécrétées hors de la cellule par exocytose.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elles sont dégradées immédiatement par les lysosomes.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elles restent dans le cytosol ou sont adressées au noyau, aux mitochondries ou aux peroxysomes.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Elles s'intègrent directement à la face extracellulaire de la membrane plasmique.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les protéines synthétisées par les ribosomes libres restent cytosoliques ou possèdent des séquences d'adressage spécifiques pour des organites non connectés au système endomembranaire (noyau, mitochondrie, peroxysome). Les protéines de sécrétion ou membranaires transitent, elles, par le RER et le Golgi.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Si une cellule eucaryote est traitée avec un inhibiteur spécifique de la synthèse d'ARNr, quelle structure cellulaire verra son assemblage bloqué en premier ?",
+  "options": [
+   {
+    "text_fr": "L'enveloppe nucléaire",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le ribosome",
+    "is_correct": true
+   },
+   {
+    "text_fr": "La membrane plasmique",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le cytosquelette",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les ARNr (ribosomiques) s'associent aux protéines ribosomales au niveau du nucléole pour assembler les sous-unités des ribosomes. Sans ARNr, la biogenèse des ribosomes est impossible.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quel phénomène permet d'expliquer la dépolarisation spontanée d'une cellule lorsque sa membrane devient soudainement très perméable aux ions $Na^+$ ?",
+  "options": [
+   {
+    "text_fr": "Le sodium sort activement de la cellule en consommant de l'ATP.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le sodium est attiré par la charge positive du milieu intracellulaire.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le sodium pénètre massivement dans la cellule selon ses gradients de concentration (chimique) et électrique.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le sodium provoque l'ouverture des aquaporines.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le $Na^+$ est très concentré à l'extérieur et l'intérieur de la cellule est négatif au repos ($-70\\text{ mV}$). Si la membrane s'ouvre, le sodium (positif) entre spontanément, attiré par le gradient chimique et la négativité interne (gradient électrochimique), dépolarisant la cellule.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quel organite cellulaire assure spécifiquement la $\\beta$-oxydation des acides gras à chaîne très longue (AGCTL) chez les mammifères ?",
+  "options": [
+   {
+    "text_fr": "La mitochondrie",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'appareil de Golgi",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Le peroxysome",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le lysosome",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Si la mitochondrie prend en charge l'oxydation des acides gras courts et moyens, le peroxysome possède les enzymes spécifiques nécessaires pour débuter la dégradation des acides gras à chaîne très longue.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quelle molécule d'acide nucléique est caractérisée par une structure double-brin circulaire ne comportant pas d'histones (protéines d'empaquetage eucaryotes) ?",
+  "options": [
+   {
+    "text_fr": "L'ADN nucléaire humain",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ARNm mature",
+    "is_correct": false
+   },
+   {
+    "text_fr": "L'ADN mitochondrial",
+    "is_correct": true
+   },
+   {
+    "text_fr": "L'ARNt",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'ADN mitochondrial (comme l'ADN bactérien) n'est pas associé à des histones pour former de la chromatine classique, contrairement à l'ADN du noyau eucaryote.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Concernant la biosynthèse des phospholipides de la membrane plasmique :",
+  "options": [
+   {
+    "text_fr": "Elle est assurée exclusivement par les ribosomes libres du cytoplasme.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elle a lieu à l'intérieur de la lumière du lysosome.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Elle débute sur la face cytosolique de la membrane du Réticulum Endoplasmique Lisse (REL).",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Elle nécessite la présence de chloroplastes.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les enzymes synthétisant les phospholipides membranaires sont ancrées dans la membrane du REL, du côté cytosolique. Les lipides produits sont ensuite transférés aux autres membranes.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quelle est la conséquence thermodynamique directe de la présence de cholestérol au sein de la membrane plasmique animale ?",
+  "options": [
+   {
+    "text_fr": "Il bloque complètement les transports passifs de l'eau.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Il régule la fluidité membranaire (stabilise la membrane à haute température et empêche sa gélification à basse température).",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Il force les phospholipides à se détacher pour former des vésicules d'exocytose.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Il dépolarise la membrane en bloquant les canaux potassium.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le cholestérol s'intercale entre les phospholipides. Il joue un rôle de tampon de fluidité thermique indispensable pour maintenir l'homéostasie physique de la membrane.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quel est le mécanisme de transport utilisé par le glucose pour pénétrer dans les cellules musculaires ou adipeuses selon son gradient de concentration ?",
+  "options": [
+   {
+    "text_fr": "La diffusion simple",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La diffusion facilitée par un transporteur (type GLUT)",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Le transport actif primaire",
+    "is_correct": false
+   },
+   {
+    "text_fr": "La phagocytose",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Le glucose est une molécule trop volumineuse et trop polaire pour traverser la bicouche de lipides. Il utilise donc une diffusion facilitée (transport passif) par l'intermédiaire de protéines porteuses spécifiques (les transporteurs GLUT).",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Quelle affirmation concernant les nucléosides triphosphates (comme l'ATP) est physiologiquement exacte ?",
+  "options": [
+   {
+    "text_fr": "Ils ne contiennent aucune liaison riche en énergie.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Ce sont des monomères constitutifs exclusifs de la molécule d'ADN.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Ils sont formés d'une base purique ou pyrimidique, d'un pentose et de trois groupements phosphate liés en série.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Ils s'apparient toujours avec l'uracile par 3 liaisons covalentes.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "L'ATP (Adénosine Triphosphate) est un nucléoside (adénosine = adénine + ribose) lié à trois groupements phosphate. Les liaisons entre les phosphates sont des liaisons anhydrides d'acide hautement énergétiques.",
+  "ok": true
+ },
+ {
+  "difficulty": "hard",
+  "text_fr": "Pourquoi un transcrit primaire d'ARN (pré-ARNm) est-il plus long que l'ARNm mature qui sera finalement traduit dans le cytoplasme ?",
+  "options": [
+   {
+    "text_fr": "Parce que les ribosomes ajoutent des bases azotées lors de la traduction.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Parce que le pré-ARNm contient des nucléotides d'ADN.",
+    "is_correct": false
+   },
+   {
+    "text_fr": "Parce que le pré-ARNm contient des introns qui doivent être éliminés lors de l'épissage.",
+    "is_correct": true
+   },
+   {
+    "text_fr": "Parce que la double membrane nucléaire digère une partie de l'ARN.",
+    "is_correct": false
+   }
+  ],
+  "explanation_fr": "Les gènes des eucaryotes sont morcelés. Le transcrit primaire contient des régions codantes (exons) et non-codantes (introns). L'épissage nucléaire élimine les introns et raboute les exons pour donner l'ARNm mature plus court.",
+  "ok": true
+ }
+]

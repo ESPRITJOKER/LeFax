@@ -12,11 +12,13 @@ import type { DifficultyLevel, QuestionRow, ChoiceRow } from "../../lib/database
 // Exercice Niveau 1/2/3 → the rock-rolling difficulty metaphor from the original
 // platform: facile (downhill, green) → intermédiaire (amber) → difficile (uphill,
 // red). Each maps to a question `difficulty`.
-const LEVELS: Record<string, { difficulty: DifficultyLevel; color: string; fr: string; en: string; slice: 0 | 1 | 2 }> = {
-  "1": { difficulty: "easy", color: "#22c55e", fr: "Niveau 1 · Facile", en: "Level 1 · Easy", slice: 0 },
-  "2": { difficulty: "medium", color: "#f5b400", fr: "Niveau 2 · Intermédiaire", en: "Level 2 · Intermediate", slice: 1 },
-  "3": { difficulty: "hard", color: "#ef4444", fr: "Niveau 3 · Difficile", en: "Level 3 · Hard", slice: 2 },
+const LEVELS: Record<string, { difficulty: DifficultyLevel; color: string; fr: string; en: string }> = {
+  "1": { difficulty: "easy", color: "#22c55e", fr: "Niveau 1 · Facile", en: "Level 1 · Easy" },
+  "2": { difficulty: "medium", color: "#f5b400", fr: "Niveau 2 · Intermédiaire", en: "Level 2 · Intermediate" },
+  "3": { difficulty: "hard", color: "#ef4444", fr: "Niveau 3 · Difficile", en: "Level 3 · Hard" },
 };
+
+const SESSION_SIZE = 10;
 
 export default function ChapterPractice() {
   const { lang } = useI18n();
@@ -50,22 +52,18 @@ export default function ChapterPractice() {
         : { data: [] as QuestionRow[] };
       const allQuestions = (questionRows ?? []) as QuestionRow[];
 
-      // Prefer real difficulty tagging; if that tier is empty (content is not
-      // yet tagged — most questions default to 'medium'), fall back to a stable
-      // third of the ordered bank so all three tiers stay usable.
+      // Prefer this level's difficulty tier. But if the tier is too thin to fill
+      // a session, draw from the whole chapter bank so no level is ever
+      // near-empty — every QCM stays reachable at every level (2026-08-22).
       let pool = allQuestions.filter((q) => q.difficulty === meta.difficulty);
-      if (pool.length === 0 && allQuestions.length > 0) {
-        const third = Math.ceil(allQuestions.length / 3);
-        pool = allQuestions.slice(meta.slice * third, meta.slice * third + third);
-        if (pool.length === 0) pool = allQuestions; // very small banks: use everything
-      }
+      if (pool.length < SESSION_SIZE) pool = allQuestions;
 
       const selected = await selectWithNoRepeat({
         kind: "mcq",
         topicId: `${chapterId}:L${level}`,
         userId: profile?.id ?? null,
         pool,
-        sessionSize: 10,
+        sessionSize: SESSION_SIZE,
       });
 
       const questionIds = selected.map((q) => q.id);
@@ -79,7 +77,7 @@ export default function ChapterPractice() {
       setQuestions(withChoices);
       setLoading(false);
     })();
-  }, [chapterId, level, profile, round, meta.difficulty, meta.slice]);
+  }, [chapterId, level, profile, round, meta.difficulty]);
 
   if (loading)
     return (
