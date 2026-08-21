@@ -1,0 +1,985 @@
+{
+  "_note": "MCQ bank authored from admin-created lesson content + cards (see scripts/build_admin_quizzes.mjs and migration 0016). Bilingual FR/EN, 4 options, exactly 1 correct. Keyed by lesson id.",
+  "lessons": [
+    {
+      "lid": "bad03dc7-4fd6-4f52-b0dc-06091ceb9136",
+      "source": "Réplication/ADN · Introduction",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Dans quel ordre s'enchaînent les trois grands processus moléculaires étudiés dans ce chapitre ?",
+          "text_en": "In what order do the three major molecular processes of this chapter occur?",
+          "explanation_fr": "Le fil conducteur est : Réplication (ADN → ADN, avant la division) → Transcription (ADN → ARN, dans le noyau) → Traduction (ARN → Protéine, dans le cytoplasme).",
+          "explanation_en": "The thread is: Replication (DNA → DNA, before division) → Transcription (DNA → RNA, in the nucleus) → Translation (RNA → Protein, in the cytoplasm).",
+          "options": [
+            {"text_fr": "Réplication → Transcription → Traduction", "text_en": "Replication → Transcription → Translation", "is_correct": true},
+            {"text_fr": "Transcription → Réplication → Traduction", "text_en": "Transcription → Replication → Translation", "is_correct": false},
+            {"text_fr": "Traduction → Transcription → Réplication", "text_en": "Translation → Transcription → Replication", "is_correct": false},
+            {"text_fr": "Réplication → Traduction → Transcription", "text_en": "Replication → Translation → Transcription", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La réplication correspond à quel type de transfert d'information ?",
+          "text_en": "Replication corresponds to which type of information transfer?",
+          "explanation_fr": "La réplication copie l'intégralité du génome : ADN → ADN, en vue de transmettre une copie conforme aux cellules filles.",
+          "explanation_en": "Replication copies the whole genome: DNA → DNA, to pass a faithful copy to the daughter cells.",
+          "options": [
+            {"text_fr": "ADN → ADN", "text_en": "DNA → DNA", "is_correct": true},
+            {"text_fr": "ADN → ARN", "text_en": "DNA → RNA", "is_correct": false},
+            {"text_fr": "ARN → Protéine", "text_en": "RNA → Protein", "is_correct": false},
+            {"text_fr": "Protéine → ADN", "text_en": "Protein → DNA", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La traduction (ARN → Protéine) se déroule dans quel compartiment cellulaire ?",
+          "text_en": "Translation (RNA → Protein) takes place in which cellular compartment?",
+          "explanation_fr": "La transcription a lieu dans le noyau, tandis que la traduction se déroule dans le cytoplasme (sur les ribosomes).",
+          "explanation_en": "Transcription occurs in the nucleus, whereas translation takes place in the cytoplasm (on ribosomes).",
+          "options": [
+            {"text_fr": "Le cytoplasme", "text_en": "The cytoplasm", "is_correct": true},
+            {"text_fr": "Le noyau", "text_en": "The nucleus", "is_correct": false},
+            {"text_fr": "La membrane plasmique", "text_en": "The plasma membrane", "is_correct": false},
+            {"text_fr": "Le nucléole uniquement", "text_en": "The nucleolus only", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "2375072c-cbd6-4def-9ece-c1f10c23b2d9",
+      "source": "Génétique · Introduction et vocabulaire",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Comment définit-on un gène ?",
+          "text_en": "How is a gene defined?",
+          "explanation_fr": "Le gène est l'unité fondamentale de l'information génétique : un fragment précis d'ADN codant pour la synthèse d'une protéine spécifique.",
+          "explanation_en": "A gene is the fundamental unit of genetic information: a precise DNA fragment coding for the synthesis of a specific protein.",
+          "options": [
+            {"text_fr": "Un fragment précis d'ADN codant pour une protéine spécifique", "text_en": "A precise DNA fragment coding for a specific protein", "is_correct": true},
+            {"text_fr": "L'emplacement physique d'un caractère sur un chromosome", "text_en": "The physical location of a trait on a chromosome", "is_correct": false},
+            {"text_fr": "L'ensemble des caractères observables d'un individu", "text_en": "The set of an individual's observable traits", "is_correct": false},
+            {"text_fr": "Une version alternative d'un caractère", "text_en": "An alternative version of a trait", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Qu'appelle-t-on un allèle ?",
+          "text_en": "What is an allele?",
+          "explanation_fr": "Un allèle est une version alternative (variante) d'un même gène, présentant de légères variations dans sa séquence de nucléotides.",
+          "explanation_en": "An allele is an alternative version (variant) of the same gene, with slight variations in its nucleotide sequence.",
+          "options": [
+            {"text_fr": "Une version alternative d'un même gène", "text_en": "An alternative version of the same gene", "is_correct": true},
+            {"text_fr": "L'emplacement physique d'un gène sur le chromosome", "text_en": "The physical location of a gene on the chromosome", "is_correct": false},
+            {"text_fr": "L'ensemble des gènes d'un individu", "text_en": "The set of an individual's genes", "is_correct": false},
+            {"text_fr": "Un fragment d'ARN messager", "text_en": "A fragment of messenger RNA", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Le locus désigne :",
+          "text_en": "The locus refers to:",
+          "explanation_fr": "Le locus est l'emplacement physique précis et invariable d'un gène sur un chromosome.",
+          "explanation_en": "The locus is the precise, invariable physical location of a gene on a chromosome.",
+          "options": [
+            {"text_fr": "L'emplacement physique précis d'un gène sur un chromosome", "text_en": "The precise physical location of a gene on a chromosome", "is_correct": true},
+            {"text_fr": "Une variante d'un gène", "text_en": "A variant of a gene", "is_correct": false},
+            {"text_fr": "L'ensemble des caractères observables", "text_en": "The set of observable traits", "is_correct": false},
+            {"text_fr": "La combinaison des allèles d'un individu", "text_en": "An individual's combination of alleles", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Quelle affirmation distingue correctement génotype et phénotype ?",
+          "text_en": "Which statement correctly distinguishes genotype from phenotype?",
+          "explanation_fr": "Le génotype est l'ensemble des allèles (la combinaison génétique cachée) ; le phénotype est l'ensemble des caractères observables, résultant de l'expression du génotype en interaction avec l'environnement.",
+          "explanation_en": "The genotype is the set of alleles (the hidden genetic combination); the phenotype is the set of observable traits, resulting from expression of the genotype in interaction with the environment.",
+          "options": [
+            {"text_fr": "Le génotype est la combinaison d'allèles ; le phénotype, les caractères observables", "text_en": "The genotype is the combination of alleles; the phenotype, the observable traits", "is_correct": true},
+            {"text_fr": "Le génotype est observable ; le phénotype est caché", "text_en": "The genotype is observable; the phenotype is hidden", "is_correct": false},
+            {"text_fr": "Le génotype et le phénotype désignent la même chose", "text_en": "Genotype and phenotype mean the same thing", "is_correct": false},
+            {"text_fr": "Le phénotype ne dépend jamais de l'environnement", "text_en": "The phenotype never depends on the environment", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "easy",
+          "text_fr": "Combien d'allèles principaux le gène du groupe sanguin possède-t-il ?",
+          "text_en": "How many main alleles does the blood-group gene have?",
+          "explanation_fr": "Le gène « groupe sanguin » possède trois allèles principaux : A, B et O.",
+          "explanation_en": "The blood-group gene has three main alleles: A, B and O.",
+          "options": [
+            {"text_fr": "Trois (A, B et O)", "text_en": "Three (A, B and O)", "is_correct": true},
+            {"text_fr": "Deux (A et B)", "text_en": "Two (A and B)", "is_correct": false},
+            {"text_fr": "Quatre (A, B, O et AB)", "text_en": "Four (A, B, O and AB)", "is_correct": false},
+            {"text_fr": "Un seul", "text_en": "Only one", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "796c0c58-3e35-497c-a577-4b57aec232eb",
+      "source": "Organisation de l'être humain · Introduction",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "La cellule est définie comme :",
+          "text_en": "The cell is defined as:",
+          "explanation_fr": "La cellule est l'élément fonctionnel et structural de base de l'être vivant, capable d'effectuer les fonctions vitales de base.",
+          "explanation_en": "The cell is the basic functional and structural unit of a living being, able to carry out the basic vital functions.",
+          "options": [
+            {"text_fr": "L'élément fonctionnel et structural de base de l'être vivant", "text_en": "The basic functional and structural unit of a living being", "is_correct": true},
+            {"text_fr": "Un assemblage de plusieurs tissus", "text_en": "An assembly of several tissues", "is_correct": false},
+            {"text_fr": "Un organe remplissant une fonction précise", "text_en": "An organ fulfilling a precise function", "is_correct": false},
+            {"text_fr": "La plus petite molécule du corps", "text_en": "The smallest molecule of the body", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Parmi ces organismes, lequel est unicellulaire ?",
+          "text_en": "Among these organisms, which one is unicellular?",
+          "explanation_fr": "Les organismes unicellulaires (une seule cellule) comprennent les bactéries et les levures ; plantes, animaux et champignons macroscopiques sont pluricellulaires.",
+          "explanation_en": "Unicellular organisms (a single cell) include bacteria and yeasts; plants, animals and macroscopic fungi are multicellular.",
+          "options": [
+            {"text_fr": "Une bactérie", "text_en": "A bacterium", "is_correct": true},
+            {"text_fr": "Une plante", "text_en": "A plant", "is_correct": false},
+            {"text_fr": "Un animal", "text_en": "An animal", "is_correct": false},
+            {"text_fr": "Un champignon macroscopique", "text_en": "A macroscopic fungus", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Dans l'organisation du vivant, qu'obtient-on en assemblant plusieurs tissus ?",
+          "text_en": "In the organisation of living matter, what do you obtain by assembling several tissues?",
+          "explanation_fr": "L'assemblage de plusieurs tissus forme un organe qui remplit une fonction spécifique ; les organes s'assemblent en appareils/systèmes.",
+          "explanation_en": "Assembling several tissues forms an organ that fulfils a specific function; organs assemble into apparatuses/systems.",
+          "options": [
+            {"text_fr": "Un organe", "text_en": "An organ", "is_correct": true},
+            {"text_fr": "Une cellule", "text_en": "A cell", "is_correct": false},
+            {"text_fr": "Une molécule", "text_en": "A molecule", "is_correct": false},
+            {"text_fr": "Un atome", "text_en": "An atom", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "4ab84e55-5514-4328-a41d-d8270fc6459a",
+      "source": "Réplication/ADN · I- La réplication de l'ADN",
+      "questions": [
+        {
+          "difficulty": "medium",
+          "text_fr": "Pendant quelle phase du cycle cellulaire et dans quel compartiment se déroule la réplication de l'ADN ?",
+          "text_en": "During which phase of the cell cycle, and in which compartment, does DNA replication take place?",
+          "explanation_fr": "La réplication a lieu durant la phase S (Synthèse) de l'interphase, dans le noyau.",
+          "explanation_en": "Replication takes place during the S (Synthesis) phase of interphase, in the nucleus.",
+          "options": [
+            {"text_fr": "En phase S, dans le noyau", "text_en": "In S phase, in the nucleus", "is_correct": true},
+            {"text_fr": "En phase G1, dans le cytoplasme", "text_en": "In G1 phase, in the cytoplasm", "is_correct": false},
+            {"text_fr": "En métaphase, sur la plaque équatoriale", "text_en": "In metaphase, on the equatorial plate", "is_correct": false},
+            {"text_fr": "En phase G2, dans le nucléole", "text_en": "In G2 phase, in the nucleolus", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Pourquoi dit-on que la réplication est semi-conservative ?",
+          "text_en": "Why is replication said to be semi-conservative?",
+          "explanation_fr": "Chaque brin parental sert de matrice ; les deux molécules formées contiennent chacune un brin ancien et un brin nouveau.",
+          "explanation_en": "Each parental strand serves as a template; each of the two molecules formed contains one old strand and one new strand.",
+          "options": [
+            {"text_fr": "Chaque molécule fille contient un brin ancien et un brin nouveau", "text_en": "Each daughter molecule contains one old strand and one new strand", "is_correct": true},
+            {"text_fr": "Les deux nouveaux brins sont entièrement neufs", "text_en": "Both new strands are entirely new", "is_correct": false},
+            {"text_fr": "Une seule des deux molécules filles reçoit de l'ADN", "text_en": "Only one of the two daughter molecules receives DNA", "is_correct": false},
+            {"text_fr": "L'ADN parental est intégralement conservé dans une seule molécule", "text_en": "The parental DNA is entirely kept in a single molecule", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "easy",
+          "text_fr": "Quel est le rôle de l'hélicase lors de la réplication ?",
+          "text_en": "What is the role of helicase during replication?",
+          "explanation_fr": "L'hélicase sépare les deux brins d'ADN (comme une fermeture éclair) en rompant les liaisons hydrogènes entre bases complémentaires.",
+          "explanation_en": "Helicase separates the two DNA strands (like a zipper) by breaking the hydrogen bonds between complementary bases.",
+          "options": [
+            {"text_fr": "Séparer les deux brins en rompant les liaisons hydrogènes", "text_en": "Separate the two strands by breaking hydrogen bonds", "is_correct": true},
+            {"text_fr": "Synthétiser l'amorce d'ARN", "text_en": "Synthesise the RNA primer", "is_correct": false},
+            {"text_fr": "Souder les fragments d'Okazaki", "text_en": "Join Okazaki fragments", "is_correct": false},
+            {"text_fr": "Ajouter les nucléotides d'ADN", "text_en": "Add DNA nucleotides", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Les fragments d'Okazaki apparaissent parce que l'ADN polymérase :",
+          "text_en": "Okazaki fragments appear because DNA polymerase:",
+          "explanation_fr": "L'ADN polymérase ne synthétise que dans le sens 5' → 3'. Sur le brin retardé (antiparallèle), elle doit donc travailler par morceaux (fragments d'Okazaki).",
+          "explanation_en": "DNA polymerase only synthesises in the 5' → 3' direction. On the lagging (antiparallel) strand it must therefore work in pieces (Okazaki fragments).",
+          "options": [
+            {"text_fr": "ne peut synthétiser que dans le sens 5' → 3'", "text_en": "can only synthesise in the 5' → 3' direction", "is_correct": true},
+            {"text_fr": "ne peut synthétiser que dans le sens 3' → 5'", "text_en": "can only synthesise in the 3' → 5' direction", "is_correct": false},
+            {"text_fr": "n'a pas besoin d'amorce", "text_en": "does not need a primer", "is_correct": false},
+            {"text_fr": "sépare elle-même les deux brins", "text_en": "separates the two strands itself", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quelle enzyme soude entre eux les fragments d'ADN contigus (fragments d'Okazaki) ?",
+          "text_en": "Which enzyme joins the contiguous DNA fragments (Okazaki fragments) together?",
+          "explanation_fr": "La ligase attache les fragments d'ADN contigus en formant des liaisons phosphodiester.",
+          "explanation_en": "Ligase attaches the contiguous DNA fragments by forming phosphodiester bonds.",
+          "options": [
+            {"text_fr": "La ligase", "text_en": "Ligase", "is_correct": true},
+            {"text_fr": "La primase", "text_en": "Primase", "is_correct": false},
+            {"text_fr": "L'hélicase", "text_en": "Helicase", "is_correct": false},
+            {"text_fr": "Les protéines SSB", "text_en": "SSB proteins", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "b3d1df15-ac83-4230-88c6-6a6df0258493",
+      "source": "Génétique · I- Hérédité et génétique moderne",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Un individu hétérozygote pour un gène possède :",
+          "text_en": "An individual heterozygous for a gene has:",
+          "explanation_fr": "Hétérozygote = deux allèles différents pour un gène (ex : B//b) ; homozygote = deux allèles identiques (ex : B//B).",
+          "explanation_en": "Heterozygous = two different alleles for a gene (e.g. B//b); homozygous = two identical alleles (e.g. B//B).",
+          "options": [
+            {"text_fr": "Deux allèles différents (ex : B//b)", "text_en": "Two different alleles (e.g. B//b)", "is_correct": true},
+            {"text_fr": "Deux allèles identiques (ex : B//B)", "text_en": "Two identical alleles (e.g. B//B)", "is_correct": false},
+            {"text_fr": "Un seul allèle", "text_en": "A single allele", "is_correct": false},
+            {"text_fr": "Trois allèles", "text_en": "Three alleles", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Un allèle récessif ne s'exprime que si l'individu est :",
+          "text_en": "A recessive allele is expressed only if the individual is:",
+          "explanation_fr": "Un allèle récessif ne s'exprime que si l'individu est homozygote pour cet allèle, c'est-à-dire s'il n'est pas masqué par un allèle dominant.",
+          "explanation_en": "A recessive allele is expressed only if the individual is homozygous for it, i.e. not masked by a dominant allele.",
+          "options": [
+            {"text_fr": "Homozygote pour cet allèle", "text_en": "Homozygous for that allele", "is_correct": true},
+            {"text_fr": "Hétérozygote pour cet allèle", "text_en": "Heterozygous for that allele", "is_correct": false},
+            {"text_fr": "Porteur d'un allèle dominant", "text_en": "A carrier of a dominant allele", "is_correct": false},
+            {"text_fr": "Haploïde pour ce gène", "text_en": "Haploid for that gene", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Le groupe sanguin [AB] est un exemple de :",
+          "text_en": "Blood group [AB] is an example of:",
+          "explanation_fr": "Dans la codominance, deux allèles différents s'expriment simultanément pour former un phénotype mixte, comme le groupe sanguin AB.",
+          "explanation_en": "In codominance, two different alleles are expressed simultaneously to form a mixed phenotype, such as blood group AB.",
+          "options": [
+            {"text_fr": "Codominance", "text_en": "Codominance", "is_correct": true},
+            {"text_fr": "Dominance simple", "text_en": "Simple dominance", "is_correct": false},
+            {"text_fr": "Récessivité", "text_en": "Recessiveness", "is_correct": false},
+            {"text_fr": "Haploïdie", "text_en": "Haploidy", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Pourquoi chaque individu possède-t-il deux allèles pour un gène donné ?",
+          "text_en": "Why does each individual have two alleles for a given gene?",
+          "explanation_fr": "L'individu est diploïde (2n) : ses chromosomes vont par paires, il possède donc deux allèles par gène, un hérité du père, l'autre de la mère.",
+          "explanation_en": "The individual is diploid (2n): chromosomes come in pairs, so there are two alleles per gene, one inherited from the father, the other from the mother.",
+          "options": [
+            {"text_fr": "Parce qu'il est diploïde (chromosomes par paires)", "text_en": "Because it is diploid (chromosomes in pairs)", "is_correct": true},
+            {"text_fr": "Parce qu'il est haploïde", "text_en": "Because it is haploid", "is_correct": false},
+            {"text_fr": "Parce que chaque gène se duplique dans le cytoplasme", "text_en": "Because each gene duplicates in the cytoplasm", "is_correct": false},
+            {"text_fr": "Parce que les gamètes sont diploïdes", "text_en": "Because gametes are diploid", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "894523a5-936f-4007-833c-2784f118bdf9",
+      "source": "Division cellulaire · Introduction (cycle cellulaire)",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Combien de chromosomes possède une cellule somatique humaine ?",
+          "text_en": "How many chromosomes does a human somatic cell have?",
+          "explanation_fr": "Les cellules somatiques sont diploïdes : 2n = 46 chromosomes (23 paires, dont 22 paires d'autosomes et 1 paire de gonosomes).",
+          "explanation_en": "Somatic cells are diploid: 2n = 46 chromosomes (23 pairs, of which 22 pairs of autosomes and 1 pair of sex chromosomes).",
+          "options": [
+            {"text_fr": "46 (2n)", "text_en": "46 (2n)", "is_correct": true},
+            {"text_fr": "23 (n)", "text_en": "23 (n)", "is_correct": false},
+            {"text_fr": "92 (4n)", "text_en": "92 (4n)", "is_correct": false},
+            {"text_fr": "22 (autosomes seuls)", "text_en": "22 (autosomes only)", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Combien de chromosomes contient un gamète humain ?",
+          "text_en": "How many chromosomes does a human gamete contain?",
+          "explanation_fr": "Les gamètes (spermatozoïdes et ovocytes) sont haploïdes : ils ne contiennent qu'un représentant de chaque paire, soit n = 23 chromosomes.",
+          "explanation_en": "Gametes (sperm and oocytes) are haploid: they contain only one representative of each pair, i.e. n = 23 chromosomes.",
+          "options": [
+            {"text_fr": "23 (n)", "text_en": "23 (n)", "is_correct": true},
+            {"text_fr": "46 (2n)", "text_en": "46 (2n)", "is_correct": false},
+            {"text_fr": "92 (4n)", "text_en": "92 (4n)", "is_correct": false},
+            {"text_fr": "11 (n/2)", "text_en": "11 (n/2)", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Que rétablit la fécondation en fusionnant deux gamètes (n) ?",
+          "text_en": "What does fertilisation restore by fusing two gametes (n)?",
+          "explanation_fr": "La fusion de deux gamètes (n) donne un zygote diploïde (2n = 46), rétablissant la diploïdie caractéristique de l'espèce.",
+          "explanation_en": "The fusion of two gametes (n) yields a diploid zygote (2n = 46), restoring the diploidy characteristic of the species.",
+          "options": [
+            {"text_fr": "La diploïdie (zygote 2n = 46)", "text_en": "Diploidy (zygote 2n = 46)", "is_correct": true},
+            {"text_fr": "L'haploïdie (n = 23)", "text_en": "Haploidy (n = 23)", "is_correct": false},
+            {"text_fr": "La tétraploïdie (4n = 92)", "text_en": "Tetraploidy (4n = 92)", "is_correct": false},
+            {"text_fr": "La monosomie", "text_en": "Monosomy", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Le cycle cellulaire est constitué de deux grandes périodes. Lesquelles ?",
+          "text_en": "The cell cycle consists of two main periods. Which ones?",
+          "explanation_fr": "Le cycle cellulaire comprend l'interphase (préparation : croissance et copie du matériel génétique) et la phase M (division cellulaire).",
+          "explanation_en": "The cell cycle comprises interphase (preparation: growth and copying of genetic material) and the M phase (cell division).",
+          "options": [
+            {"text_fr": "L'interphase et la phase M (division)", "text_en": "Interphase and the M phase (division)", "is_correct": true},
+            {"text_fr": "La prophase et la télophase", "text_en": "Prophase and telophase", "is_correct": false},
+            {"text_fr": "La mitose et la fécondation", "text_en": "Mitosis and fertilisation", "is_correct": false},
+            {"text_fr": "La transcription et la traduction", "text_en": "Transcription and translation", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "4fda8065-ddc7-49ff-9c33-b68282b4107d",
+      "source": "Organisation de l'être humain · I- Niveaux d'organisation",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Quels sont les quatre bioéléments majeurs représentant environ 96 % de la masse du corps ?",
+          "text_en": "What are the four main bioelements making up about 96% of body mass?",
+          "explanation_fr": "Les quatre éléments majeurs sont le Carbone (C), l'Hydrogène (H), l'Oxygène (O) et l'Azote (N).",
+          "explanation_en": "The four main elements are Carbon (C), Hydrogen (H), Oxygen (O) and Nitrogen (N).",
+          "options": [
+            {"text_fr": "C, H, O et N", "text_en": "C, H, O and N", "is_correct": true},
+            {"text_fr": "Na, K, Ca et Cl", "text_en": "Na, K, Ca and Cl", "is_correct": false},
+            {"text_fr": "C, O, Fe et P", "text_en": "C, O, Fe and P", "is_correct": false},
+            {"text_fr": "H, O, S et Mg", "text_en": "H, O, S and Mg", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "easy",
+          "text_fr": "Combien de types de tissus primaires distingue-t-on chez l'être humain ?",
+          "text_en": "How many types of primary tissue are distinguished in humans?",
+          "explanation_fr": "Il existe 4 types de tissus primaires : épithélial, conjonctif, musculaire et nerveux.",
+          "explanation_en": "There are 4 types of primary tissue: epithelial, connective, muscular and nervous.",
+          "options": [
+            {"text_fr": "Quatre", "text_en": "Four", "is_correct": true},
+            {"text_fr": "Deux", "text_en": "Two", "is_correct": false},
+            {"text_fr": "Trois", "text_en": "Three", "is_correct": false},
+            {"text_fr": "Six", "text_en": "Six", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quel niveau d'organisation vient juste après le niveau cellulaire ?",
+          "text_en": "Which level of organisation comes just after the cellular level?",
+          "explanation_fr": "L'ordre croissant est : Atomes → Molécules → Cellules → Tissus → Organes → Appareils/systèmes → Organisme. Après la cellule vient le tissu.",
+          "explanation_en": "The ascending order is: Atoms → Molecules → Cells → Tissues → Organs → Apparatuses/systems → Organism. After the cell comes the tissue.",
+          "options": [
+            {"text_fr": "Le niveau tissulaire", "text_en": "The tissue level", "is_correct": true},
+            {"text_fr": "Le niveau moléculaire", "text_en": "The molecular level", "is_correct": false},
+            {"text_fr": "Le niveau des organes", "text_en": "The organ level", "is_correct": false},
+            {"text_fr": "Le niveau des appareils", "text_en": "The apparatus level", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Quelle est la différence entre un système et un appareil ?",
+          "text_en": "What is the difference between a system and an apparatus?",
+          "explanation_fr": "Un système regroupe des organes analogues par leur tissu prédominant (ex : système nerveux) ; un appareil regroupe des organes dissemblables concourant à une même fonction (ex : appareil digestif).",
+          "explanation_en": "A system groups organs that are similar by their predominant tissue (e.g. nervous system); an apparatus groups dissimilar organs contributing to one function (e.g. digestive apparatus).",
+          "options": [
+            {"text_fr": "Le système regroupe des organes de tissu semblable ; l'appareil, des organes de tissus différents pour une même fonction", "text_en": "A system groups organs of similar tissue; an apparatus, organs of different tissues for one function", "is_correct": true},
+            {"text_fr": "Le système regroupe des organes de tissus différents ; l'appareil, des organes identiques", "text_en": "A system groups organs of different tissues; an apparatus, identical organs", "is_correct": false},
+            {"text_fr": "Ce sont deux synonymes stricts", "text_en": "They are strict synonyms", "is_correct": false},
+            {"text_fr": "Le système est plus petit qu'une cellule", "text_en": "A system is smaller than a cell", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "L'homéostasie désigne :",
+          "text_en": "Homeostasis refers to:",
+          "explanation_fr": "L'homéostasie est la capacité de l'organisme à maintenir une stabilité relative de son milieu intérieur (température ≈ 37 °C, glycémie ≈ 1 g/L, pH sanguin 7,35–7,45) malgré les variations externes.",
+          "explanation_en": "Homeostasis is the body's ability to maintain a relatively stable internal environment (temperature ≈ 37 °C, blood glucose ≈ 1 g/L, blood pH 7.35–7.45) despite external variations.",
+          "options": [
+            {"text_fr": "Le maintien d'une stabilité du milieu intérieur malgré l'environnement", "text_en": "Maintaining a stable internal environment despite the surroundings", "is_correct": true},
+            {"text_fr": "La division des cellules somatiques", "text_en": "The division of somatic cells", "is_correct": false},
+            {"text_fr": "La transmission des caractères héréditaires", "text_en": "The transmission of hereditary traits", "is_correct": false},
+            {"text_fr": "La synthèse des protéines dans le noyau", "text_en": "Protein synthesis in the nucleus", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "bf51f8c1-9fb8-4222-b831-451989191f12",
+      "source": "Réplication/ADN · II- Synthèse des protéines",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "En quelles deux grandes étapes s'effectue la synthèse des protéines ?",
+          "text_en": "In which two major steps does protein synthesis occur?",
+          "explanation_fr": "La synthèse des protéines comprend la transcription (nucléaire) puis la traduction (cytoplasmique).",
+          "explanation_en": "Protein synthesis comprises transcription (nuclear) then translation (cytoplasmic).",
+          "options": [
+            {"text_fr": "La transcription puis la traduction", "text_en": "Transcription then translation", "is_correct": true},
+            {"text_fr": "La réplication puis la transcription", "text_en": "Replication then transcription", "is_correct": false},
+            {"text_fr": "La traduction puis la transcription", "text_en": "Translation then transcription", "is_correct": false},
+            {"text_fr": "L'épissage puis la réplication", "text_en": "Splicing then replication", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quelle enzyme unique assure la transcription chez les eucaryotes ?",
+          "text_en": "Which single enzyme carries out transcription in eukaryotes?",
+          "explanation_fr": "L'acteur unique de la transcription est l'ARN polymérase : elle reconnaît le début du gène, ouvre la double hélice et assemble les nucléotides, sans amorce.",
+          "explanation_en": "The single actor of transcription is RNA polymerase: it recognises the start of the gene, opens the double helix and assembles nucleotides, without a primer.",
+          "options": [
+            {"text_fr": "L'ARN polymérase", "text_en": "RNA polymerase", "is_correct": true},
+            {"text_fr": "L'ADN polymérase III", "text_en": "DNA polymerase III", "is_correct": false},
+            {"text_fr": "La primase", "text_en": "Primase", "is_correct": false},
+            {"text_fr": "La ligase", "text_en": "Ligase", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Lors de la transcription, quelle base remplace la Thymine dans l'ARN produit ?",
+          "text_en": "During transcription, which base replaces Thymine in the RNA produced?",
+          "explanation_fr": "L'ARN est la copie du brin codant, à la différence que les Thymines (T) sont remplacées par des Uraciles (U).",
+          "explanation_en": "The RNA is a copy of the coding strand, except that Thymines (T) are replaced by Uracils (U).",
+          "options": [
+            {"text_fr": "L'Uracile (U)", "text_en": "Uracil (U)", "is_correct": true},
+            {"text_fr": "La Cytosine (C)", "text_en": "Cytosine (C)", "is_correct": false},
+            {"text_fr": "L'Adénine (A)", "text_en": "Adenine (A)", "is_correct": false},
+            {"text_fr": "La Guanine (G)", "text_en": "Guanine (G)", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quelles sont les trois modifications obligatoires de maturation du pré-ARNm ?",
+          "text_en": "What are the three mandatory maturation modifications of pre-mRNA?",
+          "explanation_fr": "Le pré-ARNm subit l'ajout d'une coiffe en 5', d'une queue en 3', et l'épissage (excision des introns, soudure des exons).",
+          "explanation_en": "Pre-mRNA undergoes addition of a 5' cap, a 3' tail, and splicing (excision of introns, joining of exons).",
+          "options": [
+            {"text_fr": "Coiffe en 5', queue en 3', et épissage", "text_en": "5' cap, 3' tail, and splicing", "is_correct": true},
+            {"text_fr": "Réplication, transcription et traduction", "text_en": "Replication, transcription and translation", "is_correct": false},
+            {"text_fr": "Initiation, élongation et terminaison", "text_en": "Initiation, elongation and termination", "is_correct": false},
+            {"text_fr": "Excision des exons et soudure des introns", "text_en": "Excision of exons and joining of introns", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quel codon donne le signal de départ de la traduction ?",
+          "text_en": "Which codon gives the start signal for translation?",
+          "explanation_fr": "Le codon d'initiation est AUG (qui code pour la Méthionine). Les codons stop sont UAA, UAG et UGA.",
+          "explanation_en": "The initiation codon is AUG (coding for Methionine). The stop codons are UAA, UAG and UGA.",
+          "options": [
+            {"text_fr": "AUG", "text_en": "AUG", "is_correct": true},
+            {"text_fr": "UAA", "text_en": "UAA", "is_correct": false},
+            {"text_fr": "UGA", "text_en": "UGA", "is_correct": false},
+            {"text_fr": "UAG", "text_en": "UAG", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Le code génétique est dit « dégénéré (ou redondant) ». Qu'est-ce que cela signifie ?",
+          "text_en": "The genetic code is said to be \"degenerate (or redundant)\". What does this mean?",
+          "explanation_fr": "Dégénéré signifie que plusieurs codons différents peuvent coder pour un même acide aminé (64 codons pour 20 acides aminés). « Non ambigu » signifie qu'un codon code pour un seul acide aminé.",
+          "explanation_en": "Degenerate means several different codons can code for the same amino acid (64 codons for 20 amino acids). \"Unambiguous\" means one codon codes for only one amino acid.",
+          "options": [
+            {"text_fr": "Plusieurs codons peuvent coder pour un même acide aminé", "text_en": "Several codons can code for the same amino acid", "is_correct": true},
+            {"text_fr": "Un codon code pour plusieurs acides aminés différents", "text_en": "One codon codes for several different amino acids", "is_correct": false},
+            {"text_fr": "Le code change d'une espèce à l'autre", "text_en": "The code changes from one species to another", "is_correct": false},
+            {"text_fr": "Chaque acide aminé a un seul codon unique", "text_en": "Each amino acid has a single unique codon", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "2781cbc4-da85-4511-b18a-c69686cb537c",
+      "source": "Génétique · II- Hérédité humaine et arbres généalogiques",
+      "questions": [
+        {
+          "difficulty": "medium",
+          "text_fr": "Pourquoi les généticiens utilisent-ils des arbres généalogiques (pedigrees) chez l'Homme ?",
+          "text_en": "Why do geneticists use family trees (pedigrees) in humans?",
+          "explanation_fr": "Chez l'Homme, l'étude génétique ne peut pas se faire par croisements expérimentaux ; on utilise donc les arbres généalogiques.",
+          "explanation_en": "In humans, genetic study cannot be done by experimental crosses; family trees are used instead.",
+          "options": [
+            {"text_fr": "Parce que les croisements expérimentaux sont impossibles chez l'Homme", "text_en": "Because experimental crosses are impossible in humans", "is_correct": true},
+            {"text_fr": "Parce que l'Homme n'a pas de chromosomes sexuels", "text_en": "Because humans have no sex chromosomes", "is_correct": false},
+            {"text_fr": "Parce que l'Homme est haploïde", "text_en": "Because humans are haploid", "is_correct": false},
+            {"text_fr": "Parce que les gènes humains ne mutent jamais", "text_en": "Because human genes never mutate", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Dans une hérédité autosomale dominante, on observe généralement que :",
+          "text_en": "In autosomal dominant inheritance, one generally observes that:",
+          "explanation_fr": "En transmission autosomale dominante, un enfant atteint a au moins un parent atteint et la maladie apparaît à chaque génération.",
+          "explanation_en": "In autosomal dominant transmission, an affected child has at least one affected parent and the disease appears in every generation.",
+          "options": [
+            {"text_fr": "Un enfant atteint a au moins un parent atteint", "text_en": "An affected child has at least one affected parent", "is_correct": true},
+            {"text_fr": "La maladie saute systématiquement une génération", "text_en": "The disease systematically skips a generation", "is_correct": false},
+            {"text_fr": "Seuls les hommes sont touchés", "text_en": "Only men are affected", "is_correct": false},
+            {"text_fr": "Deux parents atteints ne peuvent avoir d'enfant sain", "text_en": "Two affected parents cannot have a healthy child", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Deux parents sains ont un enfant atteint. Quel mode de transmission autosomale est le plus probable ?",
+          "text_en": "Two healthy parents have an affected child. Which autosomal mode of transmission is most likely?",
+          "explanation_fr": "En autosomale récessive, des parents sains (porteurs sains hétérozygotes) peuvent avoir un enfant atteint (homozygote récessif) ; la maladie peut sauter des générations.",
+          "explanation_en": "In autosomal recessive inheritance, healthy parents (healthy heterozygous carriers) can have an affected child (recessive homozygote); the disease can skip generations.",
+          "options": [
+            {"text_fr": "Autosomale récessive", "text_en": "Autosomal recessive", "is_correct": true},
+            {"text_fr": "Autosomale dominante", "text_en": "Autosomal dominant", "is_correct": false},
+            {"text_fr": "Liée à l'Y", "text_en": "Y-linked", "is_correct": false},
+            {"text_fr": "Codominante stricte", "text_en": "Strict codominance", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Pour une maladie liée à l'X récessive (ex : hémophilie), pourquoi les hommes sont-ils plus fréquemment touchés ?",
+          "text_en": "For an X-linked recessive disease (e.g. haemophilia), why are men more often affected?",
+          "explanation_fr": "Les hommes (XY) n'ont qu'un seul X : si cet unique X porte l'allèle défectueux, ils expriment obligatoirement la maladie. Les femmes (XX) peuvent être porteuses saines.",
+          "explanation_en": "Men (XY) have only one X: if that single X carries the defective allele, they necessarily express the disease. Women (XX) can be healthy carriers.",
+          "options": [
+            {"text_fr": "Ils n'ont qu'un seul chromosome X, non compensé", "text_en": "They have only one X chromosome, uncompensated", "is_correct": true},
+            {"text_fr": "Ils possèdent deux chromosomes X", "text_en": "They have two X chromosomes", "is_correct": false},
+            {"text_fr": "Le gène est porté par le chromosome Y", "text_en": "The gene is carried on the Y chromosome", "is_correct": false},
+            {"text_fr": "Les hommes sont toujours homozygotes", "text_en": "Men are always homozygous", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "1e7d5f3c-c29b-4689-a8fc-9a7d60cc0162",
+      "source": "Organisation de l'être humain · II- Grandes fonctions physiologiques",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Combien de grandes fonctions physiologiques principales distingue-t-on ?",
+          "text_en": "How many main physiological functions are distinguished?",
+          "explanation_fr": "On distingue 4 fonctions principales : nutrition, relation, reproduction et maintien de l'intégrité.",
+          "explanation_en": "Four main functions are distinguished: nutrition, relation, reproduction and maintenance of integrity.",
+          "options": [
+            {"text_fr": "Quatre", "text_en": "Four", "is_correct": true},
+            {"text_fr": "Deux", "text_en": "Two", "is_correct": false},
+            {"text_fr": "Trois", "text_en": "Three", "is_correct": false},
+            {"text_fr": "Cinq", "text_en": "Five", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La fonction de nutrition est assurée par quels appareils ?",
+          "text_en": "Which apparatuses carry out the function of nutrition?",
+          "explanation_fr": "La nutrition assure croissance et entretien via les appareils digestif, respiratoire, circulatoire/cardiovasculaire et excréteur/urinaire.",
+          "explanation_en": "Nutrition ensures growth and maintenance via the digestive, respiratory, circulatory/cardiovascular and excretory/urinary apparatuses.",
+          "options": [
+            {"text_fr": "Digestif, respiratoire, circulatoire et excréteur", "text_en": "Digestive, respiratory, circulatory and excretory", "is_correct": true},
+            {"text_fr": "Uniquement l'appareil reproducteur", "text_en": "Only the reproductive apparatus", "is_correct": false},
+            {"text_fr": "Uniquement le système nerveux", "text_en": "Only the nervous system", "is_correct": false},
+            {"text_fr": "L'appareil locomoteur seul", "text_en": "The locomotor apparatus alone", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quelle fonction met l'organisme en relation avec son environnement extérieur ?",
+          "text_en": "Which function connects the organism to its external environment?",
+          "explanation_fr": "La fonction de relation, assurée par le système nerveux, reçoit les informations, les traite et commande l'appareil locomoteur.",
+          "explanation_en": "The function of relation, carried out by the nervous system, receives information, processes it and commands the locomotor apparatus.",
+          "options": [
+            {"text_fr": "La fonction de relation", "text_en": "The function of relation", "is_correct": true},
+            {"text_fr": "La fonction de reproduction", "text_en": "The function of reproduction", "is_correct": false},
+            {"text_fr": "La fonction de nutrition", "text_en": "The function of nutrition", "is_correct": false},
+            {"text_fr": "La fonction de maintien de l'intégrité", "text_en": "The function of maintaining integrity", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La fonction de maintien de l'intégrité correspond principalement à :",
+          "text_en": "The function of maintaining integrity mainly corresponds to:",
+          "explanation_fr": "Le maintien de l'intégrité assure la protection et un état de stabilité du milieu intérieur (homéostasie) malgré les changements de l'environnement.",
+          "explanation_en": "Maintaining integrity ensures protection and a stable internal environment (homeostasis) despite environmental changes.",
+          "options": [
+            {"text_fr": "L'homéostasie (stabilité du milieu intérieur)", "text_en": "Homeostasis (stability of the internal environment)", "is_correct": true},
+            {"text_fr": "La perpétuation de l'espèce", "text_en": "The perpetuation of the species", "is_correct": false},
+            {"text_fr": "La locomotion", "text_en": "Locomotion", "is_correct": false},
+            {"text_fr": "La digestion des nutriments", "text_en": "The digestion of nutrients", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "7bd7749c-a5e0-472e-b398-230051ab549e",
+      "source": "Division cellulaire · II- La mitose",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Quel est le résultat d'une mitose ?",
+          "text_en": "What is the result of a mitosis?",
+          "explanation_fr": "La mitose donne deux cellules filles identiques à la cellule mère, avec conservation du nombre de chromosomes (2n).",
+          "explanation_en": "Mitosis yields two daughter cells identical to the mother cell, keeping the chromosome number (2n).",
+          "options": [
+            {"text_fr": "Deux cellules filles identiques (2n)", "text_en": "Two identical daughter cells (2n)", "is_correct": true},
+            {"text_fr": "Quatre cellules filles haploïdes (n)", "text_en": "Four haploid daughter cells (n)", "is_correct": false},
+            {"text_fr": "Une cellule fille tétraploïde (4n)", "text_en": "One tetraploid daughter cell (4n)", "is_correct": false},
+            {"text_fr": "Deux gamètes", "text_en": "Two gametes", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Dans l'ordre, quelles sont les 4 phases de la mitose ?",
+          "text_en": "In order, what are the 4 phases of mitosis?",
+          "explanation_fr": "La mitose se déroule en 4 phases successives : Prophase, Métaphase, Anaphase, Télophase.",
+          "explanation_en": "Mitosis proceeds in 4 successive phases: Prophase, Metaphase, Anaphase, Telophase.",
+          "options": [
+            {"text_fr": "Prophase → Métaphase → Anaphase → Télophase", "text_en": "Prophase → Metaphase → Anaphase → Telophase", "is_correct": true},
+            {"text_fr": "Métaphase → Prophase → Télophase → Anaphase", "text_en": "Metaphase → Prophase → Telophase → Anaphase", "is_correct": false},
+            {"text_fr": "Anaphase → Métaphase → Prophase → Télophase", "text_en": "Anaphase → Metaphase → Prophase → Telophase", "is_correct": false},
+            {"text_fr": "Prophase → Anaphase → Métaphase → Télophase", "text_en": "Prophase → Anaphase → Metaphase → Telophase", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "À quelle phase les chromosomes s'alignent-ils sur la plaque équatoriale ?",
+          "text_en": "During which phase do the chromosomes align on the equatorial plate?",
+          "explanation_fr": "En métaphase, les chromosomes atteignent leur condensation maximale et s'alignent sur la plaque équatoriale.",
+          "explanation_en": "In metaphase, chromosomes reach maximal condensation and align on the equatorial plate.",
+          "options": [
+            {"text_fr": "La métaphase", "text_en": "Metaphase", "is_correct": true},
+            {"text_fr": "La prophase", "text_en": "Prophase", "is_correct": false},
+            {"text_fr": "L'anaphase", "text_en": "Anaphase", "is_correct": false},
+            {"text_fr": "La télophase", "text_en": "Telophase", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Quel événement caractérise l'anaphase, la phase la plus rapide de la mitose ?",
+          "text_en": "Which event characterises anaphase, the fastest phase of mitosis?",
+          "explanation_fr": "En anaphase, les centromères se divisent et les chromatides sœurs se séparent, migrant vers les pôles opposés (ascension polaire).",
+          "explanation_en": "In anaphase, the centromeres divide and the sister chromatids separate, migrating to opposite poles (polar ascent).",
+          "options": [
+            {"text_fr": "La séparation des chromatides sœurs vers les pôles", "text_en": "The separation of sister chromatids toward the poles", "is_correct": true},
+            {"text_fr": "L'alignement des chromosomes au centre", "text_en": "The alignment of chromosomes at the centre", "is_correct": false},
+            {"text_fr": "La condensation de la chromatine", "text_en": "The condensation of chromatin", "is_correct": false},
+            {"text_fr": "La reformation de l'enveloppe nucléaire", "text_en": "The reformation of the nuclear envelope", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Comment se déroule la cytodiérèse dans une cellule animale ?",
+          "text_en": "How does cytokinesis occur in an animal cell?",
+          "explanation_fr": "Dans la cellule animale, la cytodiérèse est centripète : étranglement de la membrane par un anneau contractile d'actine et de myosine. La cellule végétale construit une nouvelle paroi (phragmoplaste), de façon centrifuge.",
+          "explanation_en": "In animal cells cytokinesis is centripetal: pinching of the membrane by a contractile ring of actin and myosin. Plant cells build a new wall (phragmoplast) centrifugally.",
+          "options": [
+            {"text_fr": "Par étranglement de la membrane (anneau d'actine/myosine)", "text_en": "By pinching of the membrane (actin/myosin ring)", "is_correct": true},
+            {"text_fr": "Par construction d'une paroi rigide au centre", "text_en": "By building a rigid wall at the centre", "is_correct": false},
+            {"text_fr": "Par bourgeonnement du noyau", "text_en": "By budding of the nucleus", "is_correct": false},
+            {"text_fr": "Par fusion de deux cellules filles", "text_en": "By fusion of two daughter cells", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "ac9c5b3c-14bd-41a1-a226-91ceacaf0cdd",
+      "source": "Génétique · III- Reproduction sexuée",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Sur quels deux événements cellulaires repose la reproduction sexuée ?",
+          "text_en": "On which two cellular events does sexual reproduction rest?",
+          "explanation_fr": "La reproduction sexuée repose sur l'alternance de la méiose (2n → n) et de la fécondation (rétablissement de 2n).",
+          "explanation_en": "Sexual reproduction rests on the alternation of meiosis (2n → n) and fertilisation (restoration of 2n).",
+          "options": [
+            {"text_fr": "La méiose et la fécondation", "text_en": "Meiosis and fertilisation", "is_correct": true},
+            {"text_fr": "La mitose et la réplication", "text_en": "Mitosis and replication", "is_correct": false},
+            {"text_fr": "La transcription et la traduction", "text_en": "Transcription and translation", "is_correct": false},
+            {"text_fr": "La mitose et la fécondation", "text_en": "Mitosis and fertilisation", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Combien de cellules la méiose produit-elle à partir d'une cellule diploïde ?",
+          "text_en": "How many cells does meiosis produce from one diploid cell?",
+          "explanation_fr": "La méiose divise le nombre de chromosomes par deux : une cellule diploïde (2n) donne quatre cellules haploïdes (n).",
+          "explanation_en": "Meiosis halves the chromosome number: one diploid cell (2n) gives four haploid cells (n).",
+          "options": [
+            {"text_fr": "Quatre cellules haploïdes (n)", "text_en": "Four haploid cells (n)", "is_correct": true},
+            {"text_fr": "Deux cellules diploïdes (2n)", "text_en": "Two diploid cells (2n)", "is_correct": false},
+            {"text_fr": "Une cellule tétraploïde (4n)", "text_en": "One tetraploid cell (4n)", "is_correct": false},
+            {"text_fr": "Deux cellules haploïdes (n)", "text_en": "Two haploid cells (n)", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Le crossing-over (brassage intrachromosomique) se produit lors de :",
+          "text_en": "Crossing-over (intrachromosomal shuffling) occurs during:",
+          "explanation_fr": "Le brassage intrachromosomique (crossing-over) a lieu en Prophase I ; le brassage interchromosomique a lieu en Anaphase I.",
+          "explanation_en": "Intrachromosomal shuffling (crossing-over) occurs in Prophase I; interchromosomal shuffling occurs in Anaphase I.",
+          "options": [
+            {"text_fr": "La Prophase I", "text_en": "Prophase I", "is_correct": true},
+            {"text_fr": "L'Anaphase I", "text_en": "Anaphase I", "is_correct": false},
+            {"text_fr": "La Métaphase II", "text_en": "Metaphase II", "is_correct": false},
+            {"text_fr": "La fécondation", "text_en": "Fertilisation", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "Quel est le rôle de la fécondation dans la reproduction sexuée ?",
+          "text_en": "What is the role of fertilisation in sexual reproduction?",
+          "explanation_fr": "La fécondation unit au hasard deux gamètes haploïdes (n) pour recréer un zygote diploïde (2n), rétablissant la diploïdie et multipliant la diversité.",
+          "explanation_en": "Fertilisation randomly unites two haploid gametes (n) to recreate a diploid zygote (2n), restoring diploidy and multiplying diversity.",
+          "options": [
+            {"text_fr": "Rétablir la diploïdie (2n) en unissant deux gamètes (n)", "text_en": "Restore diploidy (2n) by uniting two gametes (n)", "is_correct": true},
+            {"text_fr": "Réduire le nombre de chromosomes de moitié", "text_en": "Halve the chromosome number", "is_correct": false},
+            {"text_fr": "Copier l'ADN avant la mitose", "text_en": "Copy DNA before mitosis", "is_correct": false},
+            {"text_fr": "Créer de nouveaux allèles par mutation", "text_en": "Create new alleles by mutation", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "cbc702f6-93df-4418-90a8-2364ea6c321a",
+      "source": "Génétique · IV- Polymorphisme génétique",
+      "questions": [
+        {
+          "difficulty": "medium",
+          "text_fr": "Quelle est la source primaire, l'unique créatrice de nouveaux allèles ?",
+          "text_en": "What is the primary source, the sole creator of new alleles?",
+          "explanation_fr": "La reproduction sexuée brasse les allèles existants mais n'en crée pas ; la mutation génétique est l'unique créatrice de nouveaux allèles.",
+          "explanation_en": "Sexual reproduction shuffles existing alleles but does not create new ones; genetic mutation is the sole creator of new alleles.",
+          "options": [
+            {"text_fr": "La mutation génétique", "text_en": "Genetic mutation", "is_correct": true},
+            {"text_fr": "La fécondation", "text_en": "Fertilisation", "is_correct": false},
+            {"text_fr": "Le crossing-over", "text_en": "Crossing-over", "is_correct": false},
+            {"text_fr": "La mitose", "text_en": "Mitosis", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "easy",
+          "text_fr": "Une mutation par substitution correspond à :",
+          "text_en": "A substitution mutation corresponds to:",
+          "explanation_fr": "Substitution = un nucléotide remplacé par un autre ; délétion = perte de nucléotides ; insertion = ajout de nucléotides.",
+          "explanation_en": "Substitution = one nucleotide replaced by another; deletion = loss of nucleotides; insertion = addition of nucleotides.",
+          "options": [
+            {"text_fr": "Un nucléotide remplacé par un autre", "text_en": "One nucleotide replaced by another", "is_correct": true},
+            {"text_fr": "La perte d'un ou plusieurs nucléotides", "text_en": "The loss of one or more nucleotides", "is_correct": false},
+            {"text_fr": "L'ajout d'un ou plusieurs nucléotides", "text_en": "The addition of one or more nucleotides", "is_correct": false},
+            {"text_fr": "La duplication d'un chromosome entier", "text_en": "The duplication of a whole chromosome", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Quelle mutation peut être transmise à la descendance ?",
+          "text_en": "Which mutation can be transmitted to offspring?",
+          "explanation_fr": "Seule la mutation germinale (dans les cellules souches des gamètes) se transmet à la descendance ; la mutation somatique (ex : peau) ne se transmet jamais.",
+          "explanation_en": "Only germline mutation (in gamete stem cells) is passed to offspring; somatic mutation (e.g. skin) is never transmitted.",
+          "options": [
+            {"text_fr": "La mutation germinale", "text_en": "Germline mutation", "is_correct": true},
+            {"text_fr": "La mutation somatique", "text_en": "Somatic mutation", "is_correct": false},
+            {"text_fr": "Aucune mutation n'est transmissible", "text_en": "No mutation is transmissible", "is_correct": false},
+            {"text_fr": "Toutes les mutations sont transmissibles", "text_en": "All mutations are transmissible", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La reproduction sexuée (méiose + fécondation) crée-t-elle de nouveaux allèles ?",
+          "text_en": "Does sexual reproduction (meiosis + fertilisation) create new alleles?",
+          "explanation_fr": "Non : elle brasse les cartes existantes (nouvelles combinaisons) mais ne crée pas de nouvelles cartes. Seule la mutation crée de nouveaux allèles.",
+          "explanation_en": "No: it shuffles existing cards (new combinations) but does not create new cards. Only mutation creates new alleles.",
+          "options": [
+            {"text_fr": "Non, elle ne fait que brasser les allèles existants", "text_en": "No, it only shuffles existing alleles", "is_correct": true},
+            {"text_fr": "Oui, elle crée systématiquement de nouveaux allèles", "text_en": "Yes, it systematically creates new alleles", "is_correct": false},
+            {"text_fr": "Oui, uniquement lors de la fécondation", "text_en": "Yes, only during fertilisation", "is_correct": false},
+            {"text_fr": "Non, car elle ne modifie jamais les combinaisons", "text_en": "No, because it never changes combinations", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "80332ea9-b411-4b21-a362-22a77e122e36",
+      "source": "Division cellulaire · III- La méiose",
+      "questions": [
+        {
+          "difficulty": "medium",
+          "text_fr": "La méiose comporte combien de divisions et combien de réplications de l'ADN ?",
+          "text_en": "Meiosis includes how many divisions and how many DNA replications?",
+          "explanation_fr": "La méiose se compose de deux divisions successives précédées d'une seule réplication de l'ADN.",
+          "explanation_en": "Meiosis consists of two successive divisions preceded by a single DNA replication.",
+          "options": [
+            {"text_fr": "Deux divisions, une seule réplication", "text_en": "Two divisions, a single replication", "is_correct": true},
+            {"text_fr": "Une division, une réplication", "text_en": "One division, one replication", "is_correct": false},
+            {"text_fr": "Deux divisions, deux réplications", "text_en": "Two divisions, two replications", "is_correct": false},
+            {"text_fr": "Quatre divisions, une réplication", "text_en": "Four divisions, one replication", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Qu'est-ce qui caractérise la division I (réductionnelle) de la méiose ?",
+          "text_en": "What characterises division I (reductional) of meiosis?",
+          "explanation_fr": "En Anaphase I, les chromosomes homologues sont séparés sans division des centromères (passage de 2n à n) ; les chromatides restent unies.",
+          "explanation_en": "In Anaphase I, homologous chromosomes are separated without division of the centromeres (2n to n); chromatids stay joined.",
+          "options": [
+            {"text_fr": "La séparation des chromosomes homologues sans division des centromères", "text_en": "Separation of homologous chromosomes without division of the centromeres", "is_correct": true},
+            {"text_fr": "La séparation des chromatides sœurs", "text_en": "Separation of sister chromatids", "is_correct": false},
+            {"text_fr": "La réplication de l'ADN", "text_en": "DNA replication", "is_correct": false},
+            {"text_fr": "La formation de 4 cellules diploïdes", "text_en": "The formation of 4 diploid cells", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La division II (équationnelle) de la méiose ressemble à :",
+          "text_en": "Division II (equational) of meiosis resembles:",
+          "explanation_fr": "La division équationnelle ressemble à une mitose classique mais sans réplication préalable de l'ADN : les centromères se divisent et les chromatides sœurs se séparent.",
+          "explanation_en": "The equational division resembles a classic mitosis but without prior DNA replication: centromeres divide and sister chromatids separate.",
+          "options": [
+            {"text_fr": "Une mitose, mais sans réplication préalable de l'ADN", "text_en": "A mitosis, but without prior DNA replication", "is_correct": true},
+            {"text_fr": "Une réplication de l'ADN", "text_en": "A DNA replication", "is_correct": false},
+            {"text_fr": "Une fécondation", "text_en": "A fertilisation", "is_correct": false},
+            {"text_fr": "Une transcription", "text_en": "A transcription", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "easy",
+          "text_fr": "À la fin de la méiose, combien de cellules haploïdes obtient-on ?",
+          "text_en": "At the end of meiosis, how many haploid cells are obtained?",
+          "explanation_fr": "La méiose aboutit à la formation de 4 cellules haploïdes (n) à chromosomes monochromatidiens.",
+          "explanation_en": "Meiosis results in 4 haploid cells (n) with single-chromatid chromosomes.",
+          "options": [
+            {"text_fr": "Quatre", "text_en": "Four", "is_correct": true},
+            {"text_fr": "Deux", "text_en": "Two", "is_correct": false},
+            {"text_fr": "Une", "text_en": "One", "is_correct": false},
+            {"text_fr": "Huit", "text_en": "Eight", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Le crossing-over de la Prophase I correspond à :",
+          "text_en": "The crossing-over of Prophase I corresponds to:",
+          "explanation_fr": "Le crossing-over est l'échange de fragments de chromatides non-sœurs entre chromosomes homologues appariés (au niveau des chiasmas) : le brassage intrachromosomique.",
+          "explanation_en": "Crossing-over is the exchange of non-sister chromatid fragments between paired homologous chromosomes (at chiasmata): intrachromosomal shuffling.",
+          "options": [
+            {"text_fr": "Un échange de fragments entre chromatides non-sœurs de chromosomes homologues", "text_en": "An exchange of fragments between non-sister chromatids of homologous chromosomes", "is_correct": true},
+            {"text_fr": "La séparation des chromatides sœurs", "text_en": "The separation of sister chromatids", "is_correct": false},
+            {"text_fr": "La duplication de l'ADN", "text_en": "The duplication of DNA", "is_correct": false},
+            {"text_fr": "La fusion de deux gamètes", "text_en": "The fusion of two gametes", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "40b9d479-a943-41bf-8b52-ec7bfe08a486",
+      "source": "Génétique · V- Anomalies chromosomiques et caryotypes",
+      "questions": [
+        {
+          "difficulty": "easy",
+          "text_fr": "Qu'est-ce qu'un caryotype ?",
+          "text_en": "What is a karyotype?",
+          "explanation_fr": "Le caryotype est la représentation ordonnée de l'ensemble des chromosomes d'une cellule, classés par paires selon leur taille et leur forme.",
+          "explanation_en": "The karyotype is the ordered representation of all the chromosomes of a cell, classified in pairs by size and shape.",
+          "options": [
+            {"text_fr": "La représentation ordonnée des chromosomes, classés par paires", "text_en": "The ordered representation of chromosomes, classified in pairs", "is_correct": true},
+            {"text_fr": "La séquence complète de l'ADN d'un gène", "text_en": "The complete DNA sequence of a gene", "is_correct": false},
+            {"text_fr": "L'ensemble des protéines d'une cellule", "text_en": "The set of proteins of a cell", "is_correct": false},
+            {"text_fr": "Un arbre généalogique", "text_en": "A family tree", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Quelle est la formule chromosomique correcte d'une femme et d'un homme ?",
+          "text_en": "What is the correct chromosome formula for a woman and a man?",
+          "explanation_fr": "La femme est 46, XX et l'homme 46, XY. (Attention : la fiche de cours inverse ces deux formules — c'est une erreur à corriger.)",
+          "explanation_en": "A woman is 46, XX and a man 46, XY. (Note: the course card swaps these two formulas — an error to correct.)",
+          "options": [
+            {"text_fr": "Femme 46, XX ; Homme 46, XY", "text_en": "Woman 46, XX; Man 46, XY", "is_correct": true},
+            {"text_fr": "Femme 46, XY ; Homme 46, XX", "text_en": "Woman 46, XY; Man 46, XX", "is_correct": false},
+            {"text_fr": "Femme 45, X0 ; Homme 47, XXY", "text_en": "Woman 45, X0; Man 47, XXY", "is_correct": false},
+            {"text_fr": "Femme 23, X ; Homme 23, Y", "text_en": "Woman 23, X; Man 23, Y", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "À quelle étape de la division bloque-t-on les cellules pour réaliser un caryotype ?",
+          "text_en": "At which stage of division are cells blocked to produce a karyotype?",
+          "explanation_fr": "On bloque les cellules en métaphase, stade où les chromosomes sont condensés et bien visibles.",
+          "explanation_en": "Cells are blocked in metaphase, the stage where chromosomes are condensed and clearly visible.",
+          "options": [
+            {"text_fr": "En métaphase", "text_en": "In metaphase", "is_correct": true},
+            {"text_fr": "En phase S", "text_en": "In S phase", "is_correct": false},
+            {"text_fr": "En anaphase", "text_en": "In anaphase", "is_correct": false},
+            {"text_fr": "En interphase G0", "text_en": "In G0 interphase", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "medium",
+          "text_fr": "La trisomie 21 (syndrome de Down) correspond à quelle formule ?",
+          "text_en": "Trisomy 21 (Down syndrome) corresponds to which formula?",
+          "explanation_fr": "La trisomie 21 est une anomalie numérique autosomique : 47, XY (ou XX) +21. Turner = 45, X0 ; Klinefelter = 47, XXY.",
+          "explanation_en": "Trisomy 21 is an autosomal numerical anomaly: 47, XY (or XX) +21. Turner = 45, X0; Klinefelter = 47, XXY.",
+          "options": [
+            {"text_fr": "47, +21 (un chromosome 21 surnuméraire)", "text_en": "47, +21 (an extra chromosome 21)", "is_correct": true},
+            {"text_fr": "45, X0", "text_en": "45, X0", "is_correct": false},
+            {"text_fr": "47, XXY", "text_en": "47, XXY", "is_correct": false},
+            {"text_fr": "46, XY normal", "text_en": "46, XY normal", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "hard",
+          "text_fr": "Parmi ces anomalies, laquelle est une anomalie structurale (et non numérique) ?",
+          "text_en": "Among these anomalies, which is a structural (not numerical) anomaly?",
+          "explanation_fr": "Les anomalies structurales touchent la structure d'un chromosome : délétion, duplication, inversion, translocation. Trisomie, Turner et Klinefelter sont des anomalies numériques.",
+          "explanation_en": "Structural anomalies affect the structure of a chromosome: deletion, duplication, inversion, translocation. Trisomy, Turner and Klinefelter are numerical anomalies.",
+          "options": [
+            {"text_fr": "La translocation", "text_en": "Translocation", "is_correct": true},
+            {"text_fr": "La trisomie 21", "text_en": "Trisomy 21", "is_correct": false},
+            {"text_fr": "Le syndrome de Turner", "text_en": "Turner syndrome", "is_correct": false},
+            {"text_fr": "Le syndrome de Klinefelter", "text_en": "Klinefelter syndrome", "is_correct": false}
+          ]
+        }
+      ]
+    },
+    {
+      "lid": "0d3b35f1-9458-4002-bb3d-8ff17f5b8738",
+      "source": "Métabolisme et bioénergétique · Introduction",
+      "questions": [
+        {
+          "difficulty": "medium",
+          "text_fr": "Pourquoi la cellule vivante est-elle qualifiée de système thermodynamique « ouvert » ?",
+          "text_en": "Why is the living cell described as an \"open\" thermodynamic system?",
+          "explanation_fr": "La cellule est un système ouvert : elle ne survit qu'en échangeant continuellement matière et énergie avec son environnement pour maintenir son organisation interne (homéostasie).",
+          "explanation_en": "The cell is an open system: it survives only by continuously exchanging matter and energy with its environment to maintain its internal organisation (homeostasis).",
+          "options": [
+            {"text_fr": "Elle échange continuellement matière et énergie avec son environnement", "text_en": "It continuously exchanges matter and energy with its environment", "is_correct": true},
+            {"text_fr": "Elle n'échange ni matière ni énergie avec l'extérieur", "text_en": "It exchanges neither matter nor energy with the outside", "is_correct": false},
+            {"text_fr": "Elle n'échange que de la matière, jamais d'énergie", "text_en": "It exchanges only matter, never energy", "is_correct": false},
+            {"text_fr": "Elle produit sa propre énergie sans aucun apport extérieur", "text_en": "It produces its own energy with no external input", "is_correct": false}
+          ]
+        },
+        {
+          "difficulty": "easy",
+          "text_fr": "Sous combien de formes se fait l'échange d'énergie au niveau de la cellule ?",
+          "text_en": "In how many forms does energy exchange occur in the cell?",
+          "explanation_fr": "L'échange d'énergie se fait sous 4 formes : chimique, électrique, thermique et mécanique.",
+          "explanation_en": "Energy exchange occurs in 4 forms: chemical, electrical, thermal and mechanical.",
+          "options": [
+            {"text_fr": "Quatre (chimique, électrique, thermique, mécanique)", "text_en": "Four (chemical, electrical, thermal, mechanical)", "is_correct": true},
+            {"text_fr": "Deux (chimique et thermique)", "text_en": "Two (chemical and thermal)", "is_correct": false},
+            {"text_fr": "Trois (chimique, électrique, mécanique)", "text_en": "Three (chemical, electrical, mechanical)", "is_correct": false},
+            {"text_fr": "Une seule (chimique)", "text_en": "Only one (chemical)", "is_correct": false}
+          ]
+        }
+      ]
+    }
+  ]
+}

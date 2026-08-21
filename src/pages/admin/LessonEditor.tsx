@@ -6,6 +6,7 @@ import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { parseImagePlaceholders } from "../../lib/lessonContent";
 import { LessonCardsPanel, type LessonCardsHandle } from "./LessonCardsPanel";
+import { LessonQuizPanel } from "./LessonQuizPanel";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow } from "../../lib/database.types";
 
@@ -335,6 +336,10 @@ export default function AdminLessonEditor() {
       {/* Story cards (new lesson viewer) */}
       <div className="h-px bg-border my-6" />
       <LessonCardsPanel ref={cardsRef} lessonId={lessonId!} />
+
+      {/* Quiz (QCM) — feeds the chapter's Niv. 1/2/3 practice */}
+      <div className="h-px bg-border my-6" />
+      <LessonQuizPanel lessonId={lessonId!} />
     </div>
   );
 }
