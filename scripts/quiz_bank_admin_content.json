@@ -899,8 +899,8 @@
           "difficulty": "hard",
           "text_fr": "Quelle est la formule chromosomique correcte d'une femme et d'un homme ?",
           "text_en": "What is the correct chromosome formula for a woman and a man?",
-          "explanation_fr": "La femme est 46, XX et l'homme 46, XY. (Attention : la fiche de cours inverse ces deux formules — c'est une erreur à corriger.)",
-          "explanation_en": "A woman is 46, XX and a man 46, XY. (Note: the course card swaps these two formulas — an error to correct.)",
+          "explanation_fr": "La femme est 46, XX (deux gonosomes X) et l'homme 46, XY (un X et un Y).",
+          "explanation_en": "A woman is 46, XX (two X sex chromosomes) and a man 46, XY (one X and one Y).",
           "options": [
             {"text_fr": "Femme 46, XX ; Homme 46, XY", "text_en": "Woman 46, XX; Man 46, XY", "is_correct": true},
             {"text_fr": "Femme 46, XY ; Homme 46, XX", "text_en": "Woman 46, XY; Man 46, XX", "is_correct": false},

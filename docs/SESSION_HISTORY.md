@@ -69,10 +69,12 @@ lessons → quizzes → questions across a chapter's published lessons — no pe
 - Open each chapter's **Niv. 1/2/3** on the student side and review the QCM; note anything to fix.
 - Use **Admin → Contenu → (chapter) → (lesson) → Quiz (QCM)** to edit/add/delete questions yourself.
 
-### Known content issues flagged (not silently "fixed" in the source cards)
-- **Caryotype card** in `Génétique / V. Anomalies chromosomiques` states "♀ : 46, XY ; ♂ : 46, XX"
-  — **swapped**. The quiz uses the correct form (♀ 46,XX ; ♂ 46,XY) and its explanation notes the
-  card error. Recommend correcting the card text in the editor.
+### Known content issues
+- **Caryotype ♀/♂ swap — FIXED (2026-08-21).** `Génétique / V. Anomalies chromosomiques`
+  (`lessons.content_fr`, lid `40b9d479-…`) read "♀ : 46, XY ; ♂ : 46, XX"; corrected live to
+  "♀ : 46, XX ; ♂ : 46, XY". The quiz question's explanation (bank JSON + live) was also updated to
+  drop the now-stale "the course card swaps this" note. The Trisomy/Turner/Klinefelter card was
+  already correct.
 - `chapter-1787332749371 / "I. Les quatre formes d'échanges énergétiques"` lesson is an **empty stub**
   (one blank card, no content) → intentionally **no quiz** (nothing to test honestly). Add content, then
   build its quiz (add rows to `quiz_bank_admin_content.json` + re-run `--apply`, or use the admin editor).
