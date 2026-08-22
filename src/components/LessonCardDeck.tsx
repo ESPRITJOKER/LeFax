@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useI18n } from "../lib/i18n";
-import { inline } from "../lib/lessonContent";
+import { inline, RichCardText, hasInlineImageToken } from "../lib/lessonContent";
 import { gradeStructural } from "../lib/practiceBank";
 import type { LessonCardRow } from "../lib/database.types";
 
@@ -254,6 +254,23 @@ export function LessonCardDeck({
             const ans = answers[card.id];
             const isActive = i === current;
 
+            // A card carries one image (per language). By default it sits at the
+            // top of each face, but an admin can drop a [[IMG]] token into a text
+            // field to place it exactly where they want — e.g. inside the
+            // explanation (Correction N4). When a face's text asks for the image
+            // inline, we suppress that face's top image to avoid showing it twice.
+            const onError = () => setBrokenImg((p) => ({ ...p, [card.id]: true }));
+            const frontImgNode = image ? (
+              <img src={image} alt="" onError={onError} className="w-full max-h-[240px] object-contain rounded-2xl bg-white/5" />
+            ) : null;
+            const backImgNode = image ? (
+              <a href={image} target="_blank" rel="noopener noreferrer" className="block">
+                <img src={image} alt="" onError={onError} className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50" />
+              </a>
+            ) : null;
+            const frontInlineImg = hasInlineImageToken(sub);
+            const backInlineImg = hasInlineImageToken(explanation, tips, traps);
+
             return (
               <div
                 key={card.id}
@@ -276,12 +293,14 @@ export function LessonCardDeck({
 
                     {/* No image → render nothing (previously a big yellow
                         bullseye placeholder that confused users — corrections
-                        doc note 6). The card centres its text on its own. */}
-                    {image && (
+                        doc note 6). The card centres its text on its own. When
+                        the subtitle carries a [[IMG]] token the image is placed
+                        inline there instead of here (Correction N4). */}
+                    {image && !frontInlineImg && (
                       <img
                         src={image}
                         alt=""
-                        onError={() => setBrokenImg((p) => ({ ...p, [card.id]: true }))}
+                        onError={onError}
                         className="w-full max-h-[38%] object-contain rounded-2xl mb-5 bg-white/5"
                       />
                     )}
@@ -291,7 +310,14 @@ export function LessonCardDeck({
                         bold — emphasis instead comes from *italic* / **bold**
                         kept from the source text (Correction N3). */}
                     <div className="font-serif text-[21px] font-semibold leading-[1.35] mb-3.5">{inline(point)}</div>
-                    {sub && <div className="text-[13.5px] text-white/70 leading-[1.5] mb-6">{inline(sub)}</div>}
+                    {/* Sous-titre: rendered through the card block renderer so a
+                        bulleted list shows one item per line (Correction N4) —
+                        it used to collapse onto a single line via inline(). */}
+                    {sub && (
+                      <div className="text-[13.5px] text-white/70 leading-[1.5] mb-6">
+                        <RichCardText text={sub} image={frontImgNode} />
+                      </div>
+                    )}
                     {/* Reveal the back face — symbol only (corrections doc:
                         "pas besoin d'écrire : voir plus… juste de bons symboles"). */}
                     <button
@@ -327,23 +353,20 @@ export function LessonCardDeck({
 
                     <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 flex flex-col gap-4">
                       {/* Keep the diagram in view while reading — tap to open it
-                          full-size in a new tab for the detail the user wants. */}
-                      {image && (
-                        <a href={image} target="_blank" rel="noopener noreferrer" className="block">
-                          <img
-                            src={image}
-                            alt=""
-                            onError={() => setBrokenImg((p) => ({ ...p, [card.id]: true }))}
-                            className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50"
-                          />
-                        </a>
-                      )}
+                          full-size in a new tab for the detail the user wants.
+                          Suppressed here when a text block places it inline via
+                          a [[IMG]] token (Correction N4). */}
+                      {image && !backInlineImg && backImgNode}
 
-                      {/* Explanation */}
+                      {/* Explanation — rendered through the card block renderer so
+                          headings, bulleted lists and an inline [[IMG]] image all
+                          work inside the explanation (Correction N4). */}
                       {explanation && (
                         <div>
                           <div className="font-serif font-bold text-[12px] text-ink-900 mb-1.5">{t("card_explanation")}</div>
-                          <p className="text-[13.5px] leading-[1.6] text-text whitespace-pre-line">{inline(explanation)}</p>
+                          <div className="text-[13.5px] leading-[1.6] text-text">
+                            <RichCardText text={explanation} image={backImgNode} />
+                          </div>
                         </div>
                       )}
 
@@ -389,7 +412,7 @@ export function LessonCardDeck({
                           <div className="font-serif font-bold text-[12px] mb-1" style={{ color: "#0b5f96" }}>
                             💡 {t("card_tips")}
                           </div>
-                          <div className="text-[13px] leading-[1.55] whitespace-pre-line" style={{ color: "#0b4a75" }}>{inline(tips)}</div>
+                          <div className="text-[13px] leading-[1.55]" style={{ color: "#0b4a75" }}><RichCardText text={tips} image={backImgNode} /></div>
                         </div>
                       )}
 
@@ -399,7 +422,7 @@ export function LessonCardDeck({
                           <div className="font-serif font-bold text-[12px] mb-1" style={{ color: "#a35b00" }}>
                             ⚠ {t("card_traps")}
                           </div>
-                          <div className="text-[13px] leading-[1.55] whitespace-pre-line" style={{ color: "#5c3b00" }}>{inline(traps)}</div>
+                          <div className="text-[13px] leading-[1.55]" style={{ color: "#5c3b00" }}><RichCardText text={traps} image={backImgNode} /></div>
                         </div>
                       )}
                     </div>

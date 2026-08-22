@@ -14,7 +14,6 @@ interface ChapterProgress extends ChapterRow {
   lessonsCount: number;
   doneCount: number;
   progressPct: number;
-  locked: boolean;
 }
 
 /** One of the four chapter steps: a colored circle (symbol only) + label,
@@ -113,18 +112,14 @@ export default function SubjectChapters() {
         const { data: progressRows } = await supabase.from("lesson_progress").select("lesson_id, status").eq("user_id", profile.id);
         doneLessonIds = new Set((progressRows ?? []).filter((p) => p.status === "done").map((p) => p.lesson_id));
       }
-      let firstUnlockedAssigned = false;
+      // Every chapter is freely accessible — no "finish all lessons of a chapter
+      // before the next unlocks" gate (Correction N4: students revise in any
+      // order, jumping to whatever chapter they need).
       const enriched = (chapterRows ?? []).map((c) => {
         const lessonsForChapter = (lessonRows ?? []).filter((l) => l.chapter_id === c.id);
         const doneCount = lessonsForChapter.filter((l) => doneLessonIds.has(l.id)).length;
         const progressPct = lessonsForChapter.length ? Math.round((doneCount / lessonsForChapter.length) * 100) : 0;
-        const isComplete = lessonsForChapter.length > 0 && progressPct === 100;
-        let locked = false;
-        if (lessonsForChapter.length > 0 && !isComplete) {
-          locked = firstUnlockedAssigned;
-          if (!locked) firstUnlockedAssigned = true;
-        }
-        return { ...c, lessonsCount: lessonsForChapter.length, doneCount, progressPct, locked };
+        return { ...c, lessonsCount: lessonsForChapter.length, doneCount, progressPct };
       });
       setChapters(enriched);
       setLoading(false);
@@ -160,11 +155,11 @@ export default function SubjectChapters() {
             chapters.map((c, i) => {
               const isOpen = expanded === c.id;
               return (
-                <div key={c.id} className={`bg-card rounded-[14px] shadow-[0_2px_10px_rgba(20,30,60,0.06)] mb-3 overflow-hidden ${c.locked ? "opacity-60" : ""}`}>
+                <div key={c.id} className="bg-card rounded-[14px] shadow-[0_2px_10px_rgba(20,30,60,0.06)] mb-3 overflow-hidden">
                   {/* Chapter header — tap to expand the 4-step row (original image10). */}
                   <div
-                    onClick={() => !c.locked && toggleChapter(c.id)}
-                    className={`flex items-center gap-3 p-4 ${c.locked ? "" : "cursor-pointer"}`}
+                    onClick={() => toggleChapter(c.id)}
+                    className="flex items-center gap-3 p-4 cursor-pointer"
                   >
                     <div className="font-serif font-extrabold text-[18px] text-brand-500 w-7 flex-shrink-0 tabular-nums">
                       {String(i + 1).padStart(2, "0")}

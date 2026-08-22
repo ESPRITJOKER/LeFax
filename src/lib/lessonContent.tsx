@@ -27,15 +27,18 @@ import { useI18n } from "./i18n";
 
 /**
  * Render inline markup inside a single line of text:
- *   **bold**            → <strong>
- *   *italic* / _italic_ → <em>
+ *   **bold**              → <strong>
+ *   *italic* / _italic_   → <em>
+ *   ==highlight==         → <mark>  (yellow marker — "mettre en valeur", Correction N4)
+ *   __underline__         → <u>
  * Colour is inherited from the surrounding text, so this renders correctly on
  * both the light document viewer and the dark story cards. The italic forms
  * require a non-space right after the opening mark so a lone `*` (e.g. "2 * 3")
- * is left untouched.
+ * is left untouched. `__underline__` is matched before single-`_` italic so a
+ * double underscore is never mistaken for two italic runs.
  */
 export function inline(text: string): ReactNode {
-  const re = /\*\*([^*]+?)\*\*|\*([^\s*][^*]*?)\*|_([^\s_][^_]*?)_/g;
+  const re = /\*\*([^*]+?)\*\*|\*([^\s*][^*]*?)\*|==([^=]+?)==|__([^_]+?)__|_([^\s_][^_]*?)_/g;
   const nodes: ReactNode[] = [];
   let last = 0;
   let key = 0;
@@ -43,11 +46,77 @@ export function inline(text: string): ReactNode {
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) nodes.push(<Fragment key={key++}>{text.slice(last, m.index)}</Fragment>);
     if (m[1] !== undefined) nodes.push(<strong key={key++} className="font-bold">{m[1]}</strong>);
-    else nodes.push(<em key={key++} className="italic">{(m[2] ?? m[3]) as string}</em>);
+    else if (m[2] !== undefined || m[5] !== undefined) nodes.push(<em key={key++} className="italic">{(m[2] ?? m[5]) as string}</em>);
+    else if (m[3] !== undefined) nodes.push(<mark key={key++} className="rounded px-0.5" style={{ background: "#fff2a8", color: "inherit" }}>{m[3]}</mark>);
+    else nodes.push(<u key={key++} className="underline underline-offset-2">{m[4] as string}</u>);
     last = re.lastIndex;
   }
   if (last < text.length) nodes.push(<Fragment key={key++}>{text.slice(last)}</Fragment>);
   return nodes;
+}
+
+/**
+ * Colour-inheriting block renderer for the SHORT rich fields on story cards
+ * (point / sous-titre / explication / astuces / pièges). Unlike `LessonContent`
+ * — which is styled for the light document viewer with fixed dark text — this
+ * inherits its colour and sizing from the surrounding card block, so the same
+ * markup renders correctly on the dark card front and the light card back.
+ *
+ * Supports the subset of the lesson mini-markup that makes sense inside a card
+ * field, so an admin can structure an explanation the same way everywhere:
+ *   ## Titre / ### Sous-titre → headings (sized in `em`, relative to the block)
+ *   - item  /  • item         → bullet list, one item per line (Correction N4:
+ *                               a "- a - b - c" list was collapsing onto one
+ *                               line because the field ran through `inline()`
+ *                               only, which ignores line breaks)
+ *   [[IMG]] / [[IMG: …]]      → the card's uploaded image, placed inline exactly
+ *                               where the admin dropped the token (Correction N4:
+ *                               "insérer une image même dans les explications")
+ *   blank line                → paragraph break; **bold** *italic* ==surligné==
+ *                               __souligné__ inline everywhere.
+ */
+export function RichCardText({ text, image }: { text: string; image?: ReactNode }) {
+  const lines = (text ?? "").replace(/\r\n/g, "\n").split("\n");
+  const out: ReactNode[] = [];
+  let list: string[] | null = null;
+  let key = 0;
+  const flush = () => {
+    if (list && list.length) {
+      out.push(
+        <ul key={key++} className="list-disc pl-[1.2em] flex flex-col gap-1 my-1.5">
+          {list.map((it, j) => (
+            <li key={j}>{inline(it)}</li>
+          ))}
+        </ul>
+      );
+    }
+    list = null;
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    const bullet = line.match(/^(?:-|•|–)\s+(.*)$/);
+    if (bullet) {
+      (list ??= []).push(bullet[1]);
+      continue;
+    }
+    flush();
+    if (line === "") continue;
+
+    let mm: RegExpMatchArray | null;
+    if ((mm = line.match(/^##\s+(.*)$/))) out.push(<div key={key++} className="font-serif font-bold text-[1.22em] leading-snug mt-2 mb-1 first:mt-0">{inline(mm[1])}</div>);
+    else if ((mm = line.match(/^###\s+(.*)$/))) out.push(<div key={key++} className="font-bold text-[1.08em] leading-snug mt-1.5 mb-0.5">{inline(mm[1])}</div>);
+    else if (/^\[\[IMG(?::[^\]]*)?\]\]$/i.test(line)) {
+      if (image) out.push(<div key={key++} className="my-2">{image}</div>);
+    } else out.push(<p key={key++} className="my-1 first:mt-0 last:mb-0">{inline(line)}</p>);
+  }
+  flush();
+  return <>{out}</>;
+}
+
+/** True when a card text field asks for the card image to be placed inline. */
+export function hasInlineImageToken(...texts: (string | null | undefined)[]): boolean {
+  return texts.some((s) => s != null && /\[\[IMG(?::[^\]]*)?\]\]/i.test(s));
 }
 
 function ImageBlock({ caption, url }: { caption: string; url?: string }) {
@@ -183,15 +252,18 @@ export function LessonContent({ text, images }: { text: string; images?: Record<
       {blocks.map((b, i) => {
         switch (b.type) {
           case "h2":
+            // Clear hierarchy: a section title must read as clearly bigger than a
+            // sub-heading and body text (Correction N4: "les grands titres sont
+            // moins grands que les sous-titres").
             return (
-              <h2 key={i} className="font-serif font-bold text-[16px] text-text mt-4 mb-2 first:mt-0">
-                {b.text}
+              <h2 key={i} className="font-serif font-bold text-[18px] text-text mt-4 mb-2 first:mt-0">
+                {inline(b.text)}
               </h2>
             );
           case "h3":
             return (
-              <h3 key={i} className="font-bold text-[13.5px] text-text mt-3 mb-1.5">
-                {b.text}
+              <h3 key={i} className="font-bold text-[15px] text-text mt-3 mb-1.5">
+                {inline(b.text)}
               </h3>
             );
           case "p":

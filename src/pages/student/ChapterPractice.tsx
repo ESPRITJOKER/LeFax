@@ -18,7 +18,9 @@ const LEVELS: Record<string, { difficulty: DifficultyLevel; color: string; fr: s
   "3": { difficulty: "hard", color: "#ef4444", fr: "Niveau 3 · Difficile", en: "Level 3 · Hard" },
 };
 
-const SESSION_SIZE = 10;
+// Below this many questions in a difficulty tier, widen the draw to the whole
+// chapter bank so a thin tier is never near-empty.
+const MIN_TIER_POOL = 8;
 
 export default function ChapterPractice() {
   const { lang } = useI18n();
@@ -52,18 +54,22 @@ export default function ChapterPractice() {
         : { data: [] as QuestionRow[] };
       const allQuestions = (questionRows ?? []) as QuestionRow[];
 
-      // Prefer this level's difficulty tier. But if the tier is too thin to fill
-      // a session, draw from the whole chapter bank so no level is ever
-      // near-empty — every QCM stays reachable at every level (2026-08-22).
+      // Prefer this level's difficulty tier. But if the tier is too thin, draw
+      // from the whole chapter bank so no level is ever near-empty — every QCM
+      // stays reachable at every level (2026-08-22).
       let pool = allQuestions.filter((q) => q.difficulty === meta.difficulty);
-      if (pool.length < SESSION_SIZE) pool = allQuestions;
+      if (pool.length < MIN_TIER_POOL) pool = allQuestions;
 
+      // Serve the ENTIRE bank for this level (shuffled, biased away from
+      // recently-seen), not a capped 10-question slice — the admin authors many
+      // QCMs and expects to see them all in practice (Correction N4: "je vois
+      // très peu de QCMs par rapport à ce que j'ai dans la base de données").
       const selected = await selectWithNoRepeat({
         kind: "mcq",
         topicId: `${chapterId}:L${level}`,
         userId: profile?.id ?? null,
         pool,
-        sessionSize: SESSION_SIZE,
+        sessionSize: pool.length,
       });
 
       const questionIds = selected.map((q) => q.id);
