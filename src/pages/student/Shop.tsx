@@ -80,6 +80,9 @@ export default function Shop() {
               const canAfford = (profile?.faxcoins ?? 0) >= it.price_coins;
               const st = ITEM_STYLE[it.item_type] ?? { emoji: "📦", bg: "#e8f4ff" };
               const disabled = unlocked || !canAfford || pendingId === it.id;
+              // An owned paper that is linked to a quiz (reference_id) is playable:
+              // it becomes the student's personal practice paper (PaperQuiz).
+              const playable = unlocked && it.item_type === "past_paper" && !!it.reference_id;
               return (
                 <div key={it.id} className="flex items-center gap-3.5 bg-card rounded-[12px] px-4 py-3.5 shadow-[0_2px_8px_rgba(20,30,60,0.05)] mb-2.5">
                   <div className="w-11 h-11 rounded-[10px] flex items-center justify-center text-[20px] flex-shrink-0" style={{ background: st.bg }}>
@@ -89,21 +92,30 @@ export default function Shop() {
                     <div className="font-serif font-semibold text-[13.5px] text-ink-900">{lang === "fr" ? it.name_fr : it.name_en}</div>
                     <div className="text-[11.5px] text-muted mt-0.5">{lang === "fr" ? st.fr : st.en}</div>
                   </div>
-                  <button
-                    disabled={disabled}
-                    onClick={() => unlock(it)}
-                    className="rounded-[8px] px-3 py-2 font-serif font-bold text-[12px] whitespace-nowrap"
-                    style={{
-                      background: unlocked ? "#eef1f5" : "#f5b400",
-                      color: unlocked ? "#94a3b8" : "#1e2a3a",
-                    }}
-                  >
-                    {unlocked
-                      ? lang === "fr" ? "Débloqué" : "Unlocked"
-                      : canAfford
-                        ? `${it.price_coins} f`
-                        : lang === "fr" ? "Solde bas" : "Low balance"}
-                  </button>
+                  {playable ? (
+                    <button
+                      onClick={() => navigate(`/paper/${it.reference_id}`)}
+                      className="rounded-[8px] px-3 py-2 font-serif font-bold text-[12px] whitespace-nowrap bg-brand-500 text-white"
+                    >
+                      {lang === "fr" ? "S'entraîner" : "Practice"}
+                    </button>
+                  ) : (
+                    <button
+                      disabled={disabled}
+                      onClick={() => unlock(it)}
+                      className="rounded-[8px] px-3 py-2 font-serif font-bold text-[12px] whitespace-nowrap"
+                      style={{
+                        background: unlocked ? "#eef1f5" : "#f5b400",
+                        color: unlocked ? "#94a3b8" : "#1e2a3a",
+                      }}
+                    >
+                      {unlocked
+                        ? lang === "fr" ? "Débloqué" : "Unlocked"
+                        : canAfford
+                          ? `${it.price_coins} f`
+                          : lang === "fr" ? "Solde bas" : "Low balance"}
+                    </button>
+                  )}
                 </div>
               );
             })

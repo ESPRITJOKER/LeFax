@@ -13,6 +13,7 @@ import ChapterStories from "./pages/student/ChapterStories";
 import ChapterPractice from "./pages/student/ChapterPractice";
 import LessonDetail from "./pages/student/LessonDetail";
 import Quiz from "./pages/student/Quiz";
+import PaperQuiz from "./pages/student/PaperQuiz";
 import QuizResult from "./pages/student/QuizResult";
 import QuizCorrection from "./pages/student/QuizCorrection";
 import MockExamHome from "./pages/student/MockExamHome";
@@ -113,6 +114,14 @@ export default function App() {
           element={
             <ProtectedRoute roles={["student"]}>
               <Quiz />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/paper/:quizId"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <PaperQuiz />
             </ProtectedRoute>
           }
         />

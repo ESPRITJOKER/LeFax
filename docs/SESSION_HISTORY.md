@@ -5,6 +5,45 @@ Live Supabase project ref: `kjlgrgdryimazczrcvgx` ("Lefax MVP", eu-west-1).
 
 ---
 
+## 2026-08-23 — Past-paper ("sujet") feature: buy + replay an exam paper
+
+### What it is
+A **sujet** is a standalone exam paper a student buys once in the Boutique, then replays freely
+as personal practice — distinct from the graded per-lesson `Quiz.tsx` and the Concours-blanc
+mock exams. First paper seeded: **BIOLOGIE 2015 (50 QCM)**.
+
+### What was built (all in this commit)
+1. **`src/pages/student/PaperQuiz.tsx`** + route `/paper/:quizId` in `App.tsx` (student-only).
+   The player: serves the FULL question set reshuffled each attempt (`selectWithNoRepeat` with
+   `sessionSize = pool.length`, `record:false` so it doesn't burn exposure), **free navigation**
+   (Précédent/Suivant + jump grid), **no hearts / no per-question reveal**. Grades via the
+   existing `quiz-submit` edge fn → reuses `/quiz/:quizId/result` → `/quiz/:quizId/correction`;
+   offline fallback grades client-side off `choices.is_correct` if the fn errors.
+2. **`src/components/QuestionNavigator.tsx`** — "Voir toutes les questions" jump-anywhere number
+   grid; marks answered questions.
+3. **`src/pages/student/Shop.tsx`** — an *owned* `past_paper` whose `reference_id` points at a
+   quiz now shows a **"Jouer/Play"** button → `/paper/:reference_id` (was just an "unlocked" pill).
+4. **`scripts/parse_paper_docx.mjs`** — parses a paper `.docx` → JSON + `--emit-migration`.
+   FR-only source, so **EN columns mirror FR** (platform is FR-first).
+5. **`scripts/qcm_source/biologie_2015.json`** — 50 Q, validated exactly 1 correct/question,
+   5 options each (A–E), FR explanations.
+6. **`supabase/migrations/0017_seed_paper_biologie_2015.sql`** — relaxes `quizzes_target_check`
+   to allow a **free-standing quiz** (both `lesson_id` and `mock_exam_id` null; keeps the
+   mutual-exclusion guard), then seeds the quiz + questions + choices + a `past_paper` shop item
+   pointing at it via `reference_id`. Idempotent (fixed quiz id + shop key).
+
+### Verified
+- `npx tsc --noEmit` ✅ and `npx vite build` ✅ (137 modules, clean; only the pre-existing
+  >500 kB chunk-size warning).
+
+### Still open
+- **Migration 0017 NOT applied to live** — it alters the `quizzes_target_check` constraint;
+  review + `supabase db push` when ready (needs a fresh `SUPABASE_ACCESS_TOKEN`).
+- **Not browser-verified.** After applying 0017: buy "BIOLOGIE 2015" in the Boutique → "Jouer"
+  → navigate/answer/finish → result + correction screens.
+
+---
+
 ## 2026-08-22 — Ingest curated QCM from source docs + Niv display fix
 
 ### Trigger (user)
