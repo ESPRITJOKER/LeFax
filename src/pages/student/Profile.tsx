@@ -116,7 +116,7 @@ export default function Profile() {
       <div className="flex-1 min-h-0 flex flex-col">
         <TopBar variant="back" coins={profile?.faxcoins ?? 0} onBack={() => navigate("/dashboard")} />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6 lg:pb-10">
           <div className="flex flex-col items-center pb-5">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
             <button

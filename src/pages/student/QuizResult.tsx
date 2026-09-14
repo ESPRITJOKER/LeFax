@@ -86,7 +86,7 @@ export default function QuizResult() {
 
   return (
     <PhoneFrame>
-      <div className="flex-1 min-h-0 overflow-y-auto bg-white px-[26px] pt-[60px] pb-[30px] text-center flex flex-col items-center">
+      <div className="flex-1 min-h-0 overflow-y-auto bg-white px-[26px] pt-[60px] pb-[30px] text-center flex flex-col items-center lg:max-w-[560px] lg:mx-auto lg:w-full">
         <div className="w-[130px] h-[130px] rounded-full border-8 flex flex-col items-center justify-center mb-[22px]" style={{ borderColor: tier.ring }}>
           <span className="font-serif font-extrabold text-[30px] text-ink-900">
             {state.correct}/{state.total}

@@ -57,7 +57,7 @@ export default function MockExamResult() {
           onAvatar={() => navigate("/profile")}
         />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-5 pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-5 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-7 lg:pb-10">
           {loading ? (
             <Spinner />
           ) : !result ? (

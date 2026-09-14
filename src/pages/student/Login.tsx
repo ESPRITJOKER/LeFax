@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
+import { LogoMark } from "../../components/BrandLogo";
 import { useI18n } from "../../lib/i18n";
 import { normalizePhone } from "../../lib/phone";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -33,9 +34,12 @@ export default function Login() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav="auth">
       <div className="bg-white flex-1 min-h-0 overflow-y-auto flex flex-col px-[26px] pt-[60px] pb-[30px] text-center">
-        <span className="font-serif font-extrabold text-[22px] text-ink-900">LeFax</span>
+        <div className="flex items-center justify-center gap-2">
+          <LogoMark size={30} />
+          <span className="font-serif font-extrabold text-[22px] text-ink-900">LeFax</span>
+        </div>
         <h2 className="font-serif font-bold text-[19px] text-ink-900 mt-[26px] mb-[22px]">
           {lang === "fr" ? "Content de te revoir" : "Welcome back"}
         </h2>

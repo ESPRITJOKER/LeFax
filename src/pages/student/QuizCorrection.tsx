@@ -75,7 +75,7 @@ export default function QuizCorrection() {
     <PhoneFrame>
       <div className="flex-1 min-h-0 flex flex-col bg-white">
         <TopBar variant="title" title={lang === "fr" ? "Correction" : "Correction"} onBack={() => navigate(-1)} />
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-6">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-6 lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6">
           {loading ? (
             <Spinner />
           ) : items.length === 0 ? (

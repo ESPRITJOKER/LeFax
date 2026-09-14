@@ -82,7 +82,7 @@ export default function ChapterStories() {
           onBack={() => (subjectSlug ? navigate(`/subjects/${subjectSlug}`) : navigate(-1))}
         />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[30px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[30px] lg:max-w-[1180px] lg:mx-auto lg:w-full lg:pt-6">
           {/* Header: subject icon + "{Chapter} / N Stories" */}
           <div className="flex items-center gap-3.5 mb-5">
             <div className="w-[58px] h-[58px] rounded-2xl flex items-center justify-center text-[26px]" style={{ background: se.bg }}>
@@ -110,7 +110,7 @@ export default function ChapterStories() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
                 {stories.map((s) => {
                   const title = lang === "fr" ? s.title_fr : s.title_en;
                   return (

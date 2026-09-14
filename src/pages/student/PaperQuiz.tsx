@@ -86,13 +86,13 @@ export default function PaperQuiz() {
 
   if (loading)
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <Spinner />
       </PhoneFrame>
     );
   if (!quiz || questions.length === 0)
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <div className="p-6 text-sm text-muted">
           {isSupabaseConfigured ? (lang === "fr" ? "Épreuve indisponible" : "Paper unavailable") : "Backend not configured"}
         </div>
@@ -146,7 +146,7 @@ export default function PaperQuiz() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav="focus">
       <div className="flex-1 min-h-0 flex flex-col bg-white">
         <div className="bg-brand-800 px-5 py-4 flex items-center justify-between">
           <button onClick={() => navigate(-1)} aria-label={lang === "fr" ? "Fermer" : "Close"}>

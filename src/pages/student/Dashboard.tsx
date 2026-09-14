@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
+import { AppContainer } from "../../components/AppContainer";
 import { BottomTabs } from "../../components/BottomTabs";
 import { TopBar } from "../../components/TopBar";
 import { Drawer } from "../../components/Drawer";
@@ -95,8 +96,9 @@ export default function Dashboard() {
           onAvatar={() => navigate("/profile")}
         />
 
-        <div className="flex-1 min-h-0 overflow-auto pb-[90px]">
-          <div className="px-5 pt-5">
+        <div className="flex-1 min-h-0 overflow-auto pb-[90px] lg:pb-10">
+          <AppContainer wide>
+          <div className="px-5 pt-5 lg:pt-8">
             <p className="font-serif font-bold text-[19px] text-ink-900 mb-0.5">
               {`${greeting(lang)} ${firstName} 👋`}
             </p>
@@ -105,7 +107,7 @@ export default function Dashboard() {
             <p className="font-serif font-bold text-[15px] text-ink-900 mb-3">{lang === "fr" ? "Mes matières" : "My subjects"}</p>
           </div>
 
-          <div className="px-5 flex flex-col gap-3">
+          <div className="px-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {loading ? (
               <Spinner />
             ) : subjects.length === 0 ? (
@@ -138,6 +140,7 @@ export default function Dashboard() {
               })
             )}
           </div>
+          </AppContainer>
         </div>
 
         <BottomTabs active="revisions" />

@@ -1,17 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
+import { LogoMark } from "../../components/BrandLogo";
 import { useI18n } from "../../lib/i18n";
-
-function LogoMark() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <path d="M12 3L2 8l10 5 10-5-10-5z" stroke="#1e2a3a" strokeWidth="1.5" />
-      <path d="M6 10.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5" stroke="#1e2a3a" strokeWidth="1.5" />
-      <path d="M21 8v5" stroke="#1e2a3a" strokeWidth="1.5" />
-      <circle cx="21" cy="14.5" r="1.4" fill="#f5b400" />
-    </svg>
-  );
-}
 
 export default function Landing() {
   const { lang, setLang } = useI18n();
@@ -52,7 +42,7 @@ export default function Landing() {
         ];
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav="auth">
       <div className="bg-white flex-1 min-h-0 overflow-y-auto flex flex-col">
         <div className="flex items-center justify-between px-5 py-[18px]">
           <div className="flex items-center gap-2">
@@ -76,8 +66,8 @@ export default function Landing() {
         </div>
 
         <div className="px-7 pt-2 text-center">
-          <div className="w-[150px] h-[150px] mx-auto mt-1.5 mb-[18px] rounded-2xl bg-brand-50 flex items-center justify-center text-[64px]">
-            🎓
+          <div className="w-[150px] h-[150px] mx-auto mt-1.5 mb-[18px] rounded-2xl bg-brand-50 flex items-center justify-center">
+            <LogoMark size={112} />
           </div>
           <h1 className="font-serif font-bold text-[26px] text-ink-900 leading-[1.3] mb-3">
             {lang === "fr" ? "Commence ta préparation" : "Start your prep"}

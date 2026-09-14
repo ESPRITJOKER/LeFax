@@ -91,13 +91,13 @@ export default function LessonDetail() {
 
   if (loading)
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <Spinner />
       </PhoneFrame>
     );
   if (!lesson)
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <div className="p-6 text-sm text-muted">{isSupabaseConfigured ? t("common_error") : t("backend_banner")}</div>
       </PhoneFrame>
     );
@@ -117,7 +117,7 @@ export default function LessonDetail() {
   // ── New story-card viewer ────────────────────────────────────────────────
   if (cards.length > 0) {
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <LessonCardDeck
           cards={cards}
           lessonTitle={title}
@@ -142,7 +142,7 @@ export default function LessonDetail() {
       <div className="flex-1 min-h-0 flex flex-col bg-white">
         <TopBar variant="title" title={lang === "fr" ? "Leçon" : "Lesson"} onBack={() => navigate(-1)} />
 
-        <div className="flex-1 min-h-0 overflow-auto px-[22px] pt-5 pb-[100px]">
+        <div className="flex-1 min-h-0 overflow-auto px-[22px] pt-5 pb-[100px] lg:max-w-[760px] lg:mx-auto lg:w-full lg:pt-7">
           <h2 className="font-serif font-bold text-[20px] text-ink-900 mb-3.5">{title}</h2>
 
           <div className="flex items-center gap-2.5 mb-4 text-[11.5px] text-muted font-semibold">

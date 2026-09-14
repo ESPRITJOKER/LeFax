@@ -65,7 +65,7 @@ export default function Notifications() {
           </button>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-1 pb-6">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-1 pb-6 lg:max-w-[860px] lg:mx-auto lg:w-full">
           {loading ? (
             <Spinner />
           ) : items.length === 0 ? (

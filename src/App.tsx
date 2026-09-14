@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { BackendBanner } from "./components/BackendBanner";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
+import WebLanding from "./pages/student/WebLanding";
 import Landing from "./pages/student/Landing";
 import Register from "./pages/student/Register";
 import Login from "./pages/student/Login";
@@ -48,7 +49,8 @@ export default function App() {
     <>
       <BackendBanner />
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<WebLanding />} />
+        <Route path="/start" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route

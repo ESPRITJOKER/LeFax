@@ -64,7 +64,7 @@ export default function Tasks() {
       <div className="flex-1 min-h-0 flex flex-col">
         <TopBar variant="back" coins={profile?.faxcoins ?? 0} onBack={() => navigate("/dashboard")} />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6 lg:pb-10">
           <h2 className="font-serif font-bold text-[18px] text-ink-900 mb-1">{lang === "fr" ? "Tâches du jour" : "Daily tasks"}</h2>
 
           <div className="bg-brand-800 rounded-[14px] px-[18px] py-4 flex items-center justify-between my-3.5">

@@ -42,7 +42,7 @@ export default function Track() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav="auth">
       <div className="bg-white flex-1 min-h-0 flex flex-col px-6 pt-[50px] pb-[30px] overflow-y-auto">
         <h2 className="font-serif font-bold text-[21px] text-ink-900 text-center mb-2">
           {lang === "fr" ? "Choisis ton concours" : "Choose your exam track"}

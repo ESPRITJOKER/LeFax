@@ -131,7 +131,7 @@ export default function SubjectChapters() {
       <div className="flex-1 min-h-0 flex flex-col">
         <TopBar variant="back" coins={profile?.faxcoins ?? 0} onBack={() => navigate("/dashboard")} />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6 lg:pb-10">
           {/* Subject hero (original platform image8: icon tile + name + N chapitres). */}
           <div className="flex items-center gap-3.5 mb-5">
             <div className="w-[58px] h-[58px] rounded-2xl flex items-center justify-center text-[26px]" style={{ background: subjectEmoji(subject?.slug ?? "").bg }}>

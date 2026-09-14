@@ -70,7 +70,7 @@ export default function MockExamHome() {
           onAvatar={() => navigate("/profile")}
         />
 
-        <div className="flex-1 min-h-0 overflow-auto pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto pb-[90px] lg:max-w-[1000px] lg:mx-auto lg:w-full lg:pb-10">
           {loading ? (
             <Spinner />
           ) : !mock ? (

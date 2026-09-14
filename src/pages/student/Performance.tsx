@@ -129,7 +129,7 @@ export default function Performance() {
           onAvatar={() => navigate("/profile")}
         />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6 lg:pb-10">
           <h2 className="font-serif font-bold text-[18px] text-ink-900 mb-4">{lang === "fr" ? "Ma performance" : "My performance"}</h2>
 
           {loading ? (

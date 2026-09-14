@@ -3,14 +3,14 @@ import { useI18n } from "../lib/i18n";
 
 export type NavKey = "revisions" | "evaluations" | "questions" | "perfs";
 
-const TABS: { key: NavKey; to: string; labelKey: "nav_revisions" | "nav_evaluations" | "nav_questions" | "nav_perfs" }[] = [
+export const TABS: { key: NavKey; to: string; labelKey: "nav_revisions" | "nav_evaluations" | "nav_questions" | "nav_perfs" }[] = [
   { key: "revisions", to: "/dashboard", labelKey: "nav_revisions" },
   { key: "evaluations", to: "/mock-exam", labelKey: "nav_evaluations" },
   { key: "questions", to: "/search", labelKey: "nav_questions" },
   { key: "perfs", to: "/performance", labelKey: "nav_perfs" },
 ];
 
-function deriveActive(pathname: string): NavKey | undefined {
+export function deriveActive(pathname: string): NavKey | undefined {
   if (pathname.startsWith("/mock-exam")) return "evaluations";
   if (pathname.startsWith("/search")) return "questions";
   if (pathname.startsWith("/performance") || pathname.startsWith("/leaderboard")) return "perfs";
@@ -25,7 +25,7 @@ function deriveActive(pathname: string): NavKey | undefined {
   return undefined;
 }
 
-function TabIcon({ name, color }: { name: NavKey; color: string }) {
+export function TabIcon({ name, color }: { name: NavKey; color: string }) {
   switch (name) {
     case "revisions":
       return (
@@ -71,7 +71,7 @@ export function BottomTabs({ active }: { active?: NavKey }) {
   const activeKey = active ?? deriveActive(location.pathname);
 
   return (
-    <div className="absolute left-0 right-0 bottom-0 bg-card border-t border-ink-100 flex px-2.5 pt-2.5 pb-[calc(14px+env(safe-area-inset-bottom))]">
+    <div className="absolute left-0 right-0 bottom-0 bg-card border-t border-ink-100 flex px-2.5 pt-2.5 pb-[calc(14px+env(safe-area-inset-bottom))] lg:hidden">
       {TABS.map((tab) => {
         const isActive = activeKey === tab.key;
         // Active tab reads in brand blue + bold (corrections doc: "colorer en

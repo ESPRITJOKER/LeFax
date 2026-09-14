@@ -65,7 +65,7 @@ export default function ChapterLessons() {
       <div className="flex-1 min-h-0 flex flex-col">
         <TopBar variant="back" coins={profile?.faxcoins ?? 0} onBack={() => navigate(-1)} />
 
-        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px]">
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6 lg:pb-10">
           <h2 className="font-serif font-bold text-[17px] text-ink-900 mb-4">
             {chapter ? (lang === "fr" ? chapter.name_fr : chapter.name_en) : "..."}
           </h2>

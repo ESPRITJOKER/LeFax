@@ -87,7 +87,7 @@ export default function ChapterPractice() {
 
   if (loading)
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <Spinner />
       </PhoneFrame>
     );
@@ -96,7 +96,7 @@ export default function ChapterPractice() {
 
   if (questions.length === 0)
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <div className="flex-1 min-h-0 flex flex-col items-center justify-center gap-4 px-8 text-center">
           <p className="text-[14px] text-muted">
             {lang === "fr" ? "Aucun exercice disponible pour ce niveau pour le moment." : "No exercises available for this level yet."}
@@ -111,7 +111,7 @@ export default function ChapterPractice() {
   if (result) {
     const pct = Math.round((result.correct / result.total) * 100);
     return (
-      <PhoneFrame>
+      <PhoneFrame nav="focus">
         <div className="flex-1 min-h-0 flex flex-col items-center justify-center gap-3 px-8 text-center">
           <div className="w-20 h-20 rounded-full flex items-center justify-center mb-1" style={{ background: meta.color }}>
             <span className="text-white font-serif font-extrabold text-[22px]">{pct}%</span>
@@ -136,7 +136,7 @@ export default function ChapterPractice() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav="focus">
       <QcmRunner
         key={round}
         questions={questions}

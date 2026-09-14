@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
+import { LogoMark } from "../../components/BrandLogo";
 import { useI18n } from "../../lib/i18n";
 import { REGIONS, TOWNS } from "../../lib/regions";
 import { normalizePhone } from "../../lib/phone";
@@ -106,16 +107,19 @@ export default function Register() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame nav="auth">
       <div className="bg-white flex-1 min-h-0 flex flex-col pb-[30px]">
         <div className="flex items-center justify-between px-5 py-[18px]">
-          <span className="font-serif font-extrabold text-[20px] text-ink-900">LeFax</span>
+          <div className="flex items-center gap-2">
+            <LogoMark size={28} />
+            <span className="font-serif font-extrabold text-[20px] text-ink-900">LeFax</span>
+          </div>
         </div>
 
         {step === "form" && (
           <div className="flex-1 min-h-0 overflow-y-auto px-[26px] text-center">
-            <div className="w-[110px] h-[110px] mx-auto mb-2.5 rounded-[14px] bg-brand-50 flex items-center justify-center text-[48px]">
-              🎓
+            <div className="w-[110px] h-[110px] mx-auto mb-2.5 rounded-[14px] bg-brand-50 flex items-center justify-center">
+              <LogoMark size={82} />
             </div>
             <h2 className="font-serif font-bold text-[19px] text-ink-900 mb-5">
               {lang === "fr" ? "Commence ta préparation" : "Start your prep"}
