@@ -1,20 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { LogoMark } from "../../components/BrandLogo";
 import { useI18n } from "../../lib/i18n";
-import heroImg from "../../assets/landing/hero.png";
-import learnImg from "../../assets/landing/learn.png";
-import cardSciencesImg from "../../assets/landing/card-sciences.png";
-import cardArtsImg from "../../assets/landing/card-arts.png";
-import cardExamsImg from "../../assets/landing/card-exams.png";
-import resourcesImg from "../../assets/landing/resources.png";
-import examsImg from "../../assets/landing/exams.png";
-import testimonialImg from "../../assets/landing/testimonial.png";
-import mobileImg from "../../assets/landing/mobile.png";
+import heroImg from "../../assets/landing/hero.webp";
+import learnImg from "../../assets/landing/learn.webp";
+import cardSciencesImg from "../../assets/landing/card-sciences.webp";
+import cardArtsImg from "../../assets/landing/card-arts.webp";
+import cardExamsImg from "../../assets/landing/card-exams.webp";
+import resourcesImg from "../../assets/landing/resources.webp";
+import examsImg from "../../assets/landing/exams.webp";
+import testimonialImg from "../../assets/landing/testimonial.webp";
+import mobileImg from "../../assets/landing/mobile.webp";
 
 /**
  * Illustration slots for the landing page. Drop the artwork into
  * `src/assets/landing/` and import it here, e.g.
- *   import hero from "../../assets/landing/hero.png";
+ *   import hero from "../../assets/landing/hero.webp";
  *   const ART = { hero, ... };
  * Any slot left `undefined` renders a soft brand placeholder of the same shape.
  */
