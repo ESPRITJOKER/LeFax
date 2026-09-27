@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
 import { Pill, Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
@@ -18,7 +18,11 @@ export default function AdminContent() {
   const { profile } = useAuth();
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<SubjectRow[]>([]);
-  const [activeSubjectId, setActiveSubjectId] = useState<string>("");
+  // The active subject lives in the URL so the Overview subject cards can deep
+  // link into one (`/admin/content?subject=<id>`), same as the teacher panel.
+  const [params, setParams] = useSearchParams();
+  const [firstSubjectId, setFirstSubjectId] = useState<string>("");
+  const activeSubjectId = params.get("subject") ?? firstSubjectId;
   const [chapters, setChapters] = useState<ChapterWithCounts[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -54,7 +58,7 @@ export default function AdminContent() {
     (async () => {
       const { data } = await supabase.from("subjects").select("*").eq("track", "medicine").order("position");
       setSubjects(data ?? []);
-      if (data && data.length > 0) setActiveSubjectId(data[0].id);
+      if (data && data.length > 0) setFirstSubjectId(data[0].id);
       setLoading(false);
     })();
   }, []);
@@ -198,7 +202,7 @@ export default function AdminContent() {
           <Spinner />
         ) : (
           subjects.map((s) => (
-            <Pill key={s.id} active={s.id === activeSubjectId} onClick={() => setActiveSubjectId(s.id)}>
+            <Pill key={s.id} active={s.id === activeSubjectId} onClick={() => setParams({ subject: s.id })}>
               <span className="flex items-center gap-1.5">
                 <Icon name={subjectIcon(s.slug)} size={12} style={{ color: subjectColors(s.slug).accent }} />
                 {lang === "fr" ? s.name_fr : s.name_en}
