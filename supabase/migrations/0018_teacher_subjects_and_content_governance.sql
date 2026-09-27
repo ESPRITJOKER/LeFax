@@ -100,22 +100,10 @@ as $fn$
   select c.subject_id from public.lessons l join public.chapters c on c.id = l.chapter_id where l.id = p_lesson;
 $fn$;
 
--- A lesson is teacher-editable only while it is a draft (or was sent back for
--- corrections) and not published. Admins are never blocked.
-create or replace function public.lesson_is_teacher_editable(p_lesson uuid)
-returns boolean
-language sql stable security definer
-set search_path = public
-as $fn$
-  select exists (
-    select 1 from public.lessons l
-    where l.id = p_lesson
-      and l.author_id = auth.uid()
-      and l.published = false
-      and l.review_status in ('draft', 'rejected')
-      and public.teaches_subject(public.subject_of_lesson(l.id))
-  );
-$fn$;
+-- NOTE: `lesson_is_teacher_editable` reads `lessons.review_status`, so it is
+-- defined in section 3 — after that column exists. A `language sql` body is
+-- parsed and validated at CREATE time, so defining it here would fail with
+-- "column l.review_status does not exist" on a fresh database.
 
 -- ---------------------------------------------------------------------------
 -- 3. Review workflow columns
@@ -144,6 +132,27 @@ end $mig$;
 update public.lessons set review_status = 'approved' where published = true and review_status = 'draft';
 
 create index if not exists idx_lessons_review_status on public.lessons (review_status);
+
+-- Now that `review_status` exists, the editability helper can be created. It is
+-- the single definition of "this teacher may still change this lesson", used by
+-- the lessons / quizzes / questions / choices / lesson_cards policies below and
+-- mirrored in the UI by `isTeacherEditable()` in src/lib/teacher.ts.
+-- A lesson is teacher-editable only while it is a draft (or was sent back for
+-- corrections) and not published. Admins are never blocked.
+create or replace function public.lesson_is_teacher_editable(p_lesson uuid)
+returns boolean
+language sql stable security definer
+set search_path = public
+as $fn$
+  select exists (
+    select 1 from public.lessons l
+    where l.id = p_lesson
+      and l.author_id = auth.uid()
+      and l.published = false
+      and l.review_status in ('draft', 'rejected')
+      and public.teaches_subject(public.subject_of_lesson(l.id))
+  );
+$fn$;
 
 -- Chapter authorship, so a teacher can manage the chapters they created
 -- without being able to touch the seeded curriculum tree.
