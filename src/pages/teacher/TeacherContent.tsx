@@ -1,133 +1,381 @@
-import { useEffect, useState } from "react";
-import { Button, Spinner, EmptyState, Select } from "../../components/ui";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { Pill, Spinner } from "../../components/ui";
+import { StateNotice } from "../../components/StateNotice";
+import { ReviewStatusPill } from "../../components/content/ReviewStatusPill";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
-import type { ChapterRow, LessonRow, QuizRow } from "../../lib/database.types";
+import { useMySubjects, submitLessonForReview, isTeacherEditable } from "../../lib/teacher";
+import type { ChapterRow, ReviewStatus } from "../../lib/database.types";
 
+type LessonLite = {
+  id: string;
+  title_fr: string;
+  title_en: string;
+  published: boolean;
+  position: number;
+  review_status: ReviewStatus;
+  review_feedback: string | null;
+  author_id: string | null;
+};
+
+/**
+ * "My content" — the authoring tree, scoped to one assigned subject at a time.
+ *
+ * Shape follows the admin content tree (chapters expand to lessons, reorder,
+ * add, delete) but every operation is bounded by the teacher's grant:
+ *   * the subject tabs come from the server's `my_subjects`;
+ *   * `chapters.created_by` decides which chapters they may rename or delete
+ *     (the seeded curriculum is read-only to them);
+ *   * only their own lessons are listed, and only drafts/returned ones can be
+ *     edited or deleted;
+ *   * "Submit for review" is the one status transition they can drive.
+ * RLS (0018) enforces all of that independently — this just avoids offering
+ * actions the database would refuse.
+ */
 export default function TeacherContent() {
   const { t, lang } = useI18n();
+  const navigate = useNavigate();
   const { profile } = useAuth();
+  const [params, setParams] = useSearchParams();
+  const { subjects, loading: subjectsLoading, error: subjectsError, reload: reloadSubjects } = useMySubjects();
 
+  const subjectId = params.get("subject") ?? subjects[0]?.id ?? "";
   const [chapters, setChapters] = useState<ChapterRow[]>([]);
-  const [lessons, setLessons] = useState<LessonRow[]>([]);
-  const [quizzesByLesson, setQuizzesByLesson] = useState<Record<string, QuizRow>>({});
-  const [loading, setLoading] = useState(true);
+  const [lessonsByChapter, setLessonsByChapter] = useState<Record<string, LessonLite[]>>({});
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [flash, setFlash] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
-  const [chapterId, setChapterId] = useState("");
-  const [titleFr, setTitleFr] = useState("");
-  const [titleEn, setTitleEn] = useState("");
-  const [contentFr, setContentFr] = useState("");
-  const [contentEn, setContentEn] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
+  const loadLessons = useCallback(
+    async (chapterId: string) => {
+      if (!profile) return [];
+      const { data } = await supabase
+        .from("lessons")
+        .select("id, title_fr, title_en, published, position, review_status, review_feedback, author_id")
+        .eq("chapter_id", chapterId)
+        .eq("author_id", profile.id)
+        .order("position");
+      const rows = (data ?? []) as LessonLite[];
+      setLessonsByChapter((prev) => ({ ...prev, [chapterId]: rows }));
+      return rows;
+    },
+    [profile]
+  );
 
-  async function load() {
-    if (!isSupabaseConfigured || !profile) {
-      setLoading(false);
-      return;
-    }
-    const { data: chapterRows } = await supabase.from("chapters").select("*").order("position");
-    setChapters(chapterRows ?? []);
-    if (chapterRows && chapterRows.length && !chapterId) setChapterId(chapterRows[0].id);
-
-    const { data: lessonRows } = await supabase.from("lessons").select("*").eq("author_id", profile.id).order("created_at", { ascending: false });
-    setLessons(lessonRows ?? []);
-
-    const lessonIds = (lessonRows ?? []).map((l) => l.id);
-    if (lessonIds.length) {
-      const { data: quizRows } = await supabase.from("quizzes").select("*").in("lesson_id", lessonIds);
-      setQuizzesByLesson(Object.fromEntries((quizRows ?? []).map((q) => [q.lesson_id as string, q])));
-    }
+  const loadChapters = useCallback(async () => {
+    if (!isSupabaseConfigured || !subjectId) return;
+    setLoading(true);
+    const { data } = await supabase.from("chapters").select("*").eq("subject_id", subjectId).order("position");
+    setChapters(data ?? []);
+    setLessonsByChapter({});
+    setExpandedId(null);
     setLoading(false);
-  }
+  }, [subjectId]);
 
   useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile]);
+    loadChapters();
+  }, [loadChapters]);
 
-  async function uploadLesson() {
-    if (!profile || !chapterId || !titleFr) return;
-    setMessage(null);
-    const slug = `lesson-${Date.now()}`;
-    const { error } = await supabase.from("lessons").insert({
-      chapter_id: chapterId,
-      author_id: profile.id,
-      slug,
-      title_fr: titleFr,
-      title_en: titleEn || titleFr,
-      content_fr: contentFr,
-      content_en: contentEn || contentFr,
-      published: false,
-    });
-    if (error) {
-      setMessage(t("common_error"));
+  if (subjectsLoading) return <Spinner />;
+  if (subjectsError || subjects.length === 0) {
+    return (
+      <StateNotice
+        error={subjectsError}
+        emptyLabel={t("td_noSubjectsHint")}
+        errorLabel={t("common_error")}
+        onRetry={reloadSubjects}
+      />
+    );
+  }
+
+  async function toggleChapter(c: ChapterRow) {
+    if (expandedId === c.id) {
+      setExpandedId(null);
       return;
     }
-    setTitleFr("");
-    setTitleEn("");
-    setContentFr("");
-    setContentEn("");
-    setMessage(lang === "fr" ? "Leçon déposée (non publiée)." : "Lesson uploaded (unpublished).");
-    await load();
+    setExpandedId(c.id);
+    if (!lessonsByChapter[c.id] && isSupabaseConfigured) await loadLessons(c.id);
   }
 
-  async function createQuiz(lesson: LessonRow) {
-    const { data } = await supabase
-      .from("quizzes")
-      .insert({ lesson_id: lesson.id, title_fr: `Test — ${lesson.title_fr}`, title_en: `Test — ${lesson.title_en}` })
-      .select()
-      .single();
-    if (data) setQuizzesByLesson((prev) => ({ ...prev, [lesson.id]: data }));
+  async function addChapter() {
+    if (!subjectId || !profile || busy) return;
+    setBusy(true);
+    setFlash(null);
+    const nextPos = chapters.length ? Math.max(...chapters.map((c) => c.position)) + 1 : 0;
+    const { data, error } = await supabase
+      .from("chapters")
+      .insert({
+        subject_id: subjectId,
+        slug: `chapter-${Date.now()}`,
+        name_fr: lang === "fr" ? "Nouveau chapitre" : "New chapter",
+        name_en: "New chapter",
+        position: nextPos,
+        created_by: profile.id, // required by chapters_insert_teacher (0018)
+      })
+      .select("*");
+    if (error || !data?.length) setFlash({ ok: false, msg: error?.message || t("admin_saveBlocked") });
+    else setChapters((prev) => [...prev, data[0]]);
+    setBusy(false);
   }
+
+  async function saveChapterName(c: ChapterRow) {
+    // Branch rather than compute the key: a dynamic key widens the update type
+    // and loses the column check.
+    const patch = lang === "fr" ? { name_fr: editValue } : { name_en: editValue };
+    const { data, error } = await supabase.from("chapters").update(patch).eq("id", c.id).select("id");
+    if (error || !data?.length) {
+      setFlash({ ok: false, msg: error?.message || t("admin_saveBlocked") });
+    } else {
+      setChapters((prev) => prev.map((x) => (x.id === c.id ? { ...x, ...patch } : x)));
+    }
+    setEditingId(null);
+  }
+
+  async function deleteChapter(c: ChapterRow) {
+    if (busy || !window.confirm(t("admin_confirmDeleteChapter"))) return;
+    setBusy(true);
+    const { error } = await supabase.from("chapters").delete().eq("id", c.id);
+    if (error) setFlash({ ok: false, msg: error.message });
+    else {
+      setChapters((prev) => prev.filter((x) => x.id !== c.id));
+      if (expandedId === c.id) setExpandedId(null);
+    }
+    setBusy(false);
+  }
+
+  async function addLesson(c: ChapterRow) {
+    if (busy || !profile) return;
+    setBusy(true);
+    setFlash(null);
+    const existing = lessonsByChapter[c.id] ?? (await loadLessons(c.id));
+    const nextPos = existing.length ? Math.max(...existing.map((l) => l.position)) + 1 : 0;
+    const { data, error } = await supabase
+      .from("lessons")
+      .insert({
+        chapter_id: c.id,
+        slug: `lesson-${Date.now()}`,
+        title_fr: t("admin_newLesson"),
+        title_en: "New lesson",
+        position: nextPos,
+        author_id: profile.id,
+        published: false, // the trigger enforces this too — teachers create drafts
+      })
+      .select("id");
+    setBusy(false);
+    if (error || !data?.length) {
+      setFlash({ ok: false, msg: error?.message || t("admin_saveBlocked") });
+      return;
+    }
+    navigate(`/teacher/content/lesson/${data[0].id}`);
+  }
+
+  async function deleteLesson(chapterId: string, lesson: LessonLite) {
+    if (busy || !window.confirm(t("admin_confirmDeleteLesson"))) return;
+    setBusy(true);
+    const { error } = await supabase.from("lessons").delete().eq("id", lesson.id);
+    if (error) setFlash({ ok: false, msg: error.message });
+    else setLessonsByChapter((prev) => ({ ...prev, [chapterId]: (prev[chapterId] ?? []).filter((l) => l.id !== lesson.id) }));
+    setBusy(false);
+  }
+
+  async function moveLesson(chapterId: string, lesson: LessonLite, dir: -1 | 1) {
+    if (busy) return;
+    const list = [...(lessonsByChapter[chapterId] ?? [])].sort((a, b) => a.position - b.position);
+    const idx = list.findIndex((l) => l.id === lesson.id);
+    const neighbor = list[idx + dir];
+    if (!neighbor) return;
+    setBusy(true);
+    await supabase.from("lessons").update({ position: neighbor.position }).eq("id", lesson.id);
+    await supabase.from("lessons").update({ position: lesson.position }).eq("id", neighbor.id);
+    setLessonsByChapter((prev) => ({
+      ...prev,
+      [chapterId]: (prev[chapterId] ?? [])
+        .map((l) => (l.id === lesson.id ? { ...l, position: neighbor.position } : l.id === neighbor.id ? { ...l, position: lesson.position } : l))
+        .sort((a, b) => a.position - b.position),
+    }));
+    setBusy(false);
+  }
+
+  async function submit(chapterId: string, lesson: LessonLite) {
+    if (busy || !window.confirm(t("tc_confirmSubmit"))) return;
+    setBusy(true);
+    setFlash(null);
+    const { error } = await submitLessonForReview(lesson.id);
+    if (error) {
+      setFlash({ ok: false, msg: error });
+    } else {
+      setFlash({ ok: true, msg: t("tc_submitted") });
+      await loadLessons(chapterId);
+    }
+    setBusy(false);
+  }
+
+  const sortedChapters = [...chapters].sort((a, b) => a.position - b.position);
 
   return (
-    <div>
-      <div className="bg-white border border-border rounded-2xl p-5 mb-5">
-        <div className="text-[13.5px] font-bold text-ink-900 mb-3.5">{t("teacher_uploadContent")}</div>
-        <div className="flex flex-col gap-3">
-          <Select value={chapterId} onChange={(e) => setChapterId(e.target.value)} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] bg-white w-full" wrapperClassName="w-full">
-            {chapters.map((c) => (
-              <option key={c.id} value={c.id}>
-                {lang === "fr" ? c.name_fr : c.name_en}
-              </option>
-            ))}
-          </Select>
-          <input value={titleFr} onChange={(e) => setTitleFr(e.target.value)} placeholder={lang === "fr" ? "Titre (FR)" : "Title (FR)"} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
-          <input value={titleEn} onChange={(e) => setTitleEn(e.target.value)} placeholder="Title (EN)" className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px]" />
-          <textarea value={contentFr} onChange={(e) => setContentFr(e.target.value)} placeholder={lang === "fr" ? "Contenu (FR)" : "Content (FR)"} className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] min-h-[80px]" />
-          <textarea value={contentEn} onChange={(e) => setContentEn(e.target.value)} placeholder="Content (EN)" className="px-3 py-2.5 rounded-lg border-[1.5px] border-border text-[13px] min-h-[80px]" />
-        </div>
-        <Button onClick={uploadLesson} className="mt-3.5">
-          {t("teacher_uploadContent")}
-        </Button>
-        {message && <div className="mt-2.5 text-xs font-semibold text-ink-800">{message}</div>}
+    <div className="max-w-[980px]">
+      {/* Subject tabs — only the teacher's assigned subjects exist here. */}
+      <div className="flex gap-2 mb-4 flex-wrap items-center">
+        {subjects.map((s) => (
+          <Pill key={s.id} active={s.id === subjectId} onClick={() => setParams({ subject: s.id })}>
+            <span className="flex items-center gap-1.5">
+              <Icon name={subjectIcon(s.slug)} size={12} style={{ color: subjectColors(s.slug).accent }} />
+              {lang === "fr" ? s.name_fr : s.name_en}
+            </span>
+          </Pill>
+        ))}
+        <div className="flex-1" />
+        <button onClick={addChapter} disabled={busy} className="border-none px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-600 text-white flex items-center gap-1.5 disabled:opacity-60">
+          <Icon name="plus" size={14} />
+          {t("admin_addChapter")}
+        </button>
       </div>
 
-      <div className="text-[13.5px] font-bold text-ink-900 mb-3">{t("teacher_myContent")}</div>
-      <div className="flex flex-col gap-2.5">
-        {loading ? (
-          <Spinner />
-        ) : lessons.length === 0 ? (
-          <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
-        ) : (
-          lessons.map((l) => (
-            <div key={l.id} className="bg-white border border-border rounded-2xl px-4.5 px-[18px] py-3.5 flex items-center gap-3.5">
-              <div className="flex-1">
-                <div className="text-[13px] font-bold text-ink-900">{lang === "fr" ? l.title_fr : l.title_en}</div>
-                <div className="text-[11.5px] text-muted">{l.published ? (lang === "fr" ? "Publié" : "Published") : lang === "fr" ? "Brouillon" : "Draft"}</div>
+      <div className="text-[11.5px] text-muted mb-3">{t("tc_onlyOwnDrafts")}</div>
+
+      {flash && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`mb-4 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-600/10 text-success-600" : "bg-danger-600/10 text-danger-600"}`}
+        >
+          {flash.msg}
+        </div>
+      )}
+
+      {loading ? (
+        <Spinner />
+      ) : sortedChapters.length === 0 ? (
+        <StateNotice emptyLabel={t("tc_noChapters")} errorLabel={t("common_error")} />
+      ) : (
+        <div className="flex flex-col gap-2.5">
+          {sortedChapters.map((c) => {
+            const mine = c.created_by === profile?.id;
+            const lessons = [...(lessonsByChapter[c.id] ?? [])].sort((a, b) => a.position - b.position);
+            return (
+              <div key={c.id} className="bg-card border border-border rounded-2xl overflow-hidden">
+                <div className="px-[18px] py-4 flex items-center gap-3.5 flex-wrap">
+                  <div className="w-9 h-9 rounded-[10px] bg-ink-100 flex items-center justify-center flex-none">
+                    <Icon name="book" size={17} className="text-ink-700" />
+                  </div>
+                  {editingId === c.id ? (
+                    <>
+                      <input value={editValue} onChange={(e) => setEditValue(e.target.value)} className="flex-1 min-w-[160px] px-2.5 py-2 rounded-lg border-[1.5px] border-ink-300 text-[13px]" />
+                      <button onClick={() => saveChapterName(c)} className="border-none bg-success-600 text-white px-3.5 py-1.5 rounded-lg text-[11.5px] font-bold">
+                        {t("admin_save")}
+                      </button>
+                      <button onClick={() => setEditingId(null)} className="border border-border bg-white px-3.5 py-1.5 rounded-lg text-[11.5px] font-bold text-ink-900">
+                        {t("admin_cancel")}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => toggleChapter(c)} className="flex-1 min-w-0 flex items-center gap-2 bg-transparent border-none text-left p-0 cursor-pointer">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-bold text-ink-900 truncate">{lang === "fr" ? c.name_fr : c.name_en}</div>
+                          <div className="text-xs text-muted">
+                            {lessons.length || 0} {t("admin_lessons").toLowerCase()}
+                          </div>
+                        </div>
+                        <Icon name={expandedId === c.id ? "collapse" : "chevright"} size={15} className="text-muted flex-none" />
+                      </button>
+                      {/* Only chapters this teacher created are theirs to rename or remove. */}
+                      {mine && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setEditingId(c.id);
+                              setEditValue(lang === "fr" ? c.name_fr : c.name_en);
+                            }}
+                            className="border border-border bg-white px-3.5 py-1.5 rounded-lg text-[11.5px] font-bold text-ink-900 flex-none"
+                          >
+                            {t("admin_edit")}
+                          </button>
+                          <button onClick={() => deleteChapter(c)} disabled={busy} title={t("admin_deleteChapter")} className="p-1.5 rounded-lg border border-border text-danger-600 disabled:opacity-40 flex-none">
+                            <Icon name="close" size={14} />
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                {expandedId === c.id && editingId !== c.id && (
+                  <div className="border-t border-border bg-ink-50 px-[18px] py-1.5">
+                    {lessons.length === 0 ? (
+                      <div className="text-xs text-muted py-2.5">{t("admin_noLessons")}</div>
+                    ) : (
+                      lessons.map((l, li, arr) => {
+                        const editable = isTeacherEditable(l);
+                        return (
+                          <div key={l.id} className="py-2.5 border-b border-border/60 last:border-0">
+                            <div className="flex items-center gap-2.5 flex-wrap">
+                              <Icon name="book" size={14} className="text-muted flex-none" />
+                              <button
+                                onClick={() => navigate(`/teacher/content/lesson/${l.id}`)}
+                                className="flex-1 min-w-[140px] text-left bg-transparent border-none p-0 cursor-pointer text-[13px] text-ink-900 truncate"
+                              >
+                                {lang === "fr" ? l.title_fr : l.title_en || l.title_fr}
+                              </button>
+                              <ReviewStatusPill status={l.review_status} published={l.published} size="sm" />
+                              <button onClick={() => moveLesson(c.id, l, -1)} disabled={busy || li === 0} title={t("admin_moveUp")} className="p-1 rounded-md border border-border text-ink-700 disabled:opacity-40 flex-none">
+                                <Icon name="chevleft" size={12} className="rotate-90" />
+                              </button>
+                              <button onClick={() => moveLesson(c.id, l, 1)} disabled={busy || li === arr.length - 1} title={t("admin_moveDown")} className="p-1 rounded-md border border-border text-ink-700 disabled:opacity-40 flex-none">
+                                <Icon name="chevleft" size={12} className="-rotate-90" />
+                              </button>
+                              <button onClick={() => navigate(`/teacher/content/lesson/${l.id}`)} className="text-[11px] font-bold text-brand-600 flex items-center gap-0.5 flex-none bg-transparent border-none cursor-pointer">
+                                {editable ? t("admin_editLesson") : t("te_preview")}
+                                <Icon name="chevright" size={12} />
+                              </button>
+                              {editable && (
+                                <>
+                                  <button
+                                    onClick={() => submit(c.id, l)}
+                                    disabled={busy}
+                                    className="text-[11px] font-bold px-2.5 py-1.5 rounded-lg border-none bg-brand-600 text-white flex-none disabled:opacity-60"
+                                  >
+                                    {busy ? t("tc_submitting") : t("tc_submitForReview")}
+                                  </button>
+                                  <button onClick={() => deleteLesson(c.id, l)} disabled={busy} title={t("admin_deleteLesson")} className="p-1 rounded-md border border-border text-danger-600 disabled:opacity-40 flex-none">
+                                    <Icon name="close" size={12} />
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                            {l.review_status === "rejected" && l.review_feedback && (
+                              <div className="mt-1.5 ml-6 rounded-lg bg-white border border-danger-600/30 px-2.5 py-2 text-[11.5px] text-ink-800">
+                                <span className="font-bold text-danger-600">{t("tc_feedback")}: </span>
+                                {l.review_feedback}
+                              </div>
+                            )}
+                            {(l.review_status === "submitted" || l.review_status === "under_review") && (
+                              <div className="mt-1.5 ml-6 text-[11px] text-muted">{t("tc_lockedSubmitted")}</div>
+                            )}
+                            {l.review_status === "approved" && <div className="mt-1.5 ml-6 text-[11px] text-muted">{t("tc_lockedApproved")}</div>}
+                          </div>
+                        );
+                      })
+                    )}
+                    <div className="py-2.5">
+                      <button onClick={() => addLesson(c)} disabled={busy} className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-white disabled:opacity-60">
+                        <Icon name="plus" size={14} />
+                        {t("admin_addLesson")}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-              {quizzesByLesson[l.id] ? (
-                <span className="text-[11px] font-bold text-success-600">{lang === "fr" ? "Quiz créé" : "Quiz created"}</span>
-              ) : (
-                <button onClick={() => createQuiz(l)} className="text-[11px] font-bold px-3 py-1.5 rounded-lg border border-border">
-                  {t("teacher_createQuiz")}
-                </button>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

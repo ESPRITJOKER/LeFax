@@ -3,6 +3,9 @@ import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { supabase } from "../../lib/supabaseClient";
 import type { DifficultyLevel, QuestionRow, ChoiceRow } from "../../lib/database.types";
+import { FormulaTool, insertSnippet, applyInsert } from "../FormulaTool";
+import { hasNotation } from "../../lib/math";
+import { inline } from "../../lib/lessonContent";
 
 // A choice being edited: existing rows carry their db id; freshly added ones
 // don't (undefined id) until first save, when they're inserted.
@@ -331,6 +334,11 @@ export function LessonQuizPanel({ lessonId }: { lessonId: string }) {
                       <input value={c.text_fr} onChange={(e) => patchChoice(q.id, ci, { text_fr: e.target.value })} placeholder={t("admin_choiceFr")} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px]" />
                       <input value={c.text_en} onChange={(e) => patchChoice(q.id, ci, { text_en: e.target.value })} placeholder={t("admin_choiceEn")} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px]" />
                     </div>
+                    {/* Options carry formulas too ("$x^2$", "\ce{SO4^2-}") — show
+                        the author what the student will actually see. */}
+                    {(hasNotation(c.text_fr) || hasNotation(c.text_en)) && (
+                      <div className="mt-1.5 text-[12px] text-text">{inline(lang === "fr" ? c.text_fr : c.text_en)}</div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -358,15 +366,65 @@ export function LessonQuizPanel({ lessonId }: { lessonId: string }) {
   );
 }
 
+/**
+ * A bilingual text field for question prompts / explanations. Textareas get the
+ * maths + chemistry insert tools and a typeset preview, so a physics or
+ * chemistry question can be written the way it must be read (see lib/math).
+ */
 function Field({ label, value, onChange, area }: { label: string; value: string; onChange: (v: string) => void; area?: boolean }) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-[11px] font-bold text-muted">{label}</span>
-      {area ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={3} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[72px]" />
-      ) : (
+  const { t } = useI18n();
+  const ref = useRef<HTMLTextAreaElement>(null);
+  const [tool, setTool] = useState<null | "math" | "chem">(null);
+
+  function insert(snippet: string) {
+    applyInsert(ref.current, insertSnippet(ref.current, value, snippet), onChange);
+  }
+
+  if (!area) {
+    return (
+      <label className="flex flex-col gap-1.5">
+        <span className="text-[11px] font-bold text-muted">{label}</span>
         <input value={value} onChange={(e) => onChange(e.target.value)} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px]" />
+      </label>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[11px] font-bold text-muted">{label}</span>
+        <span className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setTool(tool === "math" ? null : "math")}
+            title={t("te_insertMath")}
+            aria-label={t("te_insertMath")}
+            className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${tool === "math" ? "border-brand-600 text-brand-600 bg-brand-600/10" : "border-border text-ink-700 bg-white"}`}
+          >
+            ∑
+          </button>
+          <button
+            type="button"
+            onClick={() => setTool(tool === "chem" ? null : "chem")}
+            title={t("te_insertChem")}
+            aria-label={t("te_insertChem")}
+            className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${tool === "chem" ? "border-brand-600 text-brand-600 bg-brand-600/10" : "border-border text-ink-700 bg-white"}`}
+          >
+            H₂O
+          </button>
+        </span>
+      </div>
+      <textarea
+        ref={ref}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={3}
+        className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[72px]"
+      />
+      {tool && <FormulaTool mode={tool} onInsert={insert} onClose={() => setTool(null)} />}
+      {hasNotation(value) && (
+        <div className="rounded-lg bg-ink-50 border border-ink-100 px-2.5 py-2 text-[12.5px] leading-relaxed text-text">{inline(value)}</div>
       )}
-    </label>
+    </div>
   );
 }

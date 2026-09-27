@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon, type IconName } from "../../lib/icons";
-import { useI18n } from "../../lib/i18n";
+import { useI18n, type DictKey } from "../../lib/i18n";
 import { LangSwitcher } from "../../components/LangSwitcher";
 import { BackendBanner } from "../../components/BackendBanner";
 import { useAuth } from "../../lib/auth";
 
-const NAV: { to: string; icon: IconName; labelKey: "admin_overview" | "admin_students" | "admin_content" | "admin_ai" | "admin_mocks" | "admin_admins" | "admin_logs" | "admin_settings" }[] = [
+const NAV: { to: string; icon: IconName; labelKey: DictKey }[] = [
   { to: "overview", icon: "chart", labelKey: "admin_overview" },
   { to: "students", icon: "users", labelKey: "admin_students" },
   { to: "content", icon: "book", labelKey: "admin_content" },
   { to: "ai-review", icon: "wand", labelKey: "admin_ai" },
   { to: "mock-exams", icon: "calendar", labelKey: "admin_mocks" },
+  { to: "teachers", icon: "quill", labelKey: "at_title" },
   { to: "admins", icon: "shield", labelKey: "admin_admins" },
   { to: "logs", icon: "clipboard", labelKey: "admin_logs" },
   { to: "settings", icon: "gear", labelKey: "admin_settings" },

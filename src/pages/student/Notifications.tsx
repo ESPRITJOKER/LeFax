@@ -14,6 +14,12 @@ const TYPE_STYLE: Record<NotificationRow["type"], { emoji: string; bg: string }>
   reward: { emoji: "🎁", bg: "#f3e8ff" },
   ranking_update: { emoji: "🏆", bg: "#fff4e0" },
   system: { emoji: "✅", bg: "#dcf5e3" },
+  // Content-workflow types (0018). Students never receive these — they go to the
+  // authoring staff — but the map is keyed by the full union, so they're here.
+  content_submitted: { emoji: "📤", bg: "#e8f4ff" },
+  content_approved: { emoji: "✅", bg: "#dcf5e3" },
+  content_rejected: { emoji: "✏️", bg: "#fff4e0" },
+  subject_assigned: { emoji: "🎓", bg: "#f3e8ff" },
 };
 
 function relativeTime(iso: string, lang: "fr" | "en"): string {

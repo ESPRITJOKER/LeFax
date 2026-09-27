@@ -4,6 +4,7 @@ import { Spinner, EmptyState } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ContentApprovalRow } from "../../lib/database.types";
+import { LessonReviewQueue } from "./LessonReviewQueue";
 
 type Difficulty = "easy" | "medium" | "hard";
 
@@ -30,7 +31,7 @@ export default function AdminAiReview() {
       setLoading(false);
       return;
     }
-    const { data } = await supabase.from("content_approval").select("*").eq("status", "pending").order("created_at");
+    const { data } = await supabase.from("content_approval").select("*").eq("status", "pending").eq("kind", "mcq").order("created_at");
     setQueue(data ?? []);
     setLoading(false);
   }
@@ -90,6 +91,11 @@ export default function AdminAiReview() {
 
   return (
     <div>
+      {/* Lessons teachers submitted for review sit above the AI question queue:
+          both are "things teachers sent us", and the submission path was
+          otherwise a dead end with nowhere to act on it. */}
+      <LessonReviewQueue />
+
       <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4.5 px-[18px] py-4 mb-4.5 mb-[18px] flex items-center gap-3">
         <Icon name="wand" size={22} className="text-ink-700" />
         <div className="text-xs text-ink-800 leading-relaxed">{t("admin_aiExplain")}</div>

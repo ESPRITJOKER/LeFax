@@ -34,12 +34,18 @@ import AdminLessonEditor from "./pages/admin/LessonEditor";
 import AdminAiReview from "./pages/admin/AiReview";
 import AdminMockExams from "./pages/admin/MockExams";
 import AdminAdmins from "./pages/admin/Admins";
+import AdminTeachers from "./pages/admin/Teachers";
 import AdminLogs from "./pages/admin/Logs";
 import AdminSettings from "./pages/admin/Settings";
 
 import TeacherLayout from "./pages/teacher/TeacherLayout";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherContent from "./pages/teacher/TeacherContent";
+import TeacherSubjects from "./pages/teacher/TeacherSubjects";
+import TeacherLessonEditor from "./pages/teacher/TeacherLessonEditor";
+import TeacherQuestionBank from "./pages/teacher/TeacherQuestionBank";
+import TeacherNotifications from "./pages/teacher/TeacherNotifications";
+import TeacherAccount from "./pages/teacher/TeacherAccount";
 import TeacherAiAssist from "./pages/teacher/TeacherAiAssist";
 import TeacherPerformance from "./pages/teacher/TeacherPerformance";
 
@@ -231,6 +237,7 @@ export default function App() {
           <Route path="content/lesson/:lessonId" element={<AdminLessonEditor />} />
           <Route path="ai-review" element={<AdminAiReview />} />
           <Route path="mock-exams" element={<AdminMockExams />} />
+          <Route path="teachers" element={<AdminTeachers />} />
           <Route path="admins" element={<AdminAdmins />} />
           <Route path="logs" element={<AdminLogs />} />
           <Route path="settings" element={<AdminSettings />} />
@@ -247,9 +254,14 @@ export default function App() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<TeacherDashboard />} />
+          <Route path="subjects" element={<TeacherSubjects />} />
           <Route path="content" element={<TeacherContent />} />
+          <Route path="content/lesson/:lessonId" element={<TeacherLessonEditor />} />
           <Route path="ai-assist" element={<TeacherAiAssist />} />
+          <Route path="question-bank" element={<TeacherQuestionBank />} />
           <Route path="performance" element={<TeacherPerformance />} />
+          <Route path="notifications" element={<TeacherNotifications />} />
+          <Route path="account" element={<TeacherAccount />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

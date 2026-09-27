@@ -184,3 +184,36 @@ Add a new lesson block to `scripts/quiz_bank_admin_content.json` (key by lesson 
 - add `src/pages/admin/LessonQuizPanel.tsx`
 - edit `src/pages/admin/LessonEditor.tsx` (render quiz panel), `src/lib/i18n.tsx` (quiz i18n keys)
 - add `docs/SESSION_HISTORY.md` (this file)
+
+---
+
+## 2026-09-27 — Teacher dashboard: subject-based access control + content governance
+
+Full audit and rebuild of the teacher panel. Details in `docs/TEACHER_DASHBOARD.md`.
+
+**Security (migration `0018_teacher_subjects_and_content_governance.sql` — NOT YET APPLIED):**
+- new `teacher_subjects` grant table (super_admin only) + `teaches_subject()` /
+  `lesson_is_teacher_editable()` helpers; teachers are scoped to assigned subjects.
+- replaced the `lessons` / `quizzes` / `questions` / `choices` / `lesson_cards`
+  `FOR ALL` policies (a teacher could `update lessons set published = true` and could
+  write question banks directly, bypassing approval) with per-command policies plus
+  `guard_lesson_teacher_fields` / `guard_content_approval_fields` triggers.
+- `lessons.review_status` workflow (draft/submitted/under_review/approved/rejected)
+  alongside the admin-only `published` flag; `chapters.created_by`; `content_approval.kind`.
+- created the missing private `lesson-sources` bucket; scoped `lesson-media` writes to
+  the lesson's owner; drafts no longer world-readable; assignment changes audited.
+
+**Backend:** `teacher` fn gained `my_subjects` / `dashboard_summary` / `submit_lesson`;
+`admin` fn gained `list_teachers` / `assign_subject` / `revoke_subject` / `set_role` /
+`review_lesson` (the only path that sets `published`); `ai-content` gained subject
+gating, source-text extraction, topic/level/objectives/type params and payload validation.
+
+**Frontend:** teacher panel now Dashboard / Subjects / Content / AI / Question bank /
+Performance / Notifications / Account, with sign-out. Lesson editor extracted to
+`components/content/LessonEditorCore.tsx` and shared with the admin panel. KaTeX +
+mhchem notation (`$…$`, `$$…$$`, `\ce{…}`) everywhere content renders, with an insert
+palette and live preview. `[[IMG: caption | w=60 | align=right]]` layout options.
+New super-admin page `/admin/teachers`; lesson review queue on `/admin/ai-review`.
+
+**Verified:** `npm run build` (tsc + vite) green, `npx eslint .` 0 errors.
+**Not verified:** the SQL has never been executed — no Postgres available here.

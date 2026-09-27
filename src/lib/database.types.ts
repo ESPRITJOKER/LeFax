@@ -10,6 +10,10 @@ export type AccountStatus = "active" | "suspended";
 export type DifficultyLevel = "easy" | "medium" | "hard";
 export type LessonProgressStatus = "locked" | "current" | "done";
 export type ApprovalStatus = "pending" | "approved" | "modified" | "rejected";
+/** Lesson review workflow (0018). `published` stays the separate, admin-only student-visibility switch. */
+export type ReviewStatus = "draft" | "submitted" | "under_review" | "approved" | "rejected";
+export type AssignmentStatus = "active" | "revoked";
+export type ApprovalKind = "mcq" | "lesson";
 export type MockExamStatus = "scheduled" | "open" | "closed";
 export type RankingScope = "regional" | "national" | "weekly";
 
@@ -54,7 +58,21 @@ export type ChapterRow = {
   name_fr: string;
   name_en: string;
   position: number;
+  /** Set for chapters created from the teacher panel (0018); null for seeded curriculum. */
+  created_by: string | null;
   created_at: string;
+}
+
+/** A super_admin's grant of one subject to one teacher (0018). */
+export type TeacherSubjectRow = {
+  id: string;
+  teacher_id: string;
+  subject_id: string;
+  assigned_by: string | null;
+  status: AssignmentStatus;
+  created_at: string;
+  updated_at: string;
+  revoked_at: string | null;
 }
 
 export type LessonRow = {
@@ -76,7 +94,13 @@ export type LessonRow = {
   difficulty: DifficultyLevel;
   position: number;
   is_premium: boolean;
+  /** Student visibility. Admin-only: teachers are blocked by RLS + trigger (0018). */
   published: boolean;
+  review_status: ReviewStatus;
+  review_feedback: string | null;
+  submitted_at: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -296,7 +320,16 @@ export type DailyTaskCompletionRow = {
 export type NotificationRow = {
   id: string;
   user_id: string;
-  type: "daily_reminder" | "mock_reminder" | "reward" | "ranking_update" | "system";
+  type:
+    | "daily_reminder"
+    | "mock_reminder"
+    | "reward"
+    | "ranking_update"
+    | "system"
+    | "content_submitted"
+    | "content_approved"
+    | "content_rejected"
+    | "subject_assigned";
   title_fr: string;
   title_en: string;
   body_fr: string;
@@ -322,6 +355,9 @@ export type ContentApprovalRow = {
   lesson_id: string | null;
   generated_payload: Record<string, unknown>;
   status: ApprovalStatus;
+  kind: ApprovalKind;
+  subject_id: string | null;
+  feedback: string | null;
   reviewed_by: string | null;
   reviewed_at: string | null;
   created_at: string;
@@ -351,6 +387,7 @@ export interface Database {
     Tables: {
       profiles: TableDef<ProfileRow>;
       subjects: TableDef<SubjectRow>;
+      teacher_subjects: TableDef<TeacherSubjectRow>;
       chapters: TableDef<ChapterRow>;
       lessons: TableDef<LessonRow>;
       lesson_cards: TableDef<LessonCardRow>;

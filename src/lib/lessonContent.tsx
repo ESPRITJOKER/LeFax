@@ -1,6 +1,7 @@
 import { Fragment, useState, type ReactNode } from "react";
 import { Icon } from "./icons";
 import { useI18n } from "./i18n";
+import { Math, splitNotation } from "./math";
 
 /**
  * Lightweight, dependency-free renderer for lesson bodies (lessons.content_fr /
@@ -31,13 +32,26 @@ import { useI18n } from "./i18n";
  *   *italic* / _italic_   → <em>
  *   ==highlight==         → <mark>  (yellow marker — "mettre en valeur", Correction N4)
  *   __underline__         → <u>
+ *   $x^2$ / \ce{H2O}      → typeset maths / chemistry (see ./math)
  * Colour is inherited from the surrounding text, so this renders correctly on
  * both the light document viewer and the dark story cards. The italic forms
  * require a non-space right after the opening mark so a lone `*` (e.g. "2 * 3")
  * is left untouched. `__underline__` is matched before single-`_` italic so a
  * double underscore is never mistaken for two italic runs.
+ *
+ * Notation is carved out FIRST and never passed through the markup pass: TeX is
+ * full of `_` and `^`, so `$x_1$` would otherwise be eaten by the italic rule.
  */
 export function inline(text: string): ReactNode {
+  const segments = splitNotation(text ?? "");
+  if (segments.length === 1 && segments[0].kind === "text") return markup(segments[0].value);
+  return segments.map((seg, i) =>
+    seg.kind === "math" ? <Math key={i} tex={seg.tex} display={seg.display} /> : <Fragment key={i}>{markup(seg.value)}</Fragment>
+  );
+}
+
+/** The markup half of `inline()` — bold/italic/highlight/underline only. */
+function markup(text: string): ReactNode {
   const re = /\*\*([^*]+?)\*\*|\*([^\s*][^*]*?)\*|==([^=]+?)==|__([^_]+?)__|_([^\s_][^_]*?)_/g;
   const nodes: ReactNode[] = [];
   let last = 0;
@@ -104,7 +118,8 @@ export function RichCardText({ text, image }: { text: string; image?: ReactNode 
     if (line === "") continue;
 
     let mm: RegExpMatchArray | null;
-    if ((mm = line.match(/^##\s+(.*)$/))) out.push(<div key={key++} className="font-serif font-bold text-[1.22em] leading-snug mt-2 mb-1 first:mt-0">{inline(mm[1])}</div>);
+    if ((mm = line.match(/^\$\$([\s\S]+)\$\$$/))) out.push(<Math key={key++} tex={mm[1].trim()} display />);
+    else if ((mm = line.match(/^##\s+(.*)$/))) out.push(<div key={key++} className="font-serif font-bold text-[1.22em] leading-snug mt-2 mb-1 first:mt-0">{inline(mm[1])}</div>);
     else if ((mm = line.match(/^###\s+(.*)$/))) out.push(<div key={key++} className="font-bold text-[1.08em] leading-snug mt-1.5 mb-0.5">{inline(mm[1])}</div>);
     else if (/^\[\[IMG(?::[^\]]*)?\]\]$/i.test(line)) {
       if (image) out.push(<div key={key++} className="my-2">{image}</div>);
@@ -119,11 +134,55 @@ export function hasInlineImageToken(...texts: (string | null | undefined)[]): bo
   return texts.some((s) => s != null && /\[\[IMG(?::[^\]]*)?\]\]/i.test(s));
 }
 
-function ImageBlock({ caption, url }: { caption: string; url?: string }) {
+/**
+ * Optional layout hints on an image placeholder, after the caption:
+ *   [[IMG: caption]]                        → full width, centred (the default,
+ *                                             and what all existing content uses)
+ *   [[IMG: caption | w=60]]                 → 60% of the column width
+ *   [[IMG: caption | align=right]]          → floated right on wide screens
+ *   [[IMG: caption | w=40 | align=left]]    → both
+ * Unknown options are ignored, so a typo degrades to the default rather than
+ * breaking the lesson.
+ */
+export interface ImageOptions {
+  widthPct?: number;
+  align?: "left" | "center" | "right";
+}
+
+export function parseImageSpec(raw: string): { caption: string; options: ImageOptions } {
+  const parts = raw.split("|");
+  const caption = (parts.shift() ?? "").trim();
+  const options: ImageOptions = {};
+  for (const part of parts) {
+    const [rawKey, rawValue] = part.split("=");
+    const key = rawKey?.trim().toLowerCase();
+    const value = rawValue?.trim().toLowerCase();
+    if ((key === "w" || key === "width") && value) {
+      const pct = Number.parseInt(value.replace("%", ""), 10);
+      if (Number.isFinite(pct) && pct >= 10 && pct <= 100) options.widthPct = pct;
+    } else if (key === "align" && (value === "left" || value === "right" || value === "center")) {
+      options.align = value;
+    }
+  }
+  return { caption, options };
+}
+
+function ImageBlock({ caption, url, options }: { caption: string; url?: string; options?: ImageOptions }) {
   const { t } = useI18n();
+  // Alignment is margin-based rather than a CSS float: a floated figure inside
+  // the narrow mobile reading column produces text slivers beside the image.
+  const width = options?.widthPct ? `${options.widthPct}%` : "100%";
+  const align = options?.align ?? "center";
+  const style = {
+    width,
+    maxWidth: "100%",
+    marginLeft: align === "right" ? "auto" : align === "center" ? "auto" : undefined,
+    marginRight: align === "left" ? "auto" : align === "center" ? "auto" : undefined,
+  };
+
   if (url) {
     return (
-      <figure className="my-4">
+      <figure className="my-4" style={style}>
         <img src={url} alt={caption} className="w-full rounded-2xl border border-border object-contain bg-ink-50" />
         <figcaption className="mt-1.5 text-[11px] text-muted text-center leading-snug">{caption}</figcaption>
       </figure>
@@ -198,15 +257,20 @@ function AppBox({ consigne, correction }: { consigne: string; correction: string
 type Block =
   | { type: "h2" | "h3" | "p"; text: string }
   | { type: "ul"; items: string[] }
-  | { type: "img"; caption: string; slot: number }
+  | { type: "img"; caption: string; slot: number; options: ImageOptions }
   | { type: "callout"; kind: "piege" | "info"; text: string }
-  | { type: "app"; consigne: string; correction: string };
+  | { type: "app"; consigne: string; correction: string }
+  | { type: "math"; tex: string };
 
 function parse(raw: string): Block[] {
   const lines = raw.replace(/\r\n/g, "\n").split("\n");
   const blocks: Block[] = [];
   let list: string[] | null = null;
   let imgSlot = 0;
+  // Collecting the body of a `$$` … `$$` display-equation fence. Inside it,
+  // blank lines and markup characters are TeX, not markup, so the fence is
+  // checked before every other rule.
+  let fence: string[] | null = null;
   const flush = () => {
     if (list && list.length) blocks.push({ type: "ul", items: list });
     list = null;
@@ -214,6 +278,28 @@ function parse(raw: string): Block[] {
 
   for (const rawLine of lines) {
     const line = rawLine.trim();
+
+    if (fence) {
+      if (line === "$$") {
+        blocks.push({ type: "math", tex: fence.join("\n").trim() });
+        fence = null;
+      } else {
+        fence.push(rawLine);
+      }
+      continue;
+    }
+    if (line === "$$") {
+      flush();
+      fence = [];
+      continue;
+    }
+    const oneLineMath = line.match(/^\$\$([\s\S]+)\$\$$/);
+    if (oneLineMath) {
+      flush();
+      blocks.push({ type: "math", tex: oneLineMath[1].trim() });
+      continue;
+    }
+
     const bullet = line.match(/^-\s+(.*)$/);
     if (bullet) {
       (list ??= []).push(bullet[1]);
@@ -225,7 +311,10 @@ function parse(raw: string): Block[] {
     let m: RegExpMatchArray | null;
     if ((m = line.match(/^##\s+(.*)$/))) blocks.push({ type: "h2", text: m[1] });
     else if ((m = line.match(/^###\s+(.*)$/))) blocks.push({ type: "h3", text: m[1] });
-    else if ((m = line.match(/^\[\[IMG:\s*(.*?)\]\]$/i))) blocks.push({ type: "img", caption: m[1], slot: ++imgSlot });
+    else if ((m = line.match(/^\[\[IMG:\s*(.*?)\]\]$/i))) {
+      const spec = parseImageSpec(m[1]);
+      blocks.push({ type: "img", caption: spec.caption, slot: ++imgSlot, options: spec.options });
+    }
     else if ((m = line.match(/^\[!PIEGE\]\s*(.*)$/i))) blocks.push({ type: "callout", kind: "piege", text: m[1] });
     else if ((m = line.match(/^\[!INFO\]\s*(.*)$/i))) blocks.push({ type: "callout", kind: "info", text: m[1] });
     else if ((m = line.match(/^\[!APP\]\s*(.*)$/i))) {
@@ -233,6 +322,9 @@ function parse(raw: string): Block[] {
       blocks.push({ type: "app", consigne: consigne.trim(), correction: correction.trim() });
     } else blocks.push({ type: "p", text: line });
   }
+  // An unterminated fence is still an equation the author meant to write —
+  // render it rather than swallowing the text.
+  if (fence && fence.length) blocks.push({ type: "math", tex: fence.join("\n").trim() });
   flush();
   return blocks;
 }
@@ -282,8 +374,10 @@ export function LessonContent({ text, images }: { text: string; images?: Record<
                 ))}
               </ul>
             );
+          case "math":
+            return <Math key={i} tex={b.tex} display />;
           case "img":
-            return <ImageBlock key={i} caption={b.caption} url={images?.[b.slot]} />;
+            return <ImageBlock key={i} caption={b.caption} url={images?.[b.slot]} options={b.options} />;
           case "callout":
             return <Callout key={i} kind={b.kind} text={b.text} />;
           case "app":
