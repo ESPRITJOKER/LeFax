@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Spinner, EmptyState, Select } from "../../components/ui";
+import { Spinner, Select } from "../../components/ui";
+import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import { REGIONS } from "../../lib/regions";
@@ -94,7 +95,13 @@ export default function AdminStudents() {
         {loading ? (
           <Spinner />
         ) : filtered.length === 0 ? (
-          <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
+          // An empty list is not a failure. Distinguish "nobody has registered"
+          // from "the search excluded everyone", which used to share the
+          // "Une erreur est survenue" message.
+          <StateNotice
+            errorLabel={t("common_error")}
+            emptyLabel={students.length === 0 ? t("admin_noStudents") : t("admin_noStudentMatch")}
+          />
         ) : (
           <table className="w-full border-collapse min-w-[720px]">
             <thead>

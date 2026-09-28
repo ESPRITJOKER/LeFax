@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Spinner, EmptyState, Button, Select } from "../../components/ui";
+import { Spinner, Button, Select } from "../../components/ui";
+import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
 import type { ProfileRow, UserRole } from "../../lib/database.types";
@@ -75,7 +76,7 @@ export default function AdminAdmins() {
         {loading ? (
           <Spinner />
         ) : admins.length === 0 ? (
-          <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
+          <StateNotice errorLabel={t("common_error")} emptyLabel={t("admin_noAdmins")} />
         ) : (
           admins.map((a) => (
             <div key={a.id} className="bg-white border border-border rounded-2xl px-4.5 px-[18px] py-3.5 flex items-center gap-3.5">

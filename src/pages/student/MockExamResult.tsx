@@ -61,7 +61,9 @@ export default function MockExamResult() {
           {loading ? (
             <Spinner />
           ) : !result ? (
-            <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
+            // A missing row means this attempt does not exist (or is not
+            // visible to this student) — "not found", not "something broke".
+            <EmptyState label={isSupabaseConfigured ? t("mockres_notFound") : t("backend_banner")} />
           ) : (
             <>
               <h2 className="font-serif font-bold text-[18px] text-ink-900 mb-4">{t("mockres_title")}</h2>

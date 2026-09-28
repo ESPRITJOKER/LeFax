@@ -169,7 +169,7 @@ export default function AdminOverview() {
           <div className="text-[11.5px] text-muted">{t("admin_subjectsHint")}</div>
         </div>
         {subjects.length === 0 ? (
-          <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4 py-5 text-[13px] text-muted">{t("common_error")}</div>
+          <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4 py-5 text-[13px] text-muted">{t("admin_noSubjects")}</div>
         ) : (
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }}>
             {subjects.map((s) => {

@@ -493,6 +493,11 @@ const dict = {
     au_page: "Page",
     au_clearFilters: "Réinitialiser",
     au_readonly: "Lecture seule",
+    admin_noStudents: "Aucun étudiant inscrit pour le moment.",
+    admin_noStudentMatch: "Aucun étudiant ne correspond à cette recherche.",
+    admin_noAdmins: "Aucun administrateur pour le moment.",
+    admin_noSubjects: "Aucune matière n'est définie.",
+    mockres_notFound: "Résultat introuvable.",
 
     // Admin — settings centre
     as_general: "Général",
@@ -1036,6 +1041,11 @@ const dict = {
     au_page: "Page",
     au_clearFilters: "Reset",
     au_readonly: "Read-only",
+    admin_noStudents: "No student registered yet.",
+    admin_noStudentMatch: "No student matches this search.",
+    admin_noAdmins: "No administrator yet.",
+    admin_noSubjects: "No subject is defined.",
+    mockres_notFound: "Result not found.",
 
     // Admin — settings centre
     as_general: "General",

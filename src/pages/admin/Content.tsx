@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
-import { Pill, Spinner, EmptyState } from "../../components/ui";
+import { Pill, Spinner } from "../../components/ui";
+import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -25,6 +26,13 @@ export default function AdminContent() {
   const activeSubjectId = params.get("subject") ?? firstSubjectId;
   const [chapters, setChapters] = useState<ChapterWithCounts[]>([]);
   const [loading, setLoading] = useState(true);
+  // A subject with no chapters is a normal, expected state — the five medicine
+  // subjects 0019 restored were deliberately brought back EMPTY, to be filled
+  // from this tree. It used to render `common_error` ("Une erreur est
+  // survenue"), so every one of them looked broken on click. Empty, failed and
+  // still-loading are three different facts and are now tracked separately.
+  const [chaptersLoading, setChaptersLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -56,7 +64,8 @@ export default function AdminContent() {
       return;
     }
     (async () => {
-      const { data } = await supabase.from("subjects").select("*").eq("track", "medicine").order("position");
+      const { data, error: err } = await supabase.from("subjects").select("*").eq("track", "medicine").order("position");
+      if (err) setError(err.message);
       setSubjects(data ?? []);
       if (data && data.length > 0) setFirstSubjectId(data[0].id);
       setLoading(false);
@@ -65,16 +74,36 @@ export default function AdminContent() {
 
   useEffect(() => {
     if (!activeSubjectId || !isSupabaseConfigured) return;
+    let cancelled = false;
     (async () => {
-      const { data: chapterRows } = await supabase.from("chapters").select("*").eq("subject_id", activeSubjectId).order("position");
+      // Drop the previous subject's chapters immediately, or they stay on
+      // screen under the newly selected pill until the query returns.
+      setChapters([]);
+      setExpandedId(null);
+      setChaptersLoading(true);
+      setError(null);
+      const { data: chapterRows, error: chErr } = await supabase.from("chapters").select("*").eq("subject_id", activeSubjectId).order("position");
+      if (cancelled) return;
+      if (chErr) {
+        setError(chErr.message);
+        setChaptersLoading(false);
+        return;
+      }
       const chapterIds = (chapterRows ?? []).map((c) => c.id);
       const { data: lessonRows } = chapterIds.length
         ? await supabase.from("lessons").select("id, chapter_id").in("chapter_id", chapterIds)
         : { data: [] };
+      if (cancelled) return;
       setChapters(
         (chapterRows ?? []).map((c) => ({ ...c, lessonsCount: (lessonRows ?? []).filter((l) => l.chapter_id === c.id).length }))
       );
+      setChaptersLoading(false);
     })();
+    // Subject pills can be clicked faster than the queries resolve; without
+    // this the slower response can overwrite the newer subject's chapters.
+    return () => {
+      cancelled = true;
+    };
   }, [activeSubjectId]);
 
   async function addChapter() {
@@ -82,12 +111,19 @@ export default function AdminContent() {
     const label = lang === "fr" ? "Nouveau chapitre" : "New chapter";
     const slug = `chapter-${Date.now()}`;
     const nextPos = chapters.length ? Math.max(...chapters.map((c) => c.position)) + 1 : 0;
-    const { data } = await supabase
+    const { data, error: err } = await supabase
       .from("chapters")
       .insert({ subject_id: activeSubjectId, slug, name_fr: label, name_en: "New chapter", position: nextPos })
       .select()
       .single();
-    if (data) setChapters((prev) => [...prev, { ...data, lessonsCount: 0 }]);
+    if (err || !data) {
+      // Previously this failed silently: the button did nothing and said
+      // nothing, which reads as a broken page rather than a refused write.
+      setError(err?.message ?? t("admin_saveBlocked"));
+      return;
+    }
+    setError(null);
+    setChapters((prev) => [...prev, { ...data, lessonsCount: 0 }]);
   }
 
   // Reorder a chapter by swapping its position with the adjacent one. Neither
@@ -218,8 +254,15 @@ export default function AdminContent() {
       </div>
 
       <div className="flex flex-col gap-2.5">
-        {chapters.length === 0 ? (
-          <EmptyState label={isSupabaseConfigured ? t("common_error") : t("backend_banner")} />
+        {chaptersLoading ? (
+          <Spinner />
+        ) : error || chapters.length === 0 ? (
+          <StateNotice
+            error={error}
+            errorLabel={t("common_error")}
+            emptyLabel={t("tc_noChapters")}
+            onRetry={error ? () => setParams({ subject: activeSubjectId }) : undefined}
+          />
         ) : (
           chapters
             .slice()
