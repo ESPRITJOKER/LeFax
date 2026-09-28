@@ -63,20 +63,146 @@
 
 /*
  * Dark mode is an explicit per-user Profile preference (CDC 6.12), not an
- * OS-level default — it must only apply once a logged-in user turns it on
- * (Profile.tsx sets data-theme="dark" on <html> from profiles.dark_mode).
- * There is intentionally no `@media (prefers-color-scheme: dark)` fallback:
- * that was auto-applying a dark theme to signed-out visitors (e.g. Login/
- * Register) purely from their OS setting, before they'd ever chosen one —
- * light is always the default until a user explicitly opts in.
+ * OS-level default — it must only apply once a logged-in user turns it on.
+ * `applyTheme()` (src/lib/theme.ts) sets data-theme="dark" on <html>, driven
+ * by profiles.dark_mode and mirrored into localStorage so a reload repaints in
+ * the right theme before React mounts. There is intentionally no
+ * `@media (prefers-color-scheme: dark)` fallback: that was auto-applying a
+ * dark theme to signed-out visitors (e.g. Login/Register) purely from their OS
+ * setting, before they'd ever chosen one — light is the default until a user
+ * explicitly opts in.
+ *
+ * The previous version redefined only surface/card/border/muted/text, which is
+ * why dark mode looked broken: the app writes most of its colours with the
+ * `ink` scale (`text-ink-900` alone appears in 40+ files) and that scale kept
+ * its light-mode values, so headings and list titles rendered dark navy on a
+ * dark card — invisible (feedback: "Biology" / "The Cell" unreadable). The fix
+ * is to invert the whole scale here, once: ink-950…ink-600 stay *text* colours
+ * and become progressively lighter, while ink-100/ink-50 — used as light fills
+ * and hairlines — become dark elevated surfaces. Every existing utility class
+ * then flips with no churn in the components.
+ *
+ * One desaturated blue-slate ramp, so page / card / raised / hairline stay
+ * distinguishable without pure black anywhere:
+ *   surface  #0f1620  page background (darkest)
+ *   card     #161f2b  cards, sheets, bars
+ *   ink-100  #1d2735  inputs, tracks, hover fills (one step above the card)
+ *   border   #263141  hairlines
  */
 :root[data-theme="dark"] {
-  --color-surface: oklch(18% 0.015 258);
-  --color-card: oklch(24% 0.02 258);
-  --color-border: oklch(32% 0.02 258);
-  --color-muted: oklch(70% 0.01 258);
-  --color-text: oklch(92% 0.01 258);
+  /* Text ramp — inverted: the "darkest text" token is now the brightest. */
+  --color-ink-950: #f2f6fb; /* strongest headings */
+  --color-ink-900: #e6edf6; /* body / default heading text */
+  --color-ink-800: #cbd6e4;
+  --color-ink-700: #aebbcd;
+  --color-ink-600: #8d9bb0; /* secondary text */
+  --color-ink-300: #6f7d92; /* muted icons, dashed borders */
+  /* Fill ramp — inverted: the light tints become dark elevated surfaces. */
+  --color-ink-100: #1d2735; /* tracks, hairlines, hover fills */
+  --color-ink-50: #182231; /* subtle panel fill */
+
+  --color-surface: #0f1620;
+  --color-card: #161f2b;
+  --color-border: #263141;
+  --color-muted: #8d9bb0;
+  --color-text: #e6edf6;
+
+  /* Brand blue is lightened so it keeps contrast on a dark card, and
+   * `brand-800` — a dark navy used for bars/pills in light mode — has to stop
+   * being "the dark colour" or those bars vanish into the background. */
+  --color-brand-800: #1b2635;
+  --color-brand-700: #2f9bf0;
+  --color-brand-600: #3fa9f5;
+  --color-brand-500: #5cbcfa;
+  --color-brand-100: #17304a; /* tinted fill, not a pale wash */
+  --color-brand-50: #142639;
+
+  /* Status colours keep their hue; only the pale tints invert, so badges and
+   * callouts read as tinted panels instead of glowing blocks. */
+  --color-success-700: #4ade80;
+  --color-success-100: #123125;
+  --color-success-50: #0f271e;
+  --color-ochre-700: #fbbf24;
+  --color-ochre-100: #35290f;
+  --color-ochre-50: #2a2010;
+  --color-danger-700: #f87171;
+  --color-danger-100: #3a1a1c;
+  --color-danger-50: #2c1517;
+
+  --color-accent: #3fa9f5;
+  --color-heart-empty: #3a4a63;
+
   color-scheme: dark;
+}
+
+/*
+ * `bg-white` is used in ~119 places as "the card colour" — it predates the
+ * `card` token. Mapping it to the card surface here flips all of them at once;
+ * rewriting each call site is what let the theme go patchy in the first place.
+ * `text-white` is deliberately untouched: white *text* is still white.
+ */
+:root[data-theme="dark"] .bg-white {
+  background-color: var(--color-card);
+}
+
+/* Near-white hairlines and fills hardcoded before the border token existed. */
+:root[data-theme="dark"] .border-\[\#f0f2f5\],
+:root[data-theme="dark"] .border-\[\#f4f6f9\],
+:root[data-theme="dark"] .border-\[\#e2e8f0\] {
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] .bg-\[\#f4f7fb\],
+:root[data-theme="dark"] .bg-\[\#eef3f9\],
+:root[data-theme="dark"] .bg-\[\#e7ebf1\] {
+  background-color: var(--color-ink-100);
+}
+:root[data-theme="dark"] .text-\[\#647084\] {
+  color: var(--color-ink-600);
+}
+
+/* Form controls: the browser default is a white field with black text, which
+ * is the single most jarring thing left in a dark UI. Themed centrally so every
+ * form — Settings, the lesson editor, Profile, auth — picks it up. */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+  background-color: var(--color-ink-100);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: var(--color-ink-300);
+}
+/* Native dropdown popups are painted by the OS from the option's own colours. */
+:root[data-theme="dark"] option {
+  background-color: var(--color-card);
+  color: var(--color-text);
+}
+
+/*
+ * App-shell scroll lock.
+ *
+ * `PhoneFrame` (nav="app") sets data-app-shell on <html> while it is
+ * mounted. Without this, the *document* could scroll behind the shell on a
+ * mobile browser: the shell is one visible-viewport tall, but the initial
+ * containing block is the LARGE viewport (URL bar hidden), so the page was
+ * taller than the screen by the toolbar height. Chrome then scrolled the
+ * document, carrying the whole shell — TopBar and the absolutely-pinned
+ * BottomTabs — up with it, which is the "footer with Lessons/Perfs moves while
+ * I scroll" bug (and the strip of background that appeared under the tab bar).
+ *
+ * Pinning the document also keeps the toolbar from collapsing at all, so 100dvh
+ * never changes mid-scroll and the bar cannot drift. Only the shell's inner
+ * `flex-1 min-h-0 overflow-y-auto` region scrolls. Scoped to the attribute so
+ * document-scrolling pages (the marketing landing page, the admin back-office)
+ * are untouched.
+ */
+html[data-app-shell],
+html[data-app-shell] body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 * {

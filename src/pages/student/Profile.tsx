@@ -9,6 +9,7 @@ import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import { REGIONS, TOWNS } from "../../lib/regions";
+import { applyTheme } from "../../lib/theme";
 
 const inputClass = "w-full box-border border border-[#e2e8f0] rounded-[8px] px-3.5 py-3 text-[14px] outline-none focus:border-brand-500";
 
@@ -36,8 +37,11 @@ export default function Profile() {
     setDarkMode(profile?.dark_mode ?? false);
   }, [profile]);
 
+  // Live preview of the toggle before it is saved. ThemeSync owns the theme for
+  // the rest of the app (and re-asserts the server value after a save), so this
+  // only has to cover the not-yet-persisted local switch.
   useEffect(() => {
-    document.documentElement.dataset.theme = darkMode ? "dark" : "light";
+    applyTheme(darkMode ? "dark" : "light");
   }, [darkMode]);
 
   useEffect(() => {
