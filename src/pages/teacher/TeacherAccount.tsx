@@ -1,4 +1,5 @@
-import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { Icon } from "../../lib/icons";
+import { SubjectGlyph } from "../../components/SubjectBadge";
 import { Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
@@ -48,7 +49,7 @@ export default function TeacherAccount() {
           <div className="flex flex-wrap gap-2">
             {subjects.map((s) => (
               <span key={s.id} className="inline-flex items-center gap-1.5 rounded-pill border border-border px-3 py-1.5 text-[12px] font-bold text-ink-900">
-                <Icon name={subjectIcon(s.slug)} size={13} style={{ color: subjectColors(s.slug).accent }} />
+                <SubjectGlyph slug={s.slug} size={13} />
                 {lang === "fr" ? s.name_fr : s.name_en}
               </span>
             ))}

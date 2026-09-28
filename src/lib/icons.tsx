@@ -71,6 +71,13 @@ const SUBJECT_ICONS: Record<string, IconName> = {
   "culture-generale": "globe",
 };
 
+/**
+ * No longer used to render a subject anywhere: the admin, teacher and student
+ * panels all draw subjects through `SubjectBadge` / `SubjectGlyph`, which use
+ * `subjectEmoji` so one subject looks the same everywhere. Kept because the
+ * mapping is still the reference for "which glyph means which subject", but
+ * reach for the badge components rather than reintroducing a second style.
+ */
 export function subjectIcon(slug: string): IconName {
   return SUBJECT_ICONS[slug] ?? "book";
 }

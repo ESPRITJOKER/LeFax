@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { Icon } from "../../lib/icons";
+import { SubjectBadge } from "../../components/SubjectBadge";
 import { Spinner } from "../../components/ui";
 import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
@@ -34,14 +35,11 @@ export default function TeacherSubjects() {
   return (
     <div className="grid gap-4 max-w-[980px]" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))" }}>
       {subjects.map((s) => {
-        const colors = subjectColors(s.slug);
         return (
           <div key={s.id} className="bg-white border border-border rounded-2xl p-5 flex flex-col">
             <div className="flex items-center gap-3 mb-3.5">
-              {/* subjectColors gives {gradient, accent}; tint the accent for the chip. */}
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: `${colors.accent}1a` }}>
-                <Icon name={subjectIcon(s.slug)} size={19} style={{ color: colors.accent }} />
-              </div>
+              {/* The same badge students see for this subject. */}
+              <SubjectBadge slug={s.slug} size={40} />
               <div className="min-w-0">
                 <div className="text-[14px] font-bold text-ink-900 truncate">{lang === "fr" ? s.name_fr : s.name_en}</div>
                 <div className="text-[11.5px] text-muted">

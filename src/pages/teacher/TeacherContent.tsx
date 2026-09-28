@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { Icon } from "../../lib/icons";
+import { SubjectGlyph } from "../../components/SubjectBadge";
 import { Pill, Spinner } from "../../components/ui";
 import { StateNotice } from "../../components/StateNotice";
 import { ReviewStatusPill } from "../../components/content/ReviewStatusPill";
@@ -225,7 +226,7 @@ export default function TeacherContent() {
         {subjects.map((s) => (
           <Pill key={s.id} active={s.id === subjectId} onClick={() => setParams({ subject: s.id })}>
             <span className="flex items-center gap-1.5">
-              <Icon name={subjectIcon(s.slug)} size={12} style={{ color: subjectColors(s.slug).accent }} />
+              <SubjectGlyph slug={s.slug} size={13} />
               {lang === "fr" ? s.name_fr : s.name_en}
             </span>
           </Pill>
