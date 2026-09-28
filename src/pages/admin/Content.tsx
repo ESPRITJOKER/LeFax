@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { Icon } from "../../lib/icons";
+import { SubjectBadge, SubjectGlyph } from "../../components/SubjectBadge";
 import { Pill, Spinner } from "../../components/ui";
 import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
@@ -240,7 +241,7 @@ export default function AdminContent() {
           subjects.map((s) => (
             <Pill key={s.id} active={s.id === activeSubjectId} onClick={() => setParams({ subject: s.id })}>
               <span className="flex items-center gap-1.5">
-                <Icon name={subjectIcon(s.slug)} size={12} style={{ color: subjectColors(s.slug).accent }} />
+                <SubjectGlyph slug={s.slug} size={13} />
                 {lang === "fr" ? s.name_fr : s.name_en}
               </span>
             </Pill>
@@ -270,12 +271,7 @@ export default function AdminContent() {
             .map((c, ci, arr) => (
               <div key={c.id} className="bg-card border border-border rounded-2xl overflow-hidden">
                 <div className="px-4.5 px-[18px] py-4 flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-[10px] bg-ink-100 flex items-center justify-center flex-none">
-                    {(() => {
-                      const sub = subjects.find((s) => s.id === c.subject_id);
-                      return <Icon name={sub ? subjectIcon(sub.slug) : "book"} size={17} style={{ color: sub ? subjectColors(sub.slug).accent : undefined }} />;
-                    })()}
-                  </div>
+                  <SubjectBadge slug={subjects.find((s) => s.id === c.subject_id)?.slug ?? ""} size={36} className="rounded-[10px]" />
                   {editingId === c.id ? (
                     <>
                       <input value={editValue} onChange={(e) => setEditValue(e.target.value)} className="flex-1 px-2.5 py-2 rounded-lg border-[1.5px] border-ink-300 text-[13px]" />

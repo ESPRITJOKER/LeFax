@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react
 import { Button, Spinner, Select } from "../../components/ui";
 import { StateNotice } from "../../components/StateNotice";
 import { Icon, type IconName } from "../../lib/icons";
+import { AvatarUpload } from "../../components/AvatarUpload";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured, invokeFn } from "../../lib/supabaseClient";
@@ -542,6 +543,18 @@ function ProfileTab() {
     <Section title={t("as_profile")}>
       <div className="flex flex-col gap-3">
         <FlashLine flash={flash} />
+
+        {/* The admin panel had no way to set a profile picture at all — only
+            the student screen did, even though the `avatars` bucket policy
+            (0005) is keyed on auth.uid() and never cared about the role. */}
+        <div className="flex items-center gap-4 border border-border rounded-xl p-3.5">
+          <AvatarUpload size={64} />
+          <div className="min-w-0">
+            <div className="text-[13px] font-bold text-ink-900">{t("as_photo")}</div>
+            <p className="text-[11.5px] text-muted mt-0.5 max-w-[46ch]">{t("as_photoHint")}</p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label={t("as_firstName")}>
             <input value={form.first_name} onChange={(e) => setForm((f) => ({ ...f, first_name: e.target.value }))} className={inputClass} />

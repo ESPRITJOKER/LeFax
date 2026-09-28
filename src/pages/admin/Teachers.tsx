@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Icon, subjectIcon, subjectColors } from "../../lib/icons";
+import { Icon } from "../../lib/icons";
+import { SubjectGlyph } from "../../components/SubjectBadge";
 import { Spinner, Select } from "../../components/ui";
 import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
@@ -208,7 +209,7 @@ export default function AdminTeachers() {
                   <div className="flex flex-wrap gap-2 mb-2">
                     {active.map((a) => (
                       <span key={a.id} className="inline-flex items-center gap-1.5 rounded-pill border border-border px-2.5 py-1 text-[11.5px] font-bold text-ink-900">
-                        <Icon name={subjectIcon(subjects.find((s) => s.id === a.subject_id)?.slug ?? "")} size={12} style={{ color: subjectColors(subjects.find((s) => s.id === a.subject_id)?.slug ?? "").accent }} />
+                        <SubjectGlyph slug={subjects.find((s) => s.id === a.subject_id)?.slug ?? ""} size={13} />
                         {subjectName(a.subject_id)}
                         <span className="text-[10px] font-normal text-muted">
                           {new Date(a.created_at).toLocaleDateString(lang === "fr" ? "fr-FR" : "en-GB")}

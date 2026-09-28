@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon, subjectIcon, subjectColors, type IconName } from "../../lib/icons";
+import { Icon, type IconName } from "../../lib/icons";
+import { SubjectBadge } from "../../components/SubjectBadge";
 import { Spinner } from "../../components/ui";
 import { useI18n } from "../../lib/i18n";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
@@ -173,7 +174,6 @@ export default function AdminOverview() {
         ) : (
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }}>
             {subjects.map((s) => {
-              const accent = subjectColors(s.slug).accent;
               return (
                 <Link
                   key={s.id}
@@ -181,9 +181,8 @@ export default function AdminOverview() {
                   className="bg-white border border-border rounded-2xl p-4 hover:bg-ink-50 block"
                 >
                   <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-none" style={{ background: `${accent}1a` }}>
-                      <Icon name={subjectIcon(s.slug)} size={17} style={{ color: accent }} />
-                    </div>
+                    {/* Same badge the student home shows for this subject. */}
+                    <SubjectBadge slug={s.slug} size={34} className="rounded-[10px]" />
                     <div className="text-[13px] font-bold text-ink-900 truncate">{lang === "fr" ? s.name_fr : s.name_en}</div>
                   </div>
                   <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11.5px] text-muted">

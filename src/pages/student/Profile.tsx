@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BottomTabs } from "../../components/BottomTabs";
@@ -10,6 +10,7 @@ import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import { REGIONS, TOWNS } from "../../lib/regions";
 import { applyTheme } from "../../lib/theme";
+import { AvatarUpload } from "../../components/AvatarUpload";
 
 const inputClass = "w-full box-border border border-[#e2e8f0] rounded-[8px] px-3.5 py-3 text-[14px] outline-none focus:border-brand-500";
 
@@ -25,10 +26,7 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [photoUploading, setPhotoUploading] = useState(false);
-  const [photoError, setPhotoError] = useState(false);
   const [lessonsDone, setLessonsDone] = useState(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setRegion(profile?.region ?? "");
@@ -75,32 +73,6 @@ export default function Profile() {
     await refreshProfile();
   }
 
-  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file || !profile || !isSupabaseConfigured) return;
-    if (!file.type.startsWith("image/")) {
-      setPhotoError(true);
-      return;
-    }
-    setPhotoUploading(true);
-    setPhotoError(false);
-    try {
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `${profile.id}/avatar.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, cacheControl: "3600" });
-      if (uploadError) throw uploadError;
-      const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-      const avatarUrl = `${data.publicUrl}?t=${Date.now()}`;
-      const { error: updateError } = await supabase.from("profiles").update({ avatar_url: avatarUrl }).eq("id", profile.id);
-      if (updateError) throw updateError;
-      await refreshProfile();
-    } catch {
-      setPhotoError(true);
-    }
-    setPhotoUploading(false);
-  }
-
   async function logout() {
     await signOut();
     navigate("/login");
@@ -113,7 +85,6 @@ export default function Profile() {
       </PhoneFrame>
     );
 
-  const initial = (profile?.first_name?.[0] ?? "?").toUpperCase();
 
   return (
     <PhoneFrame>
@@ -122,25 +93,14 @@ export default function Profile() {
 
         <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-[90px] lg:max-w-[860px] lg:mx-auto lg:w-full lg:pt-6 lg:pb-10">
           <div className="flex flex-col items-center pb-5">
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={photoUploading}
-              className="relative w-[78px] h-[78px] rounded-full bg-brand-500 text-white font-serif font-extrabold text-[28px] flex items-center justify-center mb-3 overflow-hidden disabled:opacity-70"
-            >
-              {profile?.avatar_url ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" /> : initial}
-              {photoUploading && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
-            </button>
+            {/* Shared with the admin settings panel: one upload path, one set
+                of failure messages. */}
+            <AvatarUpload size={78} className="mb-3" />
             <div className="font-serif font-bold text-[16px] text-ink-900">
               {profile?.first_name} {profile?.last_name}
             </div>
             <div className="text-[12px] text-muted mt-0.5">{lang === "fr" ? "Filière Médecine" : "Medicine Track"}</div>
-            {photoError && <div className="text-[11px] font-semibold text-danger-600 mt-1">{t("profile_photoError")}</div>}
+
           </div>
 
           <div className="flex gap-2.5 mb-5">

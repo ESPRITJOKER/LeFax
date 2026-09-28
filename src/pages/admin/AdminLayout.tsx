@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Icon, type IconName } from "../../lib/icons";
+import { LogoMark } from "../../components/BrandLogo";
 import { useI18n, type DictKey } from "../../lib/i18n";
 import { LangSwitcher } from "../../components/LangSwitcher";
 import { BackendBanner } from "../../components/BackendBanner";
@@ -46,10 +47,10 @@ export default function AdminLayout() {
         } lg:translate-x-0 ${open ? "lg:w-[232px]" : "lg:w-[72px]"}`}
       >
         <div className="flex items-center gap-2.5 px-[18px] py-5 whitespace-nowrap">
-          <Icon name="cap" size={26} color="#fff" />
+          <LogoMark size={30} />
           {showLabels && (
-            <div className="font-serif font-bold text-[17px] text-white">
-              Lefax <span className="opacity-60 font-medium">Admin</span>
+            <div className="font-serif font-extrabold text-[19px] text-white leading-none">
+              LeFax <span className="opacity-60 font-medium text-[15px]">Admin</span>
             </div>
           )}
         </div>
@@ -89,7 +90,17 @@ export default function AdminLayout() {
           </div>
           <div className="flex items-center gap-3.5">
             <LangSwitcher />
-            <div className="w-9 h-9 rounded-full bg-brand-600 text-white flex items-center justify-center text-[13px] font-bold">{initials}</div>
+            <NavLink
+              to="settings"
+              aria-label={t("as_profile")}
+              className="w-9 h-9 rounded-full bg-brand-600 text-white flex items-center justify-center text-[13px] font-bold overflow-hidden flex-none"
+            >
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                initials
+              )}
+            </NavLink>
           </div>
         </div>
         <div className="flex-1 p-5 lg:p-7 overflow-y-auto">
