@@ -260,3 +260,110 @@ not been eyeballed on a real device.
 - add `src/lib/theme.ts`, `src/components/ThemeSync.tsx`
 - edit `src/index.css`, `src/main.tsx`, `src/components/PhoneFrame.tsx`,
   `src/pages/student/Profile.tsx`
+
+---
+
+## 2026-09-28 — Feedback round N5: audit page, settings centre, card editor, dark mode
+
+Source: `feed backs.docx` (9 screenshots from `le-fax.vercel.app`, mobile, 20:28–20:31).
+Five complaints, decoded below with the root cause found for each.
+
+### 1. "the audit should be fixed" — `src/pages/admin/Logs.tsx`
+The screenshot showed **"Une erreur est survenue"**. The page ran
+`const { data } = await supabase.from("admin_logs")…`, discarded `error`, and rendered
+`t("common_error")` on the *empty* branch — so "no activity yet", "request failed" and
+"RLS refused you" were one message, and the likeliest of the three was reported as a crash.
+The backend was never broken: `admin_logs` exists (`0001_init.sql:344`), `admin_logs_read`
+is `using (public.is_admin())` (`0001:617`), and five server-side writers feed it.
+
+Rewritten: `StateNotice` separates empty / filtered-empty / failed, a 42501 or PGRST301 is
+named as a permission problem, actor names are resolved from `profiles` (second query, not a
+PostgREST embed — the hand-written `Database` types carry no relationship metadata), plus
+search, action/table/date filters, server-side pagination (`range` + exact count), locale
+timestamps, expandable `metadata`, a desktop table and a mobile card list. Read-only by
+construction: no policy grants update or delete on `admin_logs` to anyone.
+
+### 2. "settings … too minimalist" — `src/pages/admin/Settings.tsx` (was 60 lines)
+Was a flat dump of `settings` rows as raw-JSON inputs, with the same `common_error`-as-empty
+bug. Now four tabs:
+- **General** — the same key/value store, typed: known keys get text / number / boolean /
+  language widgets and are validated before the write; unknown keys keep a JSON editor so a
+  key added server-side stays editable. Writes `.select()` and report an RLS 0-row result as
+  refused instead of confirming a save that did not happen.
+- **Year and terms** — new `academic_terms` table, see below.
+- **My profile** — first/last name through `profiles_update_own`; `phone` (the login
+  identifier) and `role` are read-only, since `0003_guard_role_column` refuses self-escalation.
+- **Account and security** — session facts, sign-out with confirmation, and a password change
+  through `functions/profile` `change_password` (it touches `auth.users` and writes an audit row).
+
+### 3. Admin header title — `src/pages/admin/AdminLayout.tsx`
+Hardcoded `t("admin_overview")`, so every admin page was titled "Vue d'ensemble" — visible in
+two feedback screenshots while the user was on Paramètres and on the Journal d'audit. Now
+derived from the route (longest match wins, so `/admin/lesson/:id` still reads "Contenus").
+
+### 4. "footer … going up and down" — fixed in `1930c83` (previous round)
+The shell mixed `min-h-screen`/`100vh` with `100dvh` and the initial containing block is the
+large viewport either way, so the *document* scrolled behind the shell and carried TopBar and
+the pinned BottomTabs with it. All heights are `100dvh`; `PhoneFrame` pins the document with
+`data-app-shell` on `<html>` while `nav="app"` is mounted.
+
+### 5. "this dark mode is nonsense" — palette completed
+`1930c83` inverted the `ink` ramp (the cause of "Biology"/"The Cell" rendering dark navy on a
+dark card). This round finishes it: the admin shell (`bg-surface`, `bg-card`, `currentColor`
+hamburger), the permanently-dark admin rail whose labels were `text-ink-100/80` — a near-white
+tint in light mode but a *dark fill* in dark mode, i.e. the same dark-on-dark defect — now
+`text-white/75`; table header bands; and the remaining hardcoded literals
+(`#f8fafc`, `#dde4ec`, `#c3cbd6`, `#94a3b8`, `#fff8e5`).
+
+**Contrast, measured.** `scripts/check_contrast.mjs` (new) audits every token pair straight out
+of `index.css`. Dark: **22/22 pass** WCAG AA. Two fixes it forced:
+- light `--color-muted` #94a3b8 → **#5d6b80** (was 2.56:1 on a card and 2.30:1 on the page —
+  under AA for the hint text it carries; now 5.41 / 4.85);
+- dark primary-button surface: one token cannot be both the accent *text* colour (wants to be
+  light on a dark card) and the button *surface* (wants to carry white text), so
+  `.bg-brand-600` is overridden to `#1668c9` in dark only — white on it is 5.44:1, while
+  `text-brand-600` stays the light accent at 6.49:1.
+
+**Known light-mode failures, left alone on purpose** (they are the LeFax identity, which this
+round was explicitly told to preserve): white on `brand-600` 2.97:1, `text-brand-600` as body
+text 2.97:1, `brand-700` 4.14:1, `success-700` 3.30:1, and the near-white `border` token.
+Raising any of them repaints every button in the app — worth doing, but as a decision, not a
+side effect.
+
+### 6. "the first design of lefax … I wanted to keep it" — `LessonCardsPanel.tsx`
+The reference screenshot is the original card editor: a numbered card rail on the left, one
+card's fields in the middle, a live phone preview on the right. The current build stacked every
+card's full form vertically, losing both the deck overview and the student's-eye view. Layout
+restored (rail / editor / preview, stacking below `xl`, preview at `xl` and up). Presentation
+only — create, reorder, delete, per-card save, the dirty-tracking imperative handle and the
+dual-language image uploads are untouched.
+
+### Backend — migration `0020_academic_terms.sql` (NOT YET APPLIED)
+No table in `0001`..`0019` models a school year or a term, so "changing term" could not be one
+more untyped `settings` row. New `academic_terms`: one row per term grouped by
+`academic_year`; **at most one active term, enforced by a partial unique index**, not by
+application code; archive (`archived_at`) instead of delete — there is deliberately no delete
+policy; `set_active_academic_term()` does the swap in one transaction (two client writes would
+trip the index); an `academic_terms_audit` trigger mirrors every write into `admin_logs`, so
+term changes show up in the journal without the UI having to remember; RLS = read for any
+authenticated user, write for `is_admin()`. Also seeds `platform_name`, `default_language`,
+`support_phone` into `settings` (`on conflict do nothing`).
+
+Live-schema probe (REST, read-only): `teacher_subjects` → 200, so **0018 IS applied in
+production** (the previous entry's "NOT YET APPLIED" note is stale). `academic_terms` → 404,
+so **0020 still needs to be run**; until it is, the Settings → Terms tab will show the real
+Postgres error rather than a term list.
+
+### Verified / not verified
+- `npx tsc --noEmit` clean; `npm run build` green; `npx eslint .` 0 errors (23 pre-existing
+  react-refresh warnings, unchanged count).
+- `node scripts/check_contrast.mjs` — dark theme fully AA; light failures listed above.
+- **Not verified in a browser.** The Claude-in-Chrome extension was not connected in this
+  session, so no screen was visually confirmed and no interaction (tab switching, term
+  creation, audit filtering) was exercised against real data.
+
+### Files touched
+- add `supabase/migrations/0020_academic_terms.sql`, `scripts/check_contrast.mjs`
+- rewrite `src/pages/admin/Logs.tsx`, `src/pages/admin/Settings.tsx`
+- edit `src/pages/admin/AdminLayout.tsx`, `src/components/content/LessonCardsPanel.tsx`,
+  `src/index.css`, `src/lib/i18n.tsx`, `src/lib/database.types.ts`

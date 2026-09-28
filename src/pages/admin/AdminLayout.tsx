@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Icon, type IconName } from "../../lib/icons";
 import { useI18n, type DictKey } from "../../lib/i18n";
 import { LangSwitcher } from "../../components/LangSwitcher";
@@ -20,16 +20,21 @@ const NAV: { to: string; icon: IconName; labelKey: DictKey }[] = [
 
 export default function AdminLayout() {
   const { t } = useI18n();
+  const { pathname } = useLocation();
   const { profile } = useAuth();
   const [open, setOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const initials = profile ? `${profile.first_name[0] ?? ""}${profile.last_name[0] ?? ""}`.toUpperCase() : "AD";
+  // Longest match wins, so /admin/lesson/:id still resolves to "Contenus"
+  // rather than falling through to the dashboard title.
+  const current = [...NAV].sort((a, b) => b.to.length - a.to.length).find((n) => pathname.includes(`/${n.to}`));
+  const title = t(current?.labelKey ?? "admin_overview");
   // Labels collapse only on the desktop rail; the mobile drawer always shows them.
   const showLabels = open || mobileOpen;
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-surface">
       {/* Mobile overlay behind the off-canvas drawer */}
       {mobileOpen && (
         <div onClick={() => setMobileOpen(false)} className="lg:hidden fixed inset-0 bg-black/40 z-40" />
@@ -56,7 +61,7 @@ export default function AdminLayout() {
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-[10px] whitespace-nowrap ${
-                  isActive ? "bg-brand-600 text-white" : "text-ink-100/80 hover:bg-brand-700"
+                  isActive ? "bg-brand-600 text-white" : "text-white/75 hover:bg-brand-700 hover:text-white"
                 }`
               }
             >
@@ -65,7 +70,7 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </div>
-        <button onClick={() => setOpen((v) => !v)} className="hidden lg:flex cursor-pointer px-[18px] py-4 text-ink-100/70 items-center gap-2.5 hover:text-white">
+        <button onClick={() => setOpen((v) => !v)} className="hidden lg:flex cursor-pointer px-[18px] py-4 text-white/70 items-center gap-2.5 hover:text-white">
           <Icon name="collapse" size={16} />
           {open && <span className="text-xs font-semibold">{t("common_back")}</span>}
         </button>
@@ -73,14 +78,14 @@ export default function AdminLayout() {
 
       <div className="flex-1 min-w-0 flex flex-col">
         <BackendBanner />
-        <div className="flex items-center justify-between px-5 lg:px-7 py-[18px] border-b border-border bg-white gap-4 flex-wrap">
+        <div className="flex items-center justify-between px-5 lg:px-7 py-[18px] border-b border-border bg-card gap-4 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => setMobileOpen(true)} className="lg:hidden flex items-center justify-center -ml-1" aria-label="Menu">
+            <button onClick={() => setMobileOpen(true)} className="lg:hidden flex items-center justify-center -ml-1 text-ink-950" aria-label="Menu">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M3 6h18M3 12h18M3 18h18" stroke="#1e2a3a" strokeWidth="2" strokeLinecap="round" />
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </button>
-            <div className="font-serif font-bold text-lg lg:text-xl text-ink-950 truncate">{t("admin_overview")}</div>
+            <h1 className="font-serif font-bold text-lg lg:text-xl text-ink-950 truncate">{title}</h1>
           </div>
           <div className="flex items-center gap-3.5">
             <LangSwitcher />

@@ -21,6 +21,17 @@ export interface LessonCardsHandle {
  * lesson: create/reorder/delete cards, edit the four back-face blocks, and —
  * per Step 4 — assign a SEPARATE image for FR vs EN students (image_fr /
  * image_en), not a single shared field.
+ *
+ * Layout restored to the original LeFax editor the feedback round asked to keep
+ * ("the first design of lefax … I wanted to keep it"): a numbered card rail on
+ * the left, one card's fields in the middle, and a live phone preview on the
+ * right. The previous version stacked every card's full form vertically, which
+ * lost both the deck overview and the student's-eye view of what was being
+ * written — the two things that made the original screen work.
+ *
+ * The rail/editor/preview split is presentation only: create, reorder, delete,
+ * per-card save, the dirty-tracking imperative handle and the dual-language
+ * image uploads are unchanged.
  */
 export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string }>(function LessonCardsPanel(
   { lessonId },
@@ -35,6 +46,8 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
   // Cards edited since their last successful save — used to flush them all from
   // the top button and to warn before leaving.
   const [dirty, setDirty] = useState<Set<string>>(new Set());
+  // Which card the middle pane is editing. Null until the first load resolves.
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
   // Latest cards, readable inside the imperative saveAll without stale closures.
   const cardsRef = useRef<LessonCardRow[]>([]);
@@ -44,6 +57,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
     (async () => {
       const { data } = await supabase.from("lesson_cards").select("*").eq("lesson_id", lessonId).order("position");
       setCards(data ?? []);
+      setSelectedId(data?.[0]?.id ?? null);
       setDirty(new Set());
       setLoading(false);
     })();
@@ -71,6 +85,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
     const { data, error } = await supabase.from("lesson_cards").insert({ lesson_id: lessonId, position: nextPos }).select().single();
     if (error || !data) return setFlash({ ok: false, msg: error?.message || t("admin_saveError") });
     setCards((prev) => [...prev, data]);
+    setSelectedId(data.id);
   }
 
   // Persist one card. Returns true only if a row actually came back — an RLS
@@ -116,7 +131,16 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
   async function deleteCard(card: LessonCardRow) {
     setBusyId(card.id);
     const { error } = await supabase.from("lesson_cards").delete().eq("id", card.id);
-    if (!error) setCards((prev) => prev.filter((c) => c.id !== card.id));
+    if (!error) {
+      setCards((prev) => {
+        const next = prev.filter((c) => c.id !== card.id);
+        if (card.id === selectedId) {
+          const order = [...next].sort((a, b) => a.position - b.position);
+          setSelectedId(order[0]?.id ?? null);
+        }
+        return next;
+      });
+    }
     else setFlash({ ok: false, msg: t("admin_saveError") });
     setBusyId(null);
   }
@@ -183,6 +207,9 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
   if (loading) return null;
 
   const sorted = [...cards].sort((a, b) => a.position - b.position);
+  const selected = sorted.find((c) => c.id === selectedId) ?? sorted[0] ?? null;
+  const selectedIndex = selected ? sorted.findIndex((c) => c.id === selected.id) : -1;
+  const busy = selected ? busyId === selected.id : false;
 
   return (
     <div>
@@ -198,95 +225,214 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
         </div>
       )}
 
-      {sorted.length === 0 && <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4 py-5 text-[13px] text-muted mb-3">{t("admin_noCards")}</div>}
+      {sorted.length === 0 ? (
+        <>
+          <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4 py-5 text-[13px] text-muted mb-3">{t("admin_noCards")}</div>
+          <AddCardButton onClick={addCard} label={t("admin_addCard")} />
+        </>
+      ) : (
+        <div className="flex flex-col xl:flex-row gap-4 items-start">
+          {/* ---- left rail: the deck, numbered, in reading order ---------- */}
+          <nav
+            aria-label={t("admin_cards")}
+            className="w-full xl:w-[188px] xl:flex-none flex xl:flex-col gap-2.5 overflow-x-auto xl:overflow-x-visible xl:max-h-[70vh] xl:overflow-y-auto pb-1 xl:pb-0"
+          >
+            {sorted.map((card, i) => (
+              <CardThumb
+                key={card.id}
+                card={card}
+                index={i}
+                total={sorted.length}
+                active={card.id === selected?.id}
+                dirty={dirty.has(card.id)}
+                onSelect={() => setSelectedId(card.id)}
+              />
+            ))}
+            <div className="flex-none xl:mt-1">
+              <AddCardButton onClick={addCard} label={t("admin_addCard")} />
+            </div>
+          </nav>
 
-      <div className="flex flex-col gap-4">
-        {sorted.map((card, i) => {
-          const busy = busyId === card.id;
-          return (
-            <div key={card.id} className="bg-white border border-border rounded-2xl p-4">
-              <div className="flex items-center justify-between mb-3">
+          {/* ---- middle: the selected card's fields ----------------------- */}
+          {selected && (
+            <div className="flex-1 min-w-0 w-full bg-card border border-border rounded-2xl p-4">
+              <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
                 <div className="flex items-center gap-2">
                   <div className="text-[12px] font-bold uppercase tracking-wide text-muted">
-                    {t("admin_card")} {i + 1}
+                    {t("admin_card")} {selectedIndex + 1}
                   </div>
-                  {dirty.has(card.id) && (
+                  {dirty.has(selected.id) && (
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">{t("admin_unsaved")}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <button onClick={() => move(card, -1)} disabled={busy || i === 0} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveUp")}>
+                  <button onClick={() => move(selected, -1)} disabled={busy || selectedIndex === 0} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveUp")}>
                     <Icon name="chevleft" size={14} className="rotate-90" />
                   </button>
-                  <button onClick={() => move(card, 1)} disabled={busy || i === sorted.length - 1} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveDown")}>
+                  <button onClick={() => move(selected, 1)} disabled={busy || selectedIndex === sorted.length - 1} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveDown")}>
                     <Icon name="chevleft" size={14} className="-rotate-90" />
                   </button>
-                  <button onClick={() => deleteCard(card)} disabled={busy} className="p-1.5 rounded-lg border border-border text-danger-600 disabled:opacity-40" title={t("admin_deleteCard")}>
+                  <button onClick={() => deleteCard(selected)} disabled={busy} className="p-1.5 rounded-lg border border-border text-danger-600 disabled:opacity-40" title={t("admin_deleteCard")}>
                     <Icon name="close" size={14} />
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label={t("admin_cardPointFr")} value={card.point_fr} onChange={(v) => setField(card.id, "point_fr", v)} />
-                <Field label={t("admin_cardPointEn")} value={card.point_en} onChange={(v) => setField(card.id, "point_en", v)} />
-                <Field label={t("admin_cardSubFr")} value={card.sub_fr} onChange={(v) => setField(card.id, "sub_fr", v)} />
-                <Field label={t("admin_cardSubEn")} value={card.sub_en} onChange={(v) => setField(card.id, "sub_en", v)} />
-                <Field label={t("admin_cardExplanationFr")} value={card.explanation_fr} onChange={(v) => setField(card.id, "explanation_fr", v)} area />
-                <Field label={t("admin_cardExplanationEn")} value={card.explanation_en} onChange={(v) => setField(card.id, "explanation_en", v)} area />
-                <Field label={t("admin_cardStructQFr")} value={card.structural_question_fr} onChange={(v) => setField(card.id, "structural_question_fr", v)} area />
-                <Field label={t("admin_cardStructQEn")} value={card.structural_question_en} onChange={(v) => setField(card.id, "structural_question_en", v)} area />
-                <Field label={t("admin_cardStructAFr")} value={card.structural_answer_fr} onChange={(v) => setField(card.id, "structural_answer_fr", v)} />
-                <Field label={t("admin_cardStructAEn")} value={card.structural_answer_en} onChange={(v) => setField(card.id, "structural_answer_en", v)} />
-                <Field label={t("admin_cardTipsFr")} value={card.tips_fr} onChange={(v) => setField(card.id, "tips_fr", v)} area />
-                <Field label={t("admin_cardTipsEn")} value={card.tips_en} onChange={(v) => setField(card.id, "tips_en", v)} area />
-                <Field label={t("admin_cardTrapsFr")} value={card.traps_fr} onChange={(v) => setField(card.id, "traps_fr", v)} area />
-                <Field label={t("admin_cardTrapsEn")} value={card.traps_en} onChange={(v) => setField(card.id, "traps_en", v)} area />
+                <Field label={t("admin_cardPointFr")} value={selected.point_fr} onChange={(v) => setField(selected.id, "point_fr", v)} />
+                <Field label={t("admin_cardPointEn")} value={selected.point_en} onChange={(v) => setField(selected.id, "point_en", v)} />
+                <Field label={t("admin_cardSubFr")} value={selected.sub_fr} onChange={(v) => setField(selected.id, "sub_fr", v)} />
+                <Field label={t("admin_cardSubEn")} value={selected.sub_en} onChange={(v) => setField(selected.id, "sub_en", v)} />
+                <Field label={t("admin_cardExplanationFr")} value={selected.explanation_fr} onChange={(v) => setField(selected.id, "explanation_fr", v)} area />
+                <Field label={t("admin_cardExplanationEn")} value={selected.explanation_en} onChange={(v) => setField(selected.id, "explanation_en", v)} area />
+                <Field label={t("admin_cardStructQFr")} value={selected.structural_question_fr} onChange={(v) => setField(selected.id, "structural_question_fr", v)} area />
+                <Field label={t("admin_cardStructQEn")} value={selected.structural_question_en} onChange={(v) => setField(selected.id, "structural_question_en", v)} area />
+                <Field label={t("admin_cardStructAFr")} value={selected.structural_answer_fr} onChange={(v) => setField(selected.id, "structural_answer_fr", v)} />
+                <Field label={t("admin_cardStructAEn")} value={selected.structural_answer_en} onChange={(v) => setField(selected.id, "structural_answer_en", v)} />
+                <Field label={t("admin_cardTipsFr")} value={selected.tips_fr} onChange={(v) => setField(selected.id, "tips_fr", v)} area />
+                <Field label={t("admin_cardTipsEn")} value={selected.tips_en} onChange={(v) => setField(selected.id, "tips_en", v)} area />
+                <Field label={t("admin_cardTrapsFr")} value={selected.traps_fr} onChange={(v) => setField(selected.id, "traps_fr", v)} area />
+                <Field label={t("admin_cardTrapsEn")} value={selected.traps_en} onChange={(v) => setField(selected.id, "traps_en", v)} area />
               </div>
 
               {/* Dual per-language image pickers (Step 4) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
                 <ImagePicker
                   label={t("admin_cardImageFr")}
-                  url={card.image_fr}
+                  url={selected.image_fr}
                   busy={busy}
-                  onPick={() => fileInputs.current[`${card.id}-fr`]?.click()}
-                  onRemove={() => removeImage(card, "fr")}
-                  uploadLabel={t(card.image_fr ? "admin_replace" : "admin_upload")}
+                  onPick={() => fileInputs.current[`${selected.id}-fr`]?.click()}
+                  onRemove={() => removeImage(selected, "fr")}
+                  uploadLabel={t(selected.image_fr ? "admin_replace" : "admin_upload")}
                   removeLabel={t("admin_remove")}
-                  inputRef={(el) => (fileInputs.current[`${card.id}-fr`] = el)}
-                  onFile={(f) => uploadImage(card, "fr", f)}
+                  inputRef={(el) => (fileInputs.current[`${selected.id}-fr`] = el)}
+                  onFile={(f) => uploadImage(selected, "fr", f)}
                 />
                 <ImagePicker
                   label={t("admin_cardImageEn")}
-                  url={card.image_en}
+                  url={selected.image_en}
                   busy={busy}
-                  onPick={() => fileInputs.current[`${card.id}-en`]?.click()}
-                  onRemove={() => removeImage(card, "en")}
-                  uploadLabel={t(card.image_en ? "admin_replace" : "admin_upload")}
+                  onPick={() => fileInputs.current[`${selected.id}-en`]?.click()}
+                  onRemove={() => removeImage(selected, "en")}
+                  uploadLabel={t(selected.image_en ? "admin_replace" : "admin_upload")}
                   removeLabel={t("admin_remove")}
-                  inputRef={(el) => (fileInputs.current[`${card.id}-en`] = el)}
-                  onFile={(f) => uploadImage(card, "en", f)}
+                  inputRef={(el) => (fileInputs.current[`${selected.id}-en`] = el)}
+                  onFile={(f) => uploadImage(selected, "en", f)}
                 />
               </div>
 
               <div className="mt-3">
-                <button onClick={() => saveCard(card)} disabled={busy} className="border-none px-5 py-2.5 rounded-xl text-[13px] font-bold bg-brand-600 text-white disabled:opacity-60">
-                  {busy ? t("admin_uploading") : dirty.has(card.id) ? `${t("admin_saveCard")} •` : t("admin_saveCard")}
+                <button onClick={() => saveCard(selected)} disabled={busy} className="border-none px-5 py-2.5 rounded-xl text-[13px] font-bold bg-brand-600 text-white disabled:opacity-60">
+                  {busy ? t("admin_uploading") : dirty.has(selected.id) ? `${t("admin_saveCard")} •` : t("admin_saveCard")}
                 </button>
               </div>
             </div>
-          );
-        })}
-      </div>
+          )}
 
-      <button onClick={addCard} className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-white">
-        <Icon name="plus" size={15} />
-        {t("admin_addCard")}
-      </button>
+          {/* ---- right: what the student will actually see ---------------- */}
+          {selected && <PhonePreview card={selected} index={selectedIndex} total={sorted.length} />}
+        </div>
+      )}
     </div>
   );
 });
+
+function AddCardButton({ onClick, label }: { onClick: () => void; label: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-card whitespace-nowrap"
+    >
+      <Icon name="plus" size={15} />
+      {label}
+    </button>
+  );
+}
+
+/**
+ * One entry in the left rail: position badge, the card's image if it has one,
+ * and the first line of its text — enough to recognise a card without opening
+ * it, which is the whole point of the rail.
+ */
+function CardThumb({
+  card,
+  index,
+  total,
+  active,
+  dirty,
+  onSelect,
+}: {
+  card: LessonCardRow;
+  index: number;
+  total: number;
+  active: boolean;
+  dirty: boolean;
+  onSelect: () => void;
+}) {
+  const image = card.image_fr ?? card.image_en;
+  const title = card.point_fr || card.point_en;
+  const sub = card.sub_fr || card.sub_en;
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-current={active}
+      className={`relative flex-none w-[150px] xl:w-full text-left rounded-2xl border-2 p-2.5 transition-colors ${
+        active ? "border-brand-500 bg-brand-50" : "border-border bg-card hover:border-brand-500/40"
+      }`}
+    >
+      <span className="absolute -top-2 -right-2 min-w-[34px] px-1.5 h-[22px] rounded-pill bg-brand-500 text-white text-[10.5px] font-bold flex items-center justify-center">
+        {index + 1} / {total}
+      </span>
+      {image ? (
+        <img src={image} alt="" className="w-full aspect-[4/3] object-cover rounded-lg bg-ink-50 mb-2" />
+      ) : (
+        <div className="w-full aspect-[4/3] rounded-lg border border-dashed border-ink-300 bg-ink-50 mb-2 flex items-center justify-center text-ink-300">
+          <Icon name="book" size={16} />
+        </div>
+      )}
+      <div className="text-[11px] font-bold uppercase tracking-wide text-ink-900 line-clamp-2">{title || "—"}</div>
+      {sub && <div className="text-[10.5px] text-muted mt-0.5 line-clamp-3 leading-snug">{sub}</div>}
+      {dirty && <div className="mt-1 text-[9.5px] font-bold text-amber-700">•</div>}
+    </button>
+  );
+}
+
+/**
+ * Live phone preview. Renders the card the way the student deck shows its front
+ * face, in the admin's current interface language, so the person writing the
+ * card sees the real line lengths instead of guessing from a textarea.
+ */
+function PhonePreview({ card, index, total }: { card: LessonCardRow; index: number; total: number }) {
+  const { t, lang } = useI18n();
+  const image = lang === "fr" ? card.image_fr ?? card.image_en : card.image_en ?? card.image_fr;
+  const point = lang === "fr" ? card.point_fr || card.point_en : card.point_en || card.point_fr;
+  const sub = lang === "fr" ? card.sub_fr || card.sub_en : card.sub_en || card.sub_fr;
+  const progress = total > 0 ? ((index + 1) / total) * 100 : 0;
+
+  return (
+    <aside className="hidden xl:block xl:w-[292px] xl:flex-none">
+      <div className="text-[11px] font-bold uppercase tracking-wide text-muted mb-2">{t("te_preview")}</div>
+      <div className="rounded-[34px] border-[10px] border-ink-900 bg-ink-900 shadow-[0_18px_40px_-18px_rgba(15,30,60,0.55)]">
+        <div className="rounded-[24px] bg-surface overflow-hidden flex flex-col h-[520px]">
+          <div className="px-4 pt-4">
+            <div className="h-1.5 rounded-pill bg-ink-100 overflow-hidden">
+              <div className="h-full rounded-pill bg-brand-500" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4">
+            {image && <img src={image} alt="" className="w-full rounded-xl bg-card mb-3.5 object-cover" />}
+            <div className="text-[15px] font-bold text-ink-900 uppercase tracking-wide">{point || "—"}</div>
+            {sub && <p className="text-[13px] text-ink-800 leading-relaxed mt-2">{sub}</p>}
+          </div>
+          <div className="px-4 pb-4">
+            <div className="w-full rounded-xl bg-brand-500 text-white text-[13px] font-bold py-2.5 text-center">{t("lang_continue")}</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
 
 function Field({ label, value, onChange, area }: { label: string; value: string; onChange: (v: string) => void; area?: boolean }) {
   return (

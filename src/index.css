@@ -55,7 +55,7 @@
   --color-surface: #eef3f9;
   --color-card: #ffffff;
   --color-border: #eef1f5;
-  --color-muted: #94a3b8;
+  --color-muted: #5d6b80; /* AA on card AND on the page bg (5.41 / 4.85); was #94a3b8 at 2.56 / 2.30 */
 
   --color-text: #1e2a3a;
   color-scheme: light;
@@ -145,6 +145,13 @@
   background-color: var(--color-card);
 }
 
+:root[data-theme="dark"] .bg-brand-600 {
+  background-color: #1668c9;
+}
+:root[data-theme="dark"] .hover\:bg-brand-700:hover {
+  background-color: #1257ab;
+}
+
 /* Near-white hairlines and fills hardcoded before the border token existed. */
 :root[data-theme="dark"] .border-\[\#f0f2f5\],
 :root[data-theme="dark"] .border-\[\#f4f6f9\],
@@ -158,6 +165,26 @@
 }
 :root[data-theme="dark"] .text-\[\#647084\] {
   color: var(--color-ink-600);
+}
+:root[data-theme="dark"] .bg-\[\#f8fafc\] {
+  background-color: var(--color-ink-50);
+}
+:root[data-theme="dark"] .border-\[\#dde4ec\] {
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] .text-\[\#c3cbd6\],
+:root[data-theme="dark"] .text-\[\#94a3b8\] {
+  color: var(--color-ink-300);
+}
+/* Gold callout wash: a pale cream panel is a hole punched in a dark page. */
+:root[data-theme="dark"] .bg-\[\#fff8e5\] {
+  background-color: var(--color-ochre-50);
+}
+
+/* Table headers need their own step above the card, or the header band merges
+ * into the first row once every surface is dark. */
+:root[data-theme="dark"] table thead tr {
+  background-color: var(--color-ink-50);
 }
 
 /* Form controls: the browser default is a white field with black text, which

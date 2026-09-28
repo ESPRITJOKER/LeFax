@@ -380,6 +380,19 @@ export type SettingsRow = {
   updated_at: string;
 }
 
+export type AcademicTermRow = {
+  id: string;
+  name: string;
+  academic_year: string;
+  starts_on: string;
+  ends_on: string;
+  is_active: boolean;
+  archived_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 type TableDef<Row> = { Row: Row; Insert: Partial<Row>; Update: Partial<Row>; Relationships: [] };
 
 export interface Database {
@@ -413,8 +426,14 @@ export interface Database {
       content_approval: TableDef<ContentApprovalRow>;
       media_library: TableDef<MediaLibraryRow>;
       settings: TableDef<SettingsRow>;
+      academic_terms: TableDef<AcademicTermRow>;
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      // Atomic term switch (0020). Two client-side writes would trip the
+      // single-active partial unique index, so activation is an RPC.
+      set_active_academic_term: { Args: { term_id: string }; Returns: AcademicTermRow };
+      active_academic_term: { Args: Record<string, never>; Returns: AcademicTermRow };
+    };
   };
 }
