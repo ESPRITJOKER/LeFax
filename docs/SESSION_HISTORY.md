@@ -217,3 +217,46 @@ New super-admin page `/admin/teachers`; lesson review queue on `/admin/ai-review
 
 **Verified:** `npm run build` (tsc + vite) green, `npx eslint .` 0 errors.
 **Not verified:** the SQL has never been executed — no Postgres available here.
+
+---
+
+## 2026-09-28 — Dark mode applied app-wide; app shell no longer scrolls with the page
+
+**Theme plumbing.** `profiles.dark_mode` was only applied by an effect inside the Profile
+screen, so the choice was lost on every reload (light app until /profile was reopened) and
+sign-out left the previous user's theme painted. Now:
+- `src/lib/theme.ts` — `applyTheme()` / `readStoredTheme()`, the single place that writes
+  `data-theme` on `<html>`, with a localStorage mirror (`lefax.theme`) used as a cache of the
+  server value, never the source of truth.
+- `src/components/ThemeSync.tsx` — mounted once in `main.tsx` inside `AuthProvider`, above the
+  router; applies the profile value once auth resolves, resets to light on sign-out, and holds
+  the pre-painted theme while auth is in flight (flipping mid-load is a visible flash).
+- `main.tsx` pre-paints from localStorage before React mounts → no white flash for dark users.
+- `Profile.tsx` keeps an `applyTheme()` call, now only as a live preview of the unsaved toggle.
+
+**Dark palette completed.** The old `:root[data-theme="dark"]` block redefined only
+surface/card/border/muted/text, but the app writes most colours with the `ink` scale
+(`text-ink-900` alone is in 40+ files), which kept its light values — dark navy headings on a
+dark card ("Biologie" / "La cellule" unreadable). `index.css` now inverts the whole ink ramp
+(950…600 = progressively lighter text; 100/50 = dark elevated fills), lightens brand and the
+status tints, maps the ~119 legacy `bg-white` call sites and the hardcoded `#eef3f9`/`#e2e8f0`
+family to tokens, and themes `input`/`select`/`textarea`/`option`.
+
+**Shell scroll fix.** The shell mixed `min-h-screen`/`100vh` with `100dvh`, and the initial
+containing block is the *large* viewport regardless, so the document scrolled behind the shell
+and carried TopBar + the absolutely-pinned BottomTabs with it (the "footer with Cours/Perfs
+moves while I scroll" bug). All heights are `100dvh` now, and `PhoneFrame` sets
+`data-app-shell` on `<html>` while `nav="app"` is mounted; `index.css` pins
+`html`/`body` (`height:100%; overflow:hidden; overscroll-behavior:none`) behind that attribute.
+Deliberately **not** set for `nav="auth"`/`"focus"` — those centre a fixed 860px card that a
+short desktop window genuinely needs to scroll to — nor for the landing page / admin, which
+scroll the document normally.
+
+**Verified:** `npm run build` green, `npx eslint .` 0 errors (23 pre-existing react-refresh
+warnings). **Not verified:** no browser run here — the dark palette and the scroll lock have
+not been eyeballed on a real device.
+
+### Files touched
+- add `src/lib/theme.ts`, `src/components/ThemeSync.tsx`
+- edit `src/index.css`, `src/main.tsx`, `src/components/PhoneFrame.tsx`,
+  `src/pages/student/Profile.tsx`
