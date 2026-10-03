@@ -371,6 +371,11 @@ export type MediaLibraryRow = {
   uploaded_by: string | null;
   lesson_id: string | null;
   image_slot: number | null;
+  /** Image references (0021) — all optional, rendered by ImageLightbox. */
+  alt_text: string | null;
+  caption: string | null;
+  credit: string | null;
+  credit_url: string | null;
   created_at: string;
 }
 

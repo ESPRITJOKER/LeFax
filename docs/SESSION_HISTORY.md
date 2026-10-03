@@ -5,6 +5,171 @@ Live Supabase project ref: `kjlgrgdryimazczrcvgx` ("Lefax MVP", eu-west-1).
 
 ---
 
+## 2026-10-02 — Feedback round N6: lesson body, editor toolbar, highlight, video, zoom, perf
+
+Source: `Correction N6.docx` (4 screenshots + 7 remarks, FR), plus the "modèle originel"
+screenshot re-sent as `~/Downloads/images/1000085939.jpg` with *"i want exactly an editor like
+this with all functionalities"*.
+
+### 1. "je l'ai rempli mais elle ne s'affiche nulle part" — the lesson body was dead code
+`LessonDetail.tsx` returned `<LessonCardDeck/>` as soon as a lesson had **one** card, and every
+real lesson has cards. So `content_fr/en`, `objectives_*`, `summary_*`, `key_points_*` **and every
+`[[IMG:]]` upload** were written by the editor and never read back by anything. The field was not
+useless — it was unreachable.
+
+New `src/pages/student/LessonReader.tsx` at `/lesson/:id/cours` renders exactly that content
+(body + objectives + summary + key points + media), with loading / empty / error states through
+the existing `StateNotice`. Reached from a "Cours complet" button in the card-deck header, a
+secondary button on the deck's last slot, and a corner button on each `ChapterStories` tile —
+each shown **only when `content_fr` is non-empty**, so a card-only lesson gains no dead control.
+The deck remains the default; this is the second view, not a replacement.
+
+### 2. "il y a ici un petit décalage" — `ImagePicker` overflow
+`LessonCardsPanel`'s image picker was `flex gap-3` with a fixed `w-[110px]` thumbnail and a
+non-shrinking button column, inside a `md:grid-cols-2` grid: under ~420 px of column the
+"Téléverser" button escaped the card and overlapped its neighbour. Now `flex-wrap` + `min-w-0` +
+`max-w-full` on the thumbnail + `flex-1 basis-[120px]` on the buttons.
+
+### 3. "Jaune qui rend invisible les écritures" — highlight contrast
+`<mark style={{background:"#fff2a8", color:"inherit"}}>`. The story-card front is
+`bg-ink-900 text-white/70` **in both themes**, so the inherited near-white sat on a pale yellow
+fill. A theme token cannot fix a surface that is dark in light mode too, so both halves of the
+pair are now pinned: `#1e2a3a` ink on one of four fills, selectable from the toolbar
+(`==vert|texte==`). **Measured: 1.13:1 → 12.07:1**; all four fills are AAA.
+
+### 4. "le modèle originel … c'est un peu compliqué" — the editor
+The screen was one 820 px column of raw monospace textareas: FR and EN bodies stacked, preview
+behind a toggle, cards and quiz dumped below in the same scroll. Rebuilt to the reference:
+sticky back/breadcrumb/Enregistrer header, Cours | Cartes | QCM tabs, a FR/EN two-button switch
+instead of two stacked bodies, the formatting bar over the editor, and a permanent live phone
+preview beside it at `xl` (stacked below it under `xl`).
+
+New `src/components/editor/MarkupToolbar.tsx` + `MarkupField.tsx`: undo/redo (ours — a
+programmatic `setValue` destroys the textarea's native history), B / I / U, X² / X₂, highlight +
+colour picker, bullet and numbered lists, indent/outdent, clear formatting, link, image, video,
+∑ maths, H₂O chemistry, and a source toggle. Ctrl+B/I/U/K/Z/Y as well.
+
+It writes the project's existing mini-markup rather than introducing a rich-text library: the
+same markup is parsed by the student renderers, the AI pipeline and every row already in the
+database, so nothing needed migrating and the preview is literally the student renderer. The
+card editor uses the same field with `toolbarOnFocus`, so its fourteen fields show one bar at a
+time instead of fourteen. Its phone preview now renders through `inline()` / `RichCardText` on
+the real dark card surface — the old one printed raw markup on white, which is how an unreadable
+`==surligné==` could ship without anyone seeing it.
+
+`lessonContent.tsx` gained the rules the toolbar needs: `^sup^`, `~sub~`, numbered lists, one
+level of list nesting, `[texte](url)`, `[[VIDEO: url]]`, and `credit=` / `source=` / `alt=` on
+`[[IMG:]]`.
+
+### 5. "les liens des vidéos hypertexte ne se connectaient pas"
+There was **no video support at all** — no column, no markup rule, and `markup()` had no link
+rule either, so a pasted URL rendered as inert text. Probing the live DB, no published lesson
+body contains any `http` link: nothing ever persisted it, which is why the course "containing
+the YouTube link" could not be found.
+
+Now `[texte](url)` renders a real `<a target="_blank" rel="noopener noreferrer">` behind an
+http/https/mailto allowlist (a `javascript:` URL keeps its label and loses its href), and
+`[[VIDEO: url]]` renders a responsive 16:9 `youtube-nocookie.com` / `player.vimeo.com` iframe with
+the id parsed out of the URL — `watch?v=`, `youtu.be/`, `/shorts/`, `/embed/`, `/live/`,
+playlists — and a clickable card for any other URL. Nothing hardcoded, so future videos work by
+themselves. Works in lesson bodies **and** card fields.
+
+### 6. Fullscreen + zoom + image references
+New `src/components/ImageLightbox.tsx`: wheel and +/− zoom, pinch-to-zoom, drag to pan, double
+tap/click to toggle fit ↔ 2×, Esc / ✕ / backdrop to close, `object-contain` so the aspect ratio
+is never distorted, and the body locked while open so closing returns to the same scroll offset.
+`ZoomableImage` wraps it, and every content image now goes through it — lesson body, **both**
+card faces (only the back one was even clickable before, and it merely opened the raw file in a
+new tab), and the editor's slot previews.
+
+Its optional `meta` prop (caption / credit / author / source link) is the extension point for
+"on verra comment ajouter les références". Lesson-body images store theirs in
+**`0021_media_metadata.sql`** — four nullable columns on `media_library`, no new table, no policy
+change; card images carry theirs inline in the `[[IMG: … | credit=… | source=…]]` token.
+
+### 7. "1 à 2 secondes" — measured, then fixed
+| | before | after |
+|---|---|---|
+| JS on first paint | **1,035 kB / 286 kB gzip**, one chunk | 121 + 165 + 216 kB / **146 kB gzip** |
+| CSS on first paint | 72 kB / 17.0 gzip | 44 kB / **9.1 gzip** |
+| `lefax-mark.png` (every screen, drawn at 26–30 px) | 740×740, **662 kB** | 96×96, **18 kB** |
+| `lefax-logo.png` | 1108×1088, 1039 kB | 360×354, 139 kB |
+| favicon | 256×256, 100 kB | 64×64, 9 kB |
+| `/lesson/:id` round trips | 6 sequential | 1 + 5 parallel |
+
+Causes, in order of size:
+- **No code splitting at all.** Every student downloaded the admin back-office and the teacher
+  panel. `React.lazy` on both subtrees plus the heavy runners; `manualChunks` pins react /
+  supabase / katex so a content deploy no longer invalidates 250 kB of vendor code in every cache.
+- **KaTeX loaded everywhere.** Its CSS moved from `main.tsx` into `lib/math.tsx` and
+  `LessonDetail` became lazy — it was the only early screen pulling it. 78 kB gzip of maths now
+  loads on a lesson, not on the dashboard.
+- **Brand PNGs 50× larger than their display size.** `scripts/optimize-brand-assets.mjs`
+  (System.Drawing via PowerShell, no new dependency) resizes them; originals kept as
+  `src/assets/*.source.png` — under `src`, never `public`, which Vite ships whole.
+- **A refetch storm.** 20 `useEffect`s list the whole `profile` object, while `auth.tsx` re-read
+  the row and called `setProfile(newObject)` on *every* auth event, including the hourly
+  `TOKEN_REFRESHED` and the `SIGNED_IN` fired when a tab regains focus. Every mounted screen then
+  refetched everything. `loadProfile` now keeps the previous object when `updated_at` is
+  unchanged, `TOKEN_REFRESHED` skips the read entirely, and `session` keeps its identity across a
+  token rotation. One central fix instead of editing 20 files.
+- **Sequential queries and oversized payloads.** `LessonDetail`'s five independent reads now run
+  in one `Promise.all`, its `lesson_progress` upsert moved off the critical path, and the sibling
+  / stories queries stopped pulling whole `content_fr`+`content_en` bodies to render a title.
+
+### Teacher vs user platforms — one application, deliberately
+The client asked whether splitting them would help. It would not: the 286 kB was a bundling
+fault, not an architecture fault. Teacher, admin and student already share auth, the Supabase
+client, i18n, the design tokens, `LessonEditorCore`, `lessonContent.tsx` and the RLS policies; a
+second frontend would duplicate all of it, double the deployments and let the two drift. Route
+splitting gets the same bytes off the student's phone in one file, with none of that cost.
+
+### Verified / not verified
+- `npx tsc --noEmit` clean · `npm run build` green · `npx eslint .` **0 errors**, 27
+  react-refresh warnings (23 before — the 4 new ones are the same category, from the exported
+  helpers `safeUrl`, `parseVideo`, `wrapSelection`, `mapSelectedLines`).
+- **Renderer**, server-rendered in Node through `react-dom/server`: bold, italic, highlight with
+  the pinned ink, nested bullets, numbered lists, sup/sub, a real link, a YouTube iframe, the
+  non-embeddable fallback card, the image figure with its credit link, and a `javascript:` URL
+  correctly stripped of its href.
+- **Editor commands**, 21 assertions: wrap / unwrap toggling, caret placement, list toggling and
+  renumbering, indent/outdent, clear formatting, snippet insertion. One real bug found and fixed
+  — the list button wrote the indent twice on an unindented line.
+- **Component smoke tests**, server-rendered: toolbar roles and `aria-label`s, the compact
+  variant hiding its bar until focus, disabled propagation, the zoomable image being keyboard
+  reachable, and no raw i18n key leaking into the markup.
+- **Contrast**: the four highlight pairs, and `scripts/check_contrast.mjs` unchanged at 6
+  pre-existing light-mode brand failures (documented in the N5 entry).
+- **i18n**: all 414 referenced keys exist in both locales; fr and en both 535 keys.
+- **Not verified in a browser.** The Claude-in-Chrome extension was not connected in this
+  session, so no gesture (pinch-zoom, swipe, drag-pan), no real save round-trip and no visual
+  check at 320/375/768/1024/1440 px was exercised against the running app.
+- **Migration `0021` APPLIED to live 2026-10-03** (project `kjlgrgdryimazczrcvgx`), through the
+  Management API SQL endpoint with `SUPABASE_SQL_TOKEN`: `SUPABASE_ACCESS_TOKEN` lacks
+  `database_read`/`database_write`, so `supabase db push` and `migration list` both 403 with
+  `LegacyDbConfigLoginRoleStatusError`. The history row was then inserted into
+  `supabase_migrations.schema_migrations` by hand so a later push does not re-run it. Verified
+  after: the four columns exist and are nullable, the three `media_library` policies are
+  unchanged, and both the explicit-column read and the app’s `select("*")` read return 200
+  through the anon client. The readers keep `select("*")` anyway — it costs nothing and keeps
+  the code working against any database where 0021 has not been run.
+- **Known, pre-existing and left alone**: `_italic_` still matches across words
+  (`a_b c_d` italicises `b c`). The toolbar never writes that form, but changing the rule could
+  silently un-italicise existing authored content, so it is reported rather than altered.
+
+### Files touched
+- add `src/components/ImageLightbox.tsx`, `src/components/editor/MarkupToolbar.tsx`,
+  `src/components/editor/MarkupField.tsx`, `src/pages/student/LessonReader.tsx`,
+  `supabase/migrations/0021_media_metadata.sql`, `scripts/optimize-brand-assets.mjs`
+- rewrite `src/components/content/LessonEditorCore.tsx`, `src/lib/lessonContent.tsx`, `src/App.tsx`
+- edit `src/components/content/LessonCardsPanel.tsx`, `src/components/LessonCardDeck.tsx`,
+  `src/components/FormulaTool.tsx`, `src/lib/auth.tsx`, `src/lib/math.tsx`, `src/lib/i18n.tsx`,
+  `src/lib/database.types.ts`, `src/main.tsx`, `src/pages/student/LessonDetail.tsx`,
+  `src/pages/student/ChapterStories.tsx`, `vite.config.ts`, the three brand PNGs
+
+---
+
+
 ## 2026-08-23 — Past-paper ("sujet") feature: buy + replay an exam paper
 
 ### What it is

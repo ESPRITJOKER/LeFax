@@ -36,6 +36,70 @@ export function insertSnippet(
   return { next, start: caret, end: caret };
 }
 
+/**
+ * Wrap the current selection in a paired mark (`**…**`, `==…==`, `^…^`…) and
+ * return the same `{next, start, end}` shape as {@link insertSnippet}, so both
+ * go through `applyInsert`.
+ *
+ * Three behaviours the formatting toolbar needs:
+ *  - nothing selected → insert the empty pair and put the caret between the
+ *    marks, so the author just keeps typing;
+ *  - selection already wrapped → UNWRAP it, so the button toggles rather than
+ *    stacking `****bold****` on a second click;
+ *  - otherwise → wrap, leaving the text selected so another button can be
+ *    applied on top of it.
+ */
+export function wrapSelection(
+  el: HTMLTextAreaElement | HTMLInputElement | null,
+  value: string,
+  before: string,
+  after: string = before
+): { next: string; start: number; end: number } {
+  const start = el?.selectionStart ?? value.length;
+  const end = el?.selectionEnd ?? start;
+  const selected = value.slice(start, end);
+
+  // Already wrapped — either inside the selection or just around it.
+  if (selected.startsWith(before) && selected.endsWith(after) && selected.length >= before.length + after.length) {
+    const inner = selected.slice(before.length, selected.length - after.length);
+    return { next: value.slice(0, start) + inner + value.slice(end), start, end: start + inner.length };
+  }
+  const outerStart = start - before.length;
+  if (outerStart >= 0 && value.slice(outerStart, start) === before && value.slice(end, end + after.length) === after) {
+    return {
+      next: value.slice(0, outerStart) + selected + value.slice(end + after.length),
+      start: outerStart,
+      end: outerStart + selected.length,
+    };
+  }
+
+  const next = value.slice(0, start) + before + selected + after + value.slice(end);
+  return selected
+    ? { next, start: start + before.length, end: start + before.length + selected.length }
+    : { next, start: start + before.length, end: start + before.length };
+}
+
+/**
+ * Rewrite every line touched by the selection. Used by the list, indent and
+ * outdent buttons; the selection is restored across the whole rewritten range
+ * so the author can press the button again on the same block.
+ */
+export function mapSelectedLines(
+  el: HTMLTextAreaElement | HTMLInputElement | null,
+  value: string,
+  fn: (line: string, index: number) => string
+): { next: string; start: number; end: number } {
+  const selStart = el?.selectionStart ?? value.length;
+  const selEnd = el?.selectionEnd ?? selStart;
+  const lineStart = value.lastIndexOf("\n", selStart - 1) + 1;
+  const lineEndIdx = value.indexOf("\n", selEnd);
+  const lineEnd = lineEndIdx === -1 ? value.length : lineEndIdx;
+
+  const block = value.slice(lineStart, lineEnd);
+  const rewritten = block.split("\n").map(fn).join("\n");
+  return { next: value.slice(0, lineStart) + rewritten + value.slice(lineEnd), start: lineStart, end: lineStart + rewritten.length };
+}
+
 /** Apply an `insertSnippet` result to a controlled field and restore the caret. */
 export function applyInsert(
   el: HTMLTextAreaElement | HTMLInputElement | null,

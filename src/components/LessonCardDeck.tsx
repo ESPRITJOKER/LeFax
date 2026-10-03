@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useI18n } from "../lib/i18n";
 import { inline, RichCardText, hasInlineImageToken } from "../lib/lessonContent";
+import { ZoomableImage } from "./ImageLightbox";
 import { gradeStructural } from "../lib/practiceBank";
 import type { LessonCardRow } from "../lib/database.types";
 
@@ -42,12 +43,15 @@ export function LessonCardDeck({
   chapterName,
   onFinish,
   onClose,
+  onOpenCourse,
 }: {
   cards: LessonCardRow[];
   lessonTitle: string;
   chapterName?: string | null;
   onFinish: () => void;
   onClose?: () => void;
+  /** Opens the full lesson text. Omitted when the lesson has no body. */
+  onOpenCourse?: () => void;
 }) {
   const { t, lang } = useI18n();
   // Show the finger hint on the very first card until the user has seen it a
@@ -197,6 +201,24 @@ export function LessonCardDeck({
             <h1 className="font-serif font-extrabold text-[14px] truncate">{lessonTitle}</h1>
             {chapterName && <p className="text-[10.5px] text-white/60 truncate">{chapterName}</p>}
           </div>
+          {/* "Cours complet" — the lesson's long-form body. Correction N6: the
+              teacher filled Contenu (FR) and "elle ne s'affiche nulle part dans
+              l'espace utilisateur", because this deck replaced the document
+              view outright. Shown only when the lesson actually has a body. */}
+          {onOpenCourse && (
+            <button
+              onClick={onOpenCourse}
+              aria-label={t("ed_openCourse")}
+              title={t("ed_openCourse")}
+              className="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full bg-white/10 text-white text-[11.5px] font-bold border-none"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4" strokeLinejoin="round">
+                <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z" />
+                <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z" />
+              </svg>
+              <span className="hidden sm:inline">{t("ed_openCourse")}</span>
+            </button>
+          )}
           {/* Close (symbol only — corrections doc: "On rentre comment au menu ou
               sur les stories ?" → an always-visible ✕ back to the stories grid). */}
           {onClose && (
@@ -259,14 +281,16 @@ export function LessonCardDeck({
             // field to place it exactly where they want — e.g. inside the
             // explanation (Correction N4). When a face's text asks for the image
             // inline, we suppress that face's top image to avoid showing it twice.
+            // Every card image opens the fullscreen zoomable viewer on tap —
+            // Correction N6 ("que les images viennent en plein écran… et on
+            // doit être capable de zoomer"). Previously only the BACK face was
+            // even clickable, and it merely opened the raw file in a new tab.
             const onError = () => setBrokenImg((p) => ({ ...p, [card.id]: true }));
             const frontImgNode = image ? (
-              <img src={image} alt="" onError={onError} className="w-full max-h-[240px] object-contain rounded-2xl bg-white/5" />
+              <ZoomableImage src={image} alt={point} onError={onError} className="w-full max-h-[240px] object-contain rounded-2xl bg-white/5" />
             ) : null;
             const backImgNode = image ? (
-              <a href={image} target="_blank" rel="noopener noreferrer" className="block">
-                <img src={image} alt="" onError={onError} className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50" />
-              </a>
+              <ZoomableImage src={image} alt={point} onError={onError} className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50" />
             ) : null;
             const frontInlineImg = hasInlineImageToken(sub);
             const backInlineImg = hasInlineImageToken(explanation, tips, traps);
@@ -297,9 +321,9 @@ export function LessonCardDeck({
                         the subtitle carries a [[IMG]] token the image is placed
                         inline there instead of here (Correction N4). */}
                     {image && !frontInlineImg && (
-                      <img
+                      <ZoomableImage
                         src={image}
-                        alt=""
+                        alt={point}
                         onError={onError}
                         className="w-full max-h-[38%] object-contain rounded-2xl mb-5 bg-white/5"
                       />
@@ -454,6 +478,14 @@ export function LessonCardDeck({
                 <button onClick={onFinish} className="bg-brand-600 text-white font-extrabold text-[14px] px-7 py-3.5 rounded-xl">
                   {t("card_startPractice")} →
                 </button>
+                {onOpenCourse && (
+                  <button
+                    onClick={onOpenCourse}
+                    className="mt-3 bg-transparent border border-white/25 text-white/85 font-bold text-[13px] px-6 py-2.5 rounded-xl"
+                  >
+                    {t("ed_openCourse")}
+                  </button>
+                )}
               </div>
             </div>
           </div>

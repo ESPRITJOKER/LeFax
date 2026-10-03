@@ -3,6 +3,10 @@ import katex from "katex";
 // Registers \ce{...} and \pu{...} (mhchem) as KaTeX macros — chemical formulas,
 // ionic charges, reaction arrows and states of matter all come from this.
 import "katex/contrib/mhchem";
+// The stylesheet lives here rather than in main.tsx so it ships with whichever
+// chunk actually typesets something, instead of blocking the first paint of
+// every screen in the app, most of which contain no maths at all.
+import "katex/dist/katex.min.css";
 
 /**
  * Mathematical + chemical notation for lesson bodies, story cards, questions

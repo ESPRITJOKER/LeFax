@@ -7,9 +7,6 @@ import { AuthProvider } from "./lib/auth";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ThemeSync } from "./components/ThemeSync";
 import { applyTheme, readStoredTheme } from "./lib/theme";
-// KaTeX stylesheet + fonts, for the maths/chemistry notation in lesson bodies,
-// story cards and questions (src/lib/math.tsx). Imported once, globally.
-import "katex/dist/katex.min.css";
 import "./index.css";
 
 // Pre-paint the theme this browser last used, before React mounts, so a dark-

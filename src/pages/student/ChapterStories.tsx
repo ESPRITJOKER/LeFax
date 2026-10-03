@@ -9,7 +9,9 @@ import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { ChapterRow, LessonRow } from "../../lib/database.types";
 
-interface StoryTile extends LessonRow {
+type StoryLesson = Pick<LessonRow, "id" | "title_fr" | "title_en" | "position" | "content_fr">;
+
+interface StoryTile extends StoryLesson {
   cover: string | null;
 }
 
@@ -19,7 +21,7 @@ interface StoryTile extends LessonRow {
  * Each published lesson is a story; tapping one opens its card deck.
  */
 export default function ChapterStories() {
-  const { lang } = useI18n();
+  const { t, lang } = useI18n();
   const navigate = useNavigate();
   const { chapterId } = useParams<{ chapterId: string }>();
   const { profile } = useAuth();
@@ -36,20 +38,28 @@ export default function ChapterStories() {
     }
     (async () => {
       setLoading(true);
-      const { data: chapterRow } = await supabase.from("chapters").select("*").eq("id", chapterId).maybeSingle();
+      // The chapter header and the tile list are independent reads.
+      // `select("*")` on `lessons` here used to download every lesson's full
+      // content_fr AND content_en — several kB per tile — to render a title on
+      // a cover image (Correction N6, remark 5). `has_body` is derived from the
+      // one column the "Cours" affordance needs, not from the body itself.
+      const [chapterRes, lessonsRes] = await Promise.all([
+        supabase.from("chapters").select("*").eq("id", chapterId).maybeSingle(),
+        supabase
+          .from("lessons")
+          .select("id, title_fr, title_en, position, content_fr")
+          .eq("chapter_id", chapterId)
+          .eq("published", true)
+          .order("position"),
+      ]);
+      const chapterRow = chapterRes.data;
       setChapter(chapterRow ?? null);
       if (chapterRow) {
         const { data: subjectRow } = await supabase.from("subjects").select("slug").eq("id", chapterRow.subject_id).maybeSingle();
         setSubjectSlug(subjectRow?.slug ?? "");
       }
 
-      const { data: lessonRows } = await supabase
-        .from("lessons")
-        .select("*")
-        .eq("chapter_id", chapterId)
-        .eq("published", true)
-        .order("position");
-      const lessons = lessonRows ?? [];
+      const lessons = lessonsRes.data ?? [];
 
       // Cover = the first card's image (if the lesson has story cards).
       const lessonIds = lessons.map((l) => l.id);
@@ -114,20 +124,36 @@ export default function ChapterStories() {
                 {stories.map((s) => {
                   const title = lang === "fr" ? s.title_fr : s.title_en;
                   return (
-                    <button
-                      key={s.id}
-                      onClick={() => navigate(`/lesson/${s.id}`)}
-                      className="relative rounded-2xl overflow-hidden aspect-[3/4] flex items-end text-left shadow-[0_2px_10px_rgba(20,30,60,0.08)]"
-                      style={{ background: s.cover ? "#0b1526" : se.bg }}
-                    >
-                      {s.cover ? (
-                        <img src={s.cover} alt="" className="absolute inset-0 w-full h-full object-cover opacity-90" />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-[38px] opacity-40">{se.emoji}</div>
+                    <div key={s.id} className="relative">
+                      <button
+                        onClick={() => navigate(`/lesson/${s.id}`)}
+                        className="w-full relative rounded-2xl overflow-hidden aspect-[3/4] flex items-end text-left shadow-[0_2px_10px_rgba(20,30,60,0.08)]"
+                        style={{ background: s.cover ? "#0b1526" : se.bg }}
+                      >
+                        {s.cover ? (
+                          <img src={s.cover} alt="" className="absolute inset-0 w-full h-full object-cover opacity-90" />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center text-[38px] opacity-40">{se.emoji}</div>
+                        )}
+                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+                        <div className="relative z-10 p-3 font-serif font-bold text-[13px] text-white leading-[1.3]">{title}</div>
+                      </button>
+                      {/* Direct route to the written lesson, for students who
+                          want to read rather than swipe (Correction N6). */}
+                      {s.content_fr?.trim() && (
+                        <button
+                          onClick={() => navigate(`/lesson/${s.id}/cours`)}
+                          aria-label={`${t("ed_openCourse")} — ${title}`}
+                          title={t("ed_openCourse")}
+                          className="absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/55 text-white flex items-center justify-center border-none backdrop-blur-sm"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4" strokeLinejoin="round">
+                            <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z" />
+                            <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z" />
+                          </svg>
+                        </button>
                       )}
-                      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
-                      <div className="relative z-10 p-3 font-serif font-bold text-[13px] text-white leading-[1.3]">{title}</div>
-                    </button>
+                    </div>
                   );
                 })}
               </div>

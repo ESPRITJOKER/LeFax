@@ -10,6 +10,9 @@ import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow, LessonCardRow, QuizRow, ChapterRow } from "../../lib/database.types";
 
+/** Only what next/previous navigation needs — not the siblings' whole bodies. */
+type SiblingLesson = Pick<LessonRow, "id" | "title_fr" | "title_en" | "position" | "chapter_id">;
+
 export default function LessonDetail() {
   const { t, lang } = useI18n();
   const navigate = useNavigate();
@@ -19,75 +22,88 @@ export default function LessonDetail() {
   const [lesson, setLesson] = useState<LessonRow | null>(null);
   const [cards, setCards] = useState<LessonCardRow[]>([]);
   const [chapter, setChapter] = useState<ChapterRow | null>(null);
-  const [siblings, setSiblings] = useState<LessonRow[]>([]);
-  const [quiz, setQuiz] = useState<QuizRow | null>(null);
+  const [siblings, setSiblings] = useState<SiblingLesson[]>([]);
+  const [quiz, setQuiz] = useState<Pick<QuizRow, "id"> | null>(null);
   const [images, setImages] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
+  const profileId = profile?.id ?? null;
 
   useEffect(() => {
     if (!isSupabaseConfigured || !lessonId) {
       setLoading(false);
       return;
     }
+    let cancelled = false;
     (async () => {
       setLoading(true);
       const { data: lessonRow } = await supabase.from("lessons").select("*").eq("id", lessonId).eq("published", true).maybeSingle();
+      if (cancelled) return;
       setLesson(lessonRow ?? null);
 
       if (lessonRow) {
-        // Story cards (new model). Empty → fall back to the document viewer.
-        const { data: cardRows } = await supabase
-          .from("lesson_cards")
-          .select("*")
-          .eq("lesson_id", lessonRow.id)
-          .order("position");
-        setCards(cardRows ?? []);
+        // These five reads do not depend on one another — only on the lesson
+        // row we already have. Awaiting them one by one cost five serial
+        // round trips (~1 s on a Cameroonian 3G link), which is most of the
+        // "le chargement d'une page prend 1 à 2 secondes" the client measured.
+        const [cardsRes, chapterRes, siblingsRes, quizRes, mediaRes] = await Promise.all([
+          // Story cards (new model). Empty → fall back to the document viewer.
+          supabase.from("lesson_cards").select("*").eq("lesson_id", lessonRow.id).order("position"),
+          supabase.from("chapters").select("*").eq("id", lessonRow.chapter_id).maybeSingle(),
+          // Only the fields the next/previous navigation actually needs — the
+          // sibling bodies were multi-kB of content_fr/content_en per lesson.
+          supabase
+            .from("lessons")
+            .select("id, title_fr, title_en, position, chapter_id")
+            .eq("chapter_id", lessonRow.chapter_id)
+            .eq("published", true)
+            .order("position"),
+          supabase.from("quizzes").select("id").eq("lesson_id", lessonRow.id).maybeSingle(),
+          supabase.from("media_library").select("image_slot, storage_path").eq("lesson_id", lessonRow.id).not("image_slot", "is", null),
+        ]);
+        if (cancelled) return;
 
-        const { data: chapterRow } = await supabase.from("chapters").select("*").eq("id", lessonRow.chapter_id).maybeSingle();
-        setChapter(chapterRow ?? null);
+        setCards(cardsRes.data ?? []);
+        setChapter(chapterRes.data ?? null);
+        setSiblings((siblingsRes.data ?? []) as SiblingLesson[]);
+        setQuiz(quizRes.data ?? null);
 
-        const { data: siblingRows } = await supabase
-          .from("lessons")
-          .select("*")
-          .eq("chapter_id", lessonRow.chapter_id)
-          .eq("published", true)
-          .order("position");
-        setSiblings(siblingRows ?? []);
-
-        const { data: quizRow } = await supabase.from("quizzes").select("*").eq("lesson_id", lessonRow.id).maybeSingle();
-        setQuiz(quizRow ?? null);
-
-        const { data: mediaRows } = await supabase
-          .from("media_library")
-          .select("image_slot, storage_path")
-          .eq("lesson_id", lessonRow.id)
-          .not("image_slot", "is", null);
         const map: Record<number, string> = {};
-        for (const m of mediaRows ?? []) if (m.image_slot != null) map[m.image_slot] = m.storage_path;
+        for (const m of mediaRes.data ?? []) if (m.image_slot != null) map[m.image_slot] = m.storage_path;
         setImages(map);
+        setLoading(false);
 
-        if (profile) {
-          const { data: progressRow } = await supabase
-            .from("lesson_progress")
-            .select("*")
-            .eq("user_id", profile.id)
-            .eq("lesson_id", lessonRow.id)
-            .maybeSingle();
-
-          await supabase.from("lesson_progress").upsert(
-            {
-              user_id: profile.id,
-              lesson_id: lessonRow.id,
-              status: progressRow?.status === "done" ? "done" : "current",
-              last_viewed_at: new Date().toISOString(),
-            },
-            { onConflict: "user_id,lesson_id" }
-          );
+        // Progress is a write, not something the page renders — it must not sit
+        // on the critical path. Fired after the content is on screen.
+        if (profileId) {
+          void (async () => {
+            const { data: progressRow } = await supabase
+              .from("lesson_progress")
+              .select("status")
+              .eq("user_id", profileId)
+              .eq("lesson_id", lessonRow.id)
+              .maybeSingle();
+            await supabase.from("lesson_progress").upsert(
+              {
+                user_id: profileId,
+                lesson_id: lessonRow.id,
+                status: progressRow?.status === "done" ? "done" : "current",
+                last_viewed_at: new Date().toISOString(),
+              },
+              { onConflict: "user_id,lesson_id" }
+            );
+          })();
         }
+        return;
       }
       setLoading(false);
     })();
-  }, [lessonId, profile]);
+    return () => {
+      cancelled = true;
+    };
+    // Depending on `profile.id` rather than the whole `profile` object matters:
+    // every auth event (including the hourly token refresh) used to hand down a
+    // fresh object and re-run this entire load.
+  }, [lessonId, profileId]);
 
   if (loading)
     return (
@@ -114,6 +130,10 @@ export default function LessonDetail() {
     else navigate(`/lessons/${lesson!.chapter_id}`);
   }
 
+  // The lesson body is only offered when there is actually one to read, so a
+  // card-only lesson gains no dead button (Correction N6, remark 1).
+  const hasBody = Boolean((lang === "fr" ? lesson.content_fr : lesson.content_en)?.trim() || lesson.content_fr?.trim());
+
   // ── New story-card viewer ────────────────────────────────────────────────
   if (cards.length > 0) {
     return (
@@ -123,6 +143,7 @@ export default function LessonDetail() {
           lessonTitle={title}
           chapterName={chapter ? (lang === "fr" ? chapter.name_fr : chapter.name_en) : null}
           onFinish={goNext}
+          onOpenCourse={hasBody ? () => navigate(`/lesson/${lesson.id}/cours`) : undefined}
           // `replace` so closing the card doesn't push a *second* stories entry
           // on top of the one we came from — otherwise the stories grid's back
           // arrow would step back onto the card instead of the chapter list

@@ -4,6 +4,9 @@ import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
 import { supabase } from "../../lib/supabaseClient";
 import type { LessonCardRow } from "../../lib/database.types";
+import { MarkupField } from "../editor/MarkupField";
+import { ZoomableImage } from "../ImageLightbox";
+import { RichCardText, hasInlineImageToken, inline } from "../../lib/lessonContent";
 
 const BUCKET = "lesson-media";
 
@@ -33,8 +36,8 @@ export interface LessonCardsHandle {
  * per-card save, the dirty-tracking imperative handle and the dual-language
  * image uploads are unchanged.
  */
-export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string }>(function LessonCardsPanel(
-  { lessonId },
+export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string; canEdit?: boolean }>(function LessonCardsPanel(
+  { lessonId, canEdit = true },
   ref
 ) {
   const { t } = useI18n();
@@ -228,7 +231,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
       {sorted.length === 0 ? (
         <>
           <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4 py-5 text-[13px] text-muted mb-3">{t("admin_noCards")}</div>
-          <AddCardButton onClick={addCard} label={t("admin_addCard")} />
+          <AddCardButton onClick={addCard} label={t("admin_addCard")} disabled={!canEdit} />
         </>
       ) : (
         <div className="flex flex-col xl:flex-row gap-4 items-start">
@@ -249,7 +252,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
               />
             ))}
             <div className="flex-none xl:mt-1">
-              <AddCardButton onClick={addCard} label={t("admin_addCard")} />
+              <AddCardButton onClick={addCard} label={t("admin_addCard")} disabled={!canEdit} />
             </div>
           </nav>
 
@@ -266,33 +269,38 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
                   )}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <button onClick={() => move(selected, -1)} disabled={busy || selectedIndex === 0} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveUp")}>
+                  <button onClick={() => move(selected, -1)} disabled={busy || !canEdit || selectedIndex === 0} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveUp")}>
                     <Icon name="chevleft" size={14} className="rotate-90" />
                   </button>
-                  <button onClick={() => move(selected, 1)} disabled={busy || selectedIndex === sorted.length - 1} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveDown")}>
+                  <button onClick={() => move(selected, 1)} disabled={busy || !canEdit || selectedIndex === sorted.length - 1} className="p-1.5 rounded-lg border border-border text-ink-700 disabled:opacity-40" title={t("admin_moveDown")}>
                     <Icon name="chevleft" size={14} className="-rotate-90" />
                   </button>
-                  <button onClick={() => deleteCard(selected)} disabled={busy} className="p-1.5 rounded-lg border border-border text-danger-600 disabled:opacity-40" title={t("admin_deleteCard")}>
+                  <button onClick={() => deleteCard(selected)} disabled={busy || !canEdit} className="p-1.5 rounded-lg border border-border text-danger-600 disabled:opacity-40" title={t("admin_deleteCard")}>
                     <Icon name="close" size={14} />
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label={t("admin_cardPointFr")} value={selected.point_fr} onChange={(v) => setField(selected.id, "point_fr", v)} />
-                <Field label={t("admin_cardPointEn")} value={selected.point_en} onChange={(v) => setField(selected.id, "point_en", v)} />
-                <Field label={t("admin_cardSubFr")} value={selected.sub_fr} onChange={(v) => setField(selected.id, "sub_fr", v)} />
-                <Field label={t("admin_cardSubEn")} value={selected.sub_en} onChange={(v) => setField(selected.id, "sub_en", v)} />
-                <Field label={t("admin_cardExplanationFr")} value={selected.explanation_fr} onChange={(v) => setField(selected.id, "explanation_fr", v)} area />
-                <Field label={t("admin_cardExplanationEn")} value={selected.explanation_en} onChange={(v) => setField(selected.id, "explanation_en", v)} area />
-                <Field label={t("admin_cardStructQFr")} value={selected.structural_question_fr} onChange={(v) => setField(selected.id, "structural_question_fr", v)} area />
-                <Field label={t("admin_cardStructQEn")} value={selected.structural_question_en} onChange={(v) => setField(selected.id, "structural_question_en", v)} area />
-                <Field label={t("admin_cardStructAFr")} value={selected.structural_answer_fr} onChange={(v) => setField(selected.id, "structural_answer_fr", v)} />
-                <Field label={t("admin_cardStructAEn")} value={selected.structural_answer_en} onChange={(v) => setField(selected.id, "structural_answer_en", v)} />
-                <Field label={t("admin_cardTipsFr")} value={selected.tips_fr} onChange={(v) => setField(selected.id, "tips_fr", v)} area />
-                <Field label={t("admin_cardTipsEn")} value={selected.tips_en} onChange={(v) => setField(selected.id, "tips_en", v)} area />
-                <Field label={t("admin_cardTrapsFr")} value={selected.traps_fr} onChange={(v) => setField(selected.id, "traps_fr", v)} area />
-                <Field label={t("admin_cardTrapsEn")} value={selected.traps_en} onChange={(v) => setField(selected.id, "traps_en", v)} area />
+                {/* The rich fields get the formatting bar — but only while the
+                    author is in them, so the pane shows one toolbar at a time
+                    rather than fourteen (Correction N6: "c'est un peu
+                    compliqué"). The two short answer fields stay plain: a
+                    direct-match graded answer has nothing to format. */}
+                <Rich label={t("admin_cardPointFr")} value={selected.point_fr} onChange={(v) => setField(selected.id, "point_fr", v)} disabled={!canEdit} rows={2} minHeight={60} />
+                <Rich label={t("admin_cardPointEn")} value={selected.point_en} onChange={(v) => setField(selected.id, "point_en", v)} disabled={!canEdit} rows={2} minHeight={60} />
+                <Rich label={t("admin_cardSubFr")} value={selected.sub_fr} onChange={(v) => setField(selected.id, "sub_fr", v)} disabled={!canEdit} rows={3} minHeight={84} />
+                <Rich label={t("admin_cardSubEn")} value={selected.sub_en} onChange={(v) => setField(selected.id, "sub_en", v)} disabled={!canEdit} rows={3} minHeight={84} />
+                <Rich label={t("admin_cardExplanationFr")} value={selected.explanation_fr} onChange={(v) => setField(selected.id, "explanation_fr", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardExplanationEn")} value={selected.explanation_en} onChange={(v) => setField(selected.id, "explanation_en", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardStructQFr")} value={selected.structural_question_fr} onChange={(v) => setField(selected.id, "structural_question_fr", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardStructQEn")} value={selected.structural_question_en} onChange={(v) => setField(selected.id, "structural_question_en", v)} disabled={!canEdit} />
+                <Field label={t("admin_cardStructAFr")} value={selected.structural_answer_fr} onChange={(v) => setField(selected.id, "structural_answer_fr", v)} disabled={!canEdit} />
+                <Field label={t("admin_cardStructAEn")} value={selected.structural_answer_en} onChange={(v) => setField(selected.id, "structural_answer_en", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardTipsFr")} value={selected.tips_fr} onChange={(v) => setField(selected.id, "tips_fr", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardTipsEn")} value={selected.tips_en} onChange={(v) => setField(selected.id, "tips_en", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardTrapsFr")} value={selected.traps_fr} onChange={(v) => setField(selected.id, "traps_fr", v)} disabled={!canEdit} />
+                <Rich label={t("admin_cardTrapsEn")} value={selected.traps_en} onChange={(v) => setField(selected.id, "traps_en", v)} disabled={!canEdit} />
               </div>
 
               {/* Dual per-language image pickers (Step 4) */}
@@ -300,7 +308,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
                 <ImagePicker
                   label={t("admin_cardImageFr")}
                   url={selected.image_fr}
-                  busy={busy}
+                  busy={busy || !canEdit}
                   onPick={() => fileInputs.current[`${selected.id}-fr`]?.click()}
                   onRemove={() => removeImage(selected, "fr")}
                   uploadLabel={t(selected.image_fr ? "admin_replace" : "admin_upload")}
@@ -311,7 +319,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
                 <ImagePicker
                   label={t("admin_cardImageEn")}
                   url={selected.image_en}
-                  busy={busy}
+                  busy={busy || !canEdit}
                   onPick={() => fileInputs.current[`${selected.id}-en`]?.click()}
                   onRemove={() => removeImage(selected, "en")}
                   uploadLabel={t(selected.image_en ? "admin_replace" : "admin_upload")}
@@ -322,7 +330,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
               </div>
 
               <div className="mt-3">
-                <button onClick={() => saveCard(selected)} disabled={busy} className="border-none px-5 py-2.5 rounded-xl text-[13px] font-bold bg-brand-600 text-white disabled:opacity-60">
+                <button onClick={() => saveCard(selected)} disabled={busy || !canEdit} className="border-none px-5 py-2.5 rounded-xl text-[13px] font-bold bg-brand-600 text-white disabled:opacity-60">
                   {busy ? t("admin_uploading") : dirty.has(selected.id) ? `${t("admin_saveCard")} •` : t("admin_saveCard")}
                 </button>
               </div>
@@ -337,11 +345,12 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
   );
 });
 
-function AddCardButton({ onClick, label }: { onClick: () => void; label: string }) {
+function AddCardButton({ onClick, label, disabled }: { onClick: () => void; label: string; disabled?: boolean }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-card whitespace-nowrap"
+      disabled={disabled}
+      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-card whitespace-nowrap disabled:opacity-50"
     >
       <Icon name="plus" size={15} />
       {label}
@@ -399,9 +408,15 @@ function CardThumb({
 }
 
 /**
- * Live phone preview. Renders the card the way the student deck shows its front
- * face, in the admin's current interface language, so the person writing the
- * card sees the real line lengths instead of guessing from a textarea.
+ * Live phone preview — "tu peux voir directement la modification que tu as
+ * effectuée sur l'écran (mobile) à côté" (Correction N6).
+ *
+ * It now renders through the SAME renderers the student deck uses (`inline` for
+ * the point, `RichCardText` for the subtitle) on the same dark card surface, so
+ * bold, italic, highlight, lists and formulas look here exactly as they will in
+ * the app. The previous version printed the raw markup as plain text on a light
+ * background, which is precisely how `==surligné==` could ship unreadable
+ * without anyone seeing it first.
  */
 function PhonePreview({ card, index, total }: { card: LessonCardRow; index: number; total: number }) {
   const { t, lang } = useI18n();
@@ -409,24 +424,33 @@ function PhonePreview({ card, index, total }: { card: LessonCardRow; index: numb
   const point = lang === "fr" ? card.point_fr || card.point_en : card.point_en || card.point_fr;
   const sub = lang === "fr" ? card.sub_fr || card.sub_en : card.sub_en || card.sub_fr;
   const progress = total > 0 ? ((index + 1) / total) * 100 : 0;
+  const inlineImg = hasInlineImageToken(sub);
+  const imgNode = image ? <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-xl bg-white/5" /> : null;
 
   return (
-    <aside className="hidden xl:block xl:w-[292px] xl:flex-none">
-      <div className="text-[11px] font-bold uppercase tracking-wide text-muted mb-2">{t("te_preview")}</div>
-      <div className="rounded-[34px] border-[10px] border-ink-900 bg-ink-900 shadow-[0_18px_40px_-18px_rgba(15,30,60,0.55)]">
-        <div className="rounded-[24px] bg-surface overflow-hidden flex flex-col h-[520px]">
+    <aside className="w-full xl:w-[300px] xl:flex-none">
+      <div className="text-[11px] font-bold uppercase tracking-wide text-muted mb-2">{t("ed_livePreview")}</div>
+      <div className="rounded-[34px] border-[10px] border-ink-900 bg-ink-900 shadow-[0_18px_40px_-18px_rgba(15,30,60,0.55)] max-w-[320px] mx-auto xl:mx-0">
+        <div className="rounded-[24px] bg-ink-900 text-white overflow-hidden flex flex-col h-[520px]">
           <div className="px-4 pt-4">
-            <div className="h-1.5 rounded-pill bg-ink-100 overflow-hidden">
-              <div className="h-full rounded-pill bg-brand-500" style={{ width: `${progress}%` }} />
+            <div className="h-1.5 rounded-pill bg-white/25 overflow-hidden">
+              <div className="h-full rounded-pill bg-white" style={{ width: `${progress}%` }} />
             </div>
           </div>
-          <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4">
-            {image && <img src={image} alt="" className="w-full rounded-xl bg-card mb-3.5 object-cover" />}
-            <div className="text-[15px] font-bold text-ink-900 uppercase tracking-wide">{point || "—"}</div>
-            {sub && <p className="text-[13px] text-ink-800 leading-relaxed mt-2">{sub}</p>}
+          <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4">
+            {image && !inlineImg && <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-2xl mb-4 bg-white/5" />}
+            <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">
+              {lang === "fr" ? `Carte ${index + 1} / ${total}` : `Card ${index + 1} / ${total}`}
+            </div>
+            <div className="font-serif text-[18px] font-semibold leading-[1.35] mb-3">{point ? inline(point) : "—"}</div>
+            {sub && (
+              <div className="text-[13px] text-white/70 leading-[1.5]">
+                <RichCardText text={sub} image={imgNode} />
+              </div>
+            )}
           </div>
           <div className="px-4 pb-4">
-            <div className="w-full rounded-xl bg-brand-500 text-white text-[13px] font-bold py-2.5 text-center">{t("lang_continue")}</div>
+            <div className="w-full rounded-xl bg-brand-600 text-white text-[13px] font-bold py-2.5 text-center">{t("lang_continue")}</div>
           </div>
         </div>
       </div>
@@ -434,18 +458,51 @@ function PhonePreview({ card, index, total }: { card: LessonCardRow; index: numb
   );
 }
 
-function Field({ label, value, onChange, area }: { label: string; value: string; onChange: (v: string) => void; area?: boolean }) {
+/** A card text field with the formatting bar, revealed on focus. */
+function Rich({
+  label,
+  value,
+  onChange,
+  disabled,
+  rows = 5,
+  minHeight = 120,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  disabled?: boolean;
+  rows?: number;
+  minHeight?: number;
+}) {
+  return (
+    <MarkupField
+      label={label}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      rows={rows}
+      minHeight={minHeight}
+      toolbarOnFocus
+      showImage={false}
+      showMedia={false}
+    />
+  );
+}
+
+function Field({ label, value, onChange, disabled }: { label: string; value: string; onChange: (v: string) => void; disabled?: boolean }) {
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-[11px] font-bold text-muted">{label}</span>
-      {area ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={5} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[120px]" />
-      ) : (
-        // Even the "short" fields are textareas now so long pasted text is
-        // fully visible without scrolling one line at a time (corrections doc
-        // note 4: "des carrés moyens à la place des rectangles").
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={2} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[60px]" />
-      )}
+      {/* Even the "short" fields are textareas so long pasted text is fully
+          visible without scrolling one line at a time (corrections doc note 4:
+          "des carrés moyens à la place des rectangles"). */}
+      <textarea
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.value)}
+        rows={2}
+        className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 bg-card text-[12.5px] leading-relaxed resize-y min-h-[60px] disabled:bg-ink-50"
+      />
     </label>
   );
 }
@@ -471,26 +528,31 @@ function ImagePicker({
   inputRef: (el: HTMLInputElement | null) => void;
   onFile: (f: File) => void;
 }) {
+  // Correction N6 ("il y a ici un petit décalage"): the thumbnail was a fixed
+  // 110px block beside a button column that could not shrink, inside a
+  // two-column grid. Under roughly 420px of column the buttons escaped the card
+  // and overlapped the neighbouring picker. `flex-wrap` + `min-w-0` + a
+  // shrinkable thumbnail lets the row reflow instead of overflowing.
   return (
-    <div className="border border-border rounded-xl p-3">
+    <div className="border border-border rounded-xl p-3 min-w-0 overflow-hidden">
       <div className="text-[11px] font-bold text-muted mb-2">{label}</div>
-      <div className="flex gap-3 items-start">
-        <div className="w-[110px] flex-none">
+      <div className="flex gap-3 items-start flex-wrap">
+        <div className="w-[110px] max-w-full flex-none">
           {url ? (
-            <img src={url} alt="" className="w-full aspect-[16/10] object-cover rounded-lg border border-border bg-ink-50" />
+            <ZoomableImage src={url} alt={label} className="w-full aspect-[16/10] object-cover rounded-lg border border-border bg-ink-50" />
           ) : (
             <div className="w-full aspect-[16/10] rounded-lg border-[1.5px] border-dashed border-ink-300 bg-ink-50 flex items-center justify-center text-ink-300">
               <Icon name="upload" size={18} />
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 flex-1 min-w-0 basis-[120px]">
           <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) onFile(f); }} />
-          <button onClick={onPick} disabled={busy} className="border-none px-3.5 py-1.5 rounded-lg text-[12px] font-bold bg-brand-600 text-white disabled:opacity-60">
+          <button onClick={onPick} disabled={busy} className="w-full border-none px-3 py-1.5 rounded-lg text-[12px] font-bold bg-brand-600 text-white disabled:opacity-60 truncate">
             {uploadLabel}
           </button>
           {url && (
-            <button onClick={onRemove} disabled={busy} className="border border-border bg-white px-3.5 py-1.5 rounded-lg text-[12px] font-bold text-danger-600 disabled:opacity-60">
+            <button onClick={onRemove} disabled={busy} className="w-full border border-border bg-card px-3 py-1.5 rounded-lg text-[12px] font-bold text-danger-600 disabled:opacity-60 truncate">
               {removeLabel}
             </button>
           )}
