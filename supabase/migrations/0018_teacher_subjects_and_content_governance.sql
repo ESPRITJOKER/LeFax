@@ -14,7 +14,7 @@
 -- Model introduced here:
 --   * teacher_subjects — an explicit, audited grant (super_admin only).
 --   * lessons.review_status — draft -> submitted -> under_review -> approved /
---     rejected, alongside the existing `published` flag which stays the
+--     rejected, alongside the existing `published` flag which stays the n
 --     student-visibility switch and remains admin-only.
 --   * Per-command RLS policies (no more FOR ALL on content) scoped to
 --     "assigned subject AND my own row AND still editable".

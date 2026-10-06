@@ -1,24 +1,52 @@
 import { useCallback, useRef, useState } from "react";
 import { useI18n } from "../../lib/i18n";
-import { FormulaTool, applyInsert, insertSnippet, mapSelectedLines, wrapSelection } from "../FormulaTool";
-import { MarkupToolbar, type MarkupCommand, type ToolbarState } from "./MarkupToolbar";
+import { applyInsert, insertSnippet, mapSelectedLines, wrapSelection } from "../FormulaTool";
+import { Ribbon, TableTools } from "./Ribbon";
+import { InsertPanel } from "./InsertPanel";
+import { ImageDialog, LinkDialog } from "./ImageDialog";
+import { parse, type ImageOptions } from "../../lib/markupSyntax";
+import {
+  alignAt,
+  blockStyleAt,
+  calloutAt,
+  imageToken,
+  insertBlock,
+  insertTable,
+  isQuoteAt,
+  setAlign,
+  setBlockStyle,
+  tableAt,
+  tableDeleteColumn,
+  tableDeleteRow,
+  tableInsertColumn,
+  tableInsertRow,
+  tableSetColumnAlign,
+  tableToggleHeader,
+  toggleCallout,
+  toggleQuote,
+  type Edit,
+} from "./markupCommands";
+import type { MarkupCmd, RibbonDialog, RibbonPanel, RibbonState, RibbonVariant } from "./ribbonTypes";
 
 /**
- * One text field with the formatting bar above it — the editing unit the client
- * asked for (Correction N6: a toolbar that makes layout easy, and the change
- * visible straight away in the preview beside it).
+ * One text field with the formatting ribbon above it — the editing unit the
+ * client asked for: "la barre qui facilite la mise en page", with the change
+ * visible straight away in the preview beside it.
  *
- * It stays a plain `<textarea>` over the project's existing line-based
- * mini-markup rather than becoming a contentEditable WYSIWYG, deliberately:
- * the very same markup is parsed by the student renderers (`LessonContent`,
- * `RichCardText`), by the AI content pipeline and by every row already in the
- * database. A toolbar that writes that markup gives the author the convenience
- * without forking the format — nothing has to be migrated, and what the live
- * preview shows is literally what the student will get.
+ * It stays a plain `<textarea>` over the project's line-based mini-markup rather
+ * than becoming a contentEditable WYSIWYG, deliberately: the very same markup is
+ * parsed by the student renderers (`LessonContent`, `RichCardText`, `inline`), by
+ * the AI content pipeline and by every row already in the database. A ribbon that
+ * writes that markup gives the author the convenience without forking the format
+ * — nothing has to be migrated, and what the live preview shows is literally what
+ * the student will get.
  *
- * Undo/redo is ours because `document.execCommand`-free programmatic writes
- * destroy the browser's native textarea history: the moment a toolbar button
- * sets the value, Ctrl+Z would jump back past everything.
+ * Undo/redo is ours because programmatic writes destroy the browser's native
+ * textarea history: the moment a toolbar button sets the value, Ctrl+Z would jump
+ * back past everything.
+ *
+ * Every string transform lives in `./markupCommands` as a pure function, so the
+ * grammar surgery is testable without React and this component stays a router.
  */
 
 interface Snapshot {
@@ -39,18 +67,31 @@ export interface MarkupFieldProps {
   placeholder?: string;
   /** Label rendered above the bar; omit when the caller provides its own. */
   label?: string;
-  /** Show the `[[IMG:]]` button (lesson body only — cards have one image). */
-  showImage?: boolean;
-  /** Show video / maths / chemistry (off for the short card fields). */
-  showMedia?: boolean;
-  /** Called instead of the default `[[IMG: description]]` insertion. */
-  onInsertImage?: () => void;
   /**
-   * Reveal the bar only while the field is being edited. The card editor has
-   * five rich fields on screen at once; five permanent toolbars is exactly the
-   * "c'est un peu compliqué" the client complained about, so there only the
-   * focused field shows its bar — as in the reference screenshot, where one
-   * editor has one toolbar.
+   * Which tools this field gets — driven by what the field's READER can render.
+   * See `capabilitiesFor` in `./ribbonTypes`; the short version is that a quiz
+   * field only renders inline marks, so it must not be offered headings or
+   * tables.
+   */
+  variant?: RibbonVariant;
+  /**
+   * Supplied by the lesson editor. Without it the image button just inserts a
+   * bare `[[IMG: …]]` placeholder for the Illustrations list to fill.
+   */
+  imageUpload?: {
+    /** Binds the file to a stable key (0022) or, keyless, to its position. */
+    upload: (target: { key?: string; slot: number }, file: File) => Promise<string | null>;
+    /** False until migration 0022 is applied. */
+    keysSupported: boolean;
+    canEdit: boolean;
+  };
+  /** Keys already used in this body, so a newly minted one cannot collide. */
+  usedImageKeys?: string[];
+  /**
+   * Reveal the bar only while the field is being edited. The card editor has five
+   * rich fields on screen at once; five permanent ribbons is exactly the "c'est un
+   * peu compliqué" the client complained about, so there only the focused field
+   * shows its bar.
    */
   toolbarOnFocus?: boolean;
   className?: string;
@@ -64,9 +105,9 @@ export function MarkupField({
   minHeight = 260,
   placeholder,
   label,
-  showImage = true,
-  showMedia = true,
-  onInsertImage,
+  variant = "lesson",
+  imageUpload,
+  usedImageKeys = [],
   toolbarOnFocus = false,
   className = "",
 }: MarkupFieldProps) {
@@ -74,15 +115,33 @@ export function MarkupField({
   const ref = useRef<HTMLTextAreaElement>(null);
   const hist = useRef<{ past: Snapshot[]; future: Snapshot[]; at: number }>({ past: [], future: [], at: 0 });
   const [, bump] = useState(0);
-  const [tool, setTool] = useState<null | "math" | "chem">(null);
+  const [panel, setPanel] = useState<RibbonPanel | null>(null);
+  const [dialog, setDialog] = useState<RibbonDialog | null>(null);
   const [source, setSource] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [prompt, setPrompt] = useState<null | { kind: "link" | "video"; url: string; text: string }>(null);
+  /** Caret, mirrored into state so the ribbon can show pressed states. */
+  const [caret, setCaret] = useState(0);
 
-  const snap = useCallback(
-    (): Snapshot => ({ value, start: ref.current?.selectionStart ?? value.length, end: ref.current?.selectionEnd ?? value.length }),
-    [value]
-  );
+  /**
+   * The selection as it was when a dialog or panel opened.
+   *
+   * Every ribbon BUTTON works because it never takes focus
+   * (`onMouseDown preventDefault`), so `selectionStart` is still valid when the
+   * command runs. A dialog does take focus — it has inputs — and the textarea's
+   * selection collapses, which would land every insertion at index 0. So the
+   * live selection is snapshotted before anything focusable opens, and the
+   * snapshot is what the commands read until it is applied.
+   */
+  const pendingSel = useRef<{ start: number; end: number } | null>(null);
+
+  const liveSel = useCallback(() => {
+    const el = ref.current;
+    return { start: el?.selectionStart ?? value.length, end: el?.selectionEnd ?? value.length };
+  }, [value.length]);
+
+  const sel = useCallback(() => pendingSel.current ?? liveSel(), [liveSel]);
+
+  const snap = useCallback((): Snapshot => ({ value, ...liveSel() }), [value, liveSel]);
 
   /** Record the pre-mutation state. `coalesce` folds consecutive keystrokes. */
   const push = useCallback(
@@ -108,6 +167,7 @@ export function MarkupField({
       requestAnimationFrame(() => {
         ref.current?.focus();
         ref.current?.setSelectionRange(s.start, s.end);
+        setCaret(s.start);
       });
     },
     [onChange]
@@ -133,26 +193,29 @@ export function MarkupField({
     bump((n) => n + 1);
   }, [restore, snap]);
 
-  /** Apply a `{next,start,end}` edit, recording one undo step. */
-  function apply(result: { next: string; start: number; end: number }) {
+  /** Apply an `{next,start,end}` edit, recording one undo step. */
+  function apply(result: Edit) {
     push(false);
     applyInsert(ref.current, result, onChange);
+    // The snapshot has served its purpose; the live selection is authoritative
+    // again from here, or the next command would reuse a stale range.
+    pendingSel.current = null;
+    requestAnimationFrame(() => setCaret(result.start));
   }
 
   function wrap(before: string, after: string = before) {
-    apply(wrapSelection(ref.current, value, before, after));
+    const { start, end } = sel();
+    apply(wrapSelection({ selectionStart: start, selectionEnd: end }, value, before, after));
   }
 
   /**
-   * Toggle a list marker over every selected line. Pressing the same button on
-   * an existing list removes it, which is what every editor does and what makes
-   * the two list buttons feel like a toggle rather than a stamp.
+   * Toggle a list marker over every selected line. Pressing the same button on an
+   * existing list removes it, which is what every editor does and what makes the
+   * two list buttons feel like a toggle rather than a stamp.
    */
   function toggleList(ordered: boolean) {
     const marker = /^(\s*)(?:(?:-|•|–)\s+|\d+[.)]\s+)/;
-    const el = ref.current;
-    const start = el?.selectionStart ?? 0;
-    const end = el?.selectionEnd ?? start;
+    const { start, end } = sel();
     const from = value.lastIndexOf("\n", start - 1) + 1;
     const toIdx = value.indexOf("\n", end);
     const block = value.slice(from, toIdx === -1 ? value.length : toIdx);
@@ -163,7 +226,7 @@ export function MarkupField({
 
     let n = 0;
     apply(
-      mapSelectedLines(el, value, (line) => {
+      mapSelectedLines({ selectionStart: start, selectionEnd: end }, value, (line) => {
         if (!line.trim()) return line;
         const indent = line.match(/^\s*/)?.[0] ?? "";
         // `marker` only strips the indent when there IS a list marker to strip;
@@ -178,25 +241,30 @@ export function MarkupField({
   }
 
   function shift(dir: 1 | -1) {
+    const { start, end } = sel();
     apply(
-      mapSelectedLines(ref.current, value, (line) =>
+      mapSelectedLines({ selectionStart: start, selectionEnd: end }, value, (line) =>
         dir === 1 ? (line.trim() ? `  ${line}` : line) : line.replace(/^ {1,2}/, "")
       )
     );
   }
 
-  /** Strip every inline mark from the selection (the "T̶" button). */
+  /**
+   * Strip every inline mark from the selection. This is a hand-maintained second
+   * copy of the inline grammar in `lib/markupSyntax.ts` — a new inline mark has
+   * to be added in both places or "clear formatting" silently leaves it behind.
+   */
   function clearFormat() {
-    const el = ref.current;
-    const start = el?.selectionStart ?? 0;
-    const end = el?.selectionEnd ?? start;
+    const { start, end } = sel();
     if (start === end) return;
     const plain = value
       .slice(start, end)
+      .replace(/`([^`\n]+)`/g, "$1")
       .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, "$1")
       .replace(/\*\*([^*]+?)\*\*/g, "$1")
       .replace(/==(?:(?:jaune|vert|bleu|rose)\|)?([^=]+?)==/g, "$1")
       .replace(/__([^_]+?)__/g, "$1")
+      .replace(/~~([^~]+?)~~/g, "$1")
       .replace(/\*([^\s*][^*]*?)\*/g, "$1")
       .replace(/_([^\s_][^_]*?)_/g, "$1")
       .replace(/\^([^\s^]+)\^/g, "$1")
@@ -204,79 +272,122 @@ export function MarkupField({
     apply({ next: value.slice(0, start) + plain + value.slice(end), start, end: start + plain.length });
   }
 
-  function openPrompt(kind: "link" | "video") {
-    const el = ref.current;
-    const selected = value.slice(el?.selectionStart ?? 0, el?.selectionEnd ?? 0);
-    setPrompt({ kind, url: "", text: selected });
+  /** Snapshot the selection, then open something focusable. */
+  function openPanel(next: RibbonPanel | null) {
+    pendingSel.current = next ? liveSel() : null;
+    setDialog(null);
+    setPanel(next);
   }
 
-  function confirmPrompt() {
-    if (!prompt) return;
-    const url = prompt.url.trim();
-    if (!url) return;
-    if (prompt.kind === "video") {
-      apply(insertSnippet(ref.current, value, `[[VIDEO: ${url}]]`));
-    } else {
-      const label2 = prompt.text.trim() || url;
-      // Replace the selection when there was one, otherwise insert at the caret.
-      const el = ref.current;
-      const start = el?.selectionStart ?? value.length;
-      const end = el?.selectionEnd ?? start;
-      const snippet = `[${label2}](${url})`;
-      apply({ next: value.slice(0, start) + snippet + value.slice(end), start: start + snippet.length, end: start + snippet.length });
-    }
-    setPrompt(null);
+  function openDialog(next: RibbonDialog | null) {
+    pendingSel.current = next ? liveSel() : null;
+    setPanel(null);
+    setDialog(next);
   }
 
-  function onCmd(cmd: MarkupCommand, arg?: string) {
-    switch (cmd) {
-      case "undo":
-        return undo();
-      case "redo":
-        return redo();
-      case "bold":
-        return wrap("**");
-      case "italic":
-        return wrap("*");
-      case "underline":
-        return wrap("__");
-      case "sup":
-        return wrap("^");
-      case "sub":
-        return wrap("~");
+  function closeOverlays() {
+    pendingSel.current = null;
+    setPanel(null);
+    setDialog(null);
+  }
+
+  /**
+   * Insert the image token, then upload the chosen file to the address that
+   * placeholder actually ended up with.
+   *
+   * The order matters. A keyed placeholder (migration 0022) could be uploaded
+   * before insertion, but a KEYLESS one has no address until the token is in the
+   * text — its address is its ordinal among the body's `[[IMG:]]` tokens. Doing
+   * the insert first means the one code path serves both, which is what makes
+   * "add an image here" work on a database where 0022 has not been applied.
+   */
+  function insertImage(caption: string, options: ImageOptions, file: File | null) {
+    const { start, end } = sel();
+    const token = imageToken(caption, options);
+    const edit = insertBlock(value, start, end, token);
+    apply(edit);
+    if (!file || !imageUpload) return;
+    // `insertBlock` leaves the caret just past the token it wrote.
+    const tokenAt = edit.start - token.length;
+    // Count the placeholders BEFORE it through the real parser rather than by
+    // counting `[[IMG:` substrings: only a token alone on its line is a
+    // placeholder, and the slot numbering has to agree with `parse()` exactly or
+    // the file binds to the wrong figure.
+    const slot = parse(edit.next.slice(0, tokenAt)).filter((b) => b.type === "img").length + 1;
+    void imageUpload.upload({ key: options.key, slot }, file);
+  }
+
+  function onCmd(cmd: MarkupCmd) {
+    const { start, end } = sel();
+    switch (cmd.k) {
+      case "history":
+        return cmd.dir === "undo" ? undo() : redo();
+      case "wrap": {
+        const MARKS = { bold: "**", italic: "*", underline: "__", strike: "~~", sup: "^", sub: "~", code: "`" } as const;
+        return wrap(MARKS[cmd.mark]);
+      }
       case "highlight":
-        return wrap(arg && arg !== "jaune" ? `==${arg}|` : "==", "==");
-      case "ul":
-        return toggleList(false);
-      case "ol":
-        return toggleList(true);
-      case "indent":
-        return shift(1);
-      case "outdent":
-        return shift(-1);
+        return wrap(cmd.color === "jaune" ? "==" : `==${cmd.color}|`, "==");
+      case "style":
+        return apply(setBlockStyle(value, start, end, cmd.style));
+      case "list":
+        return toggleList(cmd.ordered);
+      case "shift":
+        return shift(cmd.dir);
+      case "align":
+        return apply(setAlign(value, start, end, cmd.align));
+      case "box":
+        return apply(toggleCallout(value, start, end, cmd.kind, t("ed_boxAnswer")));
+      case "quote":
+        return apply(toggleQuote(value, start, end));
+      case "divider":
+        return apply(insertBlock(value, start, end, "---"));
       case "clear":
         return clearFormat();
-      case "link":
-        return openPrompt("link");
-      case "video":
-        return openPrompt("video");
-      case "image":
-        if (onInsertImage) return onInsertImage();
-        return apply(insertSnippet(ref.current, value, "[[IMG: description]]", "description"));
-      case "math":
-        return setTool((m) => (m === "math" ? null : "math"));
-      case "chem":
-        return setTool((m) => (m === "chem" ? null : "chem"));
+      case "insertText":
+        return apply(insertSnippet({ selectionStart: start, selectionEnd: end }, value, cmd.text, cmd.select));
+      case "panel":
+        return openPanel(cmd.panel);
+      case "dialog":
+        if (cmd.dialog === "image" && !imageUpload) {
+          // No upload wiring (card fields, quiz fields): the bare placeholder is
+          // still the right thing to write.
+          return apply(insertSnippet({ selectionStart: start, selectionEnd: end }, value, "[[IMG: description]]", "description"));
+        }
+        return openDialog(cmd.dialog);
+      case "insertTable":
+        return apply(insertTable(value, start, end, cmd.rows, cmd.cols, t("ed_tableHeadLabel")));
+      case "table": {
+        // Recomputed from the live text rather than read off render state: the
+        // author may have typed since the last caret sync, which would make a
+        // cached table range point at the wrong characters.
+        const at = tableAt(value, start);
+        if (!at) return;
+        switch (cmd.op.op) {
+          case "addRow":
+            return apply(tableInsertRow(value, at, cmd.op.where));
+          case "addCol":
+            return apply(tableInsertColumn(value, at, cmd.op.where));
+          case "delRow":
+            return apply(tableDeleteRow(value, at));
+          case "delCol":
+            return apply(tableDeleteColumn(value, at));
+          case "colAlign":
+            return apply(tableSetColumnAlign(value, at, cmd.op.align));
+          case "toggleHeader":
+            return apply(tableToggleHeader(value, at));
+        }
+        return;
+      }
       case "source":
         return setSource((s) => !s);
     }
   }
 
-  // Ctrl/Cmd shortcuts, so the bar is a convenience and not the only way in.
+  // Ctrl/Cmd shortcuts, so the ribbon is a convenience and not the only way in.
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (!(e.ctrlKey || e.metaKey)) return;
     const k = e.key.toLowerCase();
-    const map: Record<string, MarkupCommand> = { b: "bold", i: "italic", u: "underline", k: "link" };
     if (k === "z") {
       e.preventDefault();
       return e.shiftKey ? redo() : undo();
@@ -285,23 +396,40 @@ export function MarkupField({
       e.preventDefault();
       return redo();
     }
+    const map: Record<string, MarkupCmd> = {
+      b: { k: "wrap", mark: "bold" },
+      i: { k: "wrap", mark: "italic" },
+      u: { k: "wrap", mark: "underline" },
+      k: { k: "dialog", dialog: "link" },
+    };
     if (map[k]) {
       e.preventDefault();
       onCmd(map[k]);
     }
   }
 
-  const state: ToolbarState = {
+  /** Mirror the caret so the ribbon's pressed states follow it. */
+  function syncCaret() {
+    if (pendingSel.current) return;
+    setCaret(ref.current?.selectionStart ?? 0);
+  }
+
+  const state: RibbonState = {
     canUndo: hist.current.past.length > 0,
     canRedo: hist.current.future.length > 0,
     source,
-    mathOpen: tool === "math",
-    chemOpen: tool === "chem",
+    panel,
+    style: blockStyleAt(value, caret),
+    align: alignAt(value, caret),
+    quote: isQuoteAt(value, caret),
+    box: calloutAt(value, caret),
+    inTable: tableAt(value, caret) !== null,
   };
 
-  // A panel open (link/video prompt, formula tool) keeps the bar on screen even
-  // if the textarea itself lost focus to one of its inputs.
-  const showToolbar = !toolbarOnFocus || focused || Boolean(prompt) || Boolean(tool);
+  // An open panel keeps the bar on screen even though the textarea lost focus to
+  // one of its inputs.
+  const showToolbar = !toolbarOnFocus || focused || Boolean(panel);
+  const showTableTools = state.inTable && showToolbar;
 
   return (
     <div
@@ -313,44 +441,8 @@ export function MarkupField({
     >
       {label && <span className="text-[11.5px] font-bold text-muted mb-1.5">{label}</span>}
 
-      {showToolbar && <MarkupToolbar onCmd={onCmd} state={state} disabled={disabled} showImage={showImage} showMedia={showMedia} />}
-
-      {prompt && (
-        <div className="flex flex-wrap items-end gap-2 px-2 py-2 border-x-[1.5px] border-ink-300 bg-ink-50">
-          <label className="flex flex-col gap-1 flex-1 min-w-[180px]">
-            <span className="text-[10.5px] font-bold text-muted">{prompt.kind === "video" ? t("ed_videoUrl") : t("ed_linkUrl")}</span>
-            <input
-              autoFocus
-              value={prompt.url}
-              onChange={(e) => setPrompt({ ...prompt, url: e.target.value })}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  confirmPrompt();
-                } else if (e.key === "Escape") setPrompt(null);
-              }}
-              placeholder="https://..."
-              className="px-2.5 py-1.5 rounded-lg border-[1.5px] border-ink-300 bg-card text-[12.5px]"
-            />
-          </label>
-          {prompt.kind === "link" && (
-            <label className="flex flex-col gap-1 flex-1 min-w-[140px]">
-              <span className="text-[10.5px] font-bold text-muted">{t("ed_linkText")}</span>
-              <input
-                value={prompt.text}
-                onChange={(e) => setPrompt({ ...prompt, text: e.target.value })}
-                className="px-2.5 py-1.5 rounded-lg border-[1.5px] border-ink-300 bg-card text-[12.5px]"
-              />
-            </label>
-          )}
-          <button type="button" onClick={confirmPrompt} className="border-none px-3.5 py-1.5 rounded-lg text-[12px] font-bold bg-brand-600 text-white">
-            {t("fx_insert")}
-          </button>
-          <button type="button" onClick={() => setPrompt(null)} className="border border-border bg-card px-3 py-1.5 rounded-lg text-[12px] font-bold text-ink-900">
-            {t("common_cancel")}
-          </button>
-        </div>
-      )}
+      {showToolbar && <Ribbon onCmd={onCmd} state={state} disabled={disabled} variant={variant} />}
+      {showTableTools && <TableTools onCmd={onCmd} disabled={disabled} />}
 
       <textarea
         ref={ref}
@@ -360,9 +452,13 @@ export function MarkupField({
         placeholder={placeholder}
         spellCheck={!source}
         onKeyDown={onKeyDown}
+        onKeyUp={syncCaret}
+        onClick={syncCaret}
+        onSelect={syncCaret}
         onChange={(e) => {
           push(true);
           onChange(e.target.value);
+          setCaret(e.target.selectionStart);
         }}
         style={{ minHeight }}
         className={`px-3 py-2.5 border-[1.5px] border-ink-300 text-[13px] leading-relaxed resize-y bg-card text-text disabled:bg-ink-50 ${
@@ -370,11 +466,39 @@ export function MarkupField({
         } ${source ? "font-mono text-[12.5px]" : ""}`}
       />
 
-      {tool && (
-        <FormulaTool
-          mode={tool}
-          onInsert={(s) => apply(insertSnippet(ref.current, value, s))}
-          onClose={() => setTool(null)}
+      {panel && (
+        <InsertPanel
+          panel={panel}
+          onInsert={(text) => apply(insertSnippet({ selectionStart: sel().start, selectionEnd: sel().end }, value, text))}
+          onSwitch={(next) => setPanel(next)}
+          onClose={closeOverlays}
+        />
+      )}
+
+      {dialog === "image" && imageUpload && (
+        <ImageDialog
+          onClose={closeOverlays}
+          onInsert={insertImage}
+          keysSupported={imageUpload.keysSupported}
+          canEdit={imageUpload.canEdit}
+          existingKeys={usedImageKeys}
+        />
+      )}
+
+      {(dialog === "link" || dialog === "video") && (
+        <LinkDialog
+          kind={dialog}
+          initialText={value.slice(sel().start, sel().end)}
+          onClose={closeOverlays}
+          onConfirm={(url, text) => {
+            const { start, end } = sel();
+            if (dialog === "video") {
+              apply(insertBlock(value, start, end, `[[VIDEO: ${url}]]`));
+            } else {
+              const snippet = `[${text.trim() || url}](${url})`;
+              apply({ next: value.slice(0, start) + snippet + value.slice(end), start: start + snippet.length, end: start + snippet.length });
+            }
+          }}
         />
       )}
     </div>

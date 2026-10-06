@@ -5,6 +5,203 @@ Live Supabase project ref: `kjlgrgdryimazczrcvgx` ("Lefax MVP", eu-west-1).
 
 ---
 
+## 2026-10-06 — Word-style formatting ribbon: tables, image dialog, equations, symbols
+
+Request: *"I want the editor to be like the Microsoft Word tool bar or panel, where we can add
+tables, images in the notes and many more to make things easy — the teachers can just select the
+tool they want and it applies. They can add images any how they want on notes using this tool
+panel, same for formulas and equations."*
+
+Four decisions were taken with the client before building: keep the textarea + mini-markup and
+build a **ribbon** over it rather than a WYSIWYG canvas (no new dependency, no content migration,
+the live phone preview stays literally the student renderer); include tables, an upload-on-insert
+image dialog, upgraded equation + symbol panels, and a style gallery with boxes/alignment/quote/
+divider; give lesson images **stable keys**; and put the ribbon on every field where content is
+written.
+
+### 1. The format gained the blocks the ribbon needed
+
+Tables did not exist anywhere — not in the grammar, the parser, the renderer or the toolbar.
+Added to `src/lib/markupSyntax.ts`:
+
+| Construct | Syntax |
+|---|---|
+| Big title | `# Titre` |
+| Table | a run of `\|`-leading lines; a row of `---` cells (`:---`, `:---:`, `---:`) makes the row above it a header |
+| Block quote | `> texte`, consecutive lines grouped |
+| Divider | `---` alone on its line |
+| Alignment | `[align=center] texte` (also `centre` / `droite` / `gauche`) |
+| Inline code | `` `code` `` |
+| Strikethrough | `~~barré~~` |
+
+A table is a **run of consecutive lines**, not a fence: a half-typed table degrades into a smaller
+table instead of swallowing the rest of the lesson. Cells split on unescaped pipes, and the
+splitter is built from `NOTATION_SOURCE` so a `|` belonging to TeX (`$\|v\| = 1$`) or to a
+highlight colour prefix (`==vert|texte==`) survives — one definition of "notation", three
+consumers. `\|` is a literal pipe; a pipe in a link URL must be `%7C`.
+
+**Nothing existing changes meaning.** Measured before building: across every seeding migration,
+`seed.sql` and all of `content-source/`, there are zero lines starting with `|`, `>`, `# `, zero
+`---` lines, zero `~~` and zero backticks in any lesson body (the only hits are developer docs and
+SQL comments). `---` was the one construct that could have reinterpreted live text; it does not.
+
+Heading ladder is now `#`→`<h2>`, `##`→`<h3>`, `###`→`<h4>`, with the **sizes unchanged**. The
+page's only `<h1>` is the reader's own lesson title, so the body starting at `h2` finally gives a
+monotonic outline. Pure tag change, no visual change, no content migration.
+
+### 2. The parser was split out so it could be tested at all
+
+`src/lib/lessonContent.tsx` imports React, `katex` and `katex.min.css` at module scope, so nothing
+in it could ever be loaded by a plain `node` script — which is why the grammar had no tests. The
+pure half is now `src/lib/markupSyntax.ts` (grammar, regexes, `parse`, `splitRow`,
+`parseImageSpec`, `parseVideo`, no JSX), and `lessonContent.tsx` keeps only the renderers. The
+import sites were repointed rather than re-exported: a `.tsx` that exports non-components trips
+`react-refresh/only-export-components` once per export, and re-exporting the grammar added 8
+warnings for nothing.
+
+### 3. The ribbon
+
+`src/components/editor/Ribbon.tsx` replaces `MarkupToolbar.tsx` (deleted). Captioned
+`role="group"` sections under one `role="toolbar"`: Annuler · Styles · Police · Paragraphe ·
+Encadrés · Insérer, plus a **contextual Tableau strip** that appears only while the caret is inside
+a table, the way Word reveals its table tabs. Group captions appear from `xl` up only — the editor
+sits beside a 560 px phone preview, and a second permanent strip of chrome above a 340 px field is
+exactly the "c'est un peu compliqué" the N6 rebuild was answering.
+
+New supporting files:
+
+* `markupCommands.ts` — every block transform as a **pure** function over
+  `(value, start, end)`, importing only `markupSyntax`. Style gallery, alignment, quote, callout
+  toggles, divider, and the whole table surgery (`tableAt`, insert/delete row and column, column
+  alignment, header toggle, `serializeTable`). Pure means Node can assert on it, which is what
+  caught the lost `[align=]` prefix in `setBlockStyle` and the "row above the header" case.
+* `ribbonTypes.ts` — `MarkupCmd` as a **discriminated union** replacing the old flat
+  `"bold" | "italic" | …` plus untyped `arg?: string`. At ~35 commands the flat version type-checks
+  nothing; `MarkupField`'s router now gets an exhaustiveness check for free.
+* `EditorDialog.tsx` — the modal primitive the project lacked (Esc, scroll lock, backdrop click,
+  focus trap and return), **portalled to `document.body`**. Not cosmetic: `LessonEditorCore` wraps
+  its content tab in `<fieldset disabled={!canEdit}>`, so an in-flow dialog would render every
+  control disabled on a read-only lesson and look broken. The ribbon and its popovers stay inside
+  the fieldset on purpose — they *should* go dead with it — so `ImageDialog` re-checks `canEdit`
+  itself before uploading.
+* `ImageDialog.tsx` + `LinkDialog` — upload-on-insert with caption, alt, credit, source, width and
+  left/centre/right, writing one complete token.
+* `InsertPanel.tsx` — Maths · Chimie · **Symboles** as three tabs over the existing `FormulaTool`.
+  The Ω palette (`SYMBOL_GROUPS` in `lib/math.tsx`) inserts **bare Unicode**, not TeX, so a degree
+  sign or a reaction arrow stays selectable, searchable text; a checkbox wraps in `$…$` for authors
+  who want that.
+
+Two real bugs fixed on the way. `FormulaTool`'s palette did `setExpr(p.snippet)`, so an expression
+could never be built from two templates — picking a fraction and then a square root threw the
+fraction away; it now inserts at the caret. And a **caret snapshot** (`pendingSel`) was needed
+before any dialog could work: every ribbon button is safe because it never takes focus
+(`onMouseDown preventDefault`), but a dialog has inputs, so the textarea's selection collapses and
+every insertion would have landed at index 0.
+
+### 4. Tool sets are driven by what each reader can render, not by taste
+
+This is the one place the brief had to be narrowed, and it is a correctness matter: offering a tool
+that writes markup the reader displays as literal text is worse than not offering it.
+
+* `lesson` — rendered by `LessonContent`. Everything.
+* `card` — rendered by `RichCardText`, which handles headings, lists, tables, quotes, dividers,
+  video and all inline marks but **not** the `[!PIEGE]`/`[!INFO]`/`[!APP]` boxes. So the Encadrés
+  group is hidden, and so is the image dialog (a card has one image of its own, placed by a bare
+  `[[IMG]]`).
+* `quiz` — question prompts and explanations are rendered by **`inline()` alone**, not by
+  `LessonContent` or `RichCardText`. Nothing block-level renders there: a `##` heading, a `- ` list
+  or a table would reach the student verbatim. So that variant is inline marks, links and the
+  formula/symbol panels, and nothing else. `LessonQuizPanel.Field` and `TeacherAiAssist`'s
+  `NotationField` both dropped their hand-rolled textarea + ∑/H₂O pair for it. Widening this means
+  upgrading the question renderers first — editor preview **and** the student quiz screen.
+
+`RichCardText` *renders* tables even though the card ribbon does not offer them: content moves
+between the body and card fields via AI generation and copy-paste, and a field that silently
+dropped a table is how rows disappear unnoticed.
+
+### 5. Images are no longer bound by position — migration 0022
+
+`media_library.image_slot` was the Nth `[[IMG:]]` in the body, with the file at
+`lesson-media/<lesson>/<N>`. Insert a placeholder in the middle and every image below shifted one
+slot, so each figure silently acquired the next one's picture. Since the whole point of the ribbon
+is that authors *do* insert images anywhere, that had to go.
+
+`supabase/migrations/0022_image_keys.sql` adds `image_key text` + `unique (lesson_id, image_key)`.
+The token now carries `[[IMG: légende | key=k7f3a2m1 | w=60 | align=right]]` and the file lives at
+`lesson-media/<lesson>/k7f3a2m1`. Deliberately additive: `image_slot` and its constraint **stay**,
+there is **no backfill** (a backfill would mean rewriting `content_fr`/`content_en` for every
+lesson to buy an authoring convenience), and `buildImageMap` files every row under *both* its key
+and its slot so the renderer resolves key-first, position-second with no caller-side branching.
+`parseImageSpec` already ignores unknown options, so a `key=` token renders correctly even on a
+build that predates this — the migration and the content can ship in either order.
+
+Three things this needed care over:
+
+* **`parse()` de-duplicates keys.** A key lives in editable text, so copying a figure line
+  duplicates it. The second token to claim a key loses it and falls back to its slot, showing a
+  visible empty placeholder instead of two figures sharing one picture.
+* **The query filter was the migration hazard, not the column list.** `.not("image_slot","is",null)`
+  hides every key-bound row, and the obvious fix — `.or(… image_key …)` — would 42703 the whole
+  PostgREST request wherever 0022 is unapplied, which is the exact trap the `select("*")` comment
+  exists to prevent. So all three loaders (editor, `LessonReader`, `LessonDetail`) now fetch a
+  lesson's media rows unfiltered and let `buildImageMap` skip the non-figures.
+* **A probe, because migrations here lag the code.** `0021` shipped ahead of its migration and left
+  `ed_metaMigration` behind as evidence. One `select("image_key").limit(1)` at load sets
+  `keysSupported`; when false the image dialog says so and falls back to inserting a positional
+  placeholder rather than uploading a file it cannot bind.
+
+### 6. A pre-existing, project-wide CSS bug found and worked around
+
+**Tailwind opacity modifiers do not work on this project's colour tokens.** Every colour in
+`tailwind.config.js` is a bare `var(--color-…)`, which Tailwind cannot parse, so it drops the class
+from the stylesheet **entirely** — not "at full opacity", *absent*. Verified by compiling a probe:
+`bg-brand-600/10`, `border-brand-600/40`, `bg-ink-50/60`, `border-current/25` and
+`text-ink-900/50` all produce **no rule at all**, while literal `bg-white/10` and `bg-black/60`
+compile correctly.
+
+So the old toolbar's active state (`bg-brand-600/10 text-brand-600`) was brand blue text on **no
+background** — the pressed state was invisible. Everything new here uses solid tokens, or literal
+`white/α` on the card surface which is dark in both themes. `AppBox` and `FormulaTool` were fixed
+in passing (`border-brand-600/30 bg-brand-600/[0.06]` → `border-brand-600 bg-ink-50`).
+
+**Still unfixed elsewhere** — worth a sweep: `grep -rE '(bg|border|text)-(ink|brand|success|danger|ochre)-[0-9]+/' src/` finds the rest.
+
+### Verified
+
+* `tsc --noEmit` clean; `eslint .` **0 errors**, 24 warnings (baseline 23; the one addition is
+  `buildImageMap` exported from a `.tsx`, same pre-existing rule); `npm run build` green. The
+  editor code splits into its own chunks (`MarkupField` 40 kB / 12 kB gzip) behind the existing
+  `React.lazy` admin/teacher routes, so the student's first paint is untouched.
+* **265 assertions**, as throwaway Node scripts under `scripts/tmp/` (gitignored, re-runnable):
+  * `markup_check.mts` — 130, grammar + the pure edit engine. Includes the hard pipe case
+    (`splitRow("| $\\|v\\| = 1$ | ==vert|ok== | a\\|b |")`), key de-duplication, and
+    addColumn-then-deleteColumn returning the original text byte for byte.
+  * `render_check.mjs` — 74, the **real React renderers** server-rendered through Vite's SSR
+    (`ssrLoadModule`, which transforms the TSX and stubs the KaTeX CSS). Covers the table/quote/
+    divider/heading HTML, alignment, code suppressing inner markup, key-vs-slot image resolution
+    including "a keyed image keeps its file when another is inserted above it", and every
+    pre-existing construct as a regression set.
+  * `ribbon_check.mjs` — 61, the ribbon server-rendered, asserting each variant's tool set (the
+    quiz variant must not offer a single block-level tool) and that no token+opacity class is
+    emitted.
+  * Run them with `node scripts/tmp/run-markup-check.mjs` (it registers a resolve hook so the
+    app's extensionless imports load under Node), `node scripts/tmp/render_check.mjs`,
+    `node scripts/tmp/ribbon_check.mjs`.
+
+### NOT verified
+
+* **Nothing was checked in a browser.** The Chrome extension was not connected, so no click, no
+  dropdown, no dialog, no drag, no save round-trip, no dark-mode pass and no mobile breakpoint was
+  exercised against the running app. The SSR checks cover the HTML, not the interaction or the
+  pixels. The table grid picker, the contextual table strip, the image upload and the caret
+  snapshot after a dialog closes are the four things most worth clicking through first.
+* **Migration 0022 has NOT been applied to the live database** (`kjlgrgdryimazczrcvgx`). Until it
+  is, the image dialog shows `ed_keyMigration` and inserts positional placeholders — which is the
+  pre-existing behaviour, so nothing is broken, but "insert an image anywhere" is not actually
+  delivered until the migration runs.
+
+---
+
 ## 2026-10-02 — Feedback round N6: lesson body, editor toolbar, highlight, video, zoom, perf
 
 Source: `Correction N6.docx` (4 screenshots + 7 remarks, FR), plus the "modèle originel"

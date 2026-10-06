@@ -58,7 +58,7 @@ export default function TeacherLayout() {
               to={n.to}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-[10px] ${isActive ? "bg-brand-600 text-white" : "text-ink-100/80 hover:bg-brand-700"}`
+                `flex items-center gap-3 px-3 py-2.5 rounded-[10px] ${isActive ? "bg-brand-600 text-white" : "text-white/75 hover:bg-brand-700"}`
               }
             >
               <Icon name={n.icon} size={18} />
@@ -75,12 +75,12 @@ export default function TeacherLayout() {
               <div className="text-[12.5px] font-bold text-white truncate">
                 {profile ? `${profile.first_name} ${profile.last_name}` : "—"}
               </div>
-              <div className="text-[11px] text-ink-100/60 truncate">{profile?.role ?? ""}</div>
+              <div className="text-[11px] text-white/60 truncate">{profile?.role ?? ""}</div>
             </div>
           </div>
           <button
             onClick={() => signOut()}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] text-ink-100/80 hover:bg-brand-700 border-none bg-transparent cursor-pointer"
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] text-white/75 hover:bg-brand-700 border-none bg-transparent cursor-pointer"
           >
             <Icon name="logout" size={18} />
             <span className="text-[13.5px] font-semibold">{t("teacher_signOut")}</span>

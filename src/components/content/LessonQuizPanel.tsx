@@ -3,9 +3,9 @@ import { Icon } from "../../lib/icons";
 import { useI18n } from "../../lib/i18n";
 import { supabase } from "../../lib/supabaseClient";
 import type { DifficultyLevel, QuestionRow, ChoiceRow } from "../../lib/database.types";
-import { FormulaTool, insertSnippet, applyInsert } from "../FormulaTool";
 import { hasNotation } from "../../lib/math";
 import { inline } from "../../lib/lessonContent";
+import { MarkupField } from "../editor/MarkupField";
 
 // A choice being edited: existing rows carry their db id; freshly added ones
 // don't (undefined id) until first save, when they're inserted.
@@ -253,7 +253,7 @@ export function LessonQuizPanel({ lessonId }: { lessonId: string }) {
       <div className="text-[11.5px] text-muted leading-relaxed mb-3">{t("admin_quizHint")}</div>
 
       {flash && (
-        <div className={`mb-3 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-600/10 text-success-600" : "bg-danger-600/10 text-danger-600"}`}>
+        <div className={`mb-3 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-100 text-success-700" : "bg-danger-100 text-danger-700"}`}>
           {flash.msg}
         </div>
       )}
@@ -313,7 +313,7 @@ export function LessonQuizPanel({ lessonId }: { lessonId: string }) {
               {/* Choices */}
               <div className="mt-3 flex flex-col gap-2.5">
                 {q.choices.map((c, ci) => (
-                  <div key={ci} className={`rounded-xl border p-2.5 ${c.is_correct ? "border-success-600/50 bg-success-600/5" : "border-border bg-white"}`}>
+                  <div key={ci} className={`rounded-xl border p-2.5 ${c.is_correct ? "border-success-600 bg-success-50" : "border-border bg-white"}`}>
                     <div className="flex items-center gap-2 mb-2">
                       <button
                         onClick={() => setCorrect(q.id, ci)}
@@ -358,7 +358,7 @@ export function LessonQuizPanel({ lessonId }: { lessonId: string }) {
         })}
       </div>
 
-      <button onClick={addQuestion} disabled={busyId === "new"} className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-white disabled:opacity-60">
+      <button onClick={addQuestion} disabled={busyId === "new"} className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600 text-brand-600 bg-white disabled:opacity-60">
         <Icon name="plus" size={15} />
         {busyId === "new" ? t("admin_uploading") : t("admin_addQuestion")}
       </button>
@@ -372,56 +372,28 @@ export function LessonQuizPanel({ lessonId }: { lessonId: string }) {
  * chemistry question can be written the way it must be read (see lib/math).
  */
 function Field({ label, value, onChange, area }: { label: string; value: string; onChange: (v: string) => void; area?: boolean }) {
-  const { t } = useI18n();
-  const ref = useRef<HTMLTextAreaElement>(null);
-  const [tool, setTool] = useState<null | "math" | "chem">(null);
-
-  function insert(snippet: string) {
-    applyInsert(ref.current, insertSnippet(ref.current, value, snippet), onChange);
-  }
-
   if (!area) {
     return (
       <label className="flex flex-col gap-1.5">
         <span className="text-[11px] font-bold text-muted">{label}</span>
-        <input value={value} onChange={(e) => onChange(e.target.value)} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px]" />
+        <input value={value} onChange={(e) => onChange(e.target.value)} className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 bg-card text-[12.5px]" />
       </label>
     );
   }
 
   return (
     <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] font-bold text-muted">{label}</span>
-        <span className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => setTool(tool === "math" ? null : "math")}
-            title={t("te_insertMath")}
-            aria-label={t("te_insertMath")}
-            className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${tool === "math" ? "border-brand-600 text-brand-600 bg-brand-600/10" : "border-border text-ink-700 bg-white"}`}
-          >
-            ∑
-          </button>
-          <button
-            type="button"
-            onClick={() => setTool(tool === "chem" ? null : "chem")}
-            title={t("te_insertChem")}
-            aria-label={t("te_insertChem")}
-            className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${tool === "chem" ? "border-brand-600 text-brand-600 bg-brand-600/10" : "border-border text-ink-700 bg-white"}`}
-          >
-            H₂O
-          </button>
-        </span>
-      </div>
-      <textarea
-        ref={ref}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={3}
-        className="px-3 py-2 rounded-lg border-[1.5px] border-ink-300 text-[12.5px] leading-relaxed resize-y min-h-[72px]"
-      />
-      {tool && <FormulaTool mode={tool} onInsert={insert} onClose={() => setTool(null)} />}
+      {/*
+        `variant="quiz"` is load-bearing, not cosmetic. A question prompt and its
+        explanation are rendered by `inline()` alone — not by `LessonContent` or
+        `RichCardText` — so nothing block-level renders here: a `## heading`, a
+        `- list`, a table or a callout box would all reach the student as literal
+        characters. The quiz variant therefore offers inline marks, links and the
+        formula/symbol panels, and deliberately nothing else. Widening it means
+        upgrading the question renderers first (editor preview AND the student
+        quiz screen).
+      */}
+      <MarkupField label={label} value={value} onChange={onChange} variant="quiz" toolbarOnFocus rows={3} minHeight={72} />
       {hasNotation(value) && (
         <div className="rounded-lg bg-ink-50 border border-ink-100 px-2.5 py-2 text-[12.5px] leading-relaxed text-text">{inline(value)}</div>
       )}

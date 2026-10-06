@@ -6,7 +6,8 @@ import { supabase } from "../../lib/supabaseClient";
 import type { LessonCardRow } from "../../lib/database.types";
 import { MarkupField } from "../editor/MarkupField";
 import { ZoomableImage } from "../ImageLightbox";
-import { RichCardText, hasInlineImageToken, inline } from "../../lib/lessonContent";
+import { RichCardText, inline } from "../../lib/lessonContent";
+import { hasInlineImageToken } from "../../lib/markupSyntax";
 
 const BUCKET = "lesson-media";
 
@@ -223,7 +224,7 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
       <div className="text-[11.5px] text-muted leading-relaxed mb-3">{t("admin_cardsHint")}</div>
 
       {flash && (
-        <div className={`mb-3 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-600/10 text-success-600" : "bg-danger-600/10 text-danger-600"}`}>
+        <div className={`mb-3 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-100 text-success-700" : "bg-danger-100 text-danger-700"}`}>
           {flash.msg}
         </div>
       )}
@@ -350,7 +351,7 @@ function AddCardButton({ onClick, label, disabled }: { onClick: () => void; labe
     <button
       onClick={onClick}
       disabled={disabled}
-      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-card whitespace-nowrap disabled:opacity-50"
+      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold border-[1.5px] border-brand-600 text-brand-600 bg-card whitespace-nowrap disabled:opacity-50"
     >
       <Icon name="plus" size={15} />
       {label}
@@ -387,7 +388,7 @@ function CardThumb({
       onClick={onSelect}
       aria-current={active}
       className={`relative flex-none w-[150px] xl:w-full text-left rounded-2xl border-2 p-2.5 transition-colors ${
-        active ? "border-brand-500 bg-brand-50" : "border-border bg-card hover:border-brand-500/40"
+        active ? "border-brand-500 bg-brand-50" : "border-border bg-card hover:border-brand-500"
       }`}
     >
       <span className="absolute -top-2 -right-2 min-w-[34px] px-1.5 h-[22px] rounded-pill bg-brand-500 text-white text-[10.5px] font-bold flex items-center justify-center">
@@ -420,39 +421,145 @@ function CardThumb({
  */
 function PhonePreview({ card, index, total }: { card: LessonCardRow; index: number; total: number }) {
   const { t, lang } = useI18n();
+  /**
+   * Which face is being previewed.
+   *
+   * It only ever showed the FRONT — point, subtitle, image — which meant the
+   * explanation, the structural question, the tips and the traps were four
+   * fields an author could fill with no way to see the result: "when modifying
+   * cards we see no explanation… we see the left and right card but can't access
+   * explanations". In the app those blocks live on the card's back face, behind
+   * the flip button, so the preview needs the same two faces.
+   */
+  const [face, setFace] = useState<"front" | "back">("front");
+
   const image = lang === "fr" ? card.image_fr ?? card.image_en : card.image_en ?? card.image_fr;
   const point = lang === "fr" ? card.point_fr || card.point_en : card.point_en || card.point_fr;
   const sub = lang === "fr" ? card.sub_fr || card.sub_en : card.sub_en || card.sub_fr;
+  const explanation = lang === "fr" ? card.explanation_fr : card.explanation_en;
+  const tips = lang === "fr" ? card.tips_fr : card.tips_en;
+  const traps = lang === "fr" ? card.traps_fr : card.traps_en;
+  const structuralQ = lang === "fr" ? card.structural_question_fr : card.structural_question_en;
+  const expected = lang === "fr" ? card.structural_answer_fr : card.structural_answer_en;
+
   const progress = total > 0 ? ((index + 1) / total) * 100 : 0;
-  const inlineImg = hasInlineImageToken(sub);
-  const imgNode = image ? <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-xl bg-white/5" /> : null;
+  const frontInlineImg = hasInlineImageToken(sub);
+  const backInlineImg = hasInlineImageToken(explanation, tips, traps);
+  // The front sits on the dark card surface, the back on the light one, so each
+  // face needs the image styled for its own background — exactly as the deck does.
+  const frontImg = image ? <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-xl bg-white/5" /> : null;
+  const backImg = image ? <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-xl bg-ink-50" /> : null;
+
+  // How full the back face is, so an author can see at a glance that there is
+  // something to switch to.
+  const backBlocks = [explanation, structuralQ, tips, traps].filter((v) => v && v.trim()).length;
+
+  const FaceTab = ({ id, label }: { id: "front" | "back"; label: string }) => (
+    <button
+      type="button"
+      onClick={() => setFace(id)}
+      aria-pressed={face === id}
+      className={`px-3 py-1 rounded-pill text-[11px] font-bold border ${
+        face === id ? "border-brand-600 bg-brand-600 text-white" : "border-border bg-card text-ink-800"
+      }`}
+    >
+      {label}
+      {id === "back" && backBlocks > 0 && <span className="ml-1 opacity-80">({backBlocks})</span>}
+    </button>
+  );
 
   return (
     <aside className="w-full xl:w-[300px] xl:flex-none">
-      <div className="text-[11px] font-bold uppercase tracking-wide text-muted mb-2">{t("ed_livePreview")}</div>
+      <div className="flex items-center gap-2 mb-2 flex-wrap">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-muted">{t("ed_livePreview")}</div>
+        <div className="flex-1" />
+        <FaceTab id="front" label={t("ed_cardFront")} />
+        <FaceTab id="back" label={t("ed_cardBack")} />
+      </div>
+
       <div className="rounded-[34px] border-[10px] border-ink-900 bg-ink-900 shadow-[0_18px_40px_-18px_rgba(15,30,60,0.55)] max-w-[320px] mx-auto xl:mx-0">
-        <div className="rounded-[24px] bg-ink-900 text-white overflow-hidden flex flex-col h-[520px]">
-          <div className="px-4 pt-4">
-            <div className="h-1.5 rounded-pill bg-white/25 overflow-hidden">
-              <div className="h-full rounded-pill bg-white" style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-          <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4">
-            {image && !inlineImg && <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-2xl mb-4 bg-white/5" />}
-            <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">
-              {lang === "fr" ? `Carte ${index + 1} / ${total}` : `Card ${index + 1} / ${total}`}
-            </div>
-            <div className="font-serif text-[18px] font-semibold leading-[1.35] mb-3">{point ? inline(point) : "—"}</div>
-            {sub && (
-              <div className="text-[13px] text-white/70 leading-[1.5]">
-                <RichCardText text={sub} image={imgNode} />
+        {face === "front" ? (
+          <div className="rounded-[24px] bg-ink-900 text-white overflow-hidden flex flex-col h-[520px]">
+            <div className="px-4 pt-4">
+              <div className="h-1.5 rounded-pill bg-white/25 overflow-hidden">
+                <div className="h-full rounded-pill bg-white" style={{ width: `${progress}%` }} />
               </div>
-            )}
+            </div>
+            <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4">
+              {image && !frontInlineImg && <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-2xl mb-4 bg-white/5" />}
+              <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">
+                {lang === "fr" ? `Carte ${index + 1} / ${total}` : `Card ${index + 1} / ${total}`}
+              </div>
+              <div className="font-serif text-[18px] font-semibold leading-[1.35] mb-3">{point ? inline(point) : "—"}</div>
+              {sub && (
+                <div className="text-[13px] text-white/70 leading-[1.5]">
+                  <RichCardText text={sub} image={frontImg} />
+                </div>
+              )}
+            </div>
+            <div className="px-4 pb-4">
+              <div className="w-full rounded-xl bg-brand-600 text-white text-[13px] font-bold py-2.5 text-center">{t("lang_continue")}</div>
+            </div>
           </div>
-          <div className="px-4 pb-4">
-            <div className="w-full rounded-xl bg-brand-600 text-white text-[13px] font-bold py-2.5 text-center">{t("lang_continue")}</div>
+        ) : (
+          // The back face, laid out the way `LessonCardDeck` lays it out: title
+          // bar, then explanation, structural question, tips and traps.
+          <div className="rounded-[24px] bg-surface text-text overflow-hidden flex flex-col h-[520px]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border flex-shrink-0">
+              <h3 className="font-serif font-bold text-[13.5px] text-ink-900 truncate pr-2">{point ? inline(point) : "—"}</h3>
+            </div>
+            <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3.5 flex flex-col gap-3.5">
+              {image && !backInlineImg && backImg}
+
+              {explanation && (
+                <div>
+                  <div className="font-serif font-bold text-[12px] text-ink-900 mb-1.5">{t("card_explanation")}</div>
+                  <div className="text-[13px] leading-[1.6] text-text">
+                    <RichCardText text={explanation} image={backImg} />
+                  </div>
+                </div>
+              )}
+
+              {structuralQ && (
+                <div className="rounded-xl border border-brand-600 bg-ink-50 px-3 py-2.5">
+                  <div className="text-[10.5px] font-bold text-brand-600 mb-1.5 uppercase tracking-wide">{t("card_structuralQ")}</div>
+                  <p className="text-[12.5px] leading-relaxed text-text mb-2">{inline(structuralQ)}</p>
+                  <div className="rounded-lg border-[1.5px] border-ink-300 bg-card px-2.5 py-1.5 text-[12px] text-muted">{t("card_yourAnswer")}</div>
+                  {expected && (
+                    <div className="mt-2 rounded-lg bg-card border border-border px-2.5 py-1.5">
+                      <div className="text-[9.5px] font-bold uppercase tracking-wide text-success-600 mb-0.5">{t("card_expectedAnswer")}</div>
+                      <div className="text-[12px] text-text leading-relaxed">{inline(expected)}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {tips && (
+                <div className="rounded-lg px-3 py-2.5" style={{ background: "#e8f4ff", borderLeft: "4px solid #29b6f6" }}>
+                  <div className="font-serif font-bold text-[12px] mb-1" style={{ color: "#0b5f96" }}>
+                    💡 {t("card_tips")}
+                  </div>
+                  <div className="text-[12.5px] leading-[1.55]" style={{ color: "#0b4a75" }}>
+                    <RichCardText text={tips} image={backImg} />
+                  </div>
+                </div>
+              )}
+
+              {traps && (
+                <div className="rounded-lg px-3 py-2.5" style={{ background: "#fff4e0", borderLeft: "4px solid #f5b400" }}>
+                  <div className="font-serif font-bold text-[12px] mb-1" style={{ color: "#a35b00" }}>
+                    ⚠ {t("card_traps")}
+                  </div>
+                  <div className="text-[12.5px] leading-[1.55]" style={{ color: "#5c3b00" }}>
+                    <RichCardText text={traps} image={backImg} />
+                  </div>
+                </div>
+              )}
+
+              {backBlocks === 0 && <div className="text-[12px] text-muted leading-relaxed">{t("ed_cardBackEmpty")}</div>}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </aside>
   );
@@ -483,8 +590,7 @@ function Rich({
       rows={rows}
       minHeight={minHeight}
       toolbarOnFocus
-      showImage={false}
-      showMedia={false}
+      variant="card"
     />
   );
 }

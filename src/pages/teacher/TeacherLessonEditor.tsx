@@ -74,7 +74,7 @@ function TeacherReviewBar({ lesson, reload, ownerId }: { lesson: LessonRow; relo
       </div>
 
       {lesson.review_feedback && (
-        <div className="rounded-xl bg-danger-600/5 border border-danger-600/30 px-3 py-2 text-[12px] text-ink-800">
+        <div className="rounded-xl bg-danger-50 border border-danger-600 px-3 py-2 text-[12px] text-ink-800">
           <span className="font-bold text-danger-600">{t("tc_feedback")}: </span>
           {lesson.review_feedback}
         </div>

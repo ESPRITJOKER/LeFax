@@ -18,7 +18,7 @@
   --color-ink-50: #f8fafc;
 
   /* Green — success */
-  --color-success-700: #16a34a;
+  --color-success-700: #147a39; /* AA as text on card/surface/success-50/-100 (5.42/4.86/5.18/4.70); was #16a34a at 3.30/2.95/3.15/2.86 */
   --color-success-600: #22c55e;
   --color-success-100: #dcf5e3;
   --color-success-50: #f0fdf4;
@@ -30,7 +30,7 @@
   --color-ochre-50: #fff8e5;
 
   /* Red — reserved strictly for errors / corrections */
-  --color-danger-700: #dc2626;
+  --color-danger-700: #c81e1e; /* AA as text on card/surface/danger-50/-100 (5.74/5.14/5.24/4.70); was #dc2626 at 4.83/4.33/4.41/3.95 */
   --color-danger-600: #ef4444;
   --color-danger-100: #fee2e2;
   --color-danger-50: #fef2f2;

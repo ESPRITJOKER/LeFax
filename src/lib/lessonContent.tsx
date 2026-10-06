@@ -3,90 +3,45 @@ import { Icon } from "./icons";
 import { useI18n } from "./i18n";
 import { Math, splitNotation } from "./math";
 import { ZoomableImage, type ImageMeta } from "../components/ImageLightbox";
+import {
+  BULLET_RE,
+  DIVIDER_RE,
+  HIGHLIGHT_COLORS,
+  HIGHLIGHT_INK,
+  INLINE_RE,
+  ORDERED_RE,
+  QUOTE_RE,
+  TABLE_LINE_RE,
+  indentDepth,
+  parse,
+  parseVideo,
+  readAlign,
+  rowAlignment,
+  safeUrl,
+  splitRow,
+  type Block,
+  type CellAlign,
+  type ImageOptions,
+  type ListItem,
+} from "./markupSyntax";
 
 /**
- * Lightweight, dependency-free renderer for lesson bodies (lessons.content_fr /
- * content_en) and for the rich text fields on story cards. Lesson text is
- * stored as a line-based mini-markup so authors, the editor toolbar and the AI
- * pipeline can write rich micro-learning content into plain `text` columns
- * without a heavy Markdown/MDX dependency.
+ * Renderers for lesson bodies (lessons.content_fr / content_en) and for the rich
+ * text fields on story cards. Lesson text is stored as a line-based mini-markup
+ * so authors, the editor's ribbon and the AI pipeline can write rich
+ * micro-learning content into plain `text` columns without a heavy Markdown/MDX
+ * dependency.
  *
- * Grammar (one construct per line, blocks separated by blank lines):
- *   ## Heading                     → section heading
- *   ### Sub-heading                → sub-heading
- *   - item                         → bullet (consecutive lines grouped);
- *                                    two leading spaces nest it one level
- *   1. item                        → numbered list (same nesting rule)
- *   [[IMG: caption]]               → captioned image-upload placeholder. The
- *                                    caption identifies exactly which diagram an
- *                                    admin should upload here (CDC 6.7 media).
- *   [[VIDEO: url]]                 → embedded player (YouTube / Vimeo) or a
- *                                    clickable card for any other URL
- *                                    (Correction N6: "les liens des vidéos
- *                                    hypertexte ne se connectaient pas").
- *   [!PIEGE] text                  → "watch out" callout (common exam trap)
- *   [!INFO] text                   → note / etymology / historical marker
- *   [!APP] consigne ||| correction → self-test box; correction hidden behind a
- *                                    toggle so students try first
- *   plain text                     → paragraph
- *
- * Inline everywhere: **bold**, *italic* / _italic_, ==highlight==, __underline__,
- * ^superscript^, ~subscript~, [label](url), and $…$ / \ce{…} notation.
+ * The grammar and the parser live in `./markupSyntax` — pure string work, no
+ * React and no KaTeX, so that a plain `node` script can assert on them. This
+ * file is the React half: it turns `Block[]` into elements. Import the grammar
+ * from `./markupSyntax` directly rather than re-exporting it here; a `.tsx` file
+ * that exports non-components trips `react-refresh/only-export-components` for
+ * every one of them.
  */
 
-/**
- * Highlight fills. Every one of them is paired with a FIXED dark ink rather
- * than `color: inherit` — Correction N6: "Jaune qui rend invisible les
- * écritures". The story-card front is a dark surface whatever the theme, so an
- * inherited near-white colour on a pale yellow fill was unreadable, and no
- * theme token can fix that (the card is dark in light mode too). Pinning both
- * halves of the pair is the only form that is legible on every surface.
- */
-const HIGHLIGHT_INK = "#1e2a3a";
-export const HIGHLIGHT_COLORS = {
-  jaune: "#ffe9a8",
-  vert: "#c8f0d2",
-  bleu: "#cfe6ff",
-  rose: "#fcd9e8",
-} as const;
-export type HighlightColor = keyof typeof HIGHLIGHT_COLORS;
 
-/**
- * Only these schemes may become an `<a href>`. Author text is never injected as
- * HTML, but a `[clic](javascript:…)` would otherwise be a working script URL,
- * so the allowlist is applied at render time rather than at authoring time.
- */
-export function safeUrl(raw: string): string | null {
-  const url = (raw ?? "").trim();
-  if (!url) return null;
-  if (/^(https?:|mailto:)/i.test(url)) return url;
-  // A bare domain ("www.exemple.com") is a link an author plainly meant.
-  if (/^www\./i.test(url)) return `https://${url}`;
-  return null;
-}
-
-/**
- * Inline markup rules, in one pass. Order matters: links are matched first so a
- * URL's characters are never eaten by another rule, `**bold**` before `*italic*`
- * and `__underline__` before `_italic_`. The italic forms require a non-space
- * right after the opening mark so a lone `*` (e.g. "2 * 3") is left untouched.
- * Group names are distinct per alternative — duplicate names are not portable.
- */
-const INLINE_RE = new RegExp(
-  [
-    /\[(?<linkText>[^\]\n]+)\]\((?<linkUrl>[^)\s]+)\)/,
-    /\*\*(?<bold>[^*]+?)\*\*/,
-    /\*(?<italic>[^\s*][^*]*?)\*/,
-    /==(?:(?<hlColor>jaune|vert|bleu|rose)\|)?(?<hl>[^=]+?)==/,
-    /__(?<underline>[^_]+?)__/,
-    /_(?<italic2>[^\s_][^_]*?)_/,
-    /\^(?<sup>[^\s^]+)\^/,
-    /~(?<sub>[^\s~]+)~/,
-  ]
-    .map((r) => r.source)
-    .join("|"),
-  "g"
-);
+/* ─────────────────────────── inline rendering ──────────────────────────── */
 
 /**
  * Render inline markup inside a single line of text. Notation is carved out
@@ -112,7 +67,13 @@ function markup(text: string): ReactNode {
     const g = m.groups ?? {};
     if (m.index > last) nodes.push(<Fragment key={key++}>{text.slice(last, m.index)}</Fragment>);
 
-    if (g.linkText !== undefined) {
+    if (g.code !== undefined) {
+      nodes.push(
+        <code key={key++} className="font-mono text-[0.88em] rounded px-1 py-px bg-ink-100 text-ink-900">
+          {g.code}
+        </code>
+      );
+    } else if (g.linkText !== undefined) {
       const href = safeUrl(g.linkUrl ?? "");
       nodes.push(
         href ? (
@@ -138,12 +99,13 @@ function markup(text: string): ReactNode {
         <mark
           key={key++}
           className="rounded px-0.5"
-          style={{ background: HIGHLIGHT_COLORS[(g.hlColor as HighlightColor) ?? "jaune"], color: HIGHLIGHT_INK }}
+          style={{ background: HIGHLIGHT_COLORS[(g.hlColor as keyof typeof HIGHLIGHT_COLORS) ?? "jaune"], color: HIGHLIGHT_INK }}
         >
           {g.hl}
         </mark>
       );
     else if (g.underline !== undefined) nodes.push(<u key={key++} className="underline underline-offset-2">{g.underline}</u>);
+    else if (g.strike !== undefined) nodes.push(<s key={key++} className="line-through">{g.strike}</s>);
     else if (g.sup !== undefined) nodes.push(<sup key={key++} className="text-[0.75em] align-super">{g.sup}</sup>);
     else nodes.push(<sub key={key++} className="text-[0.75em] align-sub">{g.sub as string}</sub>);
 
@@ -154,42 +116,6 @@ function markup(text: string): ReactNode {
 }
 
 /* ─────────────────────────── video ─────────────────────────────────────── */
-
-/**
- * Turn any video URL into something embeddable. The id is parsed out of the
- * URL — nothing is hardcoded, so a course added next year works with no code
- * change (Correction N6: "ne pas coder en dur une vidéo").
- *
- * YouTube goes through `youtube-nocookie.com`, which does not set tracking
- * cookies until the student actually presses play.
- */
-export function parseVideo(raw: string): { embed: string | null; href: string | null; provider: "youtube" | "vimeo" | "other" } {
-  const href = safeUrl(raw);
-  if (!href) return { embed: null, href: null, provider: "other" };
-  try {
-    const u = new URL(href);
-    const host = u.hostname.replace(/^www\./, "").toLowerCase();
-
-    if (host === "youtu.be") {
-      const id = u.pathname.slice(1).split("/")[0];
-      if (id) return { embed: `https://www.youtube-nocookie.com/embed/${id}`, href, provider: "youtube" };
-    }
-    if (host === "youtube.com" || host === "m.youtube.com" || host === "youtube-nocookie.com") {
-      const id = u.searchParams.get("v") ?? u.pathname.match(/\/(?:embed|shorts|live|v)\/([^/?#]+)/)?.[1];
-      if (id) {
-        const list = u.searchParams.get("list");
-        return { embed: `https://www.youtube-nocookie.com/embed/${id}${list ? `?list=${encodeURIComponent(list)}` : ""}`, href, provider: "youtube" };
-      }
-    }
-    if (host === "vimeo.com" || host === "player.vimeo.com") {
-      const id = u.pathname.match(/(\d+)/)?.[1];
-      if (id) return { embed: `https://player.vimeo.com/video/${id}`, href, provider: "vimeo" };
-    }
-  } catch {
-    /* not a parseable URL — fall through to the link card */
-  }
-  return { embed: null, href, provider: "other" };
-}
 
 /**
  * A video block. An embeddable provider gets a responsive 16:9 player; anything
@@ -250,12 +176,6 @@ export function VideoBlock({ url, label }: { url: string; label?: string }) {
 
 /* ─────────────────────────── lists ─────────────────────────────────────── */
 
-interface ListItem {
-  text: string;
-  /** 0 = top level, 1 = one nesting level (the editor's indent button). */
-  depth: number;
-}
-
 /** Render a flat depth-tagged item array as (optionally nested) real lists. */
 function renderList(items: ListItem[], ordered: boolean, itemClass: string, keyBase: string, topClass: string): ReactNode {
   const Tag = ordered ? "ol" : "ul";
@@ -278,20 +198,101 @@ function renderList(items: ListItem[], ordered: boolean, itemClass: string, keyB
     );
     i = j;
   }
+  return <Tag className={`${ordered ? "list-decimal" : "list-disc"} ${topClass}`}>{out}</Tag>;
+}
+
+/* ─────────────────── alignment / table / quote / divider ───────────────── */
+
+function alignClass(align?: CellAlign): string {
+  return align === "center" ? "text-center" : align === "right" ? "text-right" : "";
+}
+
+/**
+ * A pipe table.
+ *
+ * No `/opacity` modifiers anywhere in here, and that is not a style preference:
+ * this project's colour tokens are bare `var(--color-…)` values, and Tailwind
+ * cannot parse those, so it drops a class like `border-ink-300/40` from the
+ * stylesheet **entirely** — the element then gets no border colour at all. A
+ * tint has to be its own token. The card variant sits on a surface that is dark
+ * in both themes, so there it uses literal `white/α`, which Tailwind does
+ * compile.
+ */
+function TableBlock({
+  head,
+  rows,
+  align,
+  inherit,
+}: {
+  head: string[] | null;
+  rows: string[][];
+  align: CellAlign[];
+  /** Card fields inherit their colour from a dark surface — see above. */
+  inherit?: boolean;
+}) {
+  // `Math` is the KaTeX component in this module, so no Math.max here.
+  const width = [head?.length ?? 0, ...rows.map((r) => r.length)].reduce((a, b) => (b > a ? b : a), 1);
+  const cell = (i: number) => {
+    const a = align[i] ?? "left";
+    return a === "center" ? "text-center" : a === "right" ? "text-right" : "text-left";
+  };
+  const rule = inherit ? "border-white/20" : "border-border";
+  const pad = inherit ? "px-2 py-1" : "px-2.5 py-1.5";
+
+  // The wrapper scrolls, not the page: a four-column table cannot be made to fit
+  // the 360px reading column, and letting it overflow would push the whole lesson
+  // sideways. Two or three short columns simply wrap, which is the common case.
   return (
-    <Tag className={`${ordered ? "list-decimal" : "list-disc"} ${topClass}`}>{out}</Tag>
+    <div className={`${inherit ? "my-2" : "my-4"} w-full overflow-x-auto rounded-xl border ${rule}`}>
+      <table className={`w-full border-collapse ${inherit ? "text-[0.92em]" : "text-[12.5px] text-text"}`}>
+        {head && (
+          <thead>
+            <tr>
+              {Array.from({ length: width }, (_, i) => (
+                <th
+                  key={i}
+                  scope="col"
+                  className={`border-b ${rule} ${pad} font-bold align-top ${cell(i)} ${inherit ? "bg-white/10" : "bg-ink-50 text-ink-900"}`}
+                >
+                  {inline(head[i] ?? "")}
+                </th>
+              ))}
+            </tr>
+          </thead>
+        )}
+        <tbody>
+          {rows.map((row, r) => (
+            <tr key={r}>
+              {Array.from({ length: width }, (_, i) => (
+                <td key={i} className={`border-b ${rule} ${pad} align-top leading-snug ${cell(i)}`}>
+                  {inline(row[i] ?? "")}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
-/** Leading-space depth, capped at one nesting level (the toolbar's indent). */
-function indentDepth(rawLine: string): number {
-  const spaces = rawLine.match(/^[ \t]*/)?.[0] ?? "";
-  const width = spaces.replace(/\t/g, "  ").length;
-  return width >= 2 ? 1 : 0;
+function Quote({ lines, inherit }: { lines: string[]; inherit?: boolean }) {
+  return (
+    <blockquote
+      className={`${inherit ? "my-2 pl-3 border-white/40" : "my-3.5 pl-3.5 border-brand-600 text-[13px] leading-relaxed text-muted"} border-l-[3px] italic`}
+    >
+      {lines.map((l, i) => (
+        <p key={i} className={i === 0 ? "" : "mt-1.5"}>
+          {inline(l)}
+        </p>
+      ))}
+    </blockquote>
+  );
 }
 
-const BULLET_RE = /^(?:-|•|–)\s+(.*)$/;
-const ORDERED_RE = /^\d+[.)]\s+(.*)$/;
+function Divider({ inherit }: { inherit?: boolean }) {
+  return <hr className={`border-0 border-t ${inherit ? "my-2.5 border-white/20" : "my-5 border-border"}`} />;
+}
 
 /* ───────────────────── card-field block renderer ───────────────────────── */
 
@@ -302,128 +303,174 @@ const ORDERED_RE = /^\d+[.)]\s+(.*)$/;
  * its colour and sizing from the surrounding card block, so the same markup
  * renders correctly on the dark card front and the light card back.
  *
- * Supports the subset of the lesson mini-markup that makes sense inside a card
- * field: headings, bulleted AND numbered lists (one nesting level), an inline
- * `[[IMG]]` token placing the card's own image, `[[VIDEO: url]]`, and all the
- * inline marks.
+ * It renders the whole block grammar the lesson body does, including tables,
+ * even though the card ribbon does not offer a table button: content moves
+ * between the body and the card fields (AI generation, copy-paste), and a field
+ * that silently dropped a table is how rows disappear without anyone noticing.
  */
 export function RichCardText({ text, image }: { text: string; image?: ReactNode }) {
   const lines = (text ?? "").replace(/\r\n/g, "\n").split("\n");
   const out: ReactNode[] = [];
   let list: { items: ListItem[]; ordered: boolean } | null = null;
+  let quote: string[] | null = null;
   let key = 0;
-  const flush = () => {
+  const flushList = () => {
     if (list && list.items.length) {
-      out.push(
-        <Fragment key={key++}>{renderList(list.items, list.ordered, "", `cl${key}`, "pl-[1.2em] flex flex-col gap-1 my-1.5")}</Fragment>
-      );
+      out.push(<Fragment key={key++}>{renderList(list.items, list.ordered, "", `cl${key}`, "pl-[1.2em] flex flex-col gap-1 my-1.5")}</Fragment>);
     }
     list = null;
   };
+  const flushQuote = () => {
+    if (quote && quote.length) out.push(<Quote key={key++} lines={quote} inherit />);
+    quote = null;
+  };
+  const flush = () => {
+    flushList();
+    flushQuote();
+  };
 
-  for (const rawLine of lines) {
+  for (let li = 0; li < lines.length; li += 1) {
+    const rawLine = lines[li];
     const line = rawLine.trim();
     const depth = indentDepth(rawLine);
+
+    if (TABLE_LINE_RE.test(line)) {
+      flush();
+      const rows: string[][] = [];
+      let j = li;
+      while (j < lines.length && TABLE_LINE_RE.test(lines[j].trim())) {
+        rows.push(splitRow(lines[j]));
+        j += 1;
+      }
+      li = j - 1;
+      const align = rows.length > 1 ? rowAlignment(rows[1]) : null;
+      out.push(
+        align ? (
+          <TableBlock key={key++} head={rows[0]} rows={rows.slice(2)} align={align} inherit />
+        ) : (
+          <TableBlock key={key++} head={null} rows={rows} align={[]} inherit />
+        )
+      );
+      continue;
+    }
+
+    const quoted = line.match(QUOTE_RE);
+    if (quoted) {
+      flushList();
+      (quote ??= []).push(quoted[1]);
+      continue;
+    }
+
     const bullet = line.match(BULLET_RE);
     const ordered = line.match(ORDERED_RE);
     if (bullet || ordered) {
       const isOrdered = Boolean(ordered);
-      if (list && list.ordered !== isOrdered) flush();
+      flushQuote();
+      if (list && list.ordered !== isOrdered) flushList();
       (list ??= { items: [], ordered: isOrdered }).items.push({ text: (bullet?.[1] ?? ordered?.[1]) as string, depth });
       continue;
     }
     flush();
     if (line === "") continue;
 
+    if (DIVIDER_RE.test(line)) {
+      out.push(<Divider key={key++} inherit />);
+      continue;
+    }
+
+    const { align: lineAlign, rest } = readAlign(line);
+    const ac = alignClass(lineAlign);
+
     let mm: RegExpMatchArray | null;
-    if ((mm = line.match(/^\$\$([\s\S]+)\$\$$/))) out.push(<Math key={key++} tex={mm[1].trim()} display />);
-    else if ((mm = line.match(/^##\s+(.*)$/)))
+    if ((mm = rest.match(/^\$\$([\s\S]+)\$\$$/))) out.push(<Math key={key++} tex={mm[1].trim()} display />);
+    else if ((mm = rest.match(/^##\s+(.*)$/)))
       out.push(
-        <div key={key++} className="font-serif font-bold text-[1.22em] leading-snug mt-2 mb-1 first:mt-0">
+        <div key={key++} className={`font-serif font-bold text-[1.22em] leading-snug mt-2 mb-1 first:mt-0 ${ac}`}>
           {inline(mm[1])}
         </div>
       );
-    else if ((mm = line.match(/^###\s+(.*)$/)))
+    else if ((mm = rest.match(/^###\s+(.*)$/)))
       out.push(
-        <div key={key++} className="font-bold text-[1.08em] leading-snug mt-1.5 mb-0.5">
+        <div key={key++} className={`font-bold text-[1.08em] leading-snug mt-1.5 mb-0.5 ${ac}`}>
           {inline(mm[1])}
         </div>
       );
-    else if ((mm = line.match(/^\[\[VIDEO:\s*(.*?)\]\]$/i))) out.push(<VideoBlock key={key++} url={mm[1]} />);
-    else if (/^\[\[IMG(?::[^\]]*)?\]\]$/i.test(line)) {
+    else if ((mm = rest.match(/^#\s+(.*)$/)))
+      out.push(
+        <div key={key++} className={`font-serif font-bold text-[1.35em] leading-snug mt-2 mb-1 first:mt-0 ${ac}`}>
+          {inline(mm[1])}
+        </div>
+      );
+    else if ((mm = rest.match(/^\[\[VIDEO:\s*(.*?)\]\]$/i))) out.push(<VideoBlock key={key++} url={mm[1]} />);
+    else if (/^\[\[IMG(?::[^\]]*)?\]\]$/i.test(rest)) {
       if (image) out.push(<div key={key++} className="my-2">{image}</div>);
-    } else out.push(<p key={key++} className="my-1 first:mt-0 last:mb-0">{inline(line)}</p>);
+    } else out.push(<p key={key++} className={`my-1 first:mt-0 last:mb-0 ${ac}`}>{inline(rest)}</p>);
   }
   flush();
   return <>{out}</>;
 }
 
-/** True when a card text field asks for the card image to be placed inline. */
-export function hasInlineImageToken(...texts: (string | null | undefined)[]): boolean {
-  return texts.some((s) => s != null && /\[\[IMG(?::[^\]]*)?\]\]/i.test(s));
-}
-
 /* ─────────────────────────── images ────────────────────────────────────── */
 
-/**
- * Optional options on an image placeholder, after the caption:
- *   [[IMG: caption]]                        → full width, centred (the default,
- *                                             and what all existing content uses)
- *   [[IMG: caption | w=60]]                 → 60% of the column width
- *   [[IMG: caption | align=right]]          → pushed right on wide screens
- *   [[IMG: caption | credit=OMS 2024]]      → source line under the figure
- *   [[IMG: caption | source=https://…]]     → the credit becomes a link
- *   [[IMG: caption | alt=texte alternatif]] → screen-reader text
- * Unknown options are ignored, so a typo degrades to the default rather than
- * breaking the lesson.
- */
-export interface ImageOptions {
-  widthPct?: number;
-  align?: "left" | "center" | "right";
-  credit?: string;
-  sourceUrl?: string;
-  alt?: string;
-  author?: string;
-}
-
-export function parseImageSpec(raw: string): { caption: string; options: ImageOptions } {
-  const parts = raw.split("|");
-  const caption = (parts.shift() ?? "").trim();
-  const options: ImageOptions = {};
-  for (const part of parts) {
-    // Only the FIRST "=" separates key from value, so a URL's query string
-    // survives (`source=https://x.org/i?a=1`).
-    const eq = part.indexOf("=");
-    if (eq < 0) continue;
-    const key = part.slice(0, eq).trim().toLowerCase();
-    const rawValue = part.slice(eq + 1).trim();
-    const value = rawValue.toLowerCase();
-    if ((key === "w" || key === "width") && value) {
-      const pct = Number.parseInt(value.replace("%", ""), 10);
-      if (Number.isFinite(pct) && pct >= 10 && pct <= 100) options.widthPct = pct;
-    } else if (key === "align" && (value === "left" || value === "right" || value === "center")) {
-      options.align = value;
-    } else if ((key === "credit" || key === "ref" || key === "reference") && rawValue) {
-      options.credit = rawValue;
-    } else if ((key === "source" || key === "src") && rawValue) {
-      options.sourceUrl = safeUrl(rawValue) ?? undefined;
-    } else if (key === "alt" && rawValue) {
-      options.alt = rawValue;
-    } else if ((key === "author" || key === "auteur") && rawValue) {
-      options.author = rawValue;
-    }
-  }
-  return { caption, options };
-}
-
-/** Image metadata as stored on `media_library` (migration 0021), per slot. */
+/** Image metadata as stored on `media_library` (migrations 0021/0022), per slot. */
 export type SlotMeta = { url: string } & ImageMeta;
 
-/** `images` accepts either a bare URL per slot or a URL plus its references. */
-export type SlotImages = Record<number, string | SlotMeta>;
+/**
+ * Uploaded lesson images, addressed by stable image key (migration 0022) AND by
+ * 1-based positional slot — the loaders file every row under both, so a token
+ * that carries `key=…` resolves by key and every keyless token written before
+ * the image dialog existed still resolves by position. The value is either a
+ * bare URL or a URL plus its references.
+ */
+export type SlotImages = Record<string, string | SlotMeta>;
+
+/** The columns of a `media_library` row this module needs. */
+export interface MediaRowLike {
+  storage_path: string;
+  image_slot?: number | null;
+  image_key?: string | null;
+  caption?: string | null;
+  credit?: string | null;
+  credit_url?: string | null;
+}
+
+/**
+ * Turn `media_library` rows into the renderer's image map.
+ *
+ * Rows with neither a key nor a slot are generic library uploads, not lesson
+ * figures, and are skipped here rather than filtered in the query: an
+ * `image_key` filter would make the whole PostgREST request fail with 42703
+ * anywhere migration 0022 has not been applied yet, which is the same trap the
+ * callers' `select("*")` exists to avoid.
+ */
+export function buildImageMap(rows: MediaRowLike[] | null | undefined): SlotImages {
+  const map: SlotImages = {};
+  for (const row of rows ?? []) {
+    if (!row.storage_path) continue;
+    const meta: SlotMeta = {
+      url: row.storage_path,
+      caption: row.caption ?? null,
+      credit: row.credit ?? null,
+      creditUrl: row.credit_url ?? null,
+    };
+    // The column may be absent at runtime even though the type declares it: the
+    // types describe the intended schema, this read tolerates the older one.
+    const k = row.image_key ?? null;
+    if (k) map[k] = meta;
+    if (row.image_slot != null) map[row.image_slot] = meta;
+  }
+  return map;
+}
 
 function slotUrl(v: string | SlotMeta | undefined): string | undefined {
   return typeof v === "string" ? v : v?.url;
+}
+
+/** Key first, position second — see {@link SlotImages}. */
+function resolveImage(images: SlotImages | undefined, key: string | undefined, slot: number): string | SlotMeta | undefined {
+  if (!images) return undefined;
+  if (key && images[key] !== undefined) return images[key];
+  return images[slot];
 }
 
 function ImageBlock({ caption, url, meta, options }: { caption: string; url?: string; meta?: ImageMeta; options?: ImageOptions }) {
@@ -453,12 +500,7 @@ function ImageBlock({ caption, url, meta, options }: { caption: string; url?: st
   if (url) {
     return (
       <figure className="my-4" style={style}>
-        <ZoomableImage
-          src={url}
-          alt={altText}
-          meta={refs}
-          className="w-full rounded-2xl border border-border object-contain bg-ink-50"
-        />
+        <ZoomableImage src={url} alt={altText} meta={refs} className="w-full rounded-2xl border border-border object-contain bg-ink-50" />
         <figcaption className="mt-1.5 text-[11px] text-muted text-center leading-snug">
           {caption}
           {creditLine && (
@@ -490,6 +532,8 @@ function ImageBlock({ caption, url, meta, options }: { caption: string; url?: st
   );
 }
 
+/* ─────────────────────────── callouts ──────────────────────────────────── */
+
 function Callout({ kind, text }: { kind: "piege" | "info"; text: string }) {
   const { t } = useI18n();
   const isPiege = kind === "piege";
@@ -515,7 +559,7 @@ function AppBox({ consigne, correction }: { consigne: string; correction: string
   const { t } = useI18n();
   const [show, setShow] = useState(false);
   return (
-    <div className="my-3.5 rounded-xl border-[1.5px] border-brand-600/30 bg-brand-600/[0.06] px-3.5 py-3">
+    <div className="my-3.5 rounded-xl border-[1.5px] border-brand-600 bg-ink-50 px-3.5 py-3">
       <div className="flex items-center gap-1.5 text-[11px] font-bold mb-1.5 text-brand-600">
         <Icon name="wand" size={13} />
         {t("lesson_calloutApp")}
@@ -533,7 +577,7 @@ function AppBox({ consigne, correction }: { consigne: string; correction: string
         ) : (
           <button
             onClick={() => setShow(true)}
-            className="w-full py-2 rounded-lg border-[1.5px] border-brand-600/40 bg-card text-brand-600 text-[12px] font-bold"
+            className="w-full py-2 rounded-lg border-[1.5px] border-brand-600 bg-card text-brand-600 text-[12px] font-bold"
           >
             {t("lesson_showCorrection")}
           </button>
@@ -542,119 +586,43 @@ function AppBox({ consigne, correction }: { consigne: string; correction: string
   );
 }
 
-/* ─────────────────────────── block parser ──────────────────────────────── */
+/* ─────────────────────────── lesson renderer ───────────────────────────── */
 
-type Block =
-  | { type: "h2" | "h3" | "p"; text: string }
-  | { type: "list"; ordered: boolean; items: ListItem[] }
-  | { type: "img"; caption: string; slot: number; options: ImageOptions }
-  | { type: "video"; url: string }
-  | { type: "callout"; kind: "piege" | "info"; text: string }
-  | { type: "app"; consigne: string; correction: string }
-  | { type: "math"; tex: string };
-
-function parse(raw: string): Block[] {
-  const lines = raw.replace(/\r\n/g, "\n").split("\n");
-  const blocks: Block[] = [];
-  let list: { items: ListItem[]; ordered: boolean } | null = null;
-  let imgSlot = 0;
-  // Collecting the body of a `$$` … `$$` display-equation fence. Inside it,
-  // blank lines and markup characters are TeX, not markup, so the fence is
-  // checked before every other rule.
-  let fence: string[] | null = null;
-  const flush = () => {
-    if (list && list.items.length) blocks.push({ type: "list", ordered: list.ordered, items: list.items });
-    list = null;
-  };
-
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
-
-    if (fence) {
-      if (line === "$$") {
-        blocks.push({ type: "math", tex: fence.join("\n").trim() });
-        fence = null;
-      } else {
-        fence.push(rawLine);
-      }
-      continue;
-    }
-    if (line === "$$") {
-      flush();
-      fence = [];
-      continue;
-    }
-    const oneLineMath = line.match(/^\$\$([\s\S]+)\$\$$/);
-    if (oneLineMath) {
-      flush();
-      blocks.push({ type: "math", tex: oneLineMath[1].trim() });
-      continue;
-    }
-
-    const bullet = line.match(BULLET_RE);
-    const ordered = line.match(ORDERED_RE);
-    if (bullet || ordered) {
-      const isOrdered = Boolean(ordered);
-      if (list && list.ordered !== isOrdered) flush();
-      (list ??= { items: [], ordered: isOrdered }).items.push({ text: (bullet?.[1] ?? ordered?.[1]) as string, depth: indentDepth(rawLine) });
-      continue;
-    }
-    flush();
-    if (line === "") continue;
-
-    let m: RegExpMatchArray | null;
-    if ((m = line.match(/^##\s+(.*)$/))) blocks.push({ type: "h2", text: m[1] });
-    else if ((m = line.match(/^###\s+(.*)$/))) blocks.push({ type: "h3", text: m[1] });
-    else if ((m = line.match(/^\[\[IMG:\s*(.*?)\]\]$/i))) {
-      const spec = parseImageSpec(m[1]);
-      blocks.push({ type: "img", caption: spec.caption, slot: ++imgSlot, options: spec.options });
-    } else if ((m = line.match(/^\[\[VIDEO:\s*(.*?)\]\]$/i))) blocks.push({ type: "video", url: m[1].trim() });
-    else if ((m = line.match(/^\[!PIEGE\]\s*(.*)$/i))) blocks.push({ type: "callout", kind: "piege", text: m[1] });
-    else if ((m = line.match(/^\[!INFO\]\s*(.*)$/i))) blocks.push({ type: "callout", kind: "info", text: m[1] });
-    else if ((m = line.match(/^\[!APP\]\s*(.*)$/i))) {
-      const [consigne, correction = ""] = m[1].split("|||");
-      blocks.push({ type: "app", consigne: consigne.trim(), correction: correction.trim() });
-    } else blocks.push({ type: "p", text: line });
-  }
-  // An unterminated fence is still an equation the author meant to write —
-  // render it rather than swallowing the text.
-  if (fence && fence.length) blocks.push({ type: "math", tex: fence.join("\n").trim() });
-  flush();
-  return blocks;
-}
-
-/** List a lesson's image placeholders (1-based slot + caption) for the editor. */
-export function parseImagePlaceholders(text: string): { slot: number; caption: string }[] {
-  return parse(text ?? "")
-    .filter((b): b is Extract<Block, { type: "img" }> => b.type === "img")
-    .map((b) => ({ slot: b.slot, caption: b.caption }));
-}
-
-/** `images` maps a placeholder slot (1-based) to a URL, or to URL + references. */
+/** `images` maps a stable image key and/or a 1-based slot to a URL + references. */
 export function LessonContent({ text, images }: { text: string; images?: SlotImages }) {
-  const blocks = parse(text ?? "");
+  const blocks: Block[] = parse(text ?? "");
   return (
     <div className="flex flex-col">
       {blocks.map((b, i) => {
         switch (b.type) {
+          // The heading ladder is `#`→h2, `##`→h3, `###`→h4, not h1/h2/h3: the
+          // page's only `<h1>` is the lesson title in the reader's own header,
+          // and a second one would break the document outline. The sizes below
+          // are unchanged from before `#` existed, so nothing looks different.
+          case "h1":
+            return (
+              <h2 key={i} className={`font-serif font-bold text-[21px] text-text mt-5 mb-2 first:mt-0 ${alignClass(b.align)}`}>
+                {inline(b.text)}
+              </h2>
+            );
           case "h2":
             // Clear hierarchy: a section title must read as clearly bigger than a
             // sub-heading and body text (Correction N4: "les grands titres sont
             // moins grands que les sous-titres").
             return (
-              <h2 key={i} className="font-serif font-bold text-[18px] text-text mt-4 mb-2 first:mt-0">
-                {inline(b.text)}
-              </h2>
-            );
-          case "h3":
-            return (
-              <h3 key={i} className="font-bold text-[15px] text-text mt-3 mb-1.5">
+              <h3 key={i} className={`font-serif font-bold text-[18px] text-text mt-4 mb-2 first:mt-0 ${alignClass(b.align)}`}>
                 {inline(b.text)}
               </h3>
             );
+          case "h3":
+            return (
+              <h4 key={i} className={`font-bold text-[15px] text-text mt-3 mb-1.5 ${alignClass(b.align)}`}>
+                {inline(b.text)}
+              </h4>
+            );
           case "p":
             return (
-              <p key={i} className="text-[13.5px] leading-relaxed text-text mb-2.5">
+              <p key={i} className={`text-[13.5px] leading-relaxed text-text mb-2.5 ${alignClass(b.align)}`}>
                 {inline(b.text)}
               </p>
             );
@@ -664,12 +632,18 @@ export function LessonContent({ text, images }: { text: string; images?: SlotIma
                 {renderList(b.items, b.ordered, "text-[13px] text-text leading-normal", `l${i}`, "pl-[18px] flex flex-col gap-1.5 mb-3")}
               </Fragment>
             );
+          case "table":
+            return <TableBlock key={i} head={b.head} rows={b.rows} align={b.align} />;
+          case "quote":
+            return <Quote key={i} lines={b.lines} />;
+          case "hr":
+            return <Divider key={i} />;
           case "math":
             return <Math key={i} tex={b.tex} display />;
           case "img": {
-            const slot = images?.[b.slot];
-            const meta = typeof slot === "object" ? slot : undefined;
-            return <ImageBlock key={i} caption={b.caption} url={slotUrl(slot)} meta={meta} options={b.options} />;
+            const bound = resolveImage(images, b.options.key, b.slot);
+            const meta = typeof bound === "object" ? bound : undefined;
+            return <ImageBlock key={i} caption={b.caption} url={slotUrl(bound)} meta={meta} options={b.options} />;
           }
           case "video":
             return <VideoBlock key={i} url={b.url} />;

@@ -105,7 +105,13 @@ function buildPrompt(opts: {
     return [
       shared,
       `Task: produce ${what} as a JSON object with exactly these keys: { "content_fr": string, "content_en": string, "summary_fr": string, "summary_en": string, "key_points_fr": string[], "key_points_en": string[] }.`,
-      'The body uses this line-based markup: "## Heading", "### Sub-heading", "- bullet", "[[IMG: caption describing the diagram to upload]]", "[!PIEGE] common exam trap", "[!INFO] note", "[!APP] exercise ||| correction". Inline **bold**, *italic*, ==highlight==, __underline__.',
+      'The body uses this line-based markup, one construct per line, blocks separated by blank lines: "# Title", "## Heading", "### Sub-heading", "- bullet" (two leading spaces nests one level), "1. numbered item", "> quotation", "---" alone on its line for a divider, "[align=center] text" to centre a heading or paragraph, "[[IMG: caption describing the diagram to upload]]", "[[VIDEO: url]]", "[!PIEGE] common exam trap", "[!INFO] note", "[!APP] exercise ||| correction". Inline: **bold**, *italic*, ==highlight==, __underline__, ~~strikethrough~~, `code`, ^superscript^, ~subscript~, [label](url).',
+      'Tables are pipe rows: a header row "| Organite | Rôle |", then an alignment row "| --- | :---: |" (a colon marks centre or right alignment), then one line per data row. Every row must start with "|". Escape a literal pipe inside a cell as "\\|".',
+      "Use a table whenever the source compares several items along the same criteria — that is what tables are for, and prose comparisons are much harder to revise for.",
+      // Single backticks only: a triple-backtick block in the body can collide
+      // with `parseModelJson`'s fence recovery below and make it grab the wrong
+      // slice of the response.
+      "Never use triple-backtick code fences anywhere in the output.",
       "Return JSON only, no prose around it.",
       "",
       "Source material:",

@@ -339,7 +339,7 @@ export default function AdminContent() {
                       ))
                     )}
                     <div className="py-2.5">
-                      <button onClick={() => addLesson(c)} disabled={busy} className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-white disabled:opacity-60">
+                      <button onClick={() => addLesson(c)} disabled={busy} className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-bold border-[1.5px] border-brand-600 text-brand-600 bg-white disabled:opacity-60">
                         <Icon name="plus" size={14} />
                         {t("admin_addLesson")}
                       </button>

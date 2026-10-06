@@ -371,6 +371,12 @@ export type MediaLibraryRow = {
   uploaded_by: string | null;
   lesson_id: string | null;
   image_slot: number | null;
+  /**
+   * Stable per-lesson id for a body image (0022), carried in the token as
+   * `[[IMG: … | key=…]]`. Takes precedence over the positional `image_slot`,
+   * which stays for every lesson written before the image dialog existed.
+   */
+  image_key: string | null;
   /** Image references (0021) — all optional, rendered by ImageLightbox. */
   alt_text: string | null;
   caption: string | null;

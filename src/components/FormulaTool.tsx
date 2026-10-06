@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Icon } from "../lib/icons";
 import { useI18n } from "../lib/i18n";
-import { Math, texError, MATH_PALETTE, CHEM_PALETTE } from "../lib/math";
+import { Math, texError, MATH_GROUPS, CHEM_GROUPS } from "../lib/math";
 
 /**
  * Drop `snippet` into a textarea/input at the caret, on its own line when the
@@ -12,8 +12,20 @@ import { Math, texError, MATH_PALETTE, CHEM_PALETTE } from "../lib/math";
  * "je n'arrive toujours pas à insérer d'image") so the image, maths and
  * chemistry tools all behave the same way.
  */
+/**
+ * Just the two properties the text helpers below actually read. A real
+ * textarea or input satisfies it structurally, and so does a plain
+ * `{ selectionStart, selectionEnd }` — which is what lets the ribbon pass the
+ * caret SNAPSHOT it took before a dialog stole the focus, instead of the live
+ * element whose selection has since collapsed.
+ */
+export interface CaretSource {
+  selectionStart: number | null;
+  selectionEnd: number | null;
+}
+
 export function insertSnippet(
-  el: HTMLTextAreaElement | HTMLInputElement | null,
+  el: CaretSource | null,
   value: string,
   snippet: string,
   select?: string
@@ -50,7 +62,7 @@ export function insertSnippet(
  *    applied on top of it.
  */
 export function wrapSelection(
-  el: HTMLTextAreaElement | HTMLInputElement | null,
+  el: CaretSource | null,
   value: string,
   before: string,
   after: string = before
@@ -85,7 +97,7 @@ export function wrapSelection(
  * so the author can press the button again on the same block.
  */
 export function mapSelectedLines(
-  el: HTMLTextAreaElement | HTMLInputElement | null,
+  el: CaretSource | null,
   value: string,
   fn: (line: string, index: number) => string
 ): { next: string; start: number; end: number } {
@@ -123,16 +135,39 @@ export function FormulaTool({
   mode,
   onInsert,
   onClose,
+  header,
 }: {
   mode: "math" | "chem";
   onInsert: (snippet: string) => void;
   onClose: () => void;
+  /** Replaces the title row — the insert panel puts its tabs there. */
+  header?: ReactNode;
 }) {
   const { t } = useI18n();
   const isChem = mode === "chem";
   const [expr, setExpr] = useState(isChem ? "\\ce{}" : "");
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const palette = isChem ? CHEM_PALETTE : MATH_PALETTE;
+  const groups = isChem ? CHEM_GROUPS : MATH_GROUPS;
+
+  /**
+   * A palette click inserts at the caret instead of replacing the field. It used
+   * to `setExpr(p.snippet)`, which meant an expression could never be built from
+   * more than one template — picking a fraction and then a square root threw the
+   * fraction away.
+   */
+  function addTemplate(snippet: string, select?: string) {
+    const el = inputRef.current;
+    // The palette snippets carry the `$…$` wrapper they need when they go
+    // straight into a lesson; inside this field the expression is bare TeX, and
+    // the wrapper is added back on insert.
+    const bare = snippet.replace(/^\$\$?|\$\$?$/g, "");
+    const result = insertSnippet(el, expr, bare, select);
+    setExpr(result.next);
+    requestAnimationFrame(() => {
+      el?.focus();
+      el?.setSelectionRange(result.start, result.end);
+    });
+  }
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -158,28 +193,47 @@ export function FormulaTool({
   const error = texError(previewTex.tex, previewTex.display);
 
   return (
-    <div className="rounded-2xl border-[1.5px] border-brand-600/40 bg-white p-4 mt-2">
+    <div className="rounded-2xl border-[1.5px] border-brand-600 bg-card p-4 mt-2">
       <div className="flex items-center gap-2 mb-3">
-        <Icon name="wand" size={15} className="text-brand-600" />
-        <div className="text-[12.5px] font-bold text-ink-900">{isChem ? t("fx_titleChem") : t("fx_titleMath")}</div>
+        {header ?? (
+          <>
+            <Icon name="wand" size={15} className="text-brand-600" />
+            <div className="text-[12.5px] font-bold text-ink-900">{isChem ? t("fx_titleChem") : t("fx_titleMath")}</div>
+          </>
+        )}
         <div className="flex-1" />
         <button type="button" onClick={onClose} aria-label={t("common_cancel")} className="p-1 rounded-md border border-border text-ink-700">
           <Icon name="close" size={13} />
         </button>
       </div>
 
+      {/* The palette is grouped and scrollable rather than one flat row of ~16
+          items. Flat, it was unusable: a limit to infinity, a derivative or an
+          ion charge was in there somewhere but unfindable, which is why the
+          client reported being unable to "input equations as they are". Each
+          button shows BOTH the typeset result and a short label, because a
+          3 mm KaTeX preview of `\frac{dy}{dx}` is not something you can scan. */}
       <div className="text-[11px] font-bold text-muted mb-1.5">{t("fx_palette")}</div>
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {palette.map((p) => (
-          <button
-            key={p.key}
-            type="button"
-            onClick={() => setExpr(p.snippet)}
-            title={p.label}
-            className="px-2 py-1 rounded-lg border border-border bg-white hover:bg-ink-50 text-[12px] text-ink-800 flex items-center"
-          >
-            <Math tex={p.preview} />
-          </button>
+      <div className="flex flex-col gap-2.5 mb-3 max-h-[232px] overflow-y-auto pr-1">
+        {groups.map((group) => (
+          <div key={group.key}>
+            <div className="text-[10px] font-bold uppercase tracking-wide text-muted mb-1">{t(group.titleKey)}</div>
+            <div className="flex flex-wrap gap-1.5">
+              {group.items.map((p) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => addTemplate(p.snippet, p.select)}
+                  title={p.label}
+                  aria-label={p.label}
+                  className="px-2 py-1 rounded-lg border border-border bg-card hover:bg-ink-50 text-[12px] text-ink-800 flex items-center gap-1.5"
+                >
+                  <Math tex={p.preview} />
+                </button>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
 
@@ -199,7 +253,7 @@ export function FormulaTool({
       <div
         aria-live="polite"
         className={`rounded-xl border px-3 py-3 min-h-[52px] flex items-center justify-center text-center ${
-          error ? "border-danger-600/40 bg-danger-600/5" : "border-border bg-ink-50"
+          error ? "border-danger-600 bg-ink-50" : "border-border bg-ink-50"
         }`}
       >
         {!expr.trim() ? (
@@ -225,7 +279,7 @@ export function FormulaTool({
         >
           {t("fx_insert")}
         </button>
-        <button type="button" onClick={onClose} className="border border-border bg-white px-4 py-2 rounded-xl text-[12.5px] font-bold text-ink-900">
+        <button type="button" onClick={onClose} className="border border-border bg-card px-4 py-2 rounded-xl text-[12.5px] font-bold text-ink-900">
           {t("common_cancel")}
         </button>
       </div>

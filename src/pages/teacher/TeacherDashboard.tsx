@@ -69,7 +69,7 @@ export default function TeacherDashboard() {
               {tasks.map((task) => (
                 <li key={task.key}>
                   <Link to={task.to} className="flex items-center gap-2.5 rounded-xl border border-border px-3 py-2.5 hover:bg-ink-50">
-                    <span className="w-6 h-6 rounded-full bg-brand-600/10 text-brand-600 text-[11px] font-bold flex items-center justify-center flex-none">
+                    <span className="w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-[11px] font-bold flex items-center justify-center flex-none">
                       {task.count}
                     </span>
                     <span className="text-[12.5px] text-ink-900 flex-1">{task.label}</span>

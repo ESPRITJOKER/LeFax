@@ -5,7 +5,7 @@ import { TopBar } from "../../components/TopBar";
 import { Spinner } from "../../components/ui";
 import { LessonCardDeck } from "../../components/LessonCardDeck";
 import { useI18n } from "../../lib/i18n";
-import { LessonContent } from "../../lib/lessonContent";
+import { LessonContent, buildImageMap, type SlotImages } from "../../lib/lessonContent";
 import { useAuth } from "../../lib/auth";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow, LessonCardRow, QuizRow, ChapterRow } from "../../lib/database.types";
@@ -24,7 +24,7 @@ export default function LessonDetail() {
   const [chapter, setChapter] = useState<ChapterRow | null>(null);
   const [siblings, setSiblings] = useState<SiblingLesson[]>([]);
   const [quiz, setQuiz] = useState<Pick<QuizRow, "id"> | null>(null);
-  const [images, setImages] = useState<Record<number, string>>({});
+  const [images, setImages] = useState<SlotImages>({});
   const [loading, setLoading] = useState(true);
   const profileId = profile?.id ?? null;
 
@@ -58,7 +58,10 @@ export default function LessonDetail() {
             .eq("published", true)
             .order("position"),
           supabase.from("quizzes").select("id").eq("lesson_id", lessonRow.id).maybeSingle(),
-          supabase.from("media_library").select("image_slot, storage_path").eq("lesson_id", lessonRow.id).not("image_slot", "is", null),
+          // `select("*")` and no slot/key filter: naming `image_key` would
+          // 42703 the whole request anywhere migration 0022 is not applied yet,
+          // and a lesson's media rows are a handful of short rows either way.
+          supabase.from("media_library").select("*").eq("lesson_id", lessonRow.id),
         ]);
         if (cancelled) return;
 
@@ -67,9 +70,7 @@ export default function LessonDetail() {
         setSiblings((siblingsRes.data ?? []) as SiblingLesson[]);
         setQuiz(quizRes.data ?? null);
 
-        const map: Record<number, string> = {};
-        for (const m of mediaRes.data ?? []) if (m.image_slot != null) map[m.image_slot] = m.storage_path;
-        setImages(map);
+        setImages(buildImageMap(mediaRes.data));
         setLoading(false);
 
         // Progress is a write, not something the page renders — it must not sit

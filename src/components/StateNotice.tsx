@@ -30,7 +30,7 @@ export function StateNotice({
 
   if (error) {
     return (
-      <div role="alert" className="rounded-2xl border border-danger-600/30 bg-danger-600/5 px-4 py-5 text-center">
+      <div role="alert" className="rounded-2xl border border-danger-600 bg-danger-50 px-4 py-5 text-center">
         <div className="flex items-center justify-center gap-2 text-danger-600 mb-1.5">
           <Icon name="close" size={15} />
           <span className="text-[13px] font-bold">{errorLabel}</span>

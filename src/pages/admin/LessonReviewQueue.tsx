@@ -103,7 +103,7 @@ export function LessonReviewQueue() {
       </div>
 
       {error && (
-        <div role="alert" className="mb-3 rounded-xl bg-danger-600/10 px-4 py-2.5 text-[13px] font-semibold text-danger-600">
+        <div role="alert" className="mb-3 rounded-xl bg-danger-100 px-4 py-2.5 text-[13px] font-semibold text-danger-700">
           {error}
         </div>
       )}

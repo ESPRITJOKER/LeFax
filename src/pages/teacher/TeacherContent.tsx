@@ -244,7 +244,7 @@ export default function TeacherContent() {
         <div
           role="status"
           aria-live="polite"
-          className={`mb-4 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-600/10 text-success-600" : "bg-danger-600/10 text-danger-600"}`}
+          className={`mb-4 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-100 text-success-700" : "bg-danger-100 text-danger-700"}`}
         >
           {flash.msg}
         </div>
@@ -351,7 +351,7 @@ export default function TeacherContent() {
                               )}
                             </div>
                             {l.review_status === "rejected" && l.review_feedback && (
-                              <div className="mt-1.5 ml-6 rounded-lg bg-white border border-danger-600/30 px-2.5 py-2 text-[11.5px] text-ink-800">
+                              <div className="mt-1.5 ml-6 rounded-lg bg-white border border-danger-600 px-2.5 py-2 text-[11.5px] text-ink-800">
                                 <span className="font-bold text-danger-600">{t("tc_feedback")}: </span>
                                 {l.review_feedback}
                               </div>
@@ -365,7 +365,7 @@ export default function TeacherContent() {
                       })
                     )}
                     <div className="py-2.5">
-                      <button onClick={() => addLesson(c)} disabled={busy} className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-bold border-[1.5px] border-brand-600/40 text-brand-600 bg-white disabled:opacity-60">
+                      <button onClick={() => addLesson(c)} disabled={busy} className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-bold border-[1.5px] border-brand-600 text-brand-600 bg-white disabled:opacity-60">
                         <Icon name="plus" size={14} />
                         {t("admin_addLesson")}
                       </button>

@@ -141,7 +141,7 @@ export default function AdminStudents() {
                   <td className="px-4 py-3.5">
                     <span
                       className={`text-[11px] font-bold px-2.5 py-1 rounded-pill ${
-                        s.status === "active" ? "bg-success-100 text-success-600" : "bg-ink-100 text-muted"
+                        s.status === "active" ? "bg-success-100 text-success-700" : "bg-ink-100 text-muted"
                       }`}
                     >
                       {s.status === "active" ? (lang === "fr" ? "Actif" : "Active") : lang === "fr" ? "Suspendu" : "Suspended"}

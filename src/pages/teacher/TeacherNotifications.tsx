@@ -88,7 +88,7 @@ export default function TeacherNotifications() {
       {rows.map((n) => {
         const style = TYPE_ICON[n.type] ?? TYPE_ICON.system;
         return (
-          <div key={n.id} className={`bg-white border rounded-2xl px-4 py-3.5 flex gap-3 ${n.is_read ? "border-border" : "border-brand-600/40"}`}>
+          <div key={n.id} className={`bg-white border rounded-2xl px-4 py-3.5 flex gap-3 ${n.is_read ? "border-border" : "border-brand-600"}`}>
             <div className="w-9 h-9 rounded-full flex items-center justify-center flex-none text-[16px]" style={{ background: style.bg }}>
               {style.emoji}
             </div>

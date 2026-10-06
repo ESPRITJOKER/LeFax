@@ -97,6 +97,17 @@ const PAIRS = [
   ["color-ochre-700", "color-card", "warning text on a card", 4.5],
   ["color-border", "color-card", "hairline against a card", 1.2],
   ["color-card", "color-surface", "card against the page", 1.05],
+  // Tinted status bands and badges. These pairs did not exist as real CSS until
+  // the opacity-modifier sweep: `bg-success-600/10` and friends compiled to
+  // nothing, so every flash banner and status pill was coloured text on the bare
+  // card. They are now solid -100/-50 fills with -700 text, which is what these
+  // rows hold to AA.
+  ["color-success-700", "color-success-100", "success badge / flash band", 4.5],
+  ["color-danger-700", "color-danger-100", "error badge / flash band", 4.5],
+  ["color-success-700", "color-success-50", "correct-answer row", 4.5],
+  ["color-danger-700", "color-danger-50", "error panel text", 4.5],
+  ["color-ink-800", "color-danger-50", "body text in an error panel", 4.5],
+  ["color-ink-900", "color-success-50", "body text in a success panel", 4.5],
 ];
 
 const WHITE = [255, 255, 255];

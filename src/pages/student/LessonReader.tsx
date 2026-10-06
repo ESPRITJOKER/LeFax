@@ -5,7 +5,7 @@ import { TopBar } from "../../components/TopBar";
 import { Spinner } from "../../components/ui";
 import { StateNotice } from "../../components/StateNotice";
 import { useI18n } from "../../lib/i18n";
-import { LessonContent, type SlotImages, type SlotMeta } from "../../lib/lessonContent";
+import { LessonContent, buildImageMap, type SlotImages } from "../../lib/lessonContent";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow } from "../../lib/database.types";
 
@@ -50,11 +50,13 @@ export default function LessonReader() {
       // Both reads at once: the body and its illustrations are independent.
       const [lessonRes, mediaRes] = await Promise.all([
         supabase.from("lessons").select("*").eq("id", lessonId).eq("published", true).maybeSingle(),
-        // select("*") not an explicit column list: PostgREST fails the whole
-        // query with 42703 when one column is missing, and migration 0021 (the
-        // image-reference columns) may not be applied yet. With "*" the
-        // references are simply absent until it is.
-        supabase.from("media_library").select("*").eq("lesson_id", lessonId).not("image_slot", "is", null),
+        // `select("*")` and no slot/key filter, both for the same reason:
+        // PostgREST fails the WHOLE query with 42703 when one named column is
+        // missing, and 0021 (image references) or 0022 (image_key) may not be
+        // applied yet. A lesson has a handful of media rows, so fetching them
+        // all costs nothing and `buildImageMap` skips the ones that are not
+        // lesson figures.
+        supabase.from("media_library").select("*").eq("lesson_id", lessonId),
       ]);
       if (cancelled) return;
 
@@ -65,11 +67,7 @@ export default function LessonReader() {
       }
       setLesson(lessonRes.data ?? null);
 
-      const map: Record<number, SlotMeta> = {};
-      for (const m of mediaRes.data ?? [])
-        if (m.image_slot != null)
-          map[m.image_slot] = { url: m.storage_path, caption: m.caption ?? null, credit: m.credit ?? null, creditUrl: m.credit_url ?? null };
-      setImages(map);
+      setImages(buildImageMap(mediaRes.data));
       setLoading(false);
     })();
     return () => {

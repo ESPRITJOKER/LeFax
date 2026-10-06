@@ -3,7 +3,8 @@ import { Icon } from "../../lib/icons";
 import { Spinner } from "../ui";
 import { useI18n } from "../../lib/i18n";
 import { useAuth } from "../../lib/auth";
-import { LessonContent, parseImagePlaceholders, type SlotImages, type SlotMeta } from "../../lib/lessonContent";
+import { LessonContent, buildImageMap, type SlotImages, type SlotMeta } from "../../lib/lessonContent";
+import { parseImagePlaceholders } from "../../lib/markupSyntax";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient";
 import type { LessonRow } from "../../lib/database.types";
 import { LessonCardsPanel, type LessonCardsHandle } from "./LessonCardsPanel";
@@ -53,6 +54,16 @@ export interface LessonEditorCoreProps {
 type Flash = { ok: boolean; msg: string } | null;
 type Tab = "content" | "cards" | "quiz";
 
+/**
+ * How one image placeholder is addressed: by its stable key (migration 0022) or,
+ * for everything written before the image dialog existed, by its 1-based position
+ * in the body. `addrOf` is the string both the image map and the Storage path are
+ * keyed by, so the two can never disagree about which file belongs to which
+ * placeholder.
+ */
+type ImgTarget = { key?: string; slot: number };
+const addrOf = (t: ImgTarget) => t.key ?? String(t.slot);
+
 /** text[] columns are edited as one-item-per-line textareas. */
 const toLines = (arr: string[] | null | undefined) => (arr ?? []).join("\n");
 const fromLines = (text: string) =>
@@ -95,11 +106,21 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
   const [keyPointsFr, setKeyPointsFr] = useState("");
   const [keyPointsEn, setKeyPointsEn] = useState("");
 
-  // slot -> image url + its references (0021)
-  const [images, setImages] = useState<Record<number, SlotMeta>>({});
-  const [uploadingSlot, setUploadingSlot] = useState<number | null>(null);
-  const fileInputs = useRef<Record<number, HTMLInputElement | null>>({});
+  // Uploaded images, filed under their stable key (0022) AND their positional
+  // slot (0008) — see `buildImageMap`. Addressed here by `addrOf`.
+  const [images, setImages] = useState<SlotImages>({});
+  const [busyAddr, setBusyAddr] = useState<string | null>(null);
+  const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
   const cardsRef = useRef<LessonCardsHandle>(null);
+  /**
+   * Whether `media_library.image_key` exists in THIS database. Migration 0022 may
+   * not be applied yet — 0021 shipped ahead of its migration for exactly this
+   * reason — and without the column an image inserted from the ribbon would fail
+   * its upsert after the file had already been uploaded. One cheap probe, run
+   * beside the other loads, lets the image dialog degrade to positional
+   * placeholders instead of failing.
+   */
+  const [keysSupported, setKeysSupported] = useState(false);
 
   // Editability can depend on the loaded row (a teacher loses the lesson while a
   // reviewer holds it), so the prop accepts a predicate. Before the row is in,
@@ -114,12 +135,18 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
    * A lesson has a handful of media rows, so the wider row costs nothing.
    */
   const loadMedia = useCallback(async (id: string) => {
-    const { data } = await supabase.from("media_library").select("*").eq("lesson_id", id).not("image_slot", "is", null);
-    const map: Record<number, SlotMeta> = {};
-    for (const m of data ?? [])
-      if (m.image_slot != null)
-        map[m.image_slot] = { url: m.storage_path, caption: m.caption ?? null, credit: m.credit ?? null, creditUrl: m.credit_url ?? null };
-    setImages(map);
+    // No slot/key filter either: `.not("image_slot","is",null)` would hide every
+    // key-bound row, and an `.or(… image_key …)` would 42703 the request wherever
+    // 0022 is unapplied — the same trap the `select("*")` above avoids.
+    // `buildImageMap` skips the rows that are not lesson figures.
+    const { data } = await supabase.from("media_library").select("*").eq("lesson_id", id);
+    setImages(buildImageMap(data));
+  }, []);
+
+  /** Probe for the 0022 column. An error here means "not applied", not "broken". */
+  const probeKeys = useCallback(async () => {
+    const { error } = await supabase.from("media_library").select("image_key").limit(1);
+    setKeysSupported(!error);
   }, []);
 
   const load = useCallback(async () => {
@@ -145,6 +172,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
       const [chapterRes] = await Promise.all([
         supabase.from("chapters").select("name_fr, name_en, subject_id").eq("id", data.chapter_id).maybeSingle(),
         loadMedia(lessonId),
+        probeKeys(),
       ]);
       const chapter = chapterRes.data;
       if (chapter) {
@@ -156,7 +184,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
       }
     }
     setLoading(false);
-  }, [lessonId, loadMedia, lang]);
+  }, [lessonId, loadMedia, probeKeys, lang]);
 
   useEffect(() => {
     load();
@@ -199,56 +227,80 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
     setSaving(false);
   }
 
-  async function uploadForSlot(slot: number, file: File) {
-    if (!lessonId || !profile || !canEdit) return;
+  /**
+   * Upload a file for one placeholder and bind it.
+   *
+   * Addressing is the whole point of migration 0022. A placeholder that carries
+   * `key=` is bound by that key — the picture then follows its caption wherever
+   * the line is moved. One that does not is bound by its POSITION, which is how
+   * every lesson written before the image dialog existed works, and which is why
+   * inserting an image in the middle of such a lesson used to re-bind all the
+   * ones below it.
+   *
+   * Returns the public URL so the image dialog can show what it just uploaded.
+   */
+  async function uploadForImage(target: ImgTarget, file: File): Promise<string | null> {
+    if (!lessonId || !profile || !canEdit) return null;
     if (!file.type.startsWith("image/")) {
       setFlash({ ok: false, msg: t("admin_saveError") });
-      return;
+      return null;
     }
-    setUploadingSlot(slot);
+    const addr = addrOf(target);
+    setBusyAddr(addr);
     setFlash(null);
     try {
-      const path = `${lessonId}/${slot}`; // fixed key per slot → replace overwrites
+      // A fixed path per address, so replacing an image overwrites it rather
+      // than accumulating files.
+      const path = `${lessonId}/${addr}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
       if (upErr) throw upErr;
       const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-      const url = `${data.publicUrl}?t=${Date.now()}`; // cache-bust: same key, new bytes
+      const url = `${data.publicUrl}?t=${Date.now()}`; // cache-bust: same path, new bytes
+      const binding = target.key ? { image_key: target.key } : { image_slot: target.slot };
       const { data: rows, error: dbErr } = await supabase
         .from("media_library")
         .upsert(
           {
             lesson_id: lessonId,
-            image_slot: slot,
+            ...binding,
             storage_path: url,
             file_name: file.name,
             mime_type: file.type,
             uploaded_by: profile.id,
           },
-          { onConflict: "lesson_id,image_slot" }
+          { onConflict: target.key ? "lesson_id,image_key" : "lesson_id,image_slot" }
         )
         .select("id");
       if (dbErr) throw dbErr;
       if (!rows || rows.length === 0) throw new Error(t("admin_saveBlocked"));
-      setImages((prev) => ({ ...prev, [slot]: { ...(prev[slot] ?? {}), url } }));
+      setImages((prev) => ({ ...prev, [addr]: { ...(typeof prev[addr] === "object" ? (prev[addr] as SlotMeta) : {}), url } }));
       setFlash({ ok: true, msg: t("admin_lessonSaved") });
+      return url;
     } catch (e) {
-      setFlash({ ok: false, msg: e instanceof Error ? e.message : t("admin_saveError") });
+      // 42703 / 42P10 here mean 0022 is missing its column or its unique
+      // constraint — name the migration rather than a generic failure.
+      const msg = e instanceof Error ? e.message : t("admin_saveError");
+      setFlash({ ok: false, msg: /image_key|42703|42P10|ON CONFLICT/i.test(msg) ? t("ed_keyMigration") : msg });
+      return null;
+    } finally {
+      setBusyAddr(null);
     }
-    setUploadingSlot(null);
   }
 
   /** Persist an image's references (0021). Separate from the lesson save so a
    *  caption can be fixed without touching the body. */
-  async function saveMeta(slot: number, patch: Partial<SlotMeta>) {
+  async function saveMeta(target: ImgTarget, patch: Partial<SlotMeta>) {
     if (!lessonId || !canEdit) return;
-    const next = { ...(images[slot] ?? { url: "" }), ...patch };
-    setImages((prev) => ({ ...prev, [slot]: next }));
-    const { data, error } = await supabase
+    const addr = addrOf(target);
+    const current = typeof images[addr] === "object" ? (images[addr] as SlotMeta) : { url: "" };
+    const next = { ...current, ...patch };
+    setImages((prev) => ({ ...prev, [addr]: next }));
+    let q = supabase
       .from("media_library")
       .update({ caption: next.caption ?? null, credit: next.credit ?? null, credit_url: next.creditUrl ?? null, alt_text: next.caption ?? null })
-      .eq("lesson_id", lessonId)
-      .eq("image_slot", slot)
-      .select("id");
+      .eq("lesson_id", lessonId);
+    q = target.key ? q.eq("image_key", target.key) : q.eq("image_slot", target.slot);
+    const { data, error } = await q.select("id");
     // 42703 = the 0021 columns are not in this database yet. Say so, rather
     // than reporting a generic failure the admin cannot act on.
     if (error) setFlash({ ok: false, msg: error.code === "42703" ? t("ed_metaMigration") : error.message });
@@ -256,21 +308,24 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
     else setFlash({ ok: true, msg: t("ed_metaSaved") });
   }
 
-  async function removeSlot(slot: number) {
+  async function removeImage(target: ImgTarget) {
     if (!lessonId || !canEdit) return;
-    setUploadingSlot(slot);
+    const addr = addrOf(target);
+    setBusyAddr(addr);
     try {
-      await supabase.storage.from(BUCKET).remove([`${lessonId}/${slot}`]);
-      await supabase.from("media_library").delete().eq("lesson_id", lessonId).eq("image_slot", slot);
+      await supabase.storage.from(BUCKET).remove([`${lessonId}/${addr}`]);
+      let q = supabase.from("media_library").delete().eq("lesson_id", lessonId);
+      q = target.key ? q.eq("image_key", target.key) : q.eq("image_slot", target.slot);
+      await q;
       setImages((prev) => {
         const next = { ...prev };
-        delete next[slot];
+        delete next[addr];
         return next;
       });
     } catch {
       setFlash({ ok: false, msg: t("admin_saveError") });
     }
-    setUploadingSlot(null);
+    setBusyAddr(null);
   }
 
   if (loading) return <Spinner />;
@@ -280,8 +335,12 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
   const setBody = which === "fr" ? setContentFr : setContentEn;
   // Slots are language-independent; captions are shown in the edited language.
   const placeholders = parseImagePlaceholders(body);
-  const previewImages: SlotImages = images;
   const title = which === "fr" ? titleFr : titleEn;
+  // Every key already in BOTH bodies, so a newly minted one cannot collide with
+  // one the author only uses in the other language.
+  const usedImageKeys = [...parseImagePlaceholders(contentFr), ...parseImagePlaceholders(contentEn)]
+    .map((p) => p.key)
+    .filter((k): k is string => Boolean(k));
 
   function leave() {
     if (cardsRef.current?.hasDirty() && !window.confirm(t("admin_unsavedCardsWarn"))) return;
@@ -294,7 +353,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
       {/* The negative margins exactly cancel the panel shell's own padding
           (`p-5 lg:p-7` in Admin/TeacherLayout), so the bar spans the full
           width without creating a horizontal scrollbar at any size. */}
-      <div className="sticky top-0 z-20 -mx-5 px-5 lg:-mx-7 lg:px-7 pt-1 pb-3 bg-surface/95 backdrop-blur border-b border-border mb-4">
+      <div className="sticky top-0 z-20 -mx-5 px-5 lg:-mx-7 lg:px-7 pt-1 pb-3 bg-surface border-b border-border mb-4">
         <div className="flex items-center gap-3 flex-wrap">
           <button onClick={leave} className="flex items-center gap-1.5 text-[13px] font-semibold text-muted border-none bg-transparent p-0">
             <Icon name="chevleft" size={16} />
@@ -327,7 +386,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
         <div
           role="status"
           aria-live="polite"
-          className={`mb-4 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-600/10 text-success-600" : "bg-danger-600/10 text-danger-600"}`}
+          className={`mb-4 rounded-xl px-4 py-2.5 text-[13px] font-semibold ${flash.ok ? "bg-success-100 text-success-700" : "bg-danger-100 text-danger-700"}`}
         >
           {flash.msg}
         </div>
@@ -366,7 +425,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
                     onClick={() => setWhich(l)}
                     aria-pressed={which === l}
                     className={`px-3.5 py-1.5 rounded-pill text-[12px] font-bold border ${
-                      which === l ? "border-brand-600 bg-brand-600/10 text-brand-600" : "border-border bg-card text-ink-700"
+                      which === l ? "border-brand-600 bg-brand-100 text-brand-700" : "border-border bg-card text-ink-700"
                     }`}
                   >
                     {l === "fr" ? "Français" : "English"}
@@ -391,6 +450,13 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
                 disabled={!canEdit}
                 rows={18}
                 minHeight={340}
+                // The ribbon's image button uploads through this, so a figure can
+                // be inserted anywhere in the text instead of being typed by hand
+                // and then matched up with a slot in the list below. `MarkupField`
+                // resolves the target after inserting the token — by key when 0022
+                // is applied, by position when it is not.
+                imageUpload={{ upload: uploadForImage, keysSupported, canEdit }}
+                usedImageKeys={usedImageKeys}
               />
 
               <div className="text-[11px] text-muted leading-relaxed">{t("admin_markupHint")}</div>
@@ -415,21 +481,27 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
                 <div className="bg-ink-50 border border-ink-100 rounded-2xl px-4 py-5 text-[13px] text-muted">{t("admin_noPlaceholders")}</div>
               ) : (
                 <div className="flex flex-col gap-3">
-                  {placeholders.map((p) => (
-                    <SlotEditor
-                      key={p.slot}
-                      slot={p.slot}
-                      caption={p.caption}
-                      meta={images[p.slot]}
-                      busy={uploadingSlot === p.slot}
-                      canEdit={canEdit}
-                      inputRef={(el) => (fileInputs.current[p.slot] = el)}
-                      onPick={() => fileInputs.current[p.slot]?.click()}
-                      onFile={(f) => uploadForSlot(p.slot, f)}
-                      onRemove={() => removeSlot(p.slot)}
-                      onSaveMeta={(patch) => saveMeta(p.slot, patch)}
-                    />
-                  ))}
+                  {placeholders.map((p) => {
+                    const target: ImgTarget = { key: p.key, slot: p.slot };
+                    const addr = addrOf(target);
+                    const bound = images[addr];
+                    return (
+                      <SlotEditor
+                        key={addr}
+                        slot={p.slot}
+                        keyed={Boolean(p.key)}
+                        caption={p.caption}
+                        meta={typeof bound === "object" ? bound : undefined}
+                        busy={busyAddr === addr}
+                        canEdit={canEdit}
+                        inputRef={(el) => (fileInputs.current[addr] = el)}
+                        onPick={() => fileInputs.current[addr]?.click()}
+                        onFile={(f) => void uploadForImage(target, f)}
+                        onRemove={() => removeImage(target)}
+                        onSaveMeta={(patch) => saveMeta(target, patch)}
+                      />
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -443,7 +515,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
                     <div className="font-serif font-bold text-[16px] text-ink-900 leading-snug">{title || "—"}</div>
                   </div>
                   <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3">
-                    {body.trim() ? <LessonContent text={body} images={previewImages} /> : <div className="text-[12.5px] text-muted">{t("ed_noBody")}</div>}
+                    {body.trim() ? <LessonContent text={body} images={images} /> : <div className="text-[12.5px] text-muted">{t("ed_noBody")}</div>}
                   </div>
                 </div>
               </div>
@@ -478,6 +550,7 @@ export function LessonEditorCore({ lessonId, canEdit: canEditProp, onBack, backL
 /** One `[[IMG:]]` placeholder: upload / replace / remove plus its references. */
 function SlotEditor({
   slot,
+  keyed,
   caption,
   meta,
   busy,
@@ -489,6 +562,8 @@ function SlotEditor({
   onSaveMeta,
 }: {
   slot: number;
+  /** True when the placeholder carries its own `key=` (migration 0022). */
+  keyed: boolean;
   caption: string;
   meta?: SlotMeta;
   busy: boolean;
@@ -524,8 +599,14 @@ function SlotEditor({
           )}
         </div>
         <div className="flex-1 min-w-[180px]">
-          <div className="text-[10px] font-bold uppercase tracking-wide text-muted mb-1">
-            {t("admin_slot")} {slot}
+          <div className="text-[10px] font-bold uppercase tracking-wide text-muted mb-1 flex items-center gap-1.5 flex-wrap">
+            <span>
+              {t("admin_slot")} {slot}
+            </span>
+            {/* A keyed placeholder keeps its picture when the line moves; a
+                positional one does not, and the author is better off knowing
+                which kind they are looking at before reordering the lesson. */}
+            {keyed && <span className="text-brand-600 normal-case tracking-normal font-semibold">· {t("ed_imgBound")}</span>}
           </div>
           <div className="text-[13px] text-ink-900 leading-snug mb-3">{caption}</div>
           <div className="flex gap-2 flex-wrap">

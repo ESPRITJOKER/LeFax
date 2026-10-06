@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useI18n } from "../lib/i18n";
-import { inline, RichCardText, hasInlineImageToken } from "../lib/lessonContent";
+import { inline, RichCardText } from "../lib/lessonContent";
+import { hasInlineImageToken } from "../lib/markupSyntax";
 import { ZoomableImage } from "./ImageLightbox";
 import { gradeStructural } from "../lib/practiceBank";
 import type { LessonCardRow } from "../lib/database.types";
@@ -394,9 +395,14 @@ export function LessonCardDeck({
                         </div>
                       )}
 
-                      {/* Structural question — direct-match graded, inline */}
+                      {/* Structural question — direct-match graded, inline.
+                          Solid tokens, not `border-brand-600/25 bg-brand-600/[0.05]`:
+                          this project's colours are bare `var(--color-…)`, which
+                          Tailwind cannot parse, so it drops an opacity-modified
+                          class from the stylesheet entirely — this box had no
+                          border and no fill at all. */}
                       {structuralQ && (
-                        <div className="rounded-xl border border-brand-600/25 bg-brand-600/[0.05] px-3.5 py-3">
+                        <div className="rounded-xl border border-brand-600 bg-ink-50 px-3.5 py-3">
                           <div className="flex items-center gap-1.5 text-[11px] font-bold text-brand-600 mb-1.5 uppercase tracking-wide">
                             {t("card_structuralQ")}
                           </div>

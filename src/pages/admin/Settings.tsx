@@ -126,7 +126,7 @@ function FlashLine({ flash }: { flash: Flash }) {
     <div
       role={flash.ok ? "status" : "alert"}
       className={`rounded-xl px-3.5 py-2.5 text-[12.5px] font-semibold ${
-        flash.ok ? "bg-success-700/10 text-success-700" : "bg-danger-700/10 text-danger-700"
+        flash.ok ? "bg-success-100 text-success-700" : "bg-danger-100 text-danger-700"
       }`}
     >
       {flash.msg}
