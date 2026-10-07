@@ -5,6 +5,123 @@ Live Supabase project ref: `kjlgrgdryimazczrcvgx` ("Lefax MVP", eu-west-1).
 
 ---
 
+## 2026-10-07 — Closing the ribbon round: opacity sweep, and the first real browser pass
+
+Picked up the two items the previous entry left open: the project-wide Tailwind opacity bug it
+found but only fixed locally, and "nothing was checked in a browser".
+
+### 1. The opacity-modifier sweep, finished
+
+The previous round proved that `bg-brand-600/10` and friends compile to **no CSS rule at all**
+(the tokens are bare `var(--color-…)`, which Tailwind cannot parse) and left a grep for the rest.
+That grep found **30 live sites** across admin, teacher and shared components. They were not
+cosmetic: every flash banner in the app (`bg-success-600/10 text-success-600`) was coloured text
+on the bare card with no band at all, every status pill likewise, and `border-brand-600/40` on the
+"add lesson" buttons left the border colour to `currentColor` by accident.
+
+Replaced with solid tokens, which exist in both themes and invert correctly:
+
+| Was | Now |
+|---|---|
+| `bg-success-600/10 text-success-600` | `bg-success-100 text-success-700` |
+| `bg-danger-600/10 text-danger-600` | `bg-danger-100 text-danger-700` |
+| `bg-brand-600/10 text-brand-600` | `bg-brand-100 text-brand-700` (the pattern `Search.tsx` already used) |
+| `border-success-600/50 bg-success-600/5` | `border-success-600 bg-success-50` |
+| `border-brand-600/40`, `border-danger-600/30` | the solid token |
+| `bg-surface/95 backdrop-blur` (sticky editor header) | `bg-surface` — the blur was a no-op behind an opaque fill |
+| `text-ink-100/80` on the **teacher** rail | `text-white/75` |
+
+That last one is the N5 admin-rail defect still living in `TeacherLayout`: `ink-100` is a near-white
+tint in light mode but a **dark fill** in dark mode, so the rail's labels were dark-on-dark. Same
+fix as the admin rail got.
+
+Two token values moved, because the tinted bands the sweep introduces have to be legible and the
+old ones were already on the known-failure list:
+
+* `--color-success-700` #16a34a → **#147a39** (light only). As text: card 3.30 → **5.42**,
+  surface 2.95 → **4.86**, on `success-100` 2.86 → **4.70**.
+* `--color-danger-700` #dc2626 → **#c81e1e** (light only). Card 4.83 → **5.74**, surface 4.33 →
+  **5.14**, on `danger-100` 3.95 → **4.70**.
+
+Both are used only as text, nowhere as a surface, so nothing else moves. `scripts/check_contrast.mjs`
+gained six rows for the new band/badge pairs so the next change cannot silently undo this. Dark is
+now **28/28**; light reports 5 failures, all pre-existing and all the LeFax brand blue plus the
+hairline and placeholder tokens — the two status greens/reds that used to be on that list are gone.
+
+`Students.tsx` also had `bg-success-100 text-success-600` — a *valid* class pair at 1.98:1 — which
+the sweep's replacement pattern caught; it now matches every other status pill.
+
+### 2. The first real browser verification of the ribbon
+
+The Chrome extension is still not connected (third session running), so Chrome was driven directly
+over the **DevTools Protocol** instead: `chrome.exe --headless=new --remote-debugging-port=9222`
+with a ~60-line CDP client over Node's built-in `WebSocket`. No new dependency, and the clicks are
+real `Input.dispatchMouseEvent` calls, which matters — the ribbon's whole focus discipline
+(`onMouseDown preventDefault`, the caret snapshot) is invisible to a synthetic `element.click()`.
+
+Authentication was sidestepped rather than faked: a throwaway `dev-harness.html` + `dev-harness.tsx`
+at the repo root mounted `MarkupField` (all three variants) beside the real `LessonContent` and
+`RichCardText`, with the image upload injected as a prop. Vite served it at
+`/dev-harness.html`; **both files were deleted afterwards** — they are not in the repo.
+
+**29 browser assertions, all passing**, over the four things the previous entry named as most worth
+clicking, plus the two renderers:
+
+* **Pressed states** — 31 ribbon buttons, and no `aria-pressed="true"` button with a transparent
+  computed background. This is the sweep's claim verified in a browser rather than in a grep.
+* **Table grid picker** — opens with 42 sized cells, a 3×2 pick writes 3 table lines with a header
+  separator row, and the live preview goes from one rendered `<table>` to two.
+* **Contextual table strip** — it is a second `role="toolbar"` labelled *Tableau* (not a group):
+  present with 8 commands while the caret is inside a table, gone when the caret moves out.
+* **Image dialog** — portals out of the editor's `<fieldset>` onto `document.body`, exposes 6
+  fields; a real file attached through `DOM.setFileInputFiles` registers (name + blob preview) and
+  flips the confirm button to *Insérer l'image*; the insert runs the upload callback bound to a
+  stable key (`qwrkj533`, not a slot) and writes
+  `[[IMG: Legende test | key=… | w=60 | align=right]]` **at the caret snapshot (index 421), not at
+  index 0** — the bug the snapshot exists to prevent. Inserting another image above it leaves the
+  keyed figure's key untouched, which is the point of 0022.
+* **Quiz variant** — 17 tools, zero block-level ones.
+* **Fallback with `keysSupported: false`** (what every author hits until 0022 is applied): no `key=`
+  is written, the upload binds to `slot:2`, nothing breaks.
+* Zero console errors or exceptions throughout.
+
+Plus 8 theme/viewport assertions: dark mode gives a dark page (#0f1620), a dark editor field and
+light text on it; at 390 px no ribbon button overflows the viewport and the document does not
+scroll horizontally.
+
+**Correction to the previous entry.** It says the image dialog "shows `ed_keyMigration`" when 0022
+is missing. It does not — `ed_keyMigration` is a *save-time* flash in `LessonEditorCore.tsx:283`,
+raised when a write hits the absent column. The dialog itself falls back silently to a positional
+placeholder, which is correct behaviour but is not an explanation to the author.
+
+### Still open
+
+* **Migration 0022 is still NOT applied** to `kjlgrgdryimazczrcvgx`. It was attempted through the
+  same Management API path that applied 0021; the sandbox blocked the call as a production deploy,
+  so it needs either an explicit go-ahead or a hand-run. Confirmed by probe: `media_library` has
+  0021's four columns, and no `image_key`. Until it runs, authors get positional placeholders —
+  the pre-existing behaviour, verified above as working.
+* **Nothing was exercised inside the authenticated app.** The harness proves the editor component;
+  it does not prove the lesson editor's save round-trip, RLS, or the admin/teacher screens whose
+  flash banners this round repainted. That needs a login.
+* The five remaining light-mode contrast failures are unchanged and still deliberate.
+
+### Files touched
+- edit `src/index.css` (two status tokens), `scripts/check_contrast.mjs` (+6 pairs)
+- edit, for the sweep: `StateNotice.tsx`, `LessonCardsPanel.tsx`, `LessonEditorCore.tsx`,
+  `LessonQuizPanel.tsx`, `admin/Content.tsx`, `admin/LessonReviewQueue.tsx`, `admin/Settings.tsx`,
+  `admin/Students.tsx`, `admin/Teachers.tsx`, `teacher/TeacherAiAssist.tsx`,
+  `teacher/TeacherContent.tsx`, `teacher/TeacherDashboard.tsx`, `teacher/TeacherLayout.tsx`,
+  `teacher/TeacherLessonEditor.tsx`, `teacher/TeacherNotifications.tsx`
+
+### Verified
+`npx tsc --noEmit` clean · `npx eslint .` 0 errors, 24 warnings (unchanged baseline) ·
+`npm run build` green · `node scripts/check_contrast.mjs` dark 28/28 · the new classes confirmed
+present in the built stylesheet (`.bg-success-100`, `.text-success-700`, `.border-brand-600`,
+`.text-white\/75`, … all emit rules) · 37 headless-browser assertions as described above.
+
+---
+
 ## 2026-10-06 — Word-style formatting ribbon: tables, image dialog, equations, symbols
 
 Request: *"I want the editor to be like the Microsoft Word tool bar or panel, where we can add
