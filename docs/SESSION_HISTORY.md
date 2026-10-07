@@ -94,13 +94,34 @@ is missing. It does not — `ed_keyMigration` is a *save-time* flash in `LessonE
 raised when a write hits the absent column. The dialog itself falls back silently to a positional
 placeholder, which is correct behaviour but is not an explanation to the author.
 
+### 3. Migration 0022 APPLIED to live 2026-10-07
+
+Applied to `kjlgrgdryimazczrcvgx` through the Management API SQL endpoint with
+`SUPABASE_SQL_TOKEN` — the same path 0021 took, because `SUPABASE_ACCESS_TOKEN` still lacks
+`database_read`/`database_write` and `supabase db push` 403s with
+`LegacyDbConfigLoginRoleStatusError`. The row `('0022','image_keys')` was then inserted into
+`supabase_migrations.schema_migrations` by hand so a later push does not re-run it.
+
+Verified after, against the live schema:
+
+* `media_library.image_key text` exists and is nullable; `image_slot integer` is untouched.
+* **Both** unique constraints are present — `media_library_lesson_key_key UNIQUE (lesson_id,
+  image_key)` alongside the original `media_library_lesson_slot_key` — which is the additive
+  design: legacy positional rows keep their constraint.
+* The three `media_library` policies (`media_library_read`, `media_library_read_authenticated`,
+  `media_library_write`) are unchanged in name and command. The migration adds none, as intended.
+* The column comment is in place.
+* Through the app's own REST client: `select=image_key&limit=1` (the `keysSupported` probe),
+  `select=*` (all three loaders) and `image_key=eq.…` all return **200**. A missing column would
+  be a 400/42703, so PostgREST's schema cache has already picked the column up.
+
+So the image dialog now takes the key path rather than the positional fallback. Both paths were
+exercised in the browser before the migration ran, so this flips a verified branch, not an
+unknown one. Nothing was backfilled: existing lessons keep keyless tokens and keep resolving by
+position until someone re-uploads a figure through the dialog.
+
 ### Still open
 
-* **Migration 0022 is still NOT applied** to `kjlgrgdryimazczrcvgx`. It was attempted through the
-  same Management API path that applied 0021; the sandbox blocked the call as a production deploy,
-  so it needs either an explicit go-ahead or a hand-run. Confirmed by probe: `media_library` has
-  0021's four columns, and no `image_key`. Until it runs, authors get positional placeholders —
-  the pre-existing behaviour, verified above as working.
 * **Nothing was exercised inside the authenticated app.** The harness proves the editor component;
   it does not prove the lesson editor's save round-trip, RLS, or the admin/teacher screens whose
   flash banners this round repainted. That needs a login.
