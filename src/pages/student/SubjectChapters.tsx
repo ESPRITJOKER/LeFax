@@ -18,6 +18,34 @@ interface ChapterProgress extends ChapterRow {
 
 /** One of the four chapter steps: a colored circle (symbol only) + label,
  *  reproducing the original platform's step row (screenshot image10). */
+/**
+ * The difficulty metaphor from the original platform (Correction N9: "Ce que
+ * Sinc avait produit était subtil mais ça reflétait l'esprit de lefax …
+ * l'assimilation par la vue"). Instead of the bare numbers 1 / 2 / 3, each
+ * level is a rock on a slope: level 1 rolls DOWNHILL (easy), level 2 sits on
+ * FLAT ground (intermediate), level 3 is pushed UPHILL (hard). The shape is
+ * read at a glance, no reading required — which is the point. The number stays
+ * as a small tab so the mapping to "Niv. 1/2/3" is never lost.
+ */
+function DifficultyGlyph({ glyph, color }: { glyph: "1" | "2" | "3"; color: string }) {
+  // slope: start → end y (lower y = higher on screen); rock sits at the uphill
+  // end so the metaphor reads as "where the effort is".
+  const slope: Record<"1" | "2" | "3", { d: string; rock: [number, number] }> = {
+    "1": { d: "M3 8 L21 17", rock: [6, 8] }, // downhill, rock at the top-left
+    "2": { d: "M3 15 L21 15", rock: [12, 12] }, // flat, rock centred
+    "3": { d: "M3 17 L21 8", rock: [18, 8] }, // uphill, rock at the top-right
+  };
+  const s = slope[glyph];
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" aria-hidden>
+      {/* the hill */}
+      <path d={s.d} stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.65" />
+      {/* the rock */}
+      <circle cx={s.rock[0]} cy={s.rock[1]} r="3.2" fill={color} />
+    </svg>
+  );
+}
+
 function StepButton({
   label,
   color,
@@ -43,9 +71,7 @@ function StepButton({
             <path d="M9 4v16" />
           </svg>
         ) : (
-          <span className="font-serif font-extrabold text-[17px]" style={{ color }}>
-            {glyph}
-          </span>
+          <DifficultyGlyph glyph={glyph} color={color} />
         )}
         {done && (
           <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-success-600 flex items-center justify-center">

@@ -25,6 +25,7 @@ export default function LessonDetail() {
   const [siblings, setSiblings] = useState<SiblingLesson[]>([]);
   const [quiz, setQuiz] = useState<Pick<QuizRow, "id"> | null>(null);
   const [images, setImages] = useState<SlotImages>({});
+  const [subjectSlug, setSubjectSlug] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const profileId = profile?.id ?? null;
 
@@ -72,6 +73,20 @@ export default function LessonDetail() {
 
         setImages(buildImageMap(mediaRes.data));
         setLoading(false);
+
+        // Subject slug drives the default card illustration (Correction N9).
+        // Off the critical path — the deck renders fine before it arrives.
+        const subjectId = chapterRes.data?.subject_id;
+        if (subjectId) {
+          void supabase
+            .from("subjects")
+            .select("slug")
+            .eq("id", subjectId)
+            .maybeSingle()
+            .then(({ data }) => {
+              if (!cancelled) setSubjectSlug(data?.slug ?? "");
+            });
+        }
 
         // Progress is a write, not something the page renders — it must not sit
         // on the critical path. Fired after the content is on screen.
@@ -132,8 +147,11 @@ export default function LessonDetail() {
   }
 
   // The lesson body is only offered when there is actually one to read, so a
-  // card-only lesson gains no dead button (Correction N6, remark 1).
-  const hasBody = Boolean((lang === "fr" ? lesson.content_fr : lesson.content_en)?.trim() || lesson.content_fr?.trim());
+  // card-only lesson gains no dead course card (Correction N6, remark 1).
+  const bodyText = (lang === "fr" ? lesson.content_fr : lesson.content_en)?.trim()
+    ? (lang === "fr" ? lesson.content_fr : lesson.content_en)
+    : lesson.content_fr;
+  const hasBody = Boolean(bodyText?.trim());
 
   // ── New story-card viewer ────────────────────────────────────────────────
   if (cards.length > 0) {
@@ -143,8 +161,13 @@ export default function LessonDetail() {
           cards={cards}
           lessonTitle={title}
           chapterName={chapter ? (lang === "fr" ? chapter.name_fr : chapter.name_en) : null}
+          subjectSlug={subjectSlug}
           onFinish={goNext}
-          onOpenCourse={hasBody ? () => navigate(`/lesson/${lesson.id}/cours`) : undefined}
+          // The course body is now the FIRST card of the deck rather than a
+          // button (Correction N9) — the student lands on it, then swipes into
+          // the story cards. The standalone /cours page stays reachable from the
+          // stories grid for students who want to read it on its own.
+          courseNode={hasBody ? <LessonContent text={bodyText ?? ""} images={images} /> : undefined}
           // `replace` so closing the card doesn't push a *second* stories entry
           // on top of the one we came from — otherwise the stories grid's back
           // arrow would step back onto the card instead of the chapter list

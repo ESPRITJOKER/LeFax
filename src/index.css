@@ -274,14 +274,27 @@ button {
   font-family: "Inter", sans-serif;
 }
 
-/* Swipe-direction hint (LessonCardDeck): a pointing finger nudging sideways to
- * show the scroll direction on the first card of a lesson. */
+/* Swipe-direction hint (LessonCardDeck): a hand sweeping sideways to show the
+ * scroll gesture on the first card of a lesson (Correction N9: "on devrait voir
+ * cette main qui donne la direction du geste à effectuer pour scroller"). */
 @keyframes fingerNudge {
   0%,
   100% {
-    transform: translateX(-6px);
+    transform: translateX(-9px);
   }
   50% {
-    transform: translateX(6px);
+    transform: translateX(9px);
+  }
+}
+
+/* The two chevrons flanking the hand breathe in turn so the eye reads a
+ * left↔right sweep rather than a static icon. */
+@keyframes swipeArrows {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
   }
 }

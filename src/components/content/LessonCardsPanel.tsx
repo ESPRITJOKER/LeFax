@@ -316,6 +316,11 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
                   removeLabel={t("admin_remove")}
                   inputRef={(el) => (fileInputs.current[`${selected.id}-fr`] = el)}
                   onFile={(f) => uploadImage(selected, "fr", f)}
+                  credit={selected.image_credit_fr}
+                  sourceUrl={selected.image_credit_url_fr}
+                  onCredit={(v) => setField(selected.id, "image_credit_fr", v || null)}
+                  onSource={(v) => setField(selected.id, "image_credit_url_fr", v || null)}
+                  disabled={!canEdit}
                 />
                 <ImagePicker
                   label={t("admin_cardImageEn")}
@@ -327,6 +332,11 @@ export const LessonCardsPanel = forwardRef<LessonCardsHandle, { lessonId: string
                   removeLabel={t("admin_remove")}
                   inputRef={(el) => (fileInputs.current[`${selected.id}-en`] = el)}
                   onFile={(f) => uploadImage(selected, "en", f)}
+                  credit={selected.image_credit_en}
+                  sourceUrl={selected.image_credit_url_en}
+                  onCredit={(v) => setField(selected.id, "image_credit_en", v || null)}
+                  onSource={(v) => setField(selected.id, "image_credit_url_en", v || null)}
+                  disabled={!canEdit}
                 />
               </div>
 
@@ -434,6 +444,11 @@ function PhonePreview({ card, index, total }: { card: LessonCardRow; index: numb
   const [face, setFace] = useState<"front" | "back">("front");
 
   const image = lang === "fr" ? card.image_fr ?? card.image_en : card.image_en ?? card.image_fr;
+  // Mirror the image source the author set (Correction N9), so the live preview
+  // shows it exactly where the student will see it.
+  const imgCredit = lang === "fr" ? card.image_credit_fr ?? card.image_credit_en : card.image_credit_en ?? card.image_credit_fr;
+  const imgCreditUrl = lang === "fr" ? card.image_credit_url_fr ?? card.image_credit_url_en : card.image_credit_url_en ?? card.image_credit_url_fr;
+  const creditText = (imgCredit || imgCreditUrl || "").trim();
   const point = lang === "fr" ? card.point_fr || card.point_en : card.point_en || card.point_fr;
   const sub = lang === "fr" ? card.sub_fr || card.sub_en : card.sub_en || card.sub_fr;
   const explanation = lang === "fr" ? card.explanation_fr : card.explanation_en;
@@ -486,7 +501,12 @@ function PhonePreview({ card, index, total }: { card: LessonCardRow; index: numb
               </div>
             </div>
             <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4">
-              {image && !frontInlineImg && <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-2xl mb-4 bg-white/5" />}
+              {image && !frontInlineImg && (
+                <div className="mb-4">
+                  <img src={image} alt="" className="w-full max-h-[150px] object-contain rounded-2xl bg-white/5" />
+                  {creditText && <div className="mt-1 text-[9.5px] text-white/55 text-center leading-snug">{creditText}</div>}
+                </div>
+              )}
               <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">
                 {lang === "fr" ? `Carte ${index + 1} / ${total}` : `Card ${index + 1} / ${total}`}
               </div>
@@ -509,7 +529,12 @@ function PhonePreview({ card, index, total }: { card: LessonCardRow; index: numb
               <h3 className="font-serif font-bold text-[13.5px] text-ink-900 truncate pr-2">{point ? inline(point) : "—"}</h3>
             </div>
             <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3.5 flex flex-col gap-3.5">
-              {image && !backInlineImg && backImg}
+              {image && !backInlineImg && (
+                <div>
+                  {backImg}
+                  {creditText && <div className="mt-1 text-[9.5px] text-muted text-center leading-snug">{creditText}</div>}
+                </div>
+              )}
 
               {explanation && (
                 <div>
@@ -623,6 +648,11 @@ function ImagePicker({
   removeLabel,
   inputRef,
   onFile,
+  credit,
+  sourceUrl,
+  onCredit,
+  onSource,
+  disabled,
 }: {
   label: string;
   url: string | null;
@@ -633,7 +663,14 @@ function ImagePicker({
   removeLabel: string;
   inputRef: (el: HTMLInputElement | null) => void;
   onFile: (f: File) => void;
+  /** Source/reference of this image (Correction N9), persisted to the card. */
+  credit: string | null;
+  sourceUrl: string | null;
+  onCredit: (v: string) => void;
+  onSource: (v: string) => void;
+  disabled?: boolean;
 }) {
+  const { t } = useI18n();
   // Correction N6 ("il y a ici un petit décalage"): the thumbnail was a fixed
   // 110px block beside a button column that could not shrink, inside a
   // two-column grid. Under roughly 420px of column the buttons escaped the card
@@ -664,6 +701,33 @@ function ImagePicker({
           )}
         </div>
       </div>
+
+      {/* Image reference (Correction N9: "mettre la source de l'image sur les
+          cartes"). Only meaningful once there is an image, so it appears with
+          one — a credit line, and an optional link the credit becomes. */}
+      {url && (
+        <div className="mt-2.5 flex flex-col gap-1.5">
+          <input
+            type="text"
+            value={credit ?? ""}
+            disabled={disabled}
+            onChange={(e) => onCredit(e.target.value)}
+            placeholder={t("admin_cardImageCreditPlaceholder")}
+            className="w-full px-2.5 py-1.5 rounded-lg border-[1.5px] border-ink-300 bg-card text-[12px] disabled:bg-ink-50"
+            aria-label={t("admin_cardImageCredit")}
+          />
+          <input
+            type="url"
+            inputMode="url"
+            value={sourceUrl ?? ""}
+            disabled={disabled}
+            onChange={(e) => onSource(e.target.value)}
+            placeholder={t("admin_cardImageSourcePlaceholder")}
+            className="w-full px-2.5 py-1.5 rounded-lg border-[1.5px] border-ink-300 bg-card text-[12px] disabled:bg-ink-50"
+            aria-label={t("admin_cardImageSource")}
+          />
+        </div>
+      )}
     </div>
   );
 }

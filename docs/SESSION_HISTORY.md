@@ -5,6 +5,82 @@ Live Supabase project ref: `kjlgrgdryimazczrcvgx` ("Lefax MVP", eu-west-1).
 
 ---
 
+## 2026-11-10 — Feedback round N9: nested marks, authored spacing, course-first card, card motifs & sources
+
+Nine points from `Correction N9.docx` (text + annotated screenshots). Each mapped to a root
+cause before touching anything.
+
+### 1. Swipe hint — a real hand, not an emoji — `LessonCardDeck.tsx`, `index.css`
+"On devrait voir cette main qui donne la direction du geste à effectuer pour scroller." The
+first-card hint existed but was a `👉` emoji that retired after 3 lessons. Replaced with a
+drawn swiping hand flanked by two chevrons that breathe left↔right (`swipeArrows` keyframe), a
+wider `fingerNudge` sweep, and retirement bumped to 5 lessons so a genuinely new user sees it.
+
+### 2. Difficulty levels — Sinclair's visual metaphor — `SubjectChapters.tsx`
+"Ce que Sinc avait produit était subtil mais ça reflétait l'esprit de lefax … l'assimilation
+par la vue." The step row drew bare serif numbers `1 / 2 / 3`. New `DifficultyGlyph`: a rock on
+a slope — level 1 rolls **downhill** (easy), level 2 sits **flat**, level 3 is pushed
+**uphill** (hard). Read at a glance; the `Niv. 1/2/3` label underneath keeps the mapping.
+
+### 3. Bold + highlight together — recursive inline markup — `lessonContent.tsx`
+"Il semble qu'il n'est pas possible d'effectuer ces 2 tâches. Gras + surlignage." `markup()`
+was single-pass: it emitted each mark's inner text as a **raw string**, so `**==vert|x==**`
+rendered as bold with a literal `==vert|x==` inside. Now every wrapping mark re-parses its
+content through `markup()` (terminates — each level strips its own delimiters; `code` is the
+one exception, shown verbatim). `**==…==**`, `==**…**==`, a highlighted link, etc. all nest.
+Verified by probing `INLINE_RE` against `**==vert|un zygote==**` (outer → bold, inner → vert
+highlight).
+
+### 4. Image source on cards — migration `0023` + picker fields — `0023_…`, `LessonCardsPanel.tsx`, `LessonCardDeck.tsx`
+"Il n'est pas possible de mettre la source de l'image sur les cartes." 0021 deliberately left
+card images schema-less (theory: inline `[[IMG: … | credit=…]]`), but authors upload through
+the picker and had nowhere to record a source. `0023_card_image_references.sql` adds four
+nullable columns (`image_credit_fr/en`, `image_credit_url_fr/en`) — same shape 0021 gave
+media_library, no new policy. The picker grows a credit + source-link input (shown once there's
+an image); the deck shows the credit under the picture and passes it as `meta` to the
+fullscreen viewer; the admin preview mirrors it. **NOT YET APPLIED to the live DB** — run
+`supabase db push` (or apply 0023) before the credit fields will save.
+
+### 5. Authored blank lines — spacer blocks — `markupSyntax.ts`, `lessonContent.tsx`
+"Les espaces (qui sont importants pour moi) n'apparaissent pas sur la plateforme user."
+`parse()` and `RichCardText` did `if (line === "") continue;` — every blank line was swallowed.
+Now a run of blanks becomes a `spacer` block (height scales with the count, capped), leading /
+trailing runs trimmed. Seed content uses no internal blanks, so nothing existing shifts; what
+the author types in the textarea is what the student gets. Verified: `A\n\nB` → `spacer(1)`,
+`A\n\n\nB` → `spacer(2)`, edge runs dropped.
+
+### 6. Course content as the FIRST card — `LessonCardDeck.tsx`, `LessonDetail.tsx`
+"Il est mieux pour l'élève que ce soit la première carte pour la leçon qu'il ouvre." The body
+was behind a small book icon. Now, when a lesson has a body, it is **slot 0 of the deck** (a
+light, scrollable reading card with a "Commencer les cartes →" affordance); story cards shift
+to start at `base = 1`, the final slot to `cards.length + base`. The header / finish "Cours"
+buttons jump to slot 0 instead of the standalone page (which stays reachable from the stories
+grid). Confirmed as the chosen approach with the product owner before building.
+
+### 7. Illustration on every first preview — subject motif — `LessonCardDeck.tsx`, `LessonDetail.tsx`
+"J'aimerai qu'il y ait une illustration dans chaque première aperçue de la carte." Imageless
+card fronts rendered nothing (the N6 bullseye placeholder had been removed for being loud). New
+`CardMotif`: a soft subject-tinted gradient + the subject glyph — an illustration, not a
+placeholder. `LessonDetail` fetches the subject slug off the critical path and passes it down.
+Confirmed with the product owner (subject-themed motif, not a generic reminder).
+
+### Verified / not verified
+- `node_modules/.bin/tsc --noEmit` clean; `vite build` green; eslint on the touched files 0
+  errors (2 pre-existing react-refresh warnings in `lessonContent.tsx`, unchanged).
+- Parser behaviour (spacers, nested-mark matching) asserted via an esbuild-transpiled Node
+  probe.
+- **Not verified in a browser** — no Chrome extension connected this session. `0023` not yet
+  applied to the live DB.
+
+### Files touched
+- add `supabase/migrations/0023_card_image_references.sql`
+- edit `src/lib/markupSyntax.ts`, `src/lib/lessonContent.tsx`, `src/lib/database.types.ts`,
+  `src/lib/i18n.tsx`, `src/index.css`, `src/components/LessonCardDeck.tsx`,
+  `src/components/content/LessonCardsPanel.tsx`, `src/pages/student/SubjectChapters.tsx`,
+  `src/pages/student/LessonDetail.tsx`
+
+---
+
 ## 2026-10-07 — Closing the ribbon round: opacity sweep, and the first real browser pass
 
 Picked up the two items the previous entry left open: the project-wide Tailwind opacity bug it

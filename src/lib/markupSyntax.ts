@@ -325,6 +325,14 @@ export type Block =
   | { type: "math"; tex: string }
   | { type: "table"; head: string[] | null; rows: string[][]; align: CellAlign[] }
   | { type: "quote"; lines: string[] }
+  /**
+   * A run of authored blank lines, kept as real vertical space (Correction N9:
+   * "Les espaces (qui sont importants pour moi) n'apparaissent pas sur la
+   * plateforme user"). Blank lines used to be swallowed as mere block
+   * separators; now each one the author types renders as a line of breathing
+   * room. `lines` is how many consecutive blanks the run held.
+   */
+  | { type: "spacer"; lines: number }
   | { type: "hr" };
 
 export function parse(raw: string): Block[] {
@@ -423,7 +431,18 @@ export function parse(raw: string): Block[] {
       continue;
     }
     flush();
-    if (line === "") continue;
+    if (line === "") {
+      // A blank line is vertical space the author asked for, not just a block
+      // separator (Correction N9). Leading blanks (before any block) add
+      // nothing; a trailing run is trimmed after the loop. Consecutive blanks
+      // fold into one spacer whose height grows with the count.
+      if (blocks.length > 0) {
+        const prev = blocks[blocks.length - 1];
+        if (prev.type === "spacer") prev.lines += 1;
+        else blocks.push({ type: "spacer", lines: 1 });
+      }
+      continue;
+    }
 
     if (DIVIDER_RE.test(line)) {
       blocks.push({ type: "hr" });
@@ -457,6 +476,8 @@ export function parse(raw: string): Block[] {
   // render it rather than swallowing the text.
   if (fence && fence.length) blocks.push({ type: "math", tex: fence.join("\n").trim() });
   flush();
+  // Trailing blank lines are not space between anything — drop them.
+  while (blocks.length > 0 && blocks[blocks.length - 1].type === "spacer") blocks.pop();
   return blocks;
 }
 

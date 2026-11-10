@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { useI18n } from "../lib/i18n";
 import { inline, RichCardText } from "../lib/lessonContent";
-import { hasInlineImageToken } from "../lib/markupSyntax";
-import { ZoomableImage } from "./ImageLightbox";
+import { hasInlineImageToken, safeUrl } from "../lib/markupSyntax";
+import { subjectEmoji } from "../lib/icons";
+import { ZoomableImage, type ImageMeta } from "./ImageLightbox";
 import { gradeStructural } from "../lib/practiceBank";
 import type { LessonCardRow } from "../lib/database.types";
 
@@ -45,22 +46,38 @@ export function LessonCardDeck({
   onFinish,
   onClose,
   onOpenCourse,
+  courseNode,
+  subjectSlug,
 }: {
   cards: LessonCardRow[];
   lessonTitle: string;
   chapterName?: string | null;
   onFinish: () => void;
   onClose?: () => void;
-  /** Opens the full lesson text. Omitted when the lesson has no body. */
+  /** Opens the full lesson text on its own page. Used only when the body is
+   *  NOT already shown inline as the first card (i.e. `courseNode` is absent). */
   onOpenCourse?: () => void;
+  /**
+   * The lesson body, rendered, to show as the FIRST card of the deck (Correction
+   * N9: "Il est mieux pour l'élève que ce soit la première carte pour la leçon
+   * qu'il ouvre"). When present it becomes slot 0 — the student lands on the
+   * course, then swipes into the story cards. Omitted for a card-only lesson.
+   */
+  courseNode?: ReactNode;
+  /** Subject slug, for the default illustration motif on imageless cards. */
+  subjectSlug?: string;
 }) {
   const { t, lang } = useI18n();
   // Show the finger hint on the very first card until the user has seen it a
   // handful of times, then retire it.
-  const [showHint, setShowHint] = useState(hintSeenCount() < 3);
+  const [showHint, setShowHint] = useState(hintSeenCount() < 5);
 
-  // Slots: one per card, plus a final "lesson complete" slot.
-  const totalSlots = cards.length + 1;
+  // The course body, when supplied, occupies slot 0; the story cards then start
+  // at slot `base`, and the final "complete" slot sits after them.
+  const hasCourse = Boolean(courseNode);
+  const base = hasCourse ? 1 : 0;
+  // Slots: optional course slot, one per card, plus a final "lesson complete" slot.
+  const totalSlots = cards.length + 1 + base;
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [answers, setAnswers] = useState<Record<string, StructAnswerState>>({});
@@ -160,6 +177,12 @@ export function LessonCardDeck({
   const goNext = () => goTo(current + 1, 1);
   const goPrev = () => goTo(current - 1, -1);
 
+  // With the course shown inline (slot 0), the header/finish "course" affordance
+  // jumps back to it; otherwise it opens the standalone course page.
+  const openCourse = hasCourse ? () => goTo(0, -1) : onOpenCourse;
+  const showCourseBtn = hasCourse ? current !== 0 : Boolean(onOpenCourse);
+  const se = subjectEmoji(subjectSlug ?? "");
+
   function onPointerDown(e: React.PointerEvent) {
     // Don't arm swipe-nav while the back face is up — the structural answer
     // textarea lives there and a stray drag must not navigate away.
@@ -206,9 +229,9 @@ export function LessonCardDeck({
               teacher filled Contenu (FR) and "elle ne s'affiche nulle part dans
               l'espace utilisateur", because this deck replaced the document
               view outright. Shown only when the lesson actually has a body. */}
-          {onOpenCourse && (
+          {showCourseBtn && openCourse && (
             <button
-              onClick={onOpenCourse}
+              onClick={openCourse}
               aria-label={t("ed_openCourse")}
               title={t("ed_openCourse")}
               className="flex-shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-full bg-white/10 text-white text-[11.5px] font-bold border-none"
@@ -255,14 +278,67 @@ export function LessonCardDeck({
           </div>
         )}
 
-        {/* First-card swipe hint: a pointing finger nudging rightwards, no text. */}
+        {/* First-card swipe hint: a hand sweeping sideways between two chevrons,
+            no text (Correction N9: "cette main qui donne la direction du geste à
+            effectuer pour scroller"). Retires once the user is used to it. */}
         {showHint && !flipped && current === 0 && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[7] pointer-events-none flex flex-col items-center gap-1">
-            <div style={{ animation: "fingerNudge 1.2s ease-in-out infinite" }} className="text-[30px]">👉</div>
+          <div className={`absolute left-1/2 -translate-x-1/2 z-[7] pointer-events-none ${hasCourse ? "bottom-[92px]" : "bottom-7"}`}>
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-black/35 backdrop-blur-sm border border-white/15">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" className="w-4 h-4" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "swipeArrows 1.3s ease-in-out infinite" }}>
+                <path d="M15 6l-6 6 6 6" />
+              </svg>
+              <div style={{ animation: "fingerNudge 1.3s ease-in-out infinite" }} className="text-white">
+                {/* A simple swiping hand. */}
+                <svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 17V8.5a2 2 0 0 1 4 0V15" />
+                  <path d="M17 12.5a2 2 0 0 1 4 0V16" />
+                  <path d="M21 13.5a2 2 0 0 1 4 0V19a7 7 0 0 1-7 7h-1.8a6 6 0 0 1-4.9-2.56l-3.2-4.6a2 2 0 0 1 3.1-2.5l1.7 1.76" />
+                </svg>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" className="w-4 h-4" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "swipeArrows 1.3s ease-in-out infinite reverse" }}>
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </div>
           </div>
         )}
 
         <div className="relative h-full">
+          {/* Course slot (slot 0) — the lesson body as the first card the
+              student opens (Correction N9). A light reading surface so the
+              document renderer's fixed dark text stays legible; swipe right to
+              reach the story cards. */}
+          {hasCourse && (
+            <div
+              key="course"
+              ref={(el) => (slotRefs.current[0] = el)}
+              className="absolute inset-0 z-10"
+              style={{ display: current === 0 ? "block" : "none", pointerEvents: current === 0 ? "auto" : "none" }}
+            >
+              <div className="relative w-full h-full">
+                <div className="absolute inset-0 flex flex-col bg-surface text-text">
+                  <div className="deck-sweep absolute inset-0 overflow-hidden pointer-events-none">
+                    <i className="absolute top-[-30%] left-0 w-[42%] h-[160%] block" style={{ background: "linear-gradient(75deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 48%, rgba(255,255,255,0) 100%)", transform: "translateX(-160%)" }} />
+                  </div>
+                  <div className="px-5 pt-4 pb-2 flex items-center gap-2 flex-shrink-0">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wide text-brand-600">{t("ed_openCourse")}</span>
+                  </div>
+                  <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4">
+                    <h2 className="font-serif font-bold text-[20px] text-ink-900 mb-3">{lessonTitle}</h2>
+                    {courseNode}
+                  </div>
+                  {/* Swipe-on affordance into the first story card. */}
+                  <button
+                    onClick={goNext}
+                    className="mx-5 mb-4 flex-shrink-0 flex items-center justify-center gap-2 rounded-xl bg-brand-600 text-white font-bold text-[13.5px] py-3 border-none"
+                  >
+                    {t("card_startCards")}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-4 h-4"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Content card slots */}
           {cards.map((card, i) => {
             const rawImage = lang === "fr" ? card.image_fr : card.image_en;
@@ -275,7 +351,16 @@ export function LessonCardDeck({
             const structuralQ = lang === "fr" ? card.structural_question_fr : card.structural_question_en;
             const expectedAnswer = lang === "fr" ? card.structural_answer_fr : card.structural_answer_en;
             const ans = answers[card.id];
-            const isActive = i === current;
+            // Story cards start at slot `base` (slot 0 is the course, if any).
+            const slotIndex = i + base;
+            const isActive = slotIndex === current;
+
+            // Image reference (Correction N9): the credit the author attached to
+            // this card's image, shown under it and in the fullscreen viewer.
+            const imgCredit = lang === "fr" ? card.image_credit_fr : card.image_credit_en;
+            const imgCreditUrl = lang === "fr" ? card.image_credit_url_fr : card.image_credit_url_en;
+            const imgMeta: ImageMeta | undefined =
+              imgCredit || imgCreditUrl ? { credit: imgCredit, creditUrl: imgCreditUrl } : undefined;
 
             // A card carries one image (per language). By default it sits at the
             // top of each face, but an admin can drop a [[IMG]] token into a text
@@ -288,10 +373,16 @@ export function LessonCardDeck({
             // even clickable, and it merely opened the raw file in a new tab.
             const onError = () => setBrokenImg((p) => ({ ...p, [card.id]: true }));
             const frontImgNode = image ? (
-              <ZoomableImage src={image} alt={point} onError={onError} className="w-full max-h-[240px] object-contain rounded-2xl bg-white/5" />
+              <div>
+                <ZoomableImage src={image} alt={point} meta={imgMeta} onError={onError} className="w-full max-h-[240px] object-contain rounded-2xl bg-white/5" />
+                <ImageCredit credit={imgCredit} url={imgCreditUrl} tone="light" />
+              </div>
             ) : null;
             const backImgNode = image ? (
-              <ZoomableImage src={image} alt={point} onError={onError} className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50" />
+              <div>
+                <ZoomableImage src={image} alt={point} meta={imgMeta} onError={onError} className="w-full max-h-[180px] object-contain rounded-xl border border-border bg-ink-50" />
+                <ImageCredit credit={imgCredit} url={imgCreditUrl} tone="dark" />
+              </div>
             ) : null;
             const frontInlineImg = hasInlineImageToken(sub);
             const backInlineImg = hasInlineImageToken(explanation, tips, traps);
@@ -299,7 +390,7 @@ export function LessonCardDeck({
             return (
               <div
                 key={card.id}
-                ref={(el) => (slotRefs.current[i] = el)}
+                ref={(el) => (slotRefs.current[slotIndex] = el)}
                 className="absolute inset-0 z-10"
                 style={{ display: isActive ? "block" : "none", pointerEvents: isActive ? "auto" : "none" }}
               >
@@ -316,19 +407,28 @@ export function LessonCardDeck({
                       <i className="absolute top-[-30%] left-0 w-[42%] h-[160%] block" style={{ background: "linear-gradient(75deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 48%, rgba(255,255,255,0) 100%)", transform: "translateX(-160%)" }} />
                     </div>
 
-                    {/* No image → render nothing (previously a big yellow
-                        bullseye placeholder that confused users — corrections
-                        doc note 6). The card centres its text on its own. When
-                        the subtitle carries a [[IMG]] token the image is placed
-                        inline there instead of here (Correction N4). */}
+                    {/* The card's illustration. When the subtitle carries a
+                        [[IMG]] token the image is placed inline there instead of
+                        here (Correction N4). An author-set source shows under it
+                        (Correction N9). A card with NO image gets a subtle
+                        subject-themed motif so every first preview carries an
+                        illustration (Correction N9: "j'aimerai qu'il y ait une
+                        illustration dans chaque première aperçue de la carte") —
+                        a soft gradient + the subject glyph, not the loud bullseye
+                        placeholder removed in N6. */}
                     {image && !frontInlineImg && (
-                      <ZoomableImage
-                        src={image}
-                        alt={point}
-                        onError={onError}
-                        className="w-full max-h-[38%] object-contain rounded-2xl mb-5 bg-white/5"
-                      />
+                      <>
+                        <ZoomableImage
+                          src={image}
+                          alt={point}
+                          meta={imgMeta}
+                          onError={onError}
+                          className={`w-full max-h-[38%] object-contain rounded-2xl bg-white/5 ${imgCredit || imgCreditUrl ? "mb-1.5" : "mb-5"}`}
+                        />
+                        <ImageCredit credit={imgCredit} url={imgCreditUrl} tone="light" className="mb-4" />
+                      </>
                     )}
+                    {!image && !frontInlineImg && <CardMotif se={se} />}
                     <div className="text-[11px] font-extrabold uppercase tracking-wide text-ochre-600 mb-2">{cardLabel(i)}</div>
                     {/* The point is a serif headline, but rendered semibold (not
                         extrabold) so a full sentence isn't one tiring block of
@@ -465,9 +565,9 @@ export function LessonCardDeck({
           {/* Final slot */}
           <div
             key="final"
-            ref={(el) => (slotRefs.current[cards.length] = el)}
+            ref={(el) => (slotRefs.current[cards.length + base] = el)}
             className="absolute inset-0 z-10"
-            style={{ display: current === cards.length ? "block" : "none", pointerEvents: current === cards.length ? "auto" : "none" }}
+            style={{ display: current === cards.length + base ? "block" : "none", pointerEvents: current === cards.length + base ? "auto" : "none" }}
           >
             <div className="relative w-full h-full">
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
@@ -484,9 +584,9 @@ export function LessonCardDeck({
                 <button onClick={onFinish} className="bg-brand-600 text-white font-extrabold text-[14px] px-7 py-3.5 rounded-xl">
                   {t("card_startPractice")} →
                 </button>
-                {onOpenCourse && (
+                {openCourse && (
                   <button
-                    onClick={onOpenCourse}
+                    onClick={openCourse}
                     className="mt-3 bg-transparent border border-white/25 text-white/85 font-bold text-[13px] px-6 py-2.5 rounded-xl"
                   >
                     {t("ed_openCourse")}
@@ -505,6 +605,59 @@ export function LessonCardDeck({
         </div>
       </div>
 
+    </div>
+  );
+}
+
+/**
+ * A card's image source, shown under the picture (Correction N9). `tone` picks a
+ * colour that reads on the surface the image sits on — the dark card front or
+ * the light back. Renders nothing when there is no reference, so a card without
+ * one is unchanged.
+ */
+function ImageCredit({
+  credit,
+  url,
+  tone,
+  className = "",
+}: {
+  credit?: string | null;
+  url?: string | null;
+  tone: "light" | "dark";
+  className?: string;
+}) {
+  const text = (credit ?? "").trim();
+  const href = safeUrl((url ?? "").trim());
+  if (!text && !href) return null;
+  const label = text || href || "";
+  const color = tone === "light" ? "text-white/55" : "text-muted";
+  return (
+    <div className={`text-[10px] ${color} text-center leading-snug ${className}`}>
+      {href ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" className="underline">
+          {label}
+        </a>
+      ) : (
+        label
+      )}
+    </div>
+  );
+}
+
+/**
+ * The subtle default illustration for a card with no uploaded image (Correction
+ * N9). A soft subject-tinted gradient with the subject's glyph — enough to make
+ * every first preview carry an illustration without the loud placeholder that
+ * confused users in N6.
+ */
+function CardMotif({ se }: { se: { emoji: string; bg: string } }) {
+  return (
+    <div
+      className="w-full h-[150px] rounded-2xl mb-5 flex items-center justify-center overflow-hidden"
+      style={{ background: `linear-gradient(155deg, ${se.bg} 0%, rgba(255,255,255,0.05) 100%)` }}
+      aria-hidden
+    >
+      <span className="text-[46px] opacity-80 drop-shadow-sm">{se.emoji}</span>
     </div>
   );
 }

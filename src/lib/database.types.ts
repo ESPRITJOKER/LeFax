@@ -115,6 +115,13 @@ export type LessonCardRow = {
   sub_en: string;
   image_fr: string | null;
   image_en: string | null;
+  // Image references (migration 0023). Credit text + optional source link, per
+  // language, for the picker-uploaded card image. May be absent at runtime on a
+  // database where 0023 has not been applied yet.
+  image_credit_fr: string | null;
+  image_credit_en: string | null;
+  image_credit_url_fr: string | null;
+  image_credit_url_en: string | null;
   explanation_fr: string;
   explanation_en: string;
   structural_question_fr: string;

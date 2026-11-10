@@ -56,7 +56,19 @@ export function inline(text: string): ReactNode {
   );
 }
 
-/** The markup half of `inline()`. Colour is inherited except inside `<mark>`. */
+/**
+ * The markup half of `inline()`. Colour is inherited except inside `<mark>`.
+ *
+ * It recurses into the content of every wrapping mark (Correction N9: "Il semble
+ * qu'il n'est pas possible d'effectuer ces 2 tâches. Gras + surlignage"). The
+ * pass used to emit each mark's inner text as a raw string, so `**==vert|x==**`
+ * rendered as **bold** with a literal `==vert|x==` inside it — the highlight
+ * never applied. Rendering the inner text through `markup()` again lets marks
+ * nest (`**==…==**`, `==**…**==`, `*__…__*`, a highlighted link, …). Recursion
+ * terminates because each level strips its own delimiters, so the inner string
+ * is strictly shorter; `code` is the one exception — its content is shown
+ * verbatim, so it is never re-parsed.
+ */
 function markup(text: string): ReactNode {
   const re = new RegExp(INLINE_RE.source, "g");
   const nodes: ReactNode[] = [];
@@ -84,16 +96,16 @@ function markup(text: string): ReactNode {
             rel="noopener noreferrer"
             className="underline underline-offset-2 font-semibold text-brand-600 break-words"
           >
-            {g.linkText}
+            {markup(g.linkText)}
           </a>
         ) : (
           // A refused scheme still shows its label — the author's words are not
           // swallowed just because the URL was unusable.
-          <Fragment key={key++}>{g.linkText}</Fragment>
+          <Fragment key={key++}>{markup(g.linkText)}</Fragment>
         )
       );
-    } else if (g.bold !== undefined) nodes.push(<strong key={key++} className="font-bold">{g.bold}</strong>);
-    else if (g.italic !== undefined || g.italic2 !== undefined) nodes.push(<em key={key++} className="italic">{(g.italic ?? g.italic2) as string}</em>);
+    } else if (g.bold !== undefined) nodes.push(<strong key={key++} className="font-bold">{markup(g.bold)}</strong>);
+    else if (g.italic !== undefined || g.italic2 !== undefined) nodes.push(<em key={key++} className="italic">{markup((g.italic ?? g.italic2) as string)}</em>);
     else if (g.hl !== undefined)
       nodes.push(
         <mark
@@ -101,11 +113,11 @@ function markup(text: string): ReactNode {
           className="rounded px-0.5"
           style={{ background: HIGHLIGHT_COLORS[(g.hlColor as keyof typeof HIGHLIGHT_COLORS) ?? "jaune"], color: HIGHLIGHT_INK }}
         >
-          {g.hl}
+          {markup(g.hl)}
         </mark>
       );
-    else if (g.underline !== undefined) nodes.push(<u key={key++} className="underline underline-offset-2">{g.underline}</u>);
-    else if (g.strike !== undefined) nodes.push(<s key={key++} className="line-through">{g.strike}</s>);
+    else if (g.underline !== undefined) nodes.push(<u key={key++} className="underline underline-offset-2">{markup(g.underline)}</u>);
+    else if (g.strike !== undefined) nodes.push(<s key={key++} className="line-through">{markup(g.strike)}</s>);
     else if (g.sup !== undefined) nodes.push(<sup key={key++} className="text-[0.75em] align-super">{g.sup}</sup>);
     else nodes.push(<sub key={key++} className="text-[0.75em] align-sub">{g.sub as string}</sub>);
 
@@ -294,6 +306,18 @@ function Divider({ inherit }: { inherit?: boolean }) {
   return <hr className={`border-0 border-t ${inherit ? "my-2.5 border-white/20" : "my-5 border-border"}`} />;
 }
 
+/**
+ * Authored blank-line space (Correction N9). One blank line ≈ one line of
+ * breathing room; a run grows with the count. `aria-hidden` because it carries
+ * no content — it only reproduces the vertical rhythm the author laid out.
+ */
+function Spacer({ lines }: { lines: number }) {
+  // `Math` is the KaTeX component in this module (see the table renderer), so a
+  // plain clamp rather than Math.min.
+  const capped = lines > 8 ? 8 : lines;
+  return <div aria-hidden style={{ height: `${capped * 0.75}em` }} />;
+}
+
 /* ───────────────────── card-field block renderer ───────────────────────── */
 
 /**
@@ -371,7 +395,12 @@ export function RichCardText({ text, image }: { text: string; image?: ReactNode 
       continue;
     }
     flush();
-    if (line === "") continue;
+    if (line === "") {
+      // Authored blank line → real space on the card too (Correction N9).
+      // Skip a leading blank; coalesce a run by growing the last spacer.
+      if (out.length > 0) out.push(<div key={key++} aria-hidden style={{ height: "0.7em" }} />);
+      continue;
+    }
 
     if (DIVIDER_RE.test(line)) {
       out.push(<Divider key={key++} inherit />);
@@ -638,6 +667,8 @@ export function LessonContent({ text, images }: { text: string; images?: SlotIma
             return <Quote key={i} lines={b.lines} />;
           case "hr":
             return <Divider key={i} />;
+          case "spacer":
+            return <Spacer key={i} lines={b.lines} />;
           case "math":
             return <Math key={i} tex={b.tex} display />;
           case "img": {
